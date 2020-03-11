@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Editor Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>c;cpp;h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Wrappers">
+      <UniqueIdentifier>{323d5ac6-d2a4-48b2-887b-9404379ef3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{75d4ffee-5b81-4250-a542-af4a50ca4d66}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GUIEditorApp.cpp">
+      <Filter>Editor Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIEditorLib.cpp">
+      <Filter>Editor Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\ContentFile.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\DDTError.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\Reader.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\Timer.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\TimerMan.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="wrappers\Writer.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GUIEditorApp.h">
+      <Filter>Editor Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIEditorLib.h">
+      <Filter>Editor Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\ContentFile.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\DDTError.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\FrameMan.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\Reader.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\Timer.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\TimerMan.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="wrappers\Writer.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -14,6 +14,8 @@
     <ProjectGuid>{DB486FC0-C6F8-4AD3-8D32-8AA0314C6B33}</ProjectGuid>
     <RootNamespace>editor</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>GUIEditor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -62,7 +64,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>TargetSxS.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>fmodvc.lib;dinput.lib;ddraw.lib;dxguid.lib;winmm.lib;dsound.lib;alld_s_c.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -95,39 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\AllegroBitmap.cpp" />
-    <ClCompile Include="..\AllegroInput.cpp" />
-    <ClCompile Include="..\AllegroScreen.cpp" />
-    <ClCompile Include="..\GUI.cpp" />
-    <ClCompile Include="..\GUIButton.cpp" />
-    <ClCompile Include="..\GUICheckbox.cpp" />
-    <ClCompile Include="..\GUICollectionBox.cpp" />
-    <ClCompile Include="..\GUIComboBox.cpp" />
-    <ClCompile Include="..\GUIControl.cpp" />
-    <ClCompile Include="..\GUIControlFactory.cpp" />
-    <ClCompile Include="..\GUIControlManager.cpp" />
-    <ClCompile Include="..\GUIEvent.cpp" />
-    <ClCompile Include="..\GUIFont.cpp" />
-    <ClCompile Include="..\GUIInput.cpp" />
-    <ClCompile Include="..\GUILabel.cpp" />
-    <ClCompile Include="..\GUIListBox.cpp" />
-    <ClCompile Include="..\GUIListPanel.cpp" />
-    <ClCompile Include="..\GUIManager.cpp" />
-    <ClCompile Include="..\GUIPanel.cpp" />
-    <ClCompile Include="..\GUIProgressBar.cpp" />
-    <ClCompile Include="..\GUIProperties.cpp" />
-    <ClCompile Include="..\GUIPropertyPage.cpp" />
-    <ClCompile Include="..\GUIRadioButton.cpp" />
-    <ClCompile Include="..\GUIScrollbar.cpp" />
-    <ClCompile Include="..\GUIScrollPanel.cpp" />
-    <ClCompile Include="..\GUISkin.cpp" />
-    <ClCompile Include="..\GUISlider.cpp" />
-    <ClCompile Include="..\GUITab.cpp" />
-    <ClCompile Include="..\GUITextBox.cpp" />
-    <ClCompile Include="..\GUITextPanel.cpp" />
-    <ClCompile Include="..\GUIUtil.cpp" />
-    <ClCompile Include="..\WinUtil.cpp" />
-    <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="GUIEditorApp.cpp" />
     <ClCompile Include="GUIEditorLib.cpp" />
     <ClCompile Include="wrappers\ContentFile.cpp" />
@@ -138,44 +108,9 @@
     <ClCompile Include="wrappers\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\AllegroBitmap.h" />
-    <ClInclude Include="..\AllegroInput.h" />
-    <ClInclude Include="..\AllegroScreen.h" />
-    <ClInclude Include="..\GUI.H" />
-    <ClInclude Include="..\GUIBitmap.h" />
-    <ClInclude Include="..\GUIButton.h" />
-    <ClInclude Include="..\GUICheckbox.h" />
-    <ClInclude Include="..\GUICollectionBox.h" />
-    <ClInclude Include="..\GUIComboBox.h" />
-    <ClInclude Include="..\GUIControl.h" />
-    <ClInclude Include="..\GUIControlFactory.h" />
-    <ClInclude Include="..\GUIControlManager.h" />
-    <ClInclude Include="..\GUIEvent.h" />
-    <ClInclude Include="..\GUIFont.h" />
-    <ClInclude Include="..\GUIInput.h" />
-    <ClInclude Include="..\GUILabel.h" />
-    <ClInclude Include="..\GUIListBox.h" />
-    <ClInclude Include="..\GUIListPanel.h" />
-    <ClInclude Include="..\GUIManager.h" />
-    <ClInclude Include="..\GUIPanel.h" />
-    <ClInclude Include="..\GUIProgressBar.h" />
-    <ClInclude Include="..\GUIProperties.h" />
-    <ClInclude Include="..\GUIPropertyPage.h" />
-    <ClInclude Include="..\GUIRadioButton.h" />
-    <ClInclude Include="..\GUIScreen.h" />
-    <ClInclude Include="..\GUIScrollbar.h" />
-    <ClInclude Include="..\GUIScrollPanel.h" />
-    <ClInclude Include="..\GUISkin.h" />
-    <ClInclude Include="..\GUISlider.h" />
-    <ClInclude Include="..\GUITab.h" />
-    <ClInclude Include="..\GUITextBox.h" />
-    <ClInclude Include="..\GUITextPanel.h" />
-    <ClInclude Include="..\GUIUtil.h" />
-    <ClInclude Include="..\WinUtil.h" />
     <ClInclude Include="GUIEditorApp.h" />
     <ClInclude Include="GUIEditorLib.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="wrappers\ContentFile.h" />
     <ClInclude Include="wrappers\DDTError.h" />
     <ClInclude Include="wrappers\FrameMan.h" />
@@ -183,6 +118,9 @@
     <ClInclude Include="wrappers\Timer.h" />
     <ClInclude Include="wrappers\TimerMan.h" />
     <ClInclude Include="wrappers\Writer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
