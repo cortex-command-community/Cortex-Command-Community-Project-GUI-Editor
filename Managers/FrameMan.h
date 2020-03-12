@@ -41,7 +41,7 @@ enum DotGlowColor
 };
 }
 
-#include "DDTTools.h"
+#include "RTEError.h"
 #include "Singleton.h"
 #define g_FrameMan FrameMan::Instance()
 #include "Serializable.h"

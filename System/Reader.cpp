@@ -525,7 +525,7 @@ void Reader::ReportError(std::string errorDesc)
 {
     char error[1024];
     sprintf(error, "%s in %s at line %i!", errorDesc.c_str(), m_FilePath.c_str(), m_CurrentLine);
-    //DDTAbort(error);
+    //RTEAbort(error);
 }
 
 

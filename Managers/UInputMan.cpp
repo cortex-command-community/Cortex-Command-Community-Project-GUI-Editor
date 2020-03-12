@@ -812,28 +812,28 @@ int UInputMan::Create()
 #ifdef WIN32
 	if (install_joystick(JOY_TYPE_WIN32) != 0)
 	{
-		//DDTAbort("Error initialising joysticks!");
+		//RTEAbort("Error initialising joysticks!");
 		// No win 32 joysticks? Try DX then
 		if (num_joysticks == 0)
 		{
 			remove_joystick();
 			if (install_joystick(JOY_TYPE_DIRECTX) != 0)
 			{
-				//DDTAbort("Error initialising joysticks!");
+				//RTEAbort("Error initialising joysticks!");
 
 				// No dx either? Try whatever is possible
 				if (num_joysticks   == 0)
 				{
 					remove_joystick();
 					if (install_joystick(JOY_TYPE_AUTODETECT) != 0)
-						DDTAbort("Error initialising joysticks!");
+						RTEAbort("Error initialising joysticks!");
 				}
 			}
 		}
 	}
 #else
     if (install_joystick(JOY_TYPE_AUTODETECT) != 0)
-        DDTAbort("Error initialising joysticks!");
+        RTEAbort("Error initialising joysticks!");
 #endif
 
     poll_joystick();

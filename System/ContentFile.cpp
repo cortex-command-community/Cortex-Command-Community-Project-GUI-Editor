@@ -286,7 +286,7 @@ BITMAP * ContentFile::LoadAndReleaseBitmap(int conversionMode)
 
         // Copy the loaded bitmap
         if (!(pReturnBitmap = create_bitmap_ex(bitmap_color_depth(pTempBitmap), pTempBitmap->w, pTempBitmap->h)))
-            DDTAbort("Failed to create copy of the loaded datafile's data!");
+            RTEAbort("Failed to create copy of the loaded datafile's data!");
         blit(pTempBitmap, pReturnBitmap, 0, 0, 0, 0, pTempBitmap->w, pTempBitmap->h);
 
         // Now unload the datafile, also destroying the loaded bitmap;

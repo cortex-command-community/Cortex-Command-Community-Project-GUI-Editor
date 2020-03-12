@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include "DDTTools.h"
+#include "RTEError.h"
 #include "Singleton.h"
 #define g_UInputMan UInputMan::Instance()
 #include "Serializable.h"

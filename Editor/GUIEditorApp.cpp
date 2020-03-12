@@ -10,7 +10,7 @@
 #include "GUI.h"
 #include "allegro.h"
 #include "GUIEditorApp.h"
-#include "DDTError.h"
+#include "RTEError.h"
 
 #include "GUI.h"
 #include "AllegroScreen.h"
@@ -98,7 +98,7 @@ bool GUIEditorApp::Initialize(void)
     BITMAP *tempBitmap;
     PALETTE newPalette;
     //if (!(tempBitmap = load_bitmap("Palette.bmp", NULL)))// newPalette)))
-      //  DDTAbort("Failed to load palette from bitmap with following path:\n\nBase.rte/palette.bmp");
+      //  RTEAbort("Failed to load palette from bitmap with following path:\n\nBase.rte/palette.bmp");
 
     PALETTE ccpal;
     get_palette(ccpal);
@@ -811,7 +811,7 @@ void GUIEditorApp::DrawSelectedControl(GUIControl *Control)
     }
 
 
-    RECT Rect;
+    GUIRect Rect;
     SetRect(&Rect, X-6, Y-6, X+Width+6, Y+Height+6);
     g_Screen->GetBitmap()->SetClipRect(&Rect);
 

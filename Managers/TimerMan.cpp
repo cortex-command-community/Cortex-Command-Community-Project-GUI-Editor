@@ -12,28 +12,10 @@
 // Inclusions of header files
 
 
-#include "DDTError.h"
+#include "RTEError.h"
 #include "TimerMan.h"
 
-#if defined(__APPLE__)
-#include <mach/mach.h>
-#include <mach/mach_time.h>
-#endif // defined(__APPLE__)
-
-
 using namespace std;
-
-/* Obsolete Allegro timer
-// Needs to be declared volatile so that the optimizer doens't mess with it
-volatile unsigned long g_MSSinceStart = 0;
-
-// Millisecond-counting interrupt timer
-void TimerMSTick()
-{
-   g_MSSinceStart++;
-}
-END_OF_FUNCTION(TimerMSTick);
-*/
 
 namespace RTE
 {
@@ -202,14 +184,14 @@ void TimerMan::Update()
     // Make sure it's above 0
     if (timeIncrease < 0)
     {
-        DDTAbort("It seems your CPU is giving bad timing data to the game. This is known to happen on some multi-core/cpu processors. This may be fixed by downloading the latest CPU drivers from AMD or Intel. A lower resolution timer is going to be used instead until then, please restart the game.");
+        RTEAbort("It seems your CPU is giving bad timing data to the game. This is known to happen on some multi-core/cpu processors. This may be fixed by downloading the latest CPU drivers from AMD or Intel. A lower resolution timer is going to be used instead until then, please restart the game.");
     }
 
     // If not paused, add the new time difference to the sim accumulator, scaling by the TimeScale
     if (!m_SimPaused)
         m_SimAccumulator += timeIncrease * m_TimeScale;
 
-    DAssert(m_SimAccumulator >= 0, "Negative sim time accumulator?!");
+    RTEAssert(m_SimAccumulator >= 0, "Negative sim time accumulator?!");
 
     // Override the accumulator and just put one delta time in there so sim updates only once per frame
     if (m_OneSimUpdatePerFrame)
