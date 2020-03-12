@@ -23,7 +23,7 @@
     <ProjectGuid>{F0FD47AA-05BD-432E-AF5A-1D9EF0F4D377}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GUILibrary</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>GUILibrary</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -31,14 +31,14 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -73,12 +73,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)_Bin\</OutDir>
+    <IntDir>_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>RTE GUI Library.debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)_Bin\</OutDir>
+    <IntDir>_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>RTE GUI Library</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -92,6 +98,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)System;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,6 +132,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)System;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +164,37 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Source\GUI.h" />
+    <ClInclude Include="Source\GUIBanner.h" />
+    <ClInclude Include="Source\GUIButton.h" />
+    <ClInclude Include="Source\GUICheckbox.h" />
+    <ClInclude Include="Source\GUICollectionBox.h" />
+    <ClInclude Include="Source\GUIComboBox.h" />
+    <ClInclude Include="Source\GUIControl.h" />
+    <ClInclude Include="Source\GUIControlFactory.h" />
+    <ClInclude Include="Source\GUIControlManager.h" />
+    <ClInclude Include="Source\GUIEvent.h" />
+    <ClInclude Include="Source\GUIFont.h" />
+    <ClInclude Include="Source\GUIInput.h" />
+    <ClInclude Include="Source\GUILabel.h" />
+    <ClInclude Include="Source\GUIListBox.h" />
+    <ClInclude Include="Source\GUIListPanel.h" />
+    <ClInclude Include="Source\GUIManager.h" />
+    <ClInclude Include="Source\GUIPanel.h" />
+    <ClInclude Include="Source\GUIProgressBar.h" />
+    <ClInclude Include="Source\GUIProperties.h" />
+    <ClInclude Include="Source\GUIPropertyPage.h" />
+    <ClInclude Include="Source\GUIRadioButton.h" />
+    <ClInclude Include="Source\GUIScrollbar.h" />
+    <ClInclude Include="Source\GUIScrollPanel.h" />
+    <ClInclude Include="Source\GUISkin.h" />
+    <ClInclude Include="Source\GUISlider.h" />
+    <ClInclude Include="Source\GUITab.h" />
+    <ClInclude Include="Source\GUITextBox.h" />
+    <ClInclude Include="Source\GUITextPanel.h" />
+    <ClInclude Include="Source\GUIUtil.h" />
+    <ClInclude Include="Source\Interface.h" />
+    <ClInclude Include="Source\WinUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUILibrary.cpp" />
@@ -163,6 +204,36 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\GUI.cpp" />
+    <ClCompile Include="Source\GUIBanner.cpp" />
+    <ClCompile Include="Source\GUIButton.cpp" />
+    <ClCompile Include="Source\GUICheckbox.cpp" />
+    <ClCompile Include="Source\GUICollectionBox.cpp" />
+    <ClCompile Include="Source\GUIComboBox.cpp" />
+    <ClCompile Include="Source\GUIControl.cpp" />
+    <ClCompile Include="Source\GUIControlFactory.cpp" />
+    <ClCompile Include="Source\GUIControlManager.cpp" />
+    <ClCompile Include="Source\GUIEvent.cpp" />
+    <ClCompile Include="Source\GUIFont.cpp" />
+    <ClCompile Include="Source\GUIInput.cpp" />
+    <ClCompile Include="Source\GUILabel.cpp" />
+    <ClCompile Include="Source\GUIListBox.cpp" />
+    <ClCompile Include="Source\GUIListPanel.cpp" />
+    <ClCompile Include="Source\GUIManager.cpp" />
+    <ClCompile Include="Source\GUIPanel.cpp" />
+    <ClCompile Include="Source\GUIProgressBar.cpp" />
+    <ClCompile Include="Source\GUIProperties.cpp" />
+    <ClCompile Include="Source\GUIPropertyPage.cpp" />
+    <ClCompile Include="Source\GUIRadioButton.cpp" />
+    <ClCompile Include="Source\GUIScrollbar.cpp" />
+    <ClCompile Include="Source\GUIScrollPanel.cpp" />
+    <ClCompile Include="Source\GUISkin.cpp" />
+    <ClCompile Include="Source\GUISlider.cpp" />
+    <ClCompile Include="Source\GUITab.cpp" />
+    <ClCompile Include="Source\GUITextBox.cpp" />
+    <ClCompile Include="Source\GUITextPanel.cpp" />
+    <ClCompile Include="Source\GUIUtil.cpp" />
+    <ClCompile Include="Source\WinUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
