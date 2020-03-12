@@ -12,7 +12,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include <string>
 #include "TimerMan.h"
 #include "RTEError.h"
 
@@ -60,6 +59,26 @@ public:
 
 	double	GetElapsedSimTimeMS() const { return GetElapsedRealTimeMS(); }
 
+	/// <summary>
+	/// Returns true if the elapsed real time is past a certain amount of time after the start previously set by SetRealTimeLimit.
+	/// </summary>
+	/// <returns>A bool only yielding true if the elapsed real time is greater than the set limit value. If no limit has been set, this returns false.</returns>
+	bool IsPastRealTimeLimit() { return m_RealTimeLimit == 0 ? true : (m_RealTimeLimit > 0 && (g_TimerMan.GetRealTickCount() - m_StartRealTime) > m_RealTimeLimit); }
+
+	/// <summary>
+	/// Gets the real time limit value of this Timer, RELATVE to the start time.
+	/// This is when the timer is supposed to show that it has 'expired' or reached whatever time limit it is supposed to keep track of.
+	/// </summary>
+	/// <returns>A positive double with the real time limit relative to the start time.</returns>
+	double GetRealTimeLimitMS() const { return m_RealTimeLimit / m_TicksPerMS; }
+
+	/// <summary>
+	/// Sets the real time limit value of this Timer, RELATVE to the start time.
+	/// This is when the timer is supposed to show that it has 'expired' or reached whatever time limit it is supposed to keep track of.
+	/// </summary>
+	/// <param name="newTimeLimit">A positive double with the new real time limit relative to the start time.</param>
+	void SetRealTimeLimitMS(double newTimeLimit) { m_RealTimeLimit = newTimeLimit * m_TicksPerMS; }
+
 
 protected:
 
@@ -85,4 +104,4 @@ private:
 
 
 
-#endif  _RTETIMER_
+#endif  _GUITIMER_

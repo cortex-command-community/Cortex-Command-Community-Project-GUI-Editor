@@ -1,5 +1,5 @@
-#ifndef _RTEINCLUDES_
-#define _RTEINCLUDES_
+#ifndef _GUIINCLUDES_
+#define _GUIINCLUDES_
 
 // Inclusion of relevant C++ Standard Library headers.
 #include <cstdlib>

@@ -1,5 +1,5 @@
-#ifndef _RTEREADER_
-#define _RTEREADER_
+#ifndef _GUIREADER_
+#define _GUIREADER_
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // File:            Reader.h
@@ -14,10 +14,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include <ISTREAM>
-#include <FSTREAM>
-#include <string>
-#include <list>
 #include "Writer.h"
 
 namespace RTE
@@ -158,7 +154,7 @@ public:
 // Description:     Gets the class name of this Reader.
 // Arguments:       None.
 // Return value:    A string with the friendly-formatted type name of this Reader.
-
+#undef GetClassName
     virtual const std::string & GetClassName() const { return ClassName; }
 
 

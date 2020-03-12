@@ -1,17 +1,6 @@
 #ifndef _GUIEDITORLIB_
 #define _GUIEDITORLIB_
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIEditorLib.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUI Editor Library Functions
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jboett@internode.on.net
-
-
-#include <string>
 using namespace std;
 
 

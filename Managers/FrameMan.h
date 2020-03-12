@@ -1,5 +1,5 @@
-#ifndef _RTEFRAMEMAN_
-#define _RTEFRAMEMAN_
+#ifndef _GUIFRAMEMAN_
+#define _GUIFRAMEMAN_
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // File:            FrameMan.h
@@ -42,15 +42,10 @@ enum DotGlowColor
 }
 
 #include "RTEError.h"
-#include "Singleton.h"
-#define g_FrameMan FrameMan::Instance()
 #include "Serializable.h"
+#include "Timer.h"
 #include "Vector.h"
 #include "Box.h"
-#include "Material.h"
-#include "SceneMan.h"
-
-#include "MovableMan.h"
 
 namespace RTE
 {
@@ -645,28 +640,6 @@ public:
 		m_Primitives.push_back(new TextPrimitive(player, start, text, isSmall, alignment));
 	}
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBitmapPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a bitmap primitive.
-// Arguments:       Position of primitive in scene coordintaes, an entity to sraw sprite from, 
-//					rotation angle in radians, frame to draw
-// Return value:    None.
-
-	void DrawBitmapPrimitive(Vector start, Entity * pEntity, float rotAngle, int frame);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBitmapPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a bitmap primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, an entity to sraw sprite from, 
-//					rotation angle in radians, frame to draw
-// Return value:    None.
-
-	void DrawBitmapPrimitive(int player, Vector start, Entity * pEntity, float rotAngle, int frame);
-
 	
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          CalculateTextHeight
@@ -804,6 +777,7 @@ public:
 // Arguments:       None.
 // Return value:    A string with the friendly-formatted type name of this object.
 
+#undef GetClassName
     virtual const std::string & GetClassName() const { return m_ClassName; }
 
 
@@ -871,60 +845,6 @@ public:
     int GetResY() const { return m_ResY; }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetNewResX
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the horizontal resolution of the screen that will be used next
-//                  time this FrameMan is Created.
-// Arguments:       None.
-// Return value:    An int describing the horizontal resolution of the new screen in pixels.
-
-    int GetNewResX() const { return m_NewResX; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetNewResY
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the vertical resolution of the screen that will be used next
-//                  time this FrameMan is Created.
-// Arguments:       None.
-// Return value:    An int describing the vertical resolution of the new screen in pixels.
-
-    int GetNewResY() const { return m_NewResY; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetNewResX
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the horizontal resolution of the screen that will be used next
-//                  time this FrameMan is Created.
-// Arguments:       An int describing the horizontal resolution of the new screen in pixels.
-// Return value:    None.
-
-    void SetNewResX(int newResX) { m_NewResX = newResX; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetNewResY
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the vertical resolution of the screen that will be used next
-//                  time this FrameMan is Created.
-// Arguments:       An int describing the vertical resolution of the new screen in pixels.
-// Return value:    None.
-
-    void SetNewResY(int newResY) { m_NewResY = newResY; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsNewResSet
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicates whetehr a new resolution has been set for the next time
-//                  this FrameMan is created.
-// Arguments:       None.
-// Return value:    Whether the new resolution set differs from the current one.
-
-    bool IsNewResSet() const { return m_NewResX != m_ResX || m_NewResY != m_ResY; }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetBPP
@@ -956,44 +876,6 @@ public:
     BITMAP * GetBackBuffer8() const { return m_pBackBuffer8; }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetNetworkClinteBackBuffer8
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the 8bpp back buffer bitmap used to draw network transmitted image on top of everything
-// Arguments:       None.
-// Return value:    A pointer to the BITMAP 8bpp back buffer. OWNERSHIP IS NOT TRANSFERRED!
-
-	BITMAP * GetNetworkBackBufferIntermediateGUI8Ready(int player) const { return m_pNetworkBackBufferIntermediateGUI8[m_NetworkFrameReady][player]; }
-
-	BITMAP * GetNetworkBackBufferGUI8Ready(int player) const { return m_pNetworkBackBufferFinalGUI8[m_NetworkFrameReady][player]; }
-
-	BITMAP * GetNetworkBackBufferIntermediate8Ready(int player) const { return m_pNetworkBackBufferIntermediate8[m_NetworkFrameReady][player]; }
-
-	BITMAP * GetNetworkBackBuffer8Ready(int player) const { return m_pNetworkBackBufferFinal8[m_NetworkFrameReady][player]; }
-
-
-	BITMAP * GetNetworkBackBufferIntermediateGUI8Current(int player) const { return m_pNetworkBackBufferIntermediateGUI8[m_NetworkFrameCurrent][player]; }
-
-	BITMAP * GetNetworkBackBufferGUI8Current(int player) const { return m_pNetworkBackBufferFinalGUI8[m_NetworkFrameCurrent][player]; }
-
-	BITMAP * GetNetworkBackBufferIntermediate8Current(int player) const { return m_pNetworkBackBufferIntermediate8[m_NetworkFrameCurrent][player]; }
-
-	BITMAP * GetNetworkBackBuffer8Current(int player) const { return m_pNetworkBackBufferFinal8[m_NetworkFrameCurrent][player]; }
-
-
-
-
-	bool IsNetworkBitmapLocked(int player) const { return m_NetworkBitmapIsLocked[player]; }
-
-	bool GetDrawNetworkBackBuffer() { return m_DrawNetworkBackBuffer; }
-
-	void SetDrawNetworkBackBuffer(bool value) { m_DrawNetworkBackBuffer = value; }
-
-	bool GetStoreNetworkBackBuffer() { return m_StoreNetworkBackBuffer; }
-
-	void SetStoreNetworkBackBuffer(bool value) { m_StoreNetworkBackBuffer = value; }
-
-	void CreateNewPlayerBackBuffer(int player, int w, int h);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1015,29 +897,6 @@ public:
 // Return value:    The number of currently active screens.
 
     int GetScreenCount() const { return m_HSplit || m_VSplit ? (m_HSplit && m_VSplit ? 4 : 2) : 1; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetHSplit
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets whether the screen is split horizontally across the screen, ie
-//                  as two splitscreens one above the other.
-// Arguments:       None.
-// Return value:    Whether or not screen has a horizontal split.
-
-    bool GetHSplit() const { return m_HSplit; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetVSplit
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets whether the screen is split vertically across the screen, ie
-//                  as two splitscreens side by side.
-// Arguments:       None.
-// Return value:    Whether screen has a vertical split.
-
-    bool GetVSplit() const { return m_VSplit; }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetPlayerScreenWidth
@@ -1121,38 +980,6 @@ public:
     GUIFont * GetSmallFont();
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetHSplit
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether the screen is split horizontally across the screen, ie
-//                  as two splitscreens one above the other.
-// Arguments:       Whether or not to have a horizontal split.
-// Return value:    None.
-
-    void SetHSplit(bool hSplit) { m_HSplit = hSplit; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetVSplit
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether the screen is split vertically across the screen, ie
-//                  as two splitscreens side by side.
-// Arguments:       Whether or not to have a vertical split.
-// Return value:    None.
-
-    void SetVSplit(bool vSplit) { m_VSplit = vSplit; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetPPM
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the ratio between on-screen pixels and the physics engine's
-//                  meters.
-// Arguments:       A float specifying the new PPM ratio.
-// Return value:    None.
-
-    void SetPPM(const float newPPM) { m_PPM = newPPM; }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetScreenText
@@ -1190,61 +1017,6 @@ public:
 
     void ClearScreenText(int which = 0) { if (which >= 0 && which < MAXSCREENCOUNT) { m_ScreenText[which].clear(); m_TextDuration[which] = -1; m_TextDurationTimer[which].Reset(); m_TextBlinking[which] = 0; } }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsFullscreen
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicates whether we're in fullscreen mode or not.
-// Arguments:       None.
-// Return value:    Whether we're in fullscreen mode.
-
-    bool IsFullscreen() const { return m_Fullscreen; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          NxWindowed
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Tells how many times the windowed screen resolution is being multiplied
-//                  and the back buffer stretched across for better readibility.
-// Arguments:       None.
-// Return value:    What multiple the windowed mode screen resolution is run in. (1 normal)
-
-    int NxWindowed() const { return m_NxWindowed; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          NxFullscreen
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Tells how many times the fullscreen resolution is being multiplied
-//                  and the back buffer stretched across for better readibility.
-// Arguments:       None.
-// Return value:    What multiple the fullscreen mode screen resolution is run in. (1 normal)
-
-    int NxFullscreen() const { return m_NxFullscreen; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetNewNxFullscreen
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets how many times the fullscreen resolution will be multiplied ON
-//                  NEXT RESTART and the back buffer stretched.
-// Arguments:       What multiple the fullscreen mode screen resolution will be run in.
-//                  on next restart of game.
-// Return value:    None.
-
-    void SetNewNxFullscreen(int newMultiple) { m_NewNxFullscreen = newMultiple; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetNewNxFullscreen
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets how many times the fullscreen resolution will be multiplied ON
-//                  NEXT RESTART and the back buffer stretched.
-// Arguments:       None.
-// Return value:    What multiple the fullscreen mode screen resolution will be run in.
-//                  on next restart of game.
-
-    int GetNewNxFullscreen() const { return m_NewNxFullscreen; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1378,31 +1150,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SaveWorldToBMP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Dumps a bitmap of everything on the scene to the BMP file.
-// Arguments:       The filename of the file to save to, WITHOUT EXTENSION. eg, If "Test"
-//                  is passed in, this func will save to Test000.bmp, if that file does
-//                  not already exist. If it does exist, it will attempt 001, and so on.
-// Return value:    Success >=0, or failure < 0.
-
-    int SaveWorldToBMP(const char *namebase);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SaveBitmapToBMP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Dumps a bitmap to a 8bpp BMP file.
-// Arguments:       A pointer to a BITMAP to save.
-//                  The filename of the file to save to, WITHOUT EXTENSION. eg, If "Test"
-//                  is passed in, this func will save to Test000.bmp, if that file does
-//                  not already exist. If it does exist, it will attempt 001, and so on.
-// Return value:    Success >=0, or failure < 0.
-
-    int SaveBitmapToBMP(BITMAP *pBitmap, const char *namebase);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ResetFrameTimer
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Resets the frame timer to restart counting.
@@ -1411,26 +1158,6 @@ public:
 
     void ResetFrameTimer() { m_pFrameTimer->Reset(); }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ResetRTE
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Orders to reset the entire Retro Terrain Engine system next iteration.
-// Arguments:       None.
-// Return value:    None.
-
-    void ResetRTE() { m_ResetRTE = true; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsResettingRTE
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicated whether the system is about to be reset before the next loop
-//                  starts.
-// Arguments:       None.
-// Return value:    Whether the RTE is about to reset next iteration of the loop or not.
-
-    bool IsResettingRTE() { return m_ResetRTE; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1505,24 +1232,6 @@ public:
     bool FlippingWith32BPP() const;
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ShowPerformanceStats
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whetehr to display the performance stats on-screen or not.
-// Arguments:       Whether to show the performance stats or not.
-// Return value:    None.
-
-    void ShowPerformanceStats(bool showStats = true) { m_ShowPerfStats = showStats; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsShowingPerformanceStats
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Tells whetehr to display the performance stats on-screen or not.
-// Arguments:       None.
-// Return value:    Whether to show the performance stats or not.
-
-    bool IsShowingPerformanceStats() const { return m_ShowPerfStats; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1635,45 +1344,7 @@ public:
 
     void DrawPrimitives(int player, BITMAP *pTargetBitmap, const Vector &targetPos);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          NewPerformanceSample
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Moves sample counter to next sample and clears it's values.
-// Arguments:       None.
-// Return value:    None.
-	void NewPerformanceSample()
-	{
-		m_Sample++;
-		if (m_Sample >= MAXSAMPLES)
-			m_Sample = 0;
 
-		for (int pc = 0; pc < PERF_COUNT; ++pc)
-		{
-			m_PerfData[pc][m_Sample] = 0;
-			m_PerfPercentages[pc][m_Sample] = 0;
-		}
-	}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          StartPerformanceMeasurement
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves current absolute time in microseconds as a start of performance measurerement.
-// Arguments:       Counter to start measurement for.
-// Return value:    None.
-	void StartPerformanceMeasurement(PerformanceCounters counter) { m_PerfMeasureStart[counter] = g_TimerMan.GetAbsoulteTime(); }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          StopPerformanceMeasurement
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves current absolute time in microseconds as an end of performance measurerement. 
-//					The difference is added to the value of current perofrmance sample.
-// Arguments:       Counter to stop and updated measurement for.
-// Return value:    None.
-	void StopPerformanceMeasurement(PerformanceCounters counter) 
-	{ 
-		m_PerfMeasureStop[counter] = g_TimerMan.GetAbsoulteTime(); 
-		AddPerformanceSample(counter, m_PerfMeasureStop[counter] - m_PerfMeasureStart[counter]);
-	}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1684,13 +1355,7 @@ public:
 // Return value:    True if resolution is supported
 	bool IsValidResolution(int width, int height) const;
 
-	Vector GetTargetPos(int screen) { return m_TargetPos[m_NetworkFrameReady][screen]; }
 
-	Vector SLOffset[MAXSCREENCOUNT][MAX_LAYERS_STORED_FOR_NETWORK];
-
-	bool IsInMultiplayerMode() { return m_StoreNetworkBackBuffer; }
-
-	void SetCurrentPing(unsigned int ping) { m_CurrentPing = ping; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Protected member variable and method declarations
@@ -1706,34 +1371,10 @@ protected:
     // Color depth (bits per pixel)
     int m_BPP;
 
-    // These are the new resolution settings that will take effect next time the FrameMan is started
-    int m_NewResX;
-    int m_NewResY;
-
     // Screen back buffer, always 8bpp, gets copied to the 32bpp buffer if post processing is used
     BITMAP *m_pBackBuffer8;
     // 32Bits per pixel back buffer, only used if player elects, and only if in 32bpp video mode
     BITMAP *m_pBackBuffer32;
-
-	// Per-player allocated frame buffer to draw upon during frameman draw
-	BITMAP *m_pNetworkBackBufferIntermediate8[2][MAXSCREENCOUNT];
-
-	// Per-player allocated frame buffer to draw upon during frameman draw used to draw UI only
-	BITMAP *m_pNetworkBackBufferIntermediateGUI8[2][MAXSCREENCOUNT];
-
-
-	// Per-player allocated frame buffer to copy Intermediate before sending
-	BITMAP *m_pNetworkBackBufferFinal8[2][MAXSCREENCOUNT];
-
-	// Per-player allocated frame buffer to copy Intermediate before sending used to draw UI only
-	BITMAP *m_pNetworkBackBufferFinalGUI8[2][MAXSCREENCOUNT];
-
-
-	// If true, draws the contents of the m_pNetworkBackBuffer8 on top of m_pBackBuffer8 every frame in FrameMan.Draw
-	bool m_DrawNetworkBackBuffer;
-
-	// If true, dumps the contents of the m_pBackBuffer8 to the m_pNetworkBackBuffer8 every frame
-	bool m_StoreNetworkBackBuffer;
 
     // Temporary buffer for making quick screencaps
     BITMAP *m_pScreendumpBuffer;
@@ -1816,9 +1457,6 @@ protected:
     // The sim speed over real time
     float m_SimSpeed;
 
-    // Signals to reset the entire RTE next iteration.
-    bool m_ResetRTE;
-
     // The GUI control managers for all teams
 //    std::vector<GUIControlManager *> m_BuyGUIs;
 
@@ -1856,80 +1494,6 @@ protected:
 
 	std::list<PostEffect> m_ScreenRelativeEffects[MAXSCREENCOUNT];
 
-
-	//Performance data
-	//How many performance samples to store, directly affects graph size
-	const static int MAXSAMPLES = 120;
-	// How many samples to use to calculate average value displayed on screen
-	const static int AVERAGE = 10;
-
-	// Array to store perormance measurements in microseconds
-	int64_t m_PerfData[PERF_COUNT][MAXSAMPLES];
-	// Current measurement start time in microseconds
-	int64_t m_PerfMeasureStart[PERF_COUNT];
-	// Current measurement stop time in microseconds
-	int64_t m_PerfMeasureStop[PERF_COUNT];
-	// Array to store percentages from PERF_SIM_TOTAL
-	int m_PerfPercentages[PERF_COUNT][MAXSAMPLES];
-	// Perormance counter's names displayed on screen
-	string m_PerfCounterNames[PERF_COUNT];
-	// Sample counter
-	int m_Sample;
-	// Current ping value to display on screen
-	int m_CurrentPing;
-
-	// If true then the network bitmap is being updated
-	bool m_NetworkBitmapIsLocked[MAXSCREENCOUNT];
-	//std::mutex m_NetworkBitmapIsLocked[MAXSCREENCOUNT];
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AddPerformanceSample
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Adds provided value to current sample of specified performance counter
-// Arguments:       Counter to update, value to add to this counter
-// Return value:    None.
-	void AddPerformanceSample(PerformanceCounters counter, int64_t value) { m_PerfData[counter][m_Sample] += value; }
-	
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CalculateSamplePercentages
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Calculates current sample's percentages from SIM_TOTAL for all performance counters 
-//					and stores them to m_PerfPercenrages.
-// Arguments:       None.
-// Return value:    None.
-	void CalculateSamplePercentages()
-	{
-		for(int pc = 0 ; pc < FrameMan::PERF_COUNT; ++pc)
-		{
-			int perc = (int)((float)m_PerfData[pc][m_Sample] / (float)m_PerfData[pc][FrameMan::PERF_SIM_TOTAL] * 100);
-			m_PerfPercentages[pc][m_Sample] = perc;
-		}
-	}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPerormanceCounterAverage
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns an average value of AVERAGE last samples for specified performance counter
-// Arguments:       None.
-// Return value:    An average value for specified counter.
-	int64_t GetPerormanceCounterAverage(PerformanceCounters counter)
-	{
-		int64_t accum = 0;
-		int smpl = m_Sample;
-
-		for (int i = 0 ; i < AVERAGE; ++i)
-		{
-			accum += m_PerfData[counter][smpl];
-
-			smpl--;
-			if (smpl < 0)
-				smpl = MAXSAMPLES - 1;
-		}
-
-		return accum / AVERAGE;
-	}
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Private member variable and method declarations
 
@@ -1951,7 +1515,7 @@ private:
     FrameMan & operator=(const FrameMan &rhs);
 
 };
-
+extern FrameMan g_FrameMan;
 } // namespace RTE
 
 #endif // File

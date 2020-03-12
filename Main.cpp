@@ -1,120 +1,6 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            main.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Header file for test application
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			InitApp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Initialize the application
-bool	InitApp(HINSTANCE hInst, int nCmdShow);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			WinProc
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Windows callback procedure
-long PASCAL WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			UpdateApp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Update the application every frame
-void	UpdateApp(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			ProcessEditor
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Main processing function for the editor
-
-void	ProcessEditor(void);
-
-
-void	EDDrawControl(void);
-
-RTE::GUIControl *EDCheckMouse(RTE::GUIControl *Parent);
-
-void	EDDrawHandle(int X, int Y);
-
-void	EDAdjustControl(void);
-
-void	EDCheckHandle(void);
-
-void	EDInvokeUpdate(void);
-
-std::string	EDGetNewControlName(std::string classname);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			EDSave
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Save the layout
-
-void	EDSave(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			EDLoad
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Load a layout
-
-void	EDLoad(void);
-
-
-
-// Grab types
-enum {
-	Control = 0,
-	HandleTopLeft,
-	HandleTop,
-	HandleTopRight,
-	HandleRight,
-	HandleBottomRight,
-	HandleBottom,
-	HandleBottomLeft,
-	HandleLeft,
-} Grab;
-
-
-// Simple editor structure
-typedef struct {
-	RTE::GUIControl	*FocusedControl;
-
-	bool		GrabbedControl;
-	int			GrabX, GrabY;
-	int			GrabType;
-
-	int			NX, NY, NX2, NY2;
-
-	bool		Snap;
-	int			SnapGrid;
-
-	RTE::GUISurface	*Check[2];
-
-	bool		DirtyProperties;
-
-	int			WorkspaceX, WorkspaceY;
-
-} editor_t;
-*/
-
-
-
-
-/// 
-/// 
-/// //////////////////////////////////////////////////////////////////////////////////////////
-// File:            Editor.cpp
+// File:            main
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Entry point file for the GUI Library editor
 // Project:         GUI Library
@@ -122,24 +8,12 @@ typedef struct {
 //                  jboett@internode.on.net
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
-/*#include <windows.h>
-#include <windowsx.h>
-#include <stdio.h>*/
-
-
 #include "TimerMan.h"
 #include "GUIEditorApp.h"
 #include "GUIEditorLib.h"
 
-#define RECT WINDOWS_RECT
-
 #include "allegro.h"
 #include "winalleg.h"
-#undef RECT
 
 
 extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
@@ -183,4 +57,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

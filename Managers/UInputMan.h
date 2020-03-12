@@ -1,31 +1,15 @@
-#ifndef _RTEUINPUTMAN_
-#define _RTEUINPUTMAN_
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            UInputMan.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Header file for the UInputMan class.
-// Project:         Retro Terrain Engine
-// Author(s):       Daniel Tabar
-//                  data@datarealms.com
-//                  http://www.datarealms.com
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
+#ifndef _GUIUINPUTMAN_
+#define _GUIUINPUTMAN_
 
 #include "RTEError.h"
-#include "Singleton.h"
-#define g_UInputMan UInputMan::Instance()
 #include "Serializable.h"
+#include "Reader.h"
+#include "Writer.h"
 #include "Timer.h"
 
 #include "FrameMan.h"
-//#include "SceneMan.h"
-//#include "MovableMan.h"
 
-namespace RTE
-{
+namespace RTE {
 
 class GUIInput;
 class Icon;
@@ -119,29 +103,6 @@ enum MouseButtons
     MAX_MOUSE_BUTTONS
 };
 
-enum JoyButtons
-{
-    JOY_NONE = -1,
-    JOY_1 = 0,
-    JOY_2,
-    JOY_3,
-    JOY_4,
-    JOY_5,
-    JOY_6,
-    JOY_7,
-    JOY_8,
-    JOY_9,
-    JOY_10,
-    JOY_11,
-    JOY_12,
-    MAX_JOY_BUTTONS
-};
-
-enum JoyDirections
-{
-    JOYDIR_ONE = 0,
-    JOYDIR_TWO
-};
 
 enum MenuCursorButtons
 {
@@ -159,25 +120,6 @@ enum DeadZoneType
 	SQUARE = 1
 };
 
-/*
-struct JoyDirMap
-{
-    // Whether this mapping is active or not
-    bool active;
-    // Which stick on the joystick
-    int stick;
-    // Which axis
-    int axis;
-    // Which direction, on that axis, JOYDIR_ONE or JOYDIR_TWO
-    int direction;
-
-    JoyDirMap() { active = false; stick = axis = direction = 0; }
-};
-*/
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable, method and friend function declarations
-
 private:
 
 
@@ -188,12 +130,8 @@ private:
     // Parent(s):       Serializable.
     // Class history:   1/12/2007 InputScheme created.
 
-    class InputScheme:
-        public Serializable
-    {
+    class InputScheme {
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Public member variable, method and friend function declarations
 
     public:
 
@@ -205,13 +143,7 @@ private:
         // Class history:   11/25/2006 InputMapping created.
         //                  1/12/2007 Nested inside InputScheme
 
-        class InputMapping:
-            public Serializable
-        {
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Public member variable, method and friend function declarations
+        class InputMapping {
 
         public:
 
@@ -247,17 +179,6 @@ private:
 
             InputMapping() { Clear(); }
 
-/*
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Virtual method:  Create
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Makes the InputMapping object ready for use.
-        // Arguments:       None.
-        // Return value:    An error return value signaling sucess or any particular failure.
-        //                  Anything below 0 is an error signal.
-
-            virtual int Create();
-*/
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // Method:          Create
@@ -299,16 +220,6 @@ private:
 
 
         //////////////////////////////////////////////////////////////////////////////////////////
-        // Virtual method:  GetClassName
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Gets the class name of this Entity.
-        // Arguments:       None.
-        // Return value:    A string with the friendly-formatted type name of this object.
-
-            virtual const std::string & GetClassName() const { return m_sClassName; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
         // Method:          SetKey
         //////////////////////////////////////////////////////////////////////////////////////////
         // Description:     Sets the keyboard key this mapped to.
@@ -328,26 +239,7 @@ private:
             void SetMouseButton(int newButton) { m_MouseButtonMap = newButton; }
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          SetJoyButton
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Sets the joystick button mapping.
-        // Arguments:       The number of the joystick button this should be mapped to.
-        // Return value:    None.
-
-            void SetJoyButton(int newButton) { m_JoyButtonMap = newButton; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          SetDirection
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Sets the joystick direction mapping.
-        // Arguments:       The stick, axis, and direction to map this to.
-        // Return value:    None.
-
-            void SetDirection(int newStick, int newAxis, int newDirection) { m_DirectionMapped = true; m_StickMap = newStick; m_AxisMap = newAxis; m_DirectionMap = newDirection; }
-
-
+ 
         //////////////////////////////////////////////////////////////////////////////////////////
         // Method:          SetPresetDesc
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -380,55 +272,6 @@ private:
             int GetMouseButton() const { return m_MouseButtonMap; }
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          GetJoyButton
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Gets the joystick button mapping.
-        // Arguments:       None.
-        // Return value:    The number of the joystick button this is mapped to.
-
-            int GetJoyButton() const { return m_JoyButtonMap; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          JoyDirMapped
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Shows whether this is mapped to a joy direciton or not.
-        // Arguments:       None.
-        // Return value:    Joy direction mapped or not.
-
-            bool JoyDirMapped() const { return m_DirectionMapped; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          GetStick
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Gets the joystick stick number that this is mapped to.
-        // Arguments:       None.
-        // Return value:    The joystick stick number.
-
-            int GetStick() const { return m_StickMap; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          GetAxis
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Gets the joystick axis number that this is mapped to.
-        // Arguments:       None.
-        // Return value:    The joystick axis number.
-
-            int GetAxis() const { return m_AxisMap; }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Method:          GetStick
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Gets the joystick stick number that this is mapped to.
-        // Arguments:       None.
-        // Return value:    The direction, UInputMan::JOYDIR_ONE or UInputMan::JOYDIR_TWO.
-
-            int GetDirection() const { return m_DirectionMap; }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // Method:          GetPresetDesc
@@ -452,16 +295,6 @@ private:
             int m_KeyMap;
             // The mouse button mapping
             int m_MouseButtonMap;
-            // The joystick button mapping
-            int m_JoyButtonMap;
-            // Whether joystick direction mapping is enabled
-            bool m_DirectionMapped;
-            // The joystick stick mapping, if any
-            int m_StickMap;
-            // The joystick axis mapping
-            int m_AxisMap;
-            // The joystick direction mapping
-            int m_DirectionMap;
             // The friendly description that is associated with the scheme preset element, if any is set
             std::string m_PresetDesc;
 
@@ -499,17 +332,7 @@ private:
 
         InputScheme() { Clear(); }
 
-/*
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Virtual method:  Create
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Description:     Makes the InputScheme object ready for use.
-    // Arguments:       None.
-    // Return value:    An error return value signaling sucess or any particular failure.
-    //                  Anything below 0 is an error signal.
 
-        virtual int Create();
-*/
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // Method:          Create
@@ -549,15 +372,6 @@ private:
 
         virtual int Save(Writer &writer) const;
 
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Virtual method:  GetClassName
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Description:     Gets the class name of this Entity.
-    // Arguments:       None.
-    // Return value:    A string with the friendly-formatted type name of this object.
-
-        virtual const std::string & GetClassName() const { return m_sClassName; }
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -620,59 +434,6 @@ private:
         void SetupDefaults();
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          GetJoystickDeadzone
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Get the deadzone value for this control scheme.
-	// Arguments:       None.
-	// Return value:    Joystick dead zone from 0.0 to 1.0.
-
-	float GetJoystickDeadzone()
-	{
-		return m_JoystickDeadzone;
-	}
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          SetJoystickDeadzone
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     set the deadzone value for this control scheme.
-	// Arguments:       Joystick dead zone from 0.0 to 1.0.
-	// Return value:    None.
-
-	void SetJoystickDeadzone(float val)
-	{
-		m_JoystickDeadzone = val;
-	}
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          GetJoystickDeadzoneType
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Get the deadzone type for this control scheme.
-	// Arguments:       None.
-	// Return value:    Joystick dead zone InputScheme::DeadZoneType::CIRCLE or InputScheme::DeadZoneType::SQUARE
-
-	int GetJoystickDeadzoneType()
-	{
-		return m_JoystickDeadzoneType;
-	}
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          SetJoystickDeadzoneType
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Set the deadzone type for this control scheme.
-	// Arguments:       Joystick dead zone InputScheme::DeadZoneType::CIRCLE or InputScheme::DeadZoneType::SQUARE
-	// Return value:    None.
-
-	void SetJoystickDeadzoneType(int val)
-	{
-		m_JoystickDeadzoneType = val;
-	}
-
-
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -685,19 +446,15 @@ private:
         // The currently active device for this scheme 
         int m_ActiveDevice;
         // The preset this scheme was last set to, if any
-        int m_SchemePreset;
-		// How much of the input to treat like a deadzone input, not registered by the game
-		float m_JoystickDeadzone;
-		// Which deadzone type is used
-		int m_JoystickDeadzoneType;
+        //int m_SchemePreset;
         // The device input element mappings
         InputMapping m_aInputMapping[INPUT_COUNT];
 
     };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+
+
 
 public:
 
@@ -799,7 +556,7 @@ public:
 // Description:     Gets the class name of this Entity.
 // Arguments:       None.
 // Return value:    A string with the friendly-formatted type name of this object.
-
+#undef GetClassName
     virtual const std::string & GetClassName() const { return m_ClassName; }
 
 
@@ -866,16 +623,6 @@ public:
     int GetKeyMapping(int whichPlayer, int whichInput) { return m_aControlScheme[whichPlayer].GetInputMappings()[whichInput].GetKey(); }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetButtonMapping
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets which joystick button is mapped to a specific input element.
-// Arguments:       Which player to look up.
-//                  Which input element to look up.
-// Return value:    Which joystick button is mapped to the specified player and element.
-
-    int GetButtonMapping(int whichPlayer, int whichInput) { return m_aControlScheme[whichPlayer].GetInputMappings()[whichInput].GetJoyButton(); }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMappingName
@@ -913,18 +660,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetButtonMapping
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets a joystick button mapped to a specific input element.
-// Arguments:       Which player to do this for.
-//                  Which input element to map to.
-//                  Which joystick button to map to above input element.
-// Return value:    None.
-
-    void SetButtonMapping(int whichPlayer, int whichInput, int whichButton) { m_aControlScheme[whichPlayer].GetInputMappings()[whichInput].SetJoyButton(whichButton); }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          CaptureKeyMapping
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Checks for the any key press this frame, and creates an input mapping
@@ -949,34 +684,6 @@ public:
 //                  a mapping was successfully captured or not.
 
     bool CaptureButtonMapping(int whichPlayer, int whichJoy, int whichInput);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CaptureDirectionMapping
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks for the any joystick pad or stick direction press this frame,
-//                  and creates an input mapping for a specific player accordingly.
-// Arguments:       Which player to do create a map for.
-//                  Which joystick to scan for pad and stick direction presses.
-//                  Which input element to map to for that player.
-// Return value:    Whether there were any direction presses this frame, and therefore whether
-//                  a mapping was successfully captured or not.
-
-    bool CaptureDirectionMapping(int whichPlayer, int whichJoy, int whichInput);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CaptureJoystickMapping
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks for the any button or direction press this frame, and creates
-//                  an input mapping for a specific player accordingly.
-// Arguments:       Which player to do create a map for.
-//                  Which joystick to scan for button and stick presses.
-//                  Which input element to map to for that player.
-// Return value:    Whether there were any button or stick presses this frame, and
-//                  therefore whether a mapping was successfully captured or not.
-
-    bool CaptureJoystickMapping(int whichPlayer, int whichJoy, int whichInput);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,105 +836,6 @@ public:
 
     int MouseWheelMoved() { return m_MouseWheelChange; }
 
-
-	int MouseWheelMovedByPlayer(int player)
-	{
-		if (m_OverrideInput && player >= 0 && player < MAX_PLAYERS)
-		{
-			return m_aNetworkMouseWheelState[player];
-		}
-		return m_MouseWheelChange;
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyButtonPressed
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joy button was depressed between the last update and
-//                  the one previous to it.
-// Arguments:       Which joystick to check, and which button on that joystick.
-// Return value:    Pressed or not.
-
-    bool JoyButtonPressed(int whichJoy, int whichButton);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyButtonReleased
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joy button was released between the last update and
-//                  the one previous to it.
-// Arguments:       Which joystick to check, and which button on that joystick.
-// Return value:    Released or not.
-
-    bool JoyButtonReleased(int whichJoy, int whichButton);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyButtonHeld
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joystick button is being held down right now.
-// Arguments:       Which joystick to check, and which button on that joystick.
-// Return value:    Held or not.
-
-    bool JoyButtonHeld(int whichJoy, int whichButton);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          WhichJoyButtonHeld
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows the first joystick button which is currently down.
-// Arguments:       Which joystick to check.
-// Return value:    The first button in the sequence of button enumerations (JOY_1, JOY_2,
-//                  JOY_3) that is held at the time of calling this. JOY_NONE means none.
-
-    int WhichJoyButtonHeld(int whichJoy);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          WhichJoyButtonPressed
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows the first joystick button which was pressed down since last frame.
-// Arguments:       Which joystick to check.
-// Return value:    The first button in the sequence of button enumerations (JOY_1, JOY_2,
-//                  JOY_3) that is pressed since the previous frame. JOY_NONE means none.
-
-    int WhichJoyButtonPressed(int whichJoy);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyDirectionPressed
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joystick axis direction was depressed between the
-//                  last update and the one previous to it.
-// Arguments:       Which joystick, stick, axis and direction to check.
-// Return value:    Pressed or not.
-
-    bool JoyDirectionPressed(int whichJoy, int whichStick, int whichAxis, int whichDir);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyDirectionReleased
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joystick d-pad direction was released between the
-//                  last update and the one previous to it.
-// Arguments:       Which joystick, stick, axis and direction to check.
-// Return value:    Released or not.
-
-    bool JoyDirectionReleased(int whichJoy, int whichStick, int whichAxis, int whichDir);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoyDirectionHeld
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Shows whether a joystick axis is being held down in a specific
-//                  direction right now. Two adjacent directions can be held down to produce
-//                  diagonals.
-// Arguments:       Which joystick, stick, axis and direction to check.
-// Return value:    Held or not.
-
-    bool JoyDirectionHeld(int whichJoy, int whichStick, int whichAxis, int whichDir);
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          AnalogMoveValues
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1257,27 +865,6 @@ public:
 // Return value:    None.
 
     void SetMouseValueMagnitude(float magCap) { m_AnalogMouseData.CapMagnitude(m_MouseTrapRadius * magCap); }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AnalogAxisValue
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the normalized value of a certain joystick's stick's axis.
-// Arguments:       Which joystick, stick and axis to check.
-// Return value:    The analog axis value ranging between -1.0 to 1.0, or 0.0 to 1.0 if
-//                  it's a throttle type control.
-
-    float AnalogAxisValue(int whichJoy = 0, int whichStick = 0, int whichAxis = 0);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AnalogStickValues
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the analog values of a certain joystick device stick.
-// Arguments:       Which joystick to check, and which stick on that joystick device.
-// Return value:    The analog axis values ranging between -1.0 to 1.0.
-
-    Vector AnalogStickValues(int whichJoy = 0, int whichStick = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1378,37 +965,6 @@ public:
 
     void ForceMouseWithinPlayerScreen(int whichPlayer);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AnyJoyInput
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Return true if there is any joystick input at all, buttons or d-pad.
-// Arguments:       None.
-// Return value:    Whether any buttons of pads are pressed at all.
-
-    bool AnyJoyInput();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AnyJoyPress
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Return true if there is any joystick presses at all, buttons or d-pad.
-// Arguments:       None.
-// Return value:    Whether any buttons or pads have been pressed at all since last frame.
-
-    bool AnyJoyPress();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AnyJoyButtonPress
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Return true if there is any joystick button presses at all, but not
-//                  d-pad input, for a specific joystick.
-// Arguments:       None.
-// Return value:    Whether any joy buttons have been pressed at all since last frame, of
-//                  a specific joystick.
-
-    bool AnyJoyButtonPress(int whichJoy);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1539,52 +1095,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          JoystickActive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns true if specified joystick is active
-// Arguments:       None.
-// Return value:    Returns true if specified joystick is active
-
-	bool JoystickActive(int joystickNumber) const;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetJoystickCount
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the number of active joysticks
-// Arguments:       None.
-// Return value:    Returns the number of active joysticks
-
-	int GetJoystickCount() const;
-
-	Vector GetNetworkAccumulatedRawMouseMovement(int player);
-
-	void SetNetworkMouseInput(int player, Vector input);
-
-	void SetNetworkInputElementHeldState(int player, int element, bool state);
-
-	void SetNetworkInputElementPressedState(int player, int element, bool state);
-
-	void SetNetworkInputElementReleasedState(int player, int element, bool state);
-
-	void SetNetworkMouseButtonPressedState(int player, int whichButton, bool state);
-
-	void SetNetworkMouseButtonReleasedState(int player, int whichButton, bool state);
-
-	void SetNetworkMouseButtonHeldState(int player, int whichButton, bool state);
-
-	void SetNetworkMouseWheelState(int player, int state);
-
-	bool OverrideInput() { return m_OverrideInput; };
-
-	void ClearAccumulatedStates();
-
-	bool AccumulatedElementPressed(int element);
-
-	bool AccumulatedElementReleased(int element);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          FlagAltState
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Returns the state of the Alt key.
@@ -1614,42 +1124,16 @@ public:
 	bool FlagShiftState() const { return (key_shifts & KB_SHIFT_FLAG) > 0 ? true : false; }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetMultiplayerMode
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether this instance is in multiplayer mode or not
-// Arguments:       Whether multiplayer mode is on.
-// Return value:    None.
-
-	void SetMultiplayerMode(bool isMultiplayer) { m_IsInMultiplayerMode = isMultiplayer; }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
 
 protected:
 
     // Member variables
     static const std::string m_ClassName;
-
     bool m_DebugArmed;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Clear
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Clears all the member variables of this UInputMan, effectively
-//                  resetting the members of this abstraction level only.
-// Arguments:       None.
-// Return value:    None.
-
-    void Clear();
-
 
     // Key states of the previous update
     static char *s_aLastKeys;
@@ -1693,40 +1177,15 @@ private:
     static bool m_aMousePrevButtonState[MAX_MOUSE_BUTTONS];
     static bool m_aMouseChangedButtonState[MAX_MOUSE_BUTTONS];
 
-    // Joystick states as they were the previous update
-    static JOYSTICK_INFO s_aaPrevJoyState[MAX_PLAYERS];
-    // Joystick states that have changed
-    static JOYSTICK_INFO s_aaChangedJoyState[MAX_PLAYERS];
-	// Input of this manager is overriden by netowrk input
-	bool m_OverrideInput;
-	// If true then this instance operates in multiplayer mode
-	bool m_IsInMultiplayerMode;
-
-	Vector m_NetworkAccumulatedRawMouseMovement[MAX_PLAYERS];
-
-	bool m_aNetworkAccumulatedElementPressed[INPUT_COUNT];
-	bool m_aNetworkAccumulatedElementReleased[INPUT_COUNT];
-
-	bool m_aNetworkInputElementPressed[MAX_PLAYERS][INPUT_COUNT];
-	bool m_aNetworkInputElementReleased[MAX_PLAYERS][INPUT_COUNT];
-	bool m_aNetworkInputElementHeld[MAX_PLAYERS][INPUT_COUNT];
-
-	bool m_aNetworkMouseButtonPressedState[MAX_PLAYERS][MAX_MOUSE_BUTTONS];
-	bool m_aNetworkMouseButtonReleasedState[MAX_PLAYERS][MAX_MOUSE_BUTTONS];
-	bool m_aNetworkMouseButtonHeldState[MAX_PLAYERS][MAX_MOUSE_BUTTONS];
-
-	Vector m_aNetworkAnalogMoveData[MAX_PLAYERS];
-
-	int m_aNetworkMouseWheelState[MAX_PLAYERS];
-
-	bool m_TrapMousePosPerPlayer[MAX_PLAYERS];
+	/// <summary>
+	/// Clears all the member variables of this UInputMan, effectively resetting the members of this abstraction level only.
+	/// </summary>
+	void Clear();
 
     // Disallow the use of some implicit methods.
     UInputMan(const UInputMan &reference);
     UInputMan & operator=(const UInputMan &rhs);
-
 };
-
-} // namespace RTE
-
-#endif // File
+extern UInputMan g_InputMan;
+}
+#endif

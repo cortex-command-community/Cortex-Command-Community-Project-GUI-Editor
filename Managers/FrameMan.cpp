@@ -12,20 +12,9 @@
 // Inclusions of header files
 
 #include "FrameMan.h"
-#include "PresetMan.h"
-#include "ActivityMan.h"
-#include "ConsoleMan.h"
-#include "AudioMan.h"
-#include "SceneMan.h"
-#include "SettingsMan.h"
-#include "BuyMenuGUI.h"
-#include "SceneEditorGUI.h"
-#include "MovableMan.h"
-#include "SLTerrain.h"
-#include "MOSprite.h"
-#include "Scene.h"
-
 #include "UInputMan.h"
+//#include "ConsoleMan.h"
+//#include "SettingsMan.h"
 
 #include "GUI.h"
 #include "AllegroBitmap.h"
@@ -34,11 +23,6 @@
 
 // I know this is a crime, but if I include it in FrameMan.h the whole thing will collapse due to int redefinitions in Allegro
 std::mutex ScreenRelativeEffectsMutex[MAXSCREENCOUNT];
-
-#define MSPFAVERAGESAMPLESIZE 10
-
-extern bool g_ResetActivity;
-extern bool g_InActivity;
 
 namespace RTE
 {
@@ -339,44 +323,7 @@ void FrameMan::BitmapPrimitive::Draw(BITMAP *pDrawScreen, Vector targetPos)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBitmapPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a bitmap primitive.
-// Arguments:       Position of primitive in scene coordintaes, an entity to sraw sprite from, 
-//					rotation angle in radians, frame to draw
-// Return value:    None.
 
-	void FrameMan::DrawBitmapPrimitive(Vector start, Entity * pEntity, float rotAngle, int frame)
-	{
-		MOSprite * pMOS = dynamic_cast<MOSprite *>(pEntity);
-		if (pMOS)
-		{
-			BITMAP * pBitmap = pMOS->GetSpriteFrame(frame);
-			if (pBitmap)
-				m_Primitives.push_back(new BitmapPrimitive(start, pBitmap, rotAngle));
-		}
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBitmapPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a bitmap primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, an entity to sraw sprite from, 
-//					rotation angle in radians, frame to draw
-// Return value:    None.
-
-	void FrameMan::DrawBitmapPrimitive(int player, Vector start, Entity * pEntity, float rotAngle, int frame)
-	{
-		MOSprite * pMOS = dynamic_cast<MOSprite *>(pEntity);
-		if (pMOS)
-		{
-			BITMAP * pBitmap = pMOS->GetSpriteFrame(frame);
-			if (pBitmap)
-				m_Primitives.push_back(new BitmapPrimitive(player, start, pBitmap, rotAngle));
-		}
-	}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -390,11 +337,7 @@ void FrameMan::Clear()
     m_ResX = 640;
     m_ResY = 480;
     m_BPP = 8;
-    m_NewResX = m_ResX;
-    m_NewResY = m_ResY;
     m_pBackBuffer8 = 0;
-	m_DrawNetworkBackBuffer = false;
-	m_StoreNetworkBackBuffer = false;
 	m_pBackBuffer32 = 0;
     m_pScreendumpBuffer = 0;
     m_PaletteFile.Reset();
@@ -426,12 +369,10 @@ void FrameMan::Clear()
     m_MSPFs.clear();
     m_MSPFAverage = 0;
     m_SimSpeed = 1.0;
-    m_ResetRTE = false;
     m_pGUIScreen = 0;
     m_pLargeFont = 0;
     m_pSmallFont = 0;
     m_ShowPerfStats = false;
-	m_CurrentPing = 0;
 
 	m_NetworkFrameCurrent = 0;
 	m_NetworkFrameReady = 1;
@@ -450,34 +391,12 @@ void FrameMan::Clear()
         m_FlashedLastFrame[i] = false;
         m_FlashTimer[i].Reset();
 
-		for (int f = 0; f < 2; f++)
-		{
-			m_pNetworkBackBufferIntermediate8[f][i] = 0;
-			m_pNetworkBackBufferFinal8[f][i] = 0;
-			m_pNetworkBackBufferIntermediateGUI8[f][i] = 0;
-			m_pNetworkBackBufferFinalGUI8[f][i] = 0;
-		}
-		m_NetworkBitmapIsLocked[i] = false;
-
 		m_ScreenRelativeEffects->clear();
     }
     m_TextBlinkTimer.Reset();
 }
 
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Makes the FrameMan object ready for use.
 
-int FrameMan::Create()
-{
-    if (Serializable::Create() < 0)
-        return -1;
-
-    return Create();
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Virtual method:  Create
@@ -600,21 +519,7 @@ int FrameMan::Create()
     m_pBackBuffer8 = create_bitmap_ex(8, m_ResX, m_ResY);
     clear_to_color(m_pBackBuffer8, m_BlackColor);
 
-	for (int i = 0; i < MAXSCREENCOUNT; i++)
-	{
-		for (int f = 0; f < 2; f++)
-		{
-			m_pNetworkBackBufferIntermediate8[f][i] = create_bitmap_ex(8, m_ResX, m_ResY);
-			clear_to_color(m_pNetworkBackBufferIntermediate8[f][i], m_BlackColor);
-			m_pNetworkBackBufferIntermediateGUI8[f][i] = create_bitmap_ex(8, m_ResX, m_ResY);
-			clear_to_color(m_pNetworkBackBufferIntermediateGUI8[f][i], g_KeyColor);
 
-			m_pNetworkBackBufferFinal8[f][i] = create_bitmap_ex(8, m_ResX, m_ResY);
-			clear_to_color(m_pNetworkBackBufferFinal8[f][i], m_BlackColor);
-			m_pNetworkBackBufferFinalGUI8[f][i] = create_bitmap_ex(8, m_ResX, m_ResY);
-			clear_to_color(m_pNetworkBackBufferFinalGUI8[f][i], g_KeyColor);
-		}
-	}
 
     // Create the post processing buffer if in 32bpp video mode, it'll be used for glow effects etc
     if (get_color_depth() == 32 && m_BPP == 32)
@@ -657,27 +562,6 @@ int FrameMan::Create()
         m_PlayerScreenHeight = m_pPlayerScreen->h;
     }
 
-	m_Sample = 0;
-
-	for (int c = 0; c < PERF_COUNT; ++c)
-	{
-		for (int i = 0; i < MAXSAMPLES; ++i)
-		{
-			m_PerfData[c][i] = 0;
-			m_PerfPercentages[c][i] = 0;
-		}
-		m_PerfMeasureStart[c] = 0;
-		m_PerfMeasureStop[c] = 0;
-	}
-
-	//Set up performance counter's names
-	m_PerfCounterNames[PERF_SIM_TOTAL] = "Total";
-	m_PerfCounterNames[PERF_ACTORS_PASS1] = "Act Travel";
-    m_PerfCounterNames[PERF_PARTICLES_PASS1] = "Prt Travel";
-	m_PerfCounterNames[PERF_ACTORS_PASS2] = "Act Update";
-    m_PerfCounterNames[PERF_PARTICLES_PASS2] = "Prt Update";
-	m_PerfCounterNames[PERF_ACTORS_AI] = "Act AI";
-    m_PerfCounterNames[PERF_ACTIVITY] = "Activity";
 
 #if __USE_SOUND_GORILLA
 	m_PerfCounterNames[PERF_SOUND] = "Sound";
@@ -721,12 +605,10 @@ int FrameMan::ReadProperty(std::string propName, Reader &reader)
     if (propName == "ResolutionX")
     {
         reader >> m_ResX;
-        m_NewResX = m_ResX;
     }
     else if (propName == "ResolutionY")
     {
         reader >> m_ResY;
-        m_NewResY = m_ResY;
     }
     else if (propName == "TrueColorMode")
     {
@@ -868,16 +750,7 @@ int FrameMan::Save(Writer &writer) const
 void FrameMan::Destroy()
 {
     destroy_bitmap(m_pBackBuffer8);
-	for (int i = 0; i < MAXSCREENCOUNT; i++)
-	{
-		for (int f = 0; f < 2; f++)
-		{
-			destroy_bitmap(m_pNetworkBackBufferIntermediate8[f][i]);
-			destroy_bitmap(m_pNetworkBackBufferIntermediateGUI8[f][i]);
-			destroy_bitmap(m_pNetworkBackBufferFinal8[f][i]);
-			destroy_bitmap(m_pNetworkBackBufferFinalGUI8[f][i]);
-		}
-	}
+
     destroy_bitmap(m_pBackBuffer32);
     destroy_bitmap(m_pPlayerScreen);
     if (m_pPaletteDataFile)
@@ -1148,150 +1021,6 @@ int FrameMan::SaveScreenToBMP(const char *namebase)
 
     return 0;
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SaveWorldToBMP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Dumps a bitmap of everything on the scene to the BMP file.
-
-int FrameMan::SaveWorldToBMP(const char *namebase)
-{
-	if (!g_ActivityMan.ActivityRunning())
-		return 0;
-
-    int filenumber = 0;
-    char fullfilename[256];
-    int maxFileTrys = 1000;
-
-    // Make sure its not a 0 namebase
-    if (namebase == 0 || strlen(namebase) <= 0)
-        return -1;
-
-    do {
-        // Check for the file namebase001.bmp; if it exists, try 002, etc.
-        sprintf_s(fullfilename, sizeof(fullfilename), "%s%03i.bmp", namebase, filenumber++);
-        if (!exists(fullfilename)) {
-            break;
-        }
-    } while (filenumber < maxFileTrys);
-
-
-	BITMAP * pWorldBitmap = create_bitmap_ex(32, g_SceneMan.GetSceneWidth(), g_SceneMan.GetSceneHeight());
-	Vector targetPos(0,0);
-    std::list<PostEffect> postEffects;
-
-	if (pWorldBitmap)
-	{
-		clear_to_color(pWorldBitmap, makecol32(132, 192, 252)); // Light blue color
-
-		//Draw sky gradient
-		for (int i = 0; i < pWorldBitmap->h ; i++)
-		{
-			hline(pWorldBitmap, 0, i , pWorldBitmap->w - 1, makecol32(64 + (((float)i / (float)pWorldBitmap->h) * (128 - 64)), 64 + (((float)i / (float)pWorldBitmap->h) * (192 - 64)), 96 + ((float)i / (float)pWorldBitmap->h) * (255 - 96)));
-		}
-
-		// Draw scene
-		draw_sprite(pWorldBitmap, g_SceneMan.GetTerrain()->GetBGColorBitmap(), 0, 0);
-		draw_sprite(pWorldBitmap, g_SceneMan.GetTerrain()->GetFGColorBitmap(), 0, 0);
-
-		//Draw objects
-		draw_sprite(pWorldBitmap, g_SceneMan.GetMOColorBitmap(), 0, 0);
-
-		g_SceneMan.GetPostScreenEffectsWrapped(targetPos, pWorldBitmap->w, pWorldBitmap->h, postEffects,-1);
-
-		//Draw post-effects
-		BITMAP *pBitmap = 0;
-		int effectPosX = 0;
-		int effectPosY = 0;
-		int strength = 0;
-		float angle = 0;
-
-		for (list<PostEffect>::iterator eItr = postEffects.begin(); eItr != postEffects.end(); ++eItr)
-		{
-			pBitmap = (*eItr).m_pBitmap;
-			strength = (*eItr).m_Strength;
-			set_screen_blender(strength, strength, strength, strength);
-	        effectPosX  = (*eItr).m_Pos.GetFloorIntX() - (pBitmap->w / 2);
-			effectPosY  = (*eItr).m_Pos.GetFloorIntY() - (pBitmap->h / 2);
-			angle = (*eItr).m_Angle;
-
-			if (angle == 0)
-			{
-				draw_trans_sprite(pWorldBitmap, pBitmap, effectPosX, effectPosY);
-			}
-			else 
-			{
-				BITMAP * pTargetBitmap;
-
-				if (pBitmap->w < 16 && pBitmap->h < 16)
-					pTargetBitmap = m_pTempEffectBitmap_16;
-				else if (pBitmap->w < 32 && pBitmap->h < 32)
-					pTargetBitmap = m_pTempEffectBitmap_32;
-				else if (pBitmap->w < 64 && pBitmap->h < 64)
-					pTargetBitmap = m_pTempEffectBitmap_64;
-				else if (pBitmap->w < 128 && pBitmap->h < 128)
-					pTargetBitmap = m_pTempEffectBitmap_128;
-				else 
-					pTargetBitmap = m_pTempEffectBitmap_256;
-
-				clear_to_color(pTargetBitmap, 0);
-				
-				fixed fAngle;
-				fAngle = fixmul(angle, radtofix_r);
-
-				rotate_sprite(pTargetBitmap, pBitmap, 0, 0, fAngle);
-				draw_trans_sprite(pWorldBitmap, pTargetBitmap, effectPosX, effectPosY);
-			}
-		}
-
-		PALETTE palette;
-        get_palette(palette);
-        save_bmp(fullfilename, pWorldBitmap, palette);
-
-        g_ConsoleMan.PrintString("SYSTEM: World was dumped to: " + string(fullfilename));
-
-		destroy_bitmap(pWorldBitmap);
-    }
-
-    return 0;
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SaveBitmapToBMP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Dumps a bitmap to a 8bpp BMP file.
-
-int FrameMan::SaveBitmapToBMP(BITMAP *pBitmap, const char *namebase)
-{
-    int filenumber = 0;
-    char fullfilename[256];
-    int maxFileTrys = 1000;
-
-    // Make sure its not a 0 namebase
-    if (namebase == 0 || strlen(namebase) <= 0)
-        return -1;
-
-    do {
-        // Check for the file namebase001.bmp; if it exists, try 002, etc.
-        sprintf_s(fullfilename, sizeof(fullfilename), "%s%03i.bmp", namebase, filenumber++);
-        if (!exists(fullfilename)) {
-            break;
-        }
-    } while (filenumber < maxFileTrys);
-
-    // Save out the bitmap
-    if (pBitmap) {
-        PALETTE palette;
-        get_palette(palette);
-        save_bmp(fullfilename, pBitmap, palette);
-    }
-
-    return 0;
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ToggleFullscreen
@@ -2051,8 +1780,6 @@ void FrameMan::Draw()
     // These accumulate the effects for each player's screen area, and are then transferred to the above lists with the player screen offset applied
 	list<PostEffect> screenRelativeEffects;
     list<Box> screenRelativeGlowBoxes;
-    // Handy handle
-    Activity *pActivity = g_ActivityMan.GetActivity();
 
     for (int whichScreen = 0; whichScreen < screenCount; ++whichScreen)
     {
@@ -2062,32 +1789,11 @@ void FrameMan::Draw()
 
 		BITMAP *pDrawScreen = /*get_color_depth() == 8 && */screenCount == 1 ? m_pBackBuffer8 : m_pPlayerScreen;
 		BITMAP *pDrawScreenGUI = pDrawScreen;
-		if (m_StoreNetworkBackBuffer)
-		{
-			pDrawScreen = m_pNetworkBackBufferIntermediate8[m_NetworkFrameCurrent][whichScreen];
-			pDrawScreenGUI = m_pNetworkBackBufferIntermediateGUI8[m_NetworkFrameCurrent][whichScreen];
-		}
+
 
 		AllegroBitmap pPlayerGUIBitmap(pDrawScreenGUI);
 
-        // Update the scene view to line up with a specific screen and then draw it onto the intermediate screen
-        g_SceneMan.Update(whichScreen);
 
-		// Save scene layer's offsets for each screen, 
-		// server will pick them to build the frame state and send to client
-		if (m_StoreNetworkBackBuffer)
-		{
-			int layerCount = 0;
-
-			for (std::list<SceneLayer *>::reverse_iterator itr = g_SceneMan.GetScene()->GetBackLayers().rbegin(); itr != g_SceneMan.GetScene()->GetBackLayers().rend(); ++itr)
-			{
-				SLOffset[whichScreen][layerCount] = (*itr)->GetOffset();
-				layerCount++;
-
-				if (layerCount >= MAX_LAYERS_STORED_FOR_NETWORK)
-					break;
-			}
-		}
 
         Vector targetPos = g_SceneMan.GetOffset(whichScreen);
         // Adjust the drawing position on the target screen for if the target screen is larger than the scene in nonwrapping dimension.
@@ -2117,8 +1823,6 @@ void FrameMan::Draw()
             g_SceneMan.GetPostScreenEffectsWrapped(targetPos, pDrawScreen->w, pDrawScreen->h, screenRelativeEffects, pActivity->GetTeamOfPlayer(pActivity->PlayerOfScreen(whichScreen)));
             g_SceneMan.GetGlowAreasWrapped(targetPos, pDrawScreen->w, pDrawScreen->h, screenRelativeGlowBoxes);
 
-			if (IsInMultiplayerMode())
-				SetPostEffectsList(whichScreen, screenRelativeEffects);
         }
 
 // TODO: Find out what keeps disabling the clipping on the draw bitmap
@@ -2145,176 +1849,21 @@ void FrameMan::Draw()
             // Message
             if (!m_ScreenText[whichScreen].empty())
             {
-				if (IsInMultiplayerMode())
-				{
-					if (m_TextCentered[whichScreen])
-						yTextPos = (GetPlayerFrameBufferHeight(whichScreen) / 2) - 52;
-					int occOffsetX = g_SceneMan.GetScreenOcclusion(whichScreen).m_X;
+				if (m_TextCentered[whichScreen])
+					yTextPos = (GetPlayerScreenHeight() / 2) - 52;
+				int occOffsetX = g_SceneMan.GetScreenOcclusion(whichScreen).m_X;
 
-					// Draw blinking effect, but not of the text message itself, but some characters around it (so it's easier to read the msg)
-					if (m_TextBlinking[whichScreen] && m_TextBlinkTimer.AlternateReal(m_TextBlinking[whichScreen]))
-						GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerFrameBufferWidth(whichScreen) + occOffsetX) / 2, yTextPos, (">>> " + m_ScreenText[whichScreen] + " <<<").c_str(), GUIFont::Centre);
-					else
-						GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerFrameBufferWidth(whichScreen) + occOffsetX) / 2, yTextPos, m_ScreenText[whichScreen].c_str(), GUIFont::Centre);
-				}
+				// If there's really no room to offset the text into, then don't
+				if (GetPlayerScreenWidth() <= GetResX() / 2)
+					occOffsetX = 0;
+				// Draw blinking effect, but not of the text message itself, but some characters around it (so it's easier to read the msg)
+				if (m_TextBlinking[whichScreen] && m_TextBlinkTimer.AlternateReal(m_TextBlinking[whichScreen]))
+					GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerScreenWidth() + occOffsetX) / 2, yTextPos, (">>> " + m_ScreenText[whichScreen] + " <<<").c_str(), GUIFont::Centre);
 				else
-				{
-					if (m_TextCentered[whichScreen])
-						yTextPos = (GetPlayerScreenHeight() / 2) - 52;
-					int occOffsetX = g_SceneMan.GetScreenOcclusion(whichScreen).m_X;
+					GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerScreenWidth() + occOffsetX) / 2, yTextPos, m_ScreenText[whichScreen].c_str(), GUIFont::Centre);
 
-					// If there's really no room to offset the text into, then don't
-					if (GetPlayerScreenWidth() <= GetResX() / 2)
-						occOffsetX = 0;
-					// Draw blinking effect, but not of the text message itself, but some characters around it (so it's easier to read the msg)
-					if (m_TextBlinking[whichScreen] && m_TextBlinkTimer.AlternateReal(m_TextBlinking[whichScreen]))
-						GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerScreenWidth() + occOffsetX) / 2, yTextPos, (">>> " + m_ScreenText[whichScreen] + " <<<").c_str(), GUIFont::Centre);
-					else
-						GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, (GetPlayerScreenWidth() + occOffsetX) / 2, yTextPos, m_ScreenText[whichScreen].c_str(), GUIFont::Centre);
-				}
                 yTextPos += 12;
             }
-
-			////////////////////////////////////////////////////////////////
-            // Performance stats
-            if (m_ShowPerfStats && whichScreen == 0)
-            {
-                int sampleSize = 10;
-                // Time and add the millisecs per frame reading to the buffer
-                m_MSPFs.push_back(m_pFrameTimer->GetElapsedRealTimeMS());
-                m_pFrameTimer->Reset();
-                // Keep the buffer trimmed
-                while (m_MSPFs.size() > sampleSize)
-                    m_MSPFs.pop_front();
-
-                // Calculate the average millsecs per frame over the last sampleSize frames
-                int m_MSPFAverage = 0;
-                for (deque<int>::iterator fItr = m_MSPFs.begin(); fItr != m_MSPFs.end(); ++fItr)
-                    m_MSPFAverage += *fItr;
-                m_MSPFAverage /= m_MSPFs.size();
-
-                // Calcualte teh fps from the average
-                float fps = 1.0f / ((float)m_MSPFAverage / 1000.0f);
-                sprintf_s(str, sizeof(str), "FPS: %.0f", fps);
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 14, str, GUIFont::Left);
-
-                // Display the average
-                sprintf_s(str, sizeof(str), "MSPF: %i", m_MSPFAverage);
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 24, str, GUIFont::Left);
-
-                sprintf_s(str, sizeof(str), "Time Scale: x%.2f ([1]-, [2]+)", g_TimerMan.IsOneSimUpdatePerFrame() ? m_SimSpeed : g_TimerMan.GetTimeScale());
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 34, str, GUIFont::Left);
-
-                sprintf_s(str, sizeof(str), "Real to Sim Cap: %.2f ms ([3]-, [4]+)", g_TimerMan.GetRealToSimCap() * 1000.0f);
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 44, str, GUIFont::Left);
-
-                float dt = g_TimerMan.GetDeltaTimeMS();
-                sprintf_s(str, sizeof(str), "DeltaTime: %.2f ms ([5]-, [6]+)", dt);
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 54, str, GUIFont::Left);
-
-                sprintf_s(str, sizeof(str), "Particles: %i", g_MovableMan.GetParticleCount());
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 64, str, GUIFont::Left);
-
-				sprintf_s(str, sizeof(str), "Objects: %i", g_MovableMan.GetKnownObjectsCount());
-				GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 74, str, GUIFont::Left);
-
-                sprintf_s(str, sizeof(str), "MOIDs: %i", g_MovableMan.GetMOIDCount());
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 84, str, GUIFont::Left);
-
-                sprintf_s(str, sizeof(str), "Sim Updates Since Last Drawn: %i", g_TimerMan.SimUpdatesSinceDrawn());
-                GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 94, str, GUIFont::Left);
-
-                if (g_TimerMan.IsOneSimUpdatePerFrame())
-                    GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 104, "ONE Sim Update Per Frame!", GUIFont::Left);
-
-				sprintf_s(str, sizeof(str), "Sound channels: %d / %d ", g_AudioMan.GetPlayingChannelCount(), g_AudioMan.GetTotalChannelCount());
-				GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, 17, 114, str, GUIFont::Left);
-
-				int xOffset = 17;
-				int yOffset = 134;
-				int blockHeight = 34;
-				int graphHeight = 20;
-				int graphOffset = 14;
-
-				//Update current sample percentage
-				g_FrameMan.CalculateSamplePercentages();
-
-				//Draw advanced performance counters
-				for(int pc = 0 ; pc < FrameMan::PERF_COUNT; ++pc)
-				{
-					int blockStart = yOffset + pc * blockHeight;
-
-					GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, xOffset, blockStart , m_PerfCounterNames[pc], GUIFont::Left);
-
-					// Print percentage from PerformanceCounters::PERF_SIM_TOTAL
-					int perc = (int)((float)GetPerormanceCounterAverage(static_cast<PerformanceCounters>(pc)) / (float)GetPerormanceCounterAverage(PERF_SIM_TOTAL) * 100);
-					sprintf_s(str, sizeof(str), "%%: %i", perc);
-		            GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, xOffset + 60, blockStart, str, GUIFont::Left);
-					
-					// Print average processing time in ms
-					sprintf_s(str, sizeof(str), "T: %lli", GetPerormanceCounterAverage(static_cast<PerformanceCounters>(pc)) / 1000);
-		            GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, xOffset + 96, blockStart, str, GUIFont::Left);
-					
-					int graphStart = blockStart + graphOffset;
-
-					//Draw graph
-					//Draw graph backgrounds
-					pPlayerGUIBitmap.DrawRectangle(xOffset, graphStart , MAXSAMPLES, graphHeight , 240, true);
-					//pPlayerGUIBitmap.DrawLine(xOffset, graphStart, xOffset + MAXSAMPLES, graphStart, 48);
-					pPlayerGUIBitmap.DrawLine(xOffset, graphStart + graphHeight / 2, xOffset + MAXSAMPLES, graphStart + graphHeight / 2, 96);
-					//pPlayerGUIBitmap.DrawLine(xOffset, graphStart + graphHeight, xOffset + MAXSAMPLES, graphStart + graphHeight , 48);
-
-					int smpl = m_Sample;
-
-					//Custom graph for Total counter which shows update time
-					// Not used because graphs now show data in ms, but can be enabled if you need percentages
-					/*if (pc == PerformanceCounters::SIM_TOTAL)
-					{
-						m_PerfPercentages[pc][smpl] = (int)((float)m_PerfData[pc][smpl] / (1000000 / 30) * 100);
-						if (m_PerfPercentages[pc][smpl] > 100)
-							m_PerfPercentages[pc][smpl] = 100;
-					}*/
-
-					//Reset peak value
-					int peak = 0;
-
-					//Draw sample dots
-					for (int i = 0; i < MAXSAMPLES; i++)
-					{
-						if (smpl < 0)
-							smpl = MAXSAMPLES - 1;
-						
-						// Show percentages in graphs
-						//int dotHeight = (int)((float)graphHeight / 100.0 * (float)m_PerfPercentages[pc][smpl]);
-
-						// Show microseconds in graphs, assume that 33333 microseconds (one frame of 30 fps) is the highest value on the graph
-						int value = (int)((float)m_PerfData[pc][smpl] / (1000000 / 30) * 100);
-						if (value > 100)
-							value = 100;
-						// Calculate dot height on the graph
-						int dotHeight = (int)((float)graphHeight / 100.0 * (float)value);
-						pPlayerGUIBitmap.SetPixel(xOffset + MAXSAMPLES - i, graphStart + graphHeight - dotHeight, 13);
-
-						if (peak < m_PerfData[pc][smpl])
-							peak = m_PerfData[pc][smpl];
-
-						//Move to previous sample
-						smpl--;
-					}
-
-					// Print peak values
-					sprintf_s(str, sizeof(str), "Peak: %i", peak / 1000);
-		            GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, xOffset + 130, blockStart, str, GUIFont::Left);
-				}
-            }
-
-        }
-        // If superflous screen (as in a three-player match), make the fourth the Observer one
-        else
-        {
-//            yTextPos += 12;
-            GetLargeFont()->DrawAligned(&pPlayerGUIBitmap, GetPlayerScreenWidth() / 2, yTextPos, "- Observer View -", GUIFont::Centre);
-        }
 
         ////////////////////////////////////////
         // If we are dealing with split screens, then deal with the fact that we need to draw the player screens to different locations on the final buffer
@@ -2370,21 +1919,11 @@ void FrameMan::Draw()
                 m_FlashScreenColor[whichScreen] = -1;
         }
 
-        // Draw the intermediate draw splitscreen to the appropriate spot on the back buffer
-		if (!m_StoreNetworkBackBuffer)
-	        blit(pDrawScreen, m_pBackBuffer8, 0, 0, screenOffset.GetFloorIntX(), screenOffset.GetFloorIntY(), pDrawScreen->w, pDrawScreen->h);
-
         // Add the player screen's effects to the total screen effects list so they can be drawn in post processing
-        if (m_PostProcessing && !IsInMultiplayerMode())
+        if (m_PostProcessing)
         {
             int occX = g_SceneMan.GetScreenOcclusion(whichScreen).GetFloorIntX();
             int occY = g_SceneMan.GetScreenOcclusion(whichScreen).GetFloorIntY();
-
-			// Copy post effects received by client if in network mode
-			if (m_DrawNetworkBackBuffer)
-			{
-				GetPostEffectsList(0, screenRelativeEffects);
-			}
 
             // Adjust for the player screen's position on the final buffer
             for (list<PostEffect>::iterator eItr = screenRelativeEffects.begin(); eItr != screenRelativeEffects.end(); ++eItr)
@@ -2404,129 +1943,6 @@ void FrameMan::Draw()
         }
     }
 
-
-
-// Done in MovableMan's Update now
-//    g_SceneMan.ClearMOColorLayer();
-    // Clears the pixels that have been revealed from the unseen layers
-    g_SceneMan.ClearSeenPixels();
-
-	if (!m_StoreNetworkBackBuffer)
-	{
-		// Draw split screen lines
-		acquire_bitmap(m_pBackBuffer8);
-		if (m_HSplit)
-		{
-			// Draw a horizontal separating line
-			hline(m_pBackBuffer8, 0, (m_pBackBuffer8->h / 2) - 1, m_pBackBuffer8->w - 1, m_AlmostBlackColor);
-			hline(m_pBackBuffer8, 0, (m_pBackBuffer8->h / 2), m_pBackBuffer8->w - 1, m_AlmostBlackColor);
-		}
-		if (m_VSplit)
-		{
-			// Draw a vertical separating line
-			vline(m_pBackBuffer8, (m_pBackBuffer8->w / 2) - 1, 0, m_pBackBuffer8->h - 1, m_AlmostBlackColor);
-			vline(m_pBackBuffer8, (m_pBackBuffer8->w / 2), 0, m_pBackBuffer8->h - 1, m_AlmostBlackColor);
-		}
-
-		// Draw the console on top of teh 8 bpp buffer if post or 32bpp mode is active
-	//    if (!FlippingWith32BPP())
-	//        g_ConsoleMan.Draw(m_pBackBuffer32);
-
-		// Replace 8 bit backbuffer contents with network received image before postprocessing as it is where this buffer is copied to 32 bit buffer
-		if (m_DrawNetworkBackBuffer)
-		{
-			m_NetworkBitmapIsLocked[0] = true;
-			blit(m_pNetworkBackBufferFinal8[m_NetworkFrameReady][0], m_pBackBuffer8, 0, 0, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-			masked_blit(m_pNetworkBackBufferFinalGUI8[m_NetworkFrameReady][0], m_pBackBuffer8, 0, 0, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-
-			if (g_UInputMan.FlagAltState() || g_UInputMan.FlagCtrlState() || g_UInputMan.FlagShiftState())
-			{
-				AllegroBitmap allegroBitmap(m_pBackBuffer8);
-				char buf[32];
-				sprintf_s(buf, sizeof(buf), "PING: %u", m_CurrentPing);
-				GetLargeFont()->DrawAligned(&allegroBitmap, m_pBackBuffer8->w - 25, m_pBackBuffer8->h - 14, buf, GUIFont::Right);
-			}
-
-			m_NetworkBitmapIsLocked[0] = false;
-		}
-	}
-
-	//m_StoreNetworkBackBuffer = false;
-	if (m_StoreNetworkBackBuffer)
-	{
-		// Blit all four internal player screens onto the backbuffer
-		for (int i = 0; i < MAXSCREENCOUNT; i++)
-		{
-			int dx = 0;
-			int dy = 0;
-			int dw = m_pBackBuffer8->w / 2;
-			int dh = m_pBackBuffer8->h / 2;
-
-			if (i == 1)
-			{
-				dx = dw;
-			} 
-			else if (i == 2)
-			{
-				dy = dh;
-			}
-			else if (i == 3)
-			{
-				dx = dw;
-				dy = dh;
-			}
-
-			//m_TargetPos[i] = g_SceneMan.GetOffset(i);
-
-			m_NetworkBitmapIsLocked[i] = true;
-			blit(m_pNetworkBackBufferIntermediate8[m_NetworkFrameCurrent][i], m_pNetworkBackBufferFinal8[m_NetworkFrameCurrent][i], 0, 0, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameCurrent][i]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameCurrent][i]->h);
-			blit(m_pNetworkBackBufferIntermediateGUI8[m_NetworkFrameCurrent][i], m_pNetworkBackBufferFinalGUI8[m_NetworkFrameCurrent][i], 0, 0, 0, 0, m_pNetworkBackBufferFinalGUI8[m_NetworkFrameCurrent][i]->w, m_pNetworkBackBufferFinalGUI8[m_NetworkFrameCurrent][i]->h);
-			m_NetworkBitmapIsLocked[i] = false;
-
-			// Draw all player's screen into one
-			if (g_UInputMan.KeyHeld(KEY_5))
-				stretch_blit(m_pNetworkBackBufferFinal8[m_NetworkFrameCurrent][i], m_pBackBuffer8, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->h, dx, dy, dw, dh);
-		}
-
-		if (g_UInputMan.KeyHeld(KEY_1))
-		{
-			stretch_blit(m_pNetworkBackBufferFinal8[0][0], m_pBackBuffer8, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][0]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][0]->h, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-		}
-
-		if (g_UInputMan.KeyHeld(KEY_2))
-		{
-			stretch_blit(m_pNetworkBackBufferFinal8[1][0], m_pBackBuffer8, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][1]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][1]->h, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-		}
-
-		if (g_UInputMan.KeyHeld(KEY_3))
-		{
-			stretch_blit(m_pNetworkBackBufferFinal8[m_NetworkFrameReady][2], m_pBackBuffer8, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][2]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][2]->h, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-		}
-
-		if (g_UInputMan.KeyHeld(KEY_4))
-		{
-			stretch_blit(m_pNetworkBackBufferFinal8[m_NetworkFrameReady][3], m_pBackBuffer8, 0, 0, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][3]->w, m_pNetworkBackBufferFinal8[m_NetworkFrameReady][3]->h, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-		}
-
-		// Rendering complete, we can finally mark current frame as ready
-		// This is needed to make rendering look totally atomic for the server pulling data in separate threads
-		//m_NetworkFrameReady = 1;
-		//m_NetworkFrameCurrent = 1;
-		m_NetworkFrameReady = m_NetworkFrameCurrent;
-		if (m_NetworkFrameCurrent == 0)
-			m_NetworkFrameCurrent = 1;
-		else 
-			m_NetworkFrameCurrent = 0;
-		//m_NetworkFrameReady = 1;
-		//m_NetworkFrameCurrent = 0;
-
-		/*for (int i = 0; i < MAXSCREENCOUNT; i++)
-		{
-			m_NetworkBitmapIsLocked[i] = true;
-			blit(m_pBackBuffer8, m_pNetworkBackBuffer8[i], 0, 0, 0, 0, m_pBackBuffer8->w, m_pBackBuffer8->h);
-			m_NetworkBitmapIsLocked[i] = false;
-		}*/
-	}
 
     // Do postprocessing effects, if applicable and enabled
     if (m_PostProcessing && g_InActivity && m_BPP == 32)
@@ -2563,110 +1979,8 @@ void FrameMan::SetPostEffectsList(int whichScreen, list<PostEffect> & inputList)
 }
 
 
-void FrameMan::CreateNewPlayerBackBuffer(int player, int w, int h)
-{
-	for (int f = 0; f < 2; f++)
-	{
-		destroy_bitmap(m_pNetworkBackBufferIntermediate8[f][player]);
-		m_pNetworkBackBufferIntermediate8[f][player] = create_bitmap_ex(8, w, h);
-		destroy_bitmap(m_pNetworkBackBufferIntermediateGUI8[f][player]);
-		m_pNetworkBackBufferIntermediateGUI8[f][player] = create_bitmap_ex(8, w, h);
-
-		destroy_bitmap(m_pNetworkBackBufferFinal8[f][player]);
-		m_pNetworkBackBufferFinal8[f][player] = create_bitmap_ex(8, w, h);
-		destroy_bitmap(m_pNetworkBackBufferFinalGUI8[f][player]);
-		m_pNetworkBackBufferFinalGUI8[f][player] = create_bitmap_ex(8, w, h);
-	}
-
-	m_PlayerScreenWidth = w;
-	m_PlayerScreenHeight = h;
-}
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenWidth
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the width of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       None.
-// Return value:    The width of the player screens.
-
-int FrameMan::GetPlayerScreenWidth() const
-{
-	return GetPlayerFrameBufferWidth(-1);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenWidth
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the width of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       Player to get screen width for, only used by multiplayer parts.
-// Return value:    The width of the player screens.
-
-int FrameMan::GetPlayerFrameBufferWidth(int whichPlayer) const
-{ 
-	if (m_StoreNetworkBackBuffer)
-	{
-		if (whichPlayer < 0 || whichPlayer >= MAXSCREENCOUNT)
-		{
-			int w = GetResX();
-			for (int i = 0; i < MAXSCREENCOUNT; i++)
-				if (m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i] && m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->w < w)
-					w = m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->w;
-			return w;
-		}
-		else
-		{
-			if (m_pNetworkBackBufferFinal8[m_NetworkFrameReady][whichPlayer])
-				return m_pNetworkBackBufferFinal8[m_NetworkFrameReady][whichPlayer]->w;
-		}
-	}
-	return m_PlayerScreenWidth; 
-};
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenHeight
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the height of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       None.
-// Return value:    The height of the player screens.
-
-int FrameMan::GetPlayerScreenHeight() const
-{
-	return GetPlayerFrameBufferHeight(-1);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenHeight
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the height of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       Player to get screen width for, only used by multiplayer parts.
-// Return value:    The height of the player screens.
-
-int FrameMan::GetPlayerFrameBufferHeight(int whichPlayer) const 
-{ 
-	if (m_StoreNetworkBackBuffer)
-	{
-		if (whichPlayer < 0 || whichPlayer >= MAXSCREENCOUNT)
-		{
-			int h = GetResY();
-			for (int i = 0; i < MAXSCREENCOUNT; i++)
-				if (m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i] && m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->h < h)
-					h = m_pNetworkBackBufferFinal8[m_NetworkFrameReady][i]->h;
-			return h;
-		}
-		else 
-		{
-			if (m_pNetworkBackBufferFinal8[m_NetworkFrameReady][whichPlayer])
-				return m_pNetworkBackBufferFinal8[m_NetworkFrameReady][whichPlayer]->h;
-		}
-	}
-	return m_PlayerScreenHeight; 
-}
-
-
-} // namespace RTE
+} // namespace RTE 

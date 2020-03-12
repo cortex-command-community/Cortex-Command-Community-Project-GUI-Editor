@@ -1,5 +1,5 @@
-#ifndef _RTECONTENTFILE_
-#define _RTECONTENTFILE_
+#ifndef _GUICONTENTFILE_
+#define _GUICONTENTFILE_
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // File:            ContentFile.h
@@ -13,9 +13,6 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
-
-#include <string>
-#include <map>
 
 struct DATAFILE;
 struct BITMAP;
@@ -195,6 +192,7 @@ public:
 // Arguments:       None.
 // Return value:    A string with the friendly-formatted type name of this object.
 
+#undef GetClassName
     virtual const std::string & GetClassName() const { return m_ClassName; }
 
 
