@@ -7,8 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="Source\GUI.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -96,21 +94,12 @@
     <ClInclude Include="Source\GUIUtil.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Interface.h">
+    <ClInclude Include="Source\GUIInterface.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WinUtil.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
+    <ClInclude Include="LibraryIncludes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GUILibrary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Source\GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GUIBanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -195,8 +184,6 @@
     <ClCompile Include="Source\GUIUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\WinUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="LibraryIncludes.cpp" />
   </ItemGroup>
 </Project>

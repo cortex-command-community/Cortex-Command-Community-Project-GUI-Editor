@@ -74,8 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)_Bin\</OutDir>
-    <IntDir>_Bin\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName>RTE GUI Library.debug</TargetName>
+    <IntDir>$(SolutionDir)_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>RTEGUI.lib.debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,8 +83,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)_Bin\</OutDir>
-    <IntDir>_Bin\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName>RTE GUI Library</TargetName>
+    <IntDir>$(SolutionDir)_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>RTEGUI.lib.release</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -95,11 +95,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)System;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Source;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,11 +132,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)System;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Source;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <CallingConvention>Cdecl</CallingConvention>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,8 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="pch.h" />
+    <ClInclude Include="LibraryIncludes.h" />
     <ClInclude Include="Source\GUI.h" />
     <ClInclude Include="Source\GUIBanner.h" />
     <ClInclude Include="Source\GUIButton.h" />
@@ -193,18 +200,15 @@
     <ClInclude Include="Source\GUITextBox.h" />
     <ClInclude Include="Source\GUITextPanel.h" />
     <ClInclude Include="Source\GUIUtil.h" />
-    <ClInclude Include="Source\Interface.h" />
-    <ClInclude Include="Source\WinUtil.h" />
+    <ClInclude Include="Source\GUIInterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GUILibrary.cpp" />
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="LibraryIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\GUI.cpp" />
     <ClCompile Include="Source\GUIBanner.cpp" />
     <ClCompile Include="Source\GUIButton.cpp" />
     <ClCompile Include="Source\GUICheckbox.cpp" />
@@ -233,7 +237,6 @@
     <ClCompile Include="Source\GUITextBox.cpp" />
     <ClCompile Include="Source\GUITextPanel.cpp" />
     <ClCompile Include="Source\GUIUtil.cpp" />
-    <ClCompile Include="Source\WinUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

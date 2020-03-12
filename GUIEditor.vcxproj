@@ -60,8 +60,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;_WINDOWS;WIN32;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -71,6 +71,8 @@
       <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dinput.lib;ddraw.lib;dxguid.lib;winmm.lib;allegro_static_debug.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -86,8 +88,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;_WINDOWS;WIN32;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
@@ -95,6 +97,8 @@
       <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dinput.lib;ddraw.lib;dxguid.lib;winmm.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -125,6 +129,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="System\Timer.cpp" />
+    <ClCompile Include="System\Vector.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="System\Wrappers\AllegroScreen.cpp" />
@@ -140,8 +145,10 @@
     <ClInclude Include="System\ContentFile.h" />
     <ClInclude Include="System\Reader.h" />
     <ClInclude Include="System\RTEError.h" />
+    <ClInclude Include="System\Serializable.h" />
     <ClInclude Include="System\StandardIncludes.h" />
     <ClInclude Include="System\Timer.h" />
+    <ClInclude Include="System\Vector.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="System\Wrappers\AllegroInput.h" />
     <ClInclude Include="System\Wrappers\AllegroScreen.h" />

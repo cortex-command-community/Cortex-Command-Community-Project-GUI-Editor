@@ -48,9 +48,6 @@
     <ClCompile Include="Managers\UInputMan.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="System\RTEError.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -62,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="System\Wrappers\AllegroScreen.cpp">
       <Filter>System\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Vector.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RTEError.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +98,6 @@
     <ClInclude Include="Managers\UInputMan.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="System\RTEError.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\StandardIncludes.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -109,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="System\Wrappers\AllegroScreen.h">
       <Filter>System\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Vector.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Serializable.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTEError.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
