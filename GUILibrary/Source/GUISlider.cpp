@@ -95,23 +95,23 @@ void GUISlider::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the button isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
 
     // Get the values
-    string ori;
+	std::string ori;
     Props->GetValue("Orientation", &ori);
-    if (stricmp(ori.c_str(), "horizontal") == 0)
+    if (_stricmp(ori.c_str(), "horizontal") == 0)
         m_Orientation = Horizontal;
-    else if (stricmp(ori.c_str(), "vertical") == 0)
+    else if (_stricmp(ori.c_str(), "vertical") == 0)
         m_Orientation = Vertical;
 
-    string tick;
+	std::string tick;
     Props->GetValue("TickDirection", &tick);
-    if (stricmp(tick.c_str(), "TopLeft") == 0)
+    if (_stricmp(tick.c_str(), "TopLeft") == 0)
         m_TickDirection = TopLeft;
-    else if (stricmp(tick.c_str(), "BottomRight") == 0)
+    else if (_stricmp(tick.c_str(), "BottomRight") == 0)
         m_TickDirection = BottomRight;
         
     Props->GetValue("Minimum", &m_Minimum);
@@ -119,8 +119,8 @@ void GUISlider::Create(GUIProperties *Props)
     Props->GetValue("Value", &m_Value);
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
 
     // Re-Calculate the knob info
     CalculateKnob();
@@ -183,14 +183,14 @@ void GUISlider::BuildBitmap(void)
         m_KnobImage = 0;
     }
 
-    string Section;
+	std::string Section;
     if (m_Orientation == Horizontal)
         Section = "Slider_Horz";
     else
         Section = "Slider_Vert";
 
     // Load the source image
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue(Section, "Filename", &Filename);
     GUIBitmap *SrcImage = m_Skin->CreateBitmap(Filename);
     if (!SrcImage)
@@ -200,7 +200,7 @@ void GUISlider::BuildBitmap(void)
     BuildLine(Section, SrcImage);
 
     // Load the indicator image
-    string Side;
+	std::string Side;
     if (m_TickDirection == TopLeft)
         Side = "TopLeftSlider";
     else
@@ -231,7 +231,7 @@ void GUISlider::BuildBitmap(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Builds the background line for the slider
 
-void GUISlider::BuildLine(const string Section, GUIBitmap *SrcImage)
+void GUISlider::BuildLine(const std::string Section, GUIBitmap *SrcImage)
 {
     int Values[4];
     GUIRect Rect;
@@ -357,8 +357,8 @@ void GUISlider::OnMouseDown(int X, int Y, int Buttons, int Modifier)
     }
 
     // Clamp the knob position
-    m_KnobPosition = MAX(m_KnobPosition, 0);
-    m_KnobPosition = MIN(m_KnobPosition, Size-m_KnobSize);
+    m_KnobPosition = std::max(m_KnobPosition, 0);
+    m_KnobPosition = std::min(m_KnobPosition, Size-m_KnobSize);
 
     // Calculate the new value
     int Area = Size-m_KnobSize;
@@ -369,12 +369,12 @@ void GUISlider::OnMouseDown(int X, int Y, int Buttons, int Modifier)
     }
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
 
     // Clamp the knob position again for the graphics
-    m_KnobPosition = MAX(m_KnobPosition, m_EndThickness);
-    m_KnobPosition = MIN(m_KnobPosition, Size-m_KnobSize-m_EndThickness);
+    m_KnobPosition = std::max(m_KnobPosition, m_EndThickness);
+    m_KnobPosition = std::min(m_KnobPosition, Size-m_KnobSize-m_EndThickness);
 
     // If the value has changed, add the "Changed" notification
     if (m_Value != m_OldValue)
@@ -430,8 +430,8 @@ void GUISlider::OnMouseMove(int X, int Y, int Buttons, int Modifier)
         m_KnobPosition -= Delta;
 
         // Clamp the knob position
-        m_KnobPosition = MAX(m_KnobPosition, 0);
-        m_KnobPosition = MIN(m_KnobPosition, Size-m_KnobSize);
+        m_KnobPosition = std::max(m_KnobPosition, 0);
+        m_KnobPosition = std::min(m_KnobPosition, Size-m_KnobSize);
 
         // Calculate the new value
         int Area = Size-m_KnobSize;
@@ -442,12 +442,12 @@ void GUISlider::OnMouseMove(int X, int Y, int Buttons, int Modifier)
         }
 
         // Clamp the value
-        m_Value = MAX(m_Value, m_Minimum);
-        m_Value = MIN(m_Value, m_Maximum);
+        m_Value = std::max(m_Value, m_Minimum);
+        m_Value = std::min(m_Value, m_Maximum);
 
         // Clamp the knob position again for the graphics
-        m_KnobPosition = MAX(m_KnobPosition, m_EndThickness);
-        m_KnobPosition = MIN(m_KnobPosition, Size-m_KnobSize-m_EndThickness);
+        m_KnobPosition = std::max(m_KnobPosition, m_EndThickness);
+        m_KnobPosition = std::min(m_KnobPosition, Size-m_KnobSize-m_EndThickness);
 
         // If the value has changed, add the "Changed" notification
         if (m_Value != m_OldValue)
@@ -540,8 +540,8 @@ void GUISlider::CalculateKnob(void)
     }
 
     // Clamp the knob position again for the graphics
-    m_KnobPosition = MAX(m_KnobPosition, m_EndThickness);
-    m_KnobPosition = MIN(m_KnobPosition, (m_Orientation == Horizontal ? m_Width : m_Height) - m_KnobSize - m_EndThickness);
+    m_KnobPosition = std::max(m_KnobPosition, m_EndThickness);
+    m_KnobPosition = std::min(m_KnobPosition, (m_Orientation == Horizontal ? m_Width : m_Height) - m_KnobSize - m_EndThickness);
 }
 
 
@@ -564,8 +564,8 @@ void GUISlider::Move(int X, int Y)
 void GUISlider::Resize(int Width, int Height)
 {
     // Make sure the control isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUIPanel::SetSize(Width, Height);
 
@@ -695,8 +695,8 @@ void GUISlider::SetValue(int Value)
     m_Value = Value;
 
     // Clamp it
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
     
     if (m_Value != OldValue)
         AddEvent(GUIEvent::Notification, Changed, 0);
@@ -742,18 +742,18 @@ void GUISlider::ApplyProperties(GUIProperties *Props)
     GUIControl::ApplyProperties(Props);
 
     // Get the values
-    string ori;
+	std::string ori;
     m_Properties.GetValue("Orientation", &ori);
-    if (stricmp(ori.c_str(), "horizontal") == 0)
+    if (_stricmp(ori.c_str(), "horizontal") == 0)
         m_Orientation = Horizontal;
-    else if (stricmp(ori.c_str(), "vertical") == 0)
+    else if (_stricmp(ori.c_str(), "vertical") == 0)
         m_Orientation = Vertical;
 
-    string tick;
+	std::string tick;
     m_Properties.GetValue("TickDirection", &tick);
-    if (stricmp(tick.c_str(), "TopLeft") == 0)
+    if (_stricmp(tick.c_str(), "TopLeft") == 0)
         m_TickDirection = TopLeft;
-    else if (stricmp(tick.c_str(), "BottomRight") == 0)
+    else if (_stricmp(tick.c_str(), "BottomRight") == 0)
         m_TickDirection = BottomRight;
         
     m_Properties.GetValue("Minimum", &m_Minimum);
@@ -761,8 +761,8 @@ void GUISlider::ApplyProperties(GUIProperties *Props)
     m_Properties.GetValue("Value", &m_Value);
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
 
     BuildBitmap();
 }

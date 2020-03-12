@@ -65,8 +65,8 @@ void GUITab::Create(const std::string Name, int X, int Y, int Width, int Height)
         m_Height = Height;
 
     // Make sure the button isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 }
 
 
@@ -91,8 +91,8 @@ void GUITab::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the button isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     // Get the values
     Props->GetValue("Text", &m_Text);
@@ -121,7 +121,7 @@ void GUITab::ChangeSkin(GUISkin *Skin)
 
 void GUITab::BuildBitmap(void)
 {
-    string Filename;
+	std::string Filename;
     unsigned long ColorIndex = 0;
     int Values[4];
 
@@ -206,8 +206,8 @@ void GUITab::Draw(GUIScreen *Screen)
     // Draw the text
     
     // Add a space to make a gap between checkbox & text
-    string Text;
-    string space = " ";
+	std::string Text;
+	std::string space = " ";
     Text = space.append(m_Text);
 
     if (m_Font) {
@@ -329,8 +329,8 @@ void GUITab::Move(int X, int Y)
 void GUITab::Resize(int Width, int Height)
 {
     // Make sure the control isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUIPanel::SetSize(Width, Height);
 
@@ -384,8 +384,8 @@ void GUITab::SetCheck(bool Check)
         
     // Go through all my RadioButton siblings and uncheck them        
     if (m_ControlParent) {
-        vector<GUIControl *>::iterator it;
-        vector<GUIControl *> *Children = m_ControlParent->GetChildren();
+		std::vector<GUIControl *>::iterator it;
+		std::vector<GUIControl *> *Children = m_ControlParent->GetChildren();
         
         for(it = Children->begin(); it != Children->end(); it++) {
             GUIControl *C = *it;
@@ -423,7 +423,7 @@ bool GUITab::GetCheck(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUITab::SetText(const string Text)
+void GUITab::SetText(const std::string Text)
 {
     m_Text = Text;
 }
@@ -434,7 +434,7 @@ void GUITab::SetText(const string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-string GUITab::GetText(void)
+std::string GUITab::GetText(void)
 {
     return m_Text;
 }

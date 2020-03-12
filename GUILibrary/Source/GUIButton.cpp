@@ -64,8 +64,8 @@ void GUIButton::Create(const std::string Name, int X, int Y, int Width, int Heig
         m_Height = Height;
 
     // Make sure the button isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 }
 
 
@@ -90,8 +90,8 @@ void GUIButton::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the button isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     // Load the values
     Props->GetValue("Text", &m_Text);
@@ -147,7 +147,7 @@ void GUIButton::BuildBitmap(void)
     m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height*3);
 
     // Pre-cache the font
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue("Button_Up", "Font", &Filename);
     m_Skin->GetValue("Button_Up", "FontColor", &m_FontColor);
     m_Skin->GetValue("Button_Up", "FontShadow", &m_FontShadow);
@@ -342,8 +342,8 @@ void GUIButton::Move(int X, int Y)
 void GUIButton::Resize(int Width, int Height)
 {
     // Make sure the button isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUIPanel::SetSize(Width, Height);
 
@@ -367,7 +367,7 @@ void GUIButton::StoreProperties(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUIButton::SetText(const string Text)
+void GUIButton::SetText(const std::string Text)
 {
     m_Text = Text;
 
@@ -380,7 +380,7 @@ void GUIButton::SetText(const string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-string GUIButton::GetText(void)
+std::string GUIButton::GetText(void)
 {
     return m_Text;
 }

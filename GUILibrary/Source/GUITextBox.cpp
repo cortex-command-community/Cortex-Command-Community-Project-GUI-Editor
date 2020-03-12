@@ -85,25 +85,25 @@ void GUITextBox::Create(GUIProperties *Props)
     GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
 
     // Make sure the textbox isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     // Alignment values - these don't affect anyhting as of yet
-    string alignString;
+	std::string alignString;
     Props->GetValue("HAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "left") == 0)
+    if (_stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
-    if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0)
+    if (_stricmp(alignString.c_str(), "centre") == 0 || _stricmp(alignString.c_str(), "center") == 0)
         m_HAlignment = GUIFont::Centre;
-    if (stricmp(alignString.c_str(), "right") == 0)
+    if (_stricmp(alignString.c_str(), "right") == 0)
         m_HAlignment = GUIFont::Right;
 
     Props->GetValue("VAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "top") == 0)
+    if (_stricmp(alignString.c_str(), "top") == 0)
         m_VAlignment = GUIFont::Top;
-    if (stricmp(alignString.c_str(), "middle") == 0)
+    if (_stricmp(alignString.c_str(), "middle") == 0)
         m_VAlignment = GUIFont::Middle;
-    if (stricmp(alignString.c_str(), "bottom") == 0)
+    if (_stricmp(alignString.c_str(), "bottom") == 0)
         m_VAlignment = GUIFont::Bottom;
 }
 
@@ -195,8 +195,8 @@ void GUITextBox::Move(int X, int Y)
 void GUITextBox::Resize(int Width, int Height)
 {
     // Make sure the control isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUITextPanel::SetSize(Width, Height);
 

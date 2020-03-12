@@ -66,8 +66,8 @@ void GUIProgressBar::Create(const std::string Name, int X, int Y, int Width, int
         m_Height = Height;
 
     // Make sure the control isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 }
 
 
@@ -92,16 +92,16 @@ void GUIProgressBar::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the control isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     Props->GetValue("Minimum", &m_Minimum);
     Props->GetValue("Maximum", &m_Maximum);
     Props->GetValue("Value", &m_Value);
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
 }
 
 
@@ -168,7 +168,7 @@ void GUIProgressBar::BuildBitmap(void)
     m_Skin->BuildStandardRect(m_DrawBitmap, "ProgressBar_Base", 0, 0, m_Width, m_Height);    
 
     // Build the indicator
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue("ProgressBar_Indicator", "Filename", &Filename);
     GUIBitmap *Src = m_Skin->CreateBitmap(Filename);
     if (!Src)
@@ -313,8 +313,8 @@ void GUIProgressBar::Move(int X, int Y)
 void GUIProgressBar::Resize(int Width, int Height)
 {
     // Make sure the control isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUIPanel::SetSize(Width, Height);
 
@@ -358,8 +358,8 @@ void GUIProgressBar::SetValue(int Value)
     m_Value = Value;
 
     // Clamp the value
-    m_Value = MIN(m_Value, m_Maximum);
-    m_Value = MAX(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
     
     // Changed?
     if (m_Value != OldValue)
@@ -436,6 +436,6 @@ void GUIProgressBar::ApplyProperties(GUIProperties *Props)
     m_Properties.GetValue("Value", &m_Value);
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum);
 }

@@ -74,8 +74,8 @@ void GUIComboBox::Create(const std::string Name, int X, int Y, int Width, int He
         m_Height = Height;
 
     // Make sure the textbox isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
     
     m_TextPanel->Create(0, 0, m_Width-12, m_Height);    
     m_TextPanel->_SetVisible(true);
@@ -117,8 +117,8 @@ void GUIComboBox::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the textbox isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
     
     m_TextPanel->Create(0, 0, m_Width-12, m_Height);    
     m_TextPanel->_SetVisible(true);
@@ -140,13 +140,13 @@ void GUIComboBox::Create(GUIProperties *Props)
 
     // Load the info
     Props->GetValue("Dropheight", &m_DropHeight);
-    m_DropHeight = MAX(m_DropHeight, 20);
+    m_DropHeight = std::max(m_DropHeight, 20);
 
-    string Val;
+	std::string Val;
     Props->GetValue("DropDownStyle", &Val);
-    if (stricmp(Val.c_str(), "DropDownList") == 0)
+    if (_stricmp(Val.c_str(), "DropDownList") == 0)
         m_DropDownStyle = DropDownList;
-    else if (stricmp(Val.c_str(), "DropDown") == 0)
+    else if (_stricmp(Val.c_str(), "DropDown") == 0)
         m_DropDownStyle = DropDown;
 
     m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
@@ -419,7 +419,7 @@ void GUIComboBox::EndUpdate(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Add an item to the list.
 
-void GUIComboBox::AddItem(string Name, string ExtraText, GUIBitmap *pBitmap, const Entity *pEntity)
+void GUIComboBox::AddItem(std::string Name, std::string ExtraText, GUIBitmap *pBitmap, const Entity *pEntity)
 {
     m_ListPanel->AddItem(Name, ExtraText, pBitmap, pEntity);
 }
@@ -458,9 +458,9 @@ void GUIComboBox::Move(int X, int Y)
 void GUIComboBox::Resize(int Width, int Height)
 {
     // Make sure the textbox isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
-    Height = MIN(Height, 20);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
+    Height = std::min(Height, 20);
 
     GUIPanel::SetSize(Width, Height);
 
@@ -593,7 +593,7 @@ GUIListPanel::Item *GUIComboBox::GetItem(int Index)
 void GUIComboBox::SetDropHeight(int Drop)
 {
     m_DropHeight = Drop;
-    m_DropHeight = MAX(m_DropHeight, 20);
+    m_DropHeight = std::max(m_DropHeight, 20);
 
     // Change the list panel
     m_ListPanel->SetSize(m_Width, m_DropHeight);
@@ -693,7 +693,7 @@ bool GUIComboBox::GetEnabled(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets text (only if style is DropDown).
 
-string GUIComboBox::GetText(void)
+std::string GUIComboBox::GetText(void)
 {
     if (m_DropDownStyle != DropDown)
         return "";
@@ -710,7 +710,7 @@ string GUIComboBox::GetText(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets text (only if style is DropDown).
 
-void GUIComboBox::SetText(const string Text)
+void GUIComboBox::SetText(const std::string Text)
 {
     if (m_DropDownStyle == DropDown && m_TextPanel)        
         m_TextPanel->SetText(Text);
@@ -727,13 +727,13 @@ void GUIComboBox::ApplyProperties(GUIProperties *Props)
     GUIControl::ApplyProperties(Props);
 
     m_Properties.GetValue("Dropheight", &m_DropHeight);
-    m_DropHeight = MAX(m_DropHeight, 20);
+    m_DropHeight = std::max(m_DropHeight, 20);
 
-    string Val;
+	std::string Val;
     m_Properties.GetValue("DropDownStyle", &Val);
-    if (stricmp(Val.c_str(), "DropDownList") == 0)
+    if (_stricmp(Val.c_str(), "DropDownList") == 0)
         m_DropDownStyle = DropDownList;
-    else if (stricmp(Val.c_str(), "DropDown") == 0)
+    else if (_stricmp(Val.c_str(), "DropDown") == 0)
         m_DropDownStyle = DropDown;
 
     m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
@@ -780,7 +780,7 @@ void GUIComboBoxButton::ChangeSkin(GUISkin *Skin)
     Skin->BuildStandardRect(m_DrawBitmap, "ComboBox_ButtonDown", 0, m_Height, m_Width, m_Height);    
 
     // Draw the arrow
-    string Filename;
+	std::string Filename;
     Skin->GetValue("ComboBox_Arrow", "Filename", &Filename);
     GUIBitmap *Arrow = Skin->CreateBitmap(Filename);
     if (!Arrow)

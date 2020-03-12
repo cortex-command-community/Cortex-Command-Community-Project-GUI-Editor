@@ -64,8 +64,8 @@ void GUILabel::Create(const std::string Name, int X, int Y, int Width, int Heigh
         m_Height = Height;
 
     // Make sure the label isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 }
 
 
@@ -90,27 +90,27 @@ void GUILabel::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);
 
     // Make sure the label isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     // Get the values
     Props->GetValue("Text", &m_Text);
 
-    string alignString;
+	std::string alignString;
     Props->GetValue("HAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "left") == 0)
+    if (_stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
-    if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0)
+    if (_stricmp(alignString.c_str(), "centre") == 0 || _stricmp(alignString.c_str(), "center") == 0)
         m_HAlignment = GUIFont::Centre;
-    if (stricmp(alignString.c_str(), "right") == 0)
+    if (_stricmp(alignString.c_str(), "right") == 0)
         m_HAlignment = GUIFont::Right;
 
     Props->GetValue("VAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "top") == 0)
+    if (_stricmp(alignString.c_str(), "top") == 0)
         m_VAlignment = GUIFont::Top;
-    if (stricmp(alignString.c_str(), "middle") == 0)
+    if (_stricmp(alignString.c_str(), "middle") == 0)
         m_VAlignment = GUIFont::Middle;
-    if (stricmp(alignString.c_str(), "bottom") == 0)
+    if (_stricmp(alignString.c_str(), "bottom") == 0)
         m_VAlignment = GUIFont::Bottom;
 }
 
@@ -125,7 +125,7 @@ void GUILabel::ChangeSkin(GUISkin *Skin)
     GUIControl::ChangeSkin(Skin);
 
     // Load the font
-    string Filename;
+	std::string Filename;
 
     m_Skin->GetValue("Label", "Font", &Filename);
     m_Font = m_Skin->GetFont(Filename);
@@ -242,8 +242,8 @@ void GUILabel::Move(int X, int Y)
 void GUILabel::Resize(int Width, int Height)
 {
     // Make sure the control isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     GUIPanel::SetSize(Width, Height);
 }
@@ -280,7 +280,7 @@ void GUILabel::GetControlRect(int *X, int *Y, int *Width, int *Height)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text of the label.
 
-void GUILabel::SetText(const string Text)
+void GUILabel::SetText(const std::string Text)
 {
     m_Text = Text;
 }
@@ -291,7 +291,7 @@ void GUILabel::SetText(const string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text of the label.
 
-string GUILabel::GetText(void)
+std::string GUILabel::GetText(void)
 {
     return m_Text;
 }
@@ -344,20 +344,20 @@ void GUILabel::ApplyProperties(GUIProperties *Props)
 
     m_Properties.GetValue("Text", &m_Text);
 
-    string alignString;
+	std::string alignString;
     m_Properties.GetValue("HAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "left") == 0)
+    if (_stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
-    if (stricmp(alignString.c_str(), "centre") == 0)
+    if (_stricmp(alignString.c_str(), "centre") == 0)
         m_HAlignment = GUIFont::Centre;
-    if (stricmp(alignString.c_str(), "right") == 0)
+    if (_stricmp(alignString.c_str(), "right") == 0)
         m_HAlignment = GUIFont::Right;
 
     m_Properties.GetValue("VAlignment", &alignString);
-    if (stricmp(alignString.c_str(), "top") == 0)
+    if (_stricmp(alignString.c_str(), "top") == 0)
         m_VAlignment = GUIFont::Top;
-    if (stricmp(alignString.c_str(), "middle") == 0)
+    if (_stricmp(alignString.c_str(), "middle") == 0)
         m_VAlignment = GUIFont::Middle;
-    if (stricmp(alignString.c_str(), "bottom") == 0)
+    if (_stricmp(alignString.c_str(), "bottom") == 0)
         m_VAlignment = GUIFont::Bottom;
 }

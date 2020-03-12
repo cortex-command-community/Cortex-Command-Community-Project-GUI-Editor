@@ -124,8 +124,8 @@ void GUIPanel::AddChild(GUIPanel *child, bool convertToAbsolutePos)
             child->m_Height -= (child->m_Y + child->m_Height) - (m_Y + m_Height);
 */
         // Make sure the rectangle is valid
-        child->m_Width = MAX(child->m_Width, 0);
-        child->m_Height = MAX(child->m_Height, 0);
+        child->m_Width = std::max(child->m_Width, 0);
+        child->m_Height = std::max(child->m_Height, 0);
 
         int Z = 0;
         // Get the last child in the list
@@ -160,7 +160,7 @@ void GUIPanel::RemoveChild(const GUIPanel *pChild)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-    for(vector<GUIPanel *>::iterator itr = m_Children.begin(); itr != m_Children.end(); itr++)
+    for(std::vector<GUIPanel *>::iterator itr = m_Children.begin(); itr != m_Children.end(); itr++)
     {
         GUIPanel *pPanel = *itr;
         if (pPanel && pPanel == pChild)
@@ -851,7 +851,7 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type)
     int Index = -1;
 
     // Find the child in our children list
-    vector<GUIPanel *>::iterator it;
+	std::vector<GUIPanel *>::iterator it;
     int Count = 0;
     for(it = m_Children.begin(); it != m_Children.end(); it++, Count++) {
         GUIPanel *P = *it;
@@ -896,9 +896,9 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Convert the properties in the panel to a string.
 
-string GUIPanel::ToString(void)
+std::string GUIPanel::ToString(void)
 {
-    string OutString = "";
+	std::string OutString = "";
 
     // Subtract the position from the parent
     int X = m_X;
@@ -953,11 +953,11 @@ void GUIPanel::BuildProperties(GUIProperties *Prop)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Writes a single value to string.
 
-string GUIPanel::WriteValue(const string Name, int Value)
+std::string GUIPanel::WriteValue(const std::string Name, int Value)
 {
     char buf[32];
 
-    string OutString = Name;
+	std::string OutString = Name;
     OutString += " = ";
 
     sprintf_s(buf, sizeof(buf), "%i", Value);
@@ -973,9 +973,9 @@ string GUIPanel::WriteValue(const string Name, int Value)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Writes a single value to string.
 
-string GUIPanel::WriteValue(const string Name, bool Value)
+std::string GUIPanel::WriteValue(const std::string Name, bool Value)
 {
-    string OutString = Name;
+	std::string OutString = Name;
     OutString += " = ";
     OutString += (Value ? "True" : "False");
     OutString += "\n";

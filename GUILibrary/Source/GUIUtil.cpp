@@ -52,7 +52,7 @@ char* GUIUtil::SafeOverlappingStrCpy(char* dst, char* src)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text from the clipboard.
 
-bool GUIUtil::GetClipboardText(string *Text)
+bool GUIUtil::GetClipboardText(std::string *Text)
 {
 /* Platform dependent, moved to WinUtil
     HANDLE  CBDataHandle; // handle to the clipboard data
@@ -95,7 +95,7 @@ bool GUIUtil::GetClipboardText(string *Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text in the clipboard.
 
-bool GUIUtil::SetClipboardText(string Text)
+bool GUIUtil::SetClipboardText(std::string Text)
 {
 /* Platform dependent
     // Open the clipboard

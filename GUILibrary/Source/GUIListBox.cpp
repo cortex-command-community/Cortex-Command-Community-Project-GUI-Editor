@@ -58,8 +58,8 @@ void GUIListBox::Create(const std::string Name, int X, int Y, int Width, int Hei
         h = Height;
     
     // Make sure the control isn't too small
-    w = MAX(w, m_MinWidth);
-    h = MAX(h, m_MinHeight);
+    w = std::max(w, m_MinWidth);
+    h = std::max(h, m_MinHeight);
 
     GUIListPanel::Create(X, Y, w, h);
 }
@@ -86,8 +86,8 @@ void GUIListBox::Create(GUIProperties *Props)
     GUIPanel::LoadProperties(Props);    
 
     // Make sure the listbox isn't too small
-    m_Width = MAX(m_Width, m_MinWidth);
-    m_Height = MAX(m_Height, m_MinHeight);
+    m_Width = std::max(m_Width, m_MinWidth);
+    m_Height = std::max(m_Height, m_MinHeight);
 
     GUIListPanel::Create(m_X, m_Y, m_Width, m_Height);
 
@@ -139,8 +139,8 @@ void GUIListBox::Move(int X, int Y)
 void GUIListBox::Resize(int Width, int Height)
 {
     // Make sure the listbox isn't too small
-    Width = MAX(Width, m_MinWidth);
-    Height = MAX(Height, m_MinHeight);
+    Width = std::max(Width, m_MinWidth);
+    Height = std::max(Height, m_MinHeight);
 
     SetSize(Width, Height);
 }

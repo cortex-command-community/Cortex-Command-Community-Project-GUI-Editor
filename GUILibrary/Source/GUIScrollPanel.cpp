@@ -110,11 +110,11 @@ void GUIScrollPanel::LoadProps(GUIProperties *Props)
 {
     assert(Props);
 
-    string Ori;
+	std::string Ori;
     Props->GetValue("Orientation", &Ori);
 
     m_Orientation = Horizontal;
-    if (stricmp(Ori.c_str(), "Vertical") == 0)
+    if (_stricmp(Ori.c_str(), "Vertical") == 0)
         m_Orientation = Vertical;
 
     Props->GetValue("Minimum", &m_Minimum);
@@ -244,7 +244,7 @@ void GUIScrollPanel::BuildBitmap(bool UpdateSize, bool UpdateKnob)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Build a button
 
-void GUIScrollPanel::BuildButton(const string ArrowName, int Y, int Width, int Height)
+void GUIScrollPanel::BuildButton(const std::string ArrowName, int Y, int Width, int Height)
 {
     // Create the buttons
     m_Skin->BuildStandardRect(m_DrawBitmap[ButtonStates], 
@@ -258,7 +258,7 @@ void GUIScrollPanel::BuildButton(const string ArrowName, int Y, int Width, int H
     GUIRect Rect;
     
     // Load the image file
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue(ArrowName, "Filename", &Filename);
     GUIBitmap *Arrow = m_Skin->CreateBitmap(Filename);
     if (!Arrow)
@@ -293,7 +293,7 @@ void GUIScrollPanel::BuildButton(const string ArrowName, int Y, int Width, int H
 
 void GUIScrollPanel::BuildBackground(void)
 {
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue("ScrollBackground", "Filename", &Filename);
 
     GUIBitmap *Background = m_Skin->CreateBitmap(Filename);
@@ -335,7 +335,7 @@ void GUIScrollPanel::BuildKnob(const std::string Section, int X, int Y,
 void GUIScrollPanel::SetMinimum(int Min)
 {
     m_Minimum = Min;
-    m_Minimum = MIN(m_Minimum, m_Maximum);
+    m_Minimum = std::min(m_Minimum, m_Maximum);
     
     // Rebuild the knob bitmap
     m_RebuildKnob = true;
@@ -350,7 +350,7 @@ void GUIScrollPanel::SetMinimum(int Min)
 void GUIScrollPanel::SetMaximum(int Max)
 {
     m_Maximum = Max;
-    m_Maximum = MAX(m_Maximum, m_Minimum);
+    m_Maximum = std::max(m_Maximum, m_Minimum);
 
     // Rebuild the knob bitmap
     m_RebuildKnob = true;
@@ -365,8 +365,8 @@ void GUIScrollPanel::SetMaximum(int Max)
 void GUIScrollPanel::SetValue(int Value)
 {
     m_Value = Value;
-    m_Value = MAX(Value, m_Minimum);
-    m_Value = MIN(Value, m_Maximum);
+    m_Value = std::max(Value, m_Minimum);
+    m_Value = std::min(Value, m_Maximum);
 
     CalculateKnob();
 }
@@ -380,7 +380,7 @@ void GUIScrollPanel::SetValue(int Value)
 void GUIScrollPanel::SetPageSize(int PageSize)
 {
     m_PageSize = PageSize;
-    m_PageSize = MAX(m_PageSize, 1);
+    m_PageSize = std::max(m_PageSize, 1);
 
     // Rebuild the knob bitmap
     m_RebuildKnob = true;
@@ -432,7 +432,7 @@ int GUIScrollPanel::GetPageSize(void)
 void GUIScrollPanel::SetSmallChange(int SmallChange)
 {
     m_SmallChange = SmallChange;
-    m_SmallChange = MAX(m_SmallChange, 0);
+    m_SmallChange = std::max(m_SmallChange, 0);
 }
 
 
@@ -668,8 +668,8 @@ void GUIScrollPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier)
         m_KnobPosition -= Delta;
 
         // Clamp the knob
-        m_KnobPosition = MAX(m_KnobPosition, 0);
-        m_KnobPosition = MIN(m_KnobPosition, MoveLength-m_KnobLength);
+        m_KnobPosition = std::max(m_KnobPosition, 0);
+        m_KnobPosition = std::min(m_KnobPosition, MoveLength-m_KnobLength);
 
         // Calculate the value
         int Area = MoveLength - m_KnobLength;
@@ -679,8 +679,8 @@ void GUIScrollPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier)
             m_Value = (float)MaxRange * p + m_Minimum;
 
             // Clamp the value
-            m_Value = MAX(m_Value, m_Minimum);
-            m_Value = MIN(m_Value, m_Maximum-m_PageSize);
+            m_Value = std::max(m_Value, m_Minimum);
+            m_Value = std::min(m_Value, m_Maximum-m_PageSize);
 
             if (OldValue != m_Value)
                 SendSignal(ChangeValue, 0);
@@ -829,9 +829,9 @@ void GUIScrollPanel::CalculateKnob(void)
         m_KnobLength = (int)s;
     }
     // Make sure the knob is not too small
-    m_KnobLength = MAX(m_KnobLength, m_MinimumKnobSize);
+    m_KnobLength = std::max(m_KnobLength, m_MinimumKnobSize);
     if (MoveLength > 0)
-        m_KnobLength = MIN(m_KnobLength, MoveLength);
+        m_KnobLength = std::min(m_KnobLength, MoveLength);
     if (m_KnobLength < 0)
         m_KnobLength = 0;
 
@@ -845,8 +845,8 @@ void GUIScrollPanel::CalculateKnob(void)
     }
 
     // Clamp the position
-    m_KnobPosition = MAX(m_KnobPosition, 0);
-    m_KnobPosition = MIN(m_KnobPosition, MoveLength-m_KnobLength);
+    m_KnobPosition = std::max(m_KnobPosition, 0);
+    m_KnobPosition = std::min(m_KnobPosition, MoveLength-m_KnobLength);
 
 
 }
@@ -864,8 +864,8 @@ void GUIScrollPanel::AdjustValue(int Delta)
     m_Value += Delta;
 
     // Clamp the value
-    m_Value = MAX(m_Value, m_Minimum);
-    m_Value = MIN(m_Value, m_Maximum-m_PageSize);
+    m_Value = std::max(m_Value, m_Minimum);
+    m_Value = std::min(m_Value, m_Maximum-m_PageSize);
 
     // Calculate the new knob position
     CalculateKnob();
