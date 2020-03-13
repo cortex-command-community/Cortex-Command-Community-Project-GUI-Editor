@@ -14,15 +14,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#if defined(_MSC_VER)
+#include <allegro.h>
+#include <winalleg.h>	
 
-#include "allegro.h"
-#include "winalleg.h"
-	
+// Windows.h defines these and they conflict with our methods so we need to undefine them manually.
+#undef GetClassName
+#undef PlaySound
 
-#undef PlaySound	// and again == windows is a parasite
-#endif // defined(WIN32)
-
+//#include "Entity.h"
+#include "Singleton.h"
+#define g_TimerMan TimerMan::Instance()
 
 namespace RTE
 {
@@ -41,7 +42,8 @@ class QPCTimer;
 //                              instead of Allegro's crappy ms-only timer. Also implemented
 //                              the model described here: http://www.gaffer.org/game-physics/fix-your-timestep
 
-class TimerMan
+class TimerMan:
+    public Singleton<TimerMan>//,
 //    public Serializable
 {
 
@@ -132,6 +134,17 @@ public:
 // Return value:    The number of ticks per second.
 
     int64_t GetTicksPerSecond() const { return m_TicksPerSecond; }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetTicksPerSecondInLua
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the number of ticks per second, or the resolution. Lua can't handle
+//					int64 so we'll expose this specialized function.
+// Arguments:       None.
+// Return value:    The number of ticks per second.
+
+	double GetTicksPerSecondInLua() const { return (double)m_TicksPerSecond; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -344,8 +357,9 @@ public:
 // Arguments:       None.
 // Return value:    Whetehr there is enough sim time to do a physics update.
 
-    float TimeForSimUpdate() { return m_SimAccumulator >= m_DeltaTime; }
+    bool TimeForSimUpdate() { return m_SimAccumulator >= m_DeltaTime; }
 
+	signed long long GetTimeToSleep() { return (m_DeltaTime - m_SimAccumulator) / 2; };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawnSimUpdate
@@ -358,6 +372,18 @@ public:
 //                  will appear.
 
     bool DrawnSimUpdate() const { return m_DrawnSimUpdate; }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SimUpdatesSinceDrawn
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Tells how many sim updates have been performed since the last one that
+//                  ended up being a drawn frame. If negative, it means no sim updates
+//                  have happened, and a same frame will be drawn again.
+// Arguments:       None.
+// Return value:    The number of pure sim updates that have happened since the last drawn.
+
+    int SimUpdatesSinceDrawn() const { return m_SimUpdatesSinceDrawn; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -382,6 +408,17 @@ public:
 // Return value:    None.
 
     void UpdateSim();
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetAbsoulteTime
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Returns current time stamp in microseconds unrelated to TimerMan updates.
+//					Can be used to measure time intervals during single frame update.
+// Arguments:       None.
+// Return value:    Current time stamp in microseconds.
+	int64_t GetAbsoulteTime();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -410,6 +447,8 @@ protected:
     int64_t m_SimTimeTicks;
     // The number of whole simulation updates have been made since reset
     int64_t m_SimUpdateCount;
+    // How many sim updates have been done since the last drawn one
+    int m_SimUpdatesSinceDrawn;
     // Tells whether the current simulation update will be drawn in a frame.
     bool m_DrawnSimUpdate;
     // Time scale. The relationship between the real world actual time, and the simulation time.

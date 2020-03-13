@@ -142,10 +142,12 @@
     <ClInclude Include="Managers\TimerMan.h" />
     <ClInclude Include="Managers\UInputMan.h" />
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="System\Constants.h" />
     <ClInclude Include="System\ContentFile.h" />
     <ClInclude Include="System\Reader.h" />
     <ClInclude Include="System\RTEError.h" />
     <ClInclude Include="System\Serializable.h" />
+    <ClInclude Include="System\Singleton.h" />
     <ClInclude Include="System\StandardIncludes.h" />
     <ClInclude Include="System\Timer.h" />
     <ClInclude Include="System\Vector.h" />

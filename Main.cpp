@@ -20,11 +20,6 @@ extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
 
 using namespace RTE;
 
-namespace RTE {
-	
-	TimerMan	g_TimerMan;
-};
-
 GUIEditorApp g_GUIEditor;
 
 extern HINSTANCE g_hInstance = 0;

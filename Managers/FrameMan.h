@@ -1,24 +1,25 @@
 #ifndef _GUIFRAMEMAN_
 #define _GUIFRAMEMAN_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            FrameMan.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Header file for the FrameMan class.
-// Project:         Retro Terrain Engine
-// Author(s):       Daniel Tabar
-//                  data@datarealms.com
-//                  http://www.datarealms.com
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
+#include "RTEError.h"
+#include "Serializable.h"
+#include "Timer.h"
+#include "Vector.h"
+#include "Singleton.h"
+#include "ContentFile.h"
+#define g_FrameMan FrameMan::Instance()
 
 typedef int MOID;
 typedef int MID;
 
 namespace RTE
 {
+
+class AllegroScreen;
+class GUIFont;
+
+#define MAXSCREENCOUNT 4
+
 enum
 {
     g_KeyColor = 0,
@@ -32,65 +33,12 @@ enum
     g_NoMOID = 255
 };
 
-enum DotGlowColor
-{
-    NoDot = 0,
-    YellowDot,
-    RedDot,
-    BlueDot
-};
-}
-
-#include "RTEError.h"
-#include "Serializable.h"
-#include "Timer.h"
-#include "Vector.h"
-#include "Box.h"
-
-namespace RTE
-{
-
-class AllegroScreen;
-class GUIFont;
-
-#define MAXSCREENCOUNT 4
-#define MAX_LAYERS_STORED_FOR_NETWORK 10
-
 enum TransperencyPreset
 {
     LessTrans = 0,
     HalfTrans,
     MoreTrans
 };
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Struct:          PostEffect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     For storing a Post screen effect to be applied at the last stage of
-//                  32bpp rendering
-// Parent(s):       None.
-// Class history:   8/18/2007 PostEffect created.
-
-struct PostEffect
-{
-    // Where, can be relative to the scene, or to the screen, depending on context
-    Vector m_Pos;
-    // The bitmap to blend, not owned
-    BITMAP *m_pBitmap;
-    // Scalar float for how hard to blend it in, 0 - 255
-    int m_Strength;
-	// Hash used to transimt glow events over the network
-	size_t m_BitmapHash;
-	// Post effect angle
-	float m_Angle;
-
-    
-	PostEffect() { m_Pos.Reset(); m_pBitmap = 0; m_BitmapHash = 0;  m_Strength = 128; m_Angle = 0; }
-	PostEffect(const Vector &pos, BITMAP *pBitmap, size_t bitmapHash, int strength, float angle) { m_Pos = pos; m_pBitmap = pBitmap; m_BitmapHash = bitmapHash; m_Strength = strength; m_Angle = angle; }
-};
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Class:           FrameMan
@@ -104,579 +52,7 @@ class FrameMan:
     public Serializable
 {
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
-
 public:
-
-
-	// Enumeration of all available perofrmance counters
-	enum PerformanceCounters
-	{
-		PERF_SIM_TOTAL = 0,
-		PERF_ACTORS_AI,
-		PERF_ACTORS_PASS2,
-		PERF_ACTORS_PASS1,
-		PERF_PARTICLES_PASS2,
-		PERF_PARTICLES_PASS1,
-		PERF_ACTIVITY,
-
-#if __USE_SOUND_GORILLA
-		PERF_SOUND,
-#endif
-		PERF_COUNT
-	};
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           GraphicalPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of graphical primitives created from Lua
-	//					all coordintaes passed to GraphicalPrimitive objects are Scene coordinates
-	class GraphicalPrimitive
-	{
-	public:
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Method:			Constructor
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Creates GraphicalPrimitive objects
-		//                  
-		GraphicalPrimitive()
-		{
-			m_Color = 0;
-			m_Player = -1;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos) = 0;
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Method:			TranslateCoordinates
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Translates coordinats from scene to this bitmap offset
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset, scene coordinates
-		// Return value:    Vector with translated coordinates
-		Vector TranslateCoordinates(Vector targetPos, Vector scenePos);
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Method:			TranslateCoordinates
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Translates coordinats from scene to this bitmap offset producing two coordinates 
-		//					for 'left' scene bitmap with negative values as if scene seam is 0,0 and
-		//					for 'right' dcini bitmap with positive values.
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset, scene coordinates, translated coordinates
-		// Return value:    Vector with translated coordinates
-		void TranslateCoordinates(Vector targetPos, Vector scenePos, Vector & drawLeftPos, Vector & drawRightPos);
-
-
-		// Start of the primitive
-		Vector m_Start;
-		// Color to draw this primitive with
-		int m_Color;
-		// Player screen to draw primitive on
-		int m_Player;
-	};
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           LinePrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of line primitives created from Lua
-	class LinePrimitive: public GraphicalPrimitive
-	{
-	public:
-		LinePrimitive()
-		{
-		}
-
-		LinePrimitive(Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = -1;
-		}
-
-		LinePrimitive(int player, Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = player;
-		}
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		Vector m_End;
-	};
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           BoxPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of box primitives created from Lua
-	class BoxPrimitive: public GraphicalPrimitive
-	{
-	public:
-		BoxPrimitive()
-		{
-		}
-
-		BoxPrimitive(Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = -1;
-		}
-
-		BoxPrimitive(int player, Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = player;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		Vector m_End;
-	};
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           BoxFillPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of filled box primitives created from Lua
-	class BoxFillPrimitive: public GraphicalPrimitive
-	{
-	public:
-		BoxFillPrimitive()
-		{
-		}
-
-		BoxFillPrimitive(Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = -1;
-		}
-
-		BoxFillPrimitive(int player, Vector start, Vector end, int color)
-		{
-			m_Start = start;
-			m_End = end;
-			m_Color = color;
-			m_Player = player;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		Vector m_End;
-	};
-
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           CirclePrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of circle primitives created from Lua
-	class CirclePrimitive: public GraphicalPrimitive
-	{
-	public:
-		CirclePrimitive()
-		{
-			m_Radius = 0;
-		}
-
-		CirclePrimitive(Vector pos, int radius, int color)
-		{
-			m_Start = pos;
-			m_Color = color;
-			m_Radius = radius;
-			m_Player = -1;
-		}
-
-		CirclePrimitive(int player, Vector pos, int radius, int color)
-		{
-			m_Start = pos;
-			m_Color = color;
-			m_Radius = radius;
-			m_Player = player;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		float m_Radius;
-	};
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:           CircleFillPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of filled circle primitives created from Lua
-	class CircleFillPrimitive: public GraphicalPrimitive
-	{
-	public:
-		CircleFillPrimitive()
-		{
-			m_Radius = 0;
-		}
-
-		CircleFillPrimitive(Vector pos, int radius, int color)
-		{
-			m_Start = pos;
-			m_Color = color;
-			m_Radius = radius;
-			m_Player = -1;
-		}
-
-		CircleFillPrimitive(int player, Vector pos, int radius, int color)
-		{
-			m_Start = pos;
-			m_Color = color;
-			m_Radius = radius;
-			m_Player = player;
-		}
-
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		float m_Radius;
-	};
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:    TextPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of text primitives created from Lua
-	class TextPrimitive: public GraphicalPrimitive
-	{
-	public:
-		TextPrimitive()
-		{
-			m_IsSmall = true;
-			m_Text = "";
-			m_Alignment = 0;
-			m_Player = -1;
-		}
-
-		TextPrimitive(Vector pos, std::string text, bool isSmall, int alignment)
-		{
-			m_Start = pos;
-			m_Text = text;
-			m_IsSmall = isSmall;
-			m_Alignment = alignment;
-			m_Player = -1;
-		}
-
-		TextPrimitive(int player, Vector pos, std::string text, bool isSmall, int alignment)
-		{
-			m_Start = pos;
-			m_Text = text;
-			m_IsSmall = isSmall;
-			m_Alignment = alignment;
-			m_Player = player;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		bool m_IsSmall;
-		std::string m_Text;
-		int m_Alignment;
-	};
-
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Nested class:    BitmapPrimitive
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Class used to schedule drawing of bitmap primitives created from Lua
-	class BitmapPrimitive: public GraphicalPrimitive
-	{
-	public:
-		BitmapPrimitive()
-		{
-			m_pBitmap = 0;
-			m_RotAngle = 0.0;
-			m_Player = -1;
-		}
-
-		BitmapPrimitive(Vector pos, BITMAP * bitmap, float rotAngle)
-		{
-			m_Start = pos;
-			m_pBitmap = bitmap;
-			m_RotAngle = rotAngle;
-			m_Player = -1;
-		}
-
-		BitmapPrimitive(int player, Vector pos, BITMAP * bitmap, float rotAngle)
-		{
-			m_Start = pos;
-			m_pBitmap = bitmap;
-			m_RotAngle = rotAngle;
-			m_Player = player;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Virtual method:  Draw
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// Description:     Draws this primitive on provided bitmap
-		//                  
-		// Arguments:       Bitmap to draw on, bitmap offset
-		// Return value:    None
-		virtual void Draw(BITMAP *pDrawScreen, Vector targetPos);
-
-		BITMAP * m_pBitmap;
-		float m_RotAngle;
-
-	};
-
-
-	// List of graphical primitives scheduled to draw this frame, cleared every frame during FrameMan::Draw()
-	std::list<GraphicalPrimitive *> m_Primitives;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawCirclePrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a circle primitive.
-// Arguments:       Position of primitive in scene coordintaes, radius, color.
-// Return value:    None.
-
-	void DrawCirclePrimitive(Vector pos, int radius, int color)
-	{
-	    m_Primitives.push_back(new CirclePrimitive(pos, radius,color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawCirclePrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a circle primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, radius, color.
-// Return value:    None.
-
-	void DrawCirclePrimitive(int player, Vector pos, int radius, int color)
-	{
-		m_Primitives.push_back(new CirclePrimitive(player, pos, radius, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawCircleFillPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a filled circle primitive.
-// Arguments:       Position of primitive in scene coordintaes, radius, color.
-// Return value:    None.
-
-	void DrawCircleFillPrimitive(Vector pos, int radius, int color)
-	{
-	    m_Primitives.push_back(new CircleFillPrimitive(pos, radius,color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawCircleFillPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a filled circle primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, radius, color.
-// Return value:    None.
-
-	void DrawCircleFillPrimitive(int player, Vector pos, int radius, int color)
-	{
-		m_Primitives.push_back(new CircleFillPrimitive(player, pos, radius, color));
-	}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawLinePrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a line primitive.
-// Arguments:       Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawLinePrimitive(Vector start, Vector end, int color)
-	{
-	    m_Primitives.push_back(new LinePrimitive(start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawLinePrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a line primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawLinePrimitive(int player, Vector start, Vector end, int color)
-	{
-		m_Primitives.push_back(new LinePrimitive(player, start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBoxPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a box primitive.
-// Arguments:       Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawBoxPrimitive(Vector start, Vector end, int color)
-	{
-	    m_Primitives.push_back(new BoxPrimitive(start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBoxPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a box primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawBoxPrimitive(int player, Vector start, Vector end, int color)
-	{
-		m_Primitives.push_back(new BoxPrimitive(player, start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBoxPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a filled box primitive.
-// Arguments:       Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawBoxFillPrimitive(Vector start, Vector end, int color)
-	{
-	    m_Primitives.push_back(new BoxFillPrimitive(start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawBoxPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a filled box primitive.
-// Arguments:       Player screen to draw primitive on. Player screen to draw primitive on. Position of primitive in scene coordintaes, color.
-// Return value:    None.
-
-	void DrawBoxFillPrimitive(int player, Vector start, Vector end, int color)
-	{
-		m_Primitives.push_back(new BoxFillPrimitive(player, start, end, color));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawTextPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a text primitive.
-// Arguments:       Position of primitive in scene coordintaes, text, small or big font
-//					alignment 0 = left, 1 = center, 2 = right
-// Return value:    None.
-
-	void DrawTextPrimitive(Vector start, std::string text, bool isSmall, int alignment)
-	{
-	    m_Primitives.push_back(new TextPrimitive(start, text, isSmall, alignment));
-	}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawTextPrimitive
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Schedule to draw a text primitive.
-// Arguments:       Player screen to draw primitive on. Position of primitive in scene coordintaes, text, small or big font
-//					alignment 0 = left, 1 = center, 2 = right
-// Return value:    None.
-
-	void DrawTextPrimitive(int player, Vector start, std::string text, bool isSmall, int alignment)
-	{
-		m_Primitives.push_back(new TextPrimitive(player, start, text, isSmall, alignment));
-	}
-
-	
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CalculateTextHeight
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns max text height
-// Arguments:       Text, max width, whether to use small or large font
-// Return value:    None.
-
-	int CalculateTextHeight(std::string text, int maxWidth, bool isSmall);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CalculateTextWidth
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns max text width
-// Arguments:       Text, whether to use small or large font
-// Return value:    None.
-
-	int CalculateTextWidth(std::string text, bool isSmall);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ClearPrimitivesList
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Delete all scheduled primitives, called on every FrameMan sim update.
-// Arguments:       None.
-// Return value:    None.
-
-	void ClearPrimitivesList()
-	{
-		for(std::list<GraphicalPrimitive *>::const_iterator it = m_Primitives.begin(); it != m_Primitives.end(); ++it)
-		{
-			delete (*it);
-		}
-		m_Primitives.clear();
-	}
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     FrameMan
@@ -687,7 +63,6 @@ public:
 
     FrameMan() { Clear(); }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Destructor:      ~FrameMan
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -696,7 +71,6 @@ public:
 // Arguments:       None.
 
     virtual ~FrameMan() { Destroy(); }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Virtual method:  Create
@@ -709,23 +83,6 @@ public:
 
     virtual int Create();
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  ReadProperty
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Reads a property value from a Reader stream. If the name isn't
-//                  recognized by this class, then ReadProperty of the parent class
-//                  is called. If the property isn't recognized by any of the base classes,
-//                  false is returned, and the Reader's position is untouched.
-// Arguments:       The name of the property to be read.
-//                  A Reader lined up to the value of the property to be read.
-// Return value:    An error return value signaling whether the property was successfully
-//                  read or not. 0 means it was read successfully, and any nonzero indicates
-//                  that a property of that name could not be found in this or base classes.
-
-    virtual int ReadProperty(std::string propName, Reader &reader);
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Virtual method:  Reset
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -736,30 +93,6 @@ public:
 
     virtual void Reset() { Clear(); }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ResetSplitScreens
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets new values for the split screen configuration.
-// Arguments:       Whether the new setting should be horizontally split (over and under).
-//                  Whether the new setting should be vertically split (side by side)
-// Return value:    None.
-
-    void ResetSplitScreens(bool hSplit = false, bool vSplit = false);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Save
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves the complete state of this FrameMan to an output stream for
-//                  later recreation with Create(Reader &reader);
-// Arguments:       A Writer that the FrameMan will save itself with.
-// Return value:    An error return value signaling sucess or any particular failure.
-//                  Anything below 0 is an error signal.
-
-    virtual int Save(Writer &writer) const;
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Destroy
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -768,7 +101,6 @@ public:
 // Return value:    None.
 
     void Destroy();
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Virtual method:   GetClassName
@@ -780,51 +112,6 @@ public:
 #undef GetClassName
     virtual const std::string & GetClassName() const { return m_ClassName; }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPPM
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the ratio between on-screen pixels and the physics engine's
-//                  meters.
-// Arguments:       None.
-// Return value:    A float describing the current PPM ratio.
-
-    float GetPPM() const { return m_PPM; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetMPP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the ratio between the physics engine's meters and on-screen
-//                  pixels.
-// Arguments:       None.
-// Return value:    A float describing the current MPP ratio.
-
-    float GetMPP() const { return m_MPP; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPPL
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the ratio between the on-screen pixels and the physics engine's
-//                  Litres.
-// Arguments:       None.
-// Return value:    A float describing the current PPL ratio.
-
-    float GetPPL() const { return m_PPL; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetLPP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the ratio between the physics engine's Litres and on-screen
-//                  pixels.
-// Arguments:       None.
-// Return value:    A float describing the current LPP ratio.
-
-    float GetLPP() const { return m_LPP; }
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetResX
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -833,7 +120,6 @@ public:
 // Return value:    An int describing the horizontal resolution of the screen in pixels.
 
     int GetResX() const { return m_ResX; }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetResY
@@ -844,8 +130,6 @@ public:
 
     int GetResY() const { return m_ResY; }
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetBPP
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -854,7 +138,6 @@ public:
 // Return value:    An int describing the number of bits per pixel of the current color depth.
 
     int GetBPP() const { return m_BPP; }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetPaletteFile
@@ -865,7 +148,6 @@ public:
 
     const ContentFile & GetPaletteFile() const { return m_PaletteFile; }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetBackBuffer8
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -874,9 +156,6 @@ public:
 // Return value:    A pointer to the BITMAP 8bpp back buffer. OWNERSHIP IS NOT TRANSFERRED!
 
     BITMAP * GetBackBuffer8() const { return m_pBackBuffer8; }
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetBackBuffer32
@@ -887,61 +166,6 @@ public:
 // Return value:    A pointer to the BITMAP 32bpp back buffer. OWNERSHIP IS NOT TRANSFERRED!
 
     BITMAP * GetBackBuffer32() const { return m_pBackBuffer32 ? m_pBackBuffer32 : m_pBackBuffer8; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetScreenCount
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the number of currently active screens, counting all splits.
-// Arguments:       None.
-// Return value:    The number of currently active screens.
-
-    int GetScreenCount() const { return m_HSplit || m_VSplit ? (m_HSplit && m_VSplit ? 4 : 2) : 1; }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenWidth
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the width of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       None.
-// Return value:    The width of the player screens.
-
-	int GetPlayerScreenWidth() const;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenWidth
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the width of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       Player to get screen width for, only used by multiplayer parts.
-// Return value:    The width of the player screens.
-
-	int GetPlayerFrameBufferWidth(int whichPlayer) const;
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenHeight
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the height of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       None.
-// Return value:    The height of the player screens.
-
-	int GetPlayerScreenHeight() const;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPlayerScreenHeight
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the height of the individual player screens. This will only be less
-//                  than the backbuffer resolution if there are split screens.
-// Arguments:       Player to get screen width for, only used by multiplayer parts.
-// Return value:    The height of the player screens.
-
-	int GetPlayerFrameBufferHeight(int whichPlayer) const;
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetBlackIndex
@@ -955,7 +179,6 @@ public:
 
     unsigned char GetBlackIndex() const { return m_BlackColor; }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetLargeFont
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -967,7 +190,6 @@ public:
 
     GUIFont * GetLargeFont();
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetSmallFont
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -978,8 +200,6 @@ public:
 //                  Ownership is NOT transferred!
 
     GUIFont * GetSmallFont();
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetScreenText
@@ -996,8 +216,6 @@ public:
 
     void SetScreenText(const std::string &msg, int which = 0, int blinkInterval = 0, int displayDuration = -1, bool centered = false);
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetScreenText
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1007,7 +225,6 @@ public:
 
 	std::string GetScreenText(int which = 0) const;
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ClearScreenText
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1016,84 +233,6 @@ public:
 // Return value:    None.
 
     void ClearScreenText(int which = 0) { if (which >= 0 && which < MAXSCREENCOUNT) { m_ScreenText[which].clear(); m_TextDuration[which] = -1; m_TextDurationTimer[which].Reset(); m_TextBlinking[which] = 0; } }
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          EnablePostProcessing
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether we're postprocessing at all.
-// Arguments:       Whether post processing should be enabled or not.
-// Return value:    None.
-
-    void EnablePostProcessing(bool enable = true) { m_PostProcessing = enable; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsPostProcessing
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicates whether we're postprocessing or not
-// Arguments:       None.
-// Return value:    Whether post processing is enabled or not.
-
-    bool IsPostProcessing() const { return m_PostProcessing && m_BPP == 32; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          EnablePixelGlow
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether we're postprocessing the pixel glow effect or not
-// Arguments:       Whether post processing should be enabled or not.
-// Return value:    None.
-
-    void EnablePixelGlow(bool enable = true) { if (enable) { EnablePostProcessing(enable); } m_PostPixelGlow = enable; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          IsPixelGlowEnabled
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicates whether we're postprocessing the pixel glow effect or not
-// Arguments:       None.
-// Return value:    Whether post processing is enabled or not.
-
-    bool IsPixelGlowEnabled() const { return IsPostProcessing() && m_PostPixelGlow; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetDotGlowEffect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets a specific standard dot glow effect for making pixels glow
-// Arguments:       Which of the dot glow colors to get, see the DotGlowColor enum.
-// Return value:    The requested glow dot BITMAP.
-
-    BITMAP * GetDotGlowEffect(DotGlowColor which) const
-    {
-        if (which == NoDot)
-            return 0;
-        else if (which == YellowDot)
-            return m_pYellowGlow;
-        else if (which == RedDot)
-            return m_pRedGlow;
-        else
-            return m_pBlueGlow;
-    }
-
-	size_t GetDotGlowEffectHash(DotGlowColor which) const
-	{
-		if (which == NoDot)
-			return 0;
-		else if (which == YellowDot)
-			return m_YellowGlowHash;
-		else if (which == RedDot)
-			return m_RedGlowHash;
-		else
-			return m_BlueGlowHash;
-	}
-
-	void GetPostEffectsList(int whichScreen, std::list<PostEffect> & outputList);
-
-	void SetPostEffectsList(int whichScreen, std::list<PostEffect> & inputList);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          LoadPalette
@@ -1105,7 +244,6 @@ public:
 
     bool LoadPalette(std::string palettePath);
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          FadeInPalette
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1114,7 +252,6 @@ public:
 // Return value:    None.
 
     void FadeInPalette(int fadeSpeed = 1);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          FadeOutPalette
@@ -1125,7 +262,6 @@ public:
 
     void FadeOutPalette(int fadeSpeed = 1);
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetTransTable
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1135,7 +271,6 @@ public:
 // Return value:    None.
 
     void SetTransTable(TransperencyPreset transSetting);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SaveScreenToBMP
@@ -1148,49 +283,6 @@ public:
 
     int SaveScreenToBMP(const char *namebase);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ResetFrameTimer
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Resets the frame timer to restart counting.
-// Arguments:       None.
-// Return value:    None.
-
-    void ResetFrameTimer() { m_pFrameTimer->Reset(); }
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ToggleFullscreen
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Toggles to and from fullscreen and windowed mode.
-// Arguments:       None.
-// Return value:    Error code, anything other than 0 is error..
-
-    int ToggleFullscreen();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SwitchWindowMultiplier
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets and switches to a new windowed mode multiplier.
-// Arguments:       The multiplier to switch to.
-// Return value:    Error code, anything other than 0 is error..
-
-    int SwitchWindowMultiplier(int multiplier = 1);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          PostProcess
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Takes the current state of the 8bpp back buffer, copies it, and adds
-//                  post processing effects on top like glows etc. Only works in 32bpp mode.
-// Arguments:       None.
-// Return value:    None.
-
-    void PostProcess();
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ClearBackBuffer8
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1199,7 +291,6 @@ public:
 // Return value:    None.
 
     void ClearBackBuffer8() { clear_to_color(m_pBackBuffer8, m_BlackColor); }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ClearBackBuffer32
@@ -1210,7 +301,6 @@ public:
 
     void ClearBackBuffer32() { if (m_pBackBuffer32) clear_to_color(m_pBackBuffer32, 0); }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          FlipFrameBuffers
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1219,30 +309,6 @@ public:
 // Return value:    None.
 
     void FlipFrameBuffers();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          FlippingWith32BPP
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Indicates whether the 32bpp framebuffer is currnetly being used or not
-//                  when flipping the frame buffers.
-// Arguments:       None.
-// Return value:    Whether the 32bpp is used or not (8bpp one is).
-
-    bool FlippingWith32BPP() const;
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ShowMessageBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Pops up a message box dialog in the OS. For debug purposes mostly.
-// Arguments:       The string that the message box should display.
-// Return value:    None.
-
-    void ShowMessageBox(std::string message) const { allegro_message(message.c_str()); }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          FlashScreen
@@ -1256,7 +322,6 @@ public:
 
     void FlashScreen(int screen, int color, float periodMS = 0) { m_FlashScreenColor[screen] = color; m_FlashTimer[screen].SetRealTimeLimitMS(periodMS); m_FlashTimer[screen].Reset(); }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawText
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1268,12 +333,11 @@ public:
 //                  string will have on the bitmap.
 //                  Whether to draw text with black chars or not (white).
 // Return value:    None.
-
+#undef DrawText
     void DrawText(BITMAP *pTargetBitmap,
                   const std::string &str,
                   const Vector &pos,
                   bool black = true);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawLine
@@ -1295,7 +359,6 @@ public:
 
     int DrawLine(BITMAP *pBitmap, const Vector &start, const Vector &end, int color, int altColor = 0, int skip = 0, int skipStart = 0, bool shortestWrap = false);
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawDotLine
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1314,17 +377,6 @@ public:
 
     int DrawDotLine(BITMAP *pBitmap, const Vector &start, const Vector &end, BITMAP *pDot, int skip = 0, int skipStart = 0, bool shortestWrap = false);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Update
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Updates the state of this FrameMan. Supposed to be done every frame.
-// Arguments:       None.
-// Return value:    None.
-
-    void Update();
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Draw
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1334,19 +386,6 @@ public:
 
     void Draw();
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawPrimitives
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Draws all stored primitives on the screen
-// Arguments:       Bitmap to draw on, poistion to draw.
-// Return value:    None.
-
-    void DrawPrimitives(int player, BITMAP *pTargetBitmap, const Vector &targetPos);
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          IsValidResolution	
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1354,11 +393,6 @@ public:
 // Arguments:       Resolution width and height
 // Return value:    True if resolution is supported
 	bool IsValidResolution(int width, int height) const;
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
 
 protected:
 
@@ -1381,7 +415,6 @@ protected:
 
     // Data file of the screen palette
     ContentFile m_PaletteFile;
-    DATAFILE *m_pPaletteDataFile;
 
     // Transparency color tables
     COLOR_MAP m_LessTransTable;
@@ -1392,81 +425,15 @@ protected:
     unsigned char m_BlackColor;
     unsigned char m_AlmostBlackColor;
 
-    // Whether in fullscreen mode or not
-    bool m_Fullscreen;
-    // The number of times the windowed mode resoltion should be multiplied and streched across for better visibility
-    int m_NxWindowed;
-    // The number of times the fullscreen mode resolution should be multiplied and streched across for better visibility
-    // The internal virtual resolution (m_ResX, m_ResY) is 1/n of the acutal fullscreen res that the graphics card outputs
-    int m_NxFullscreen;
-    // This is the new fullscreen multiple that will take effect next time the FrameMan is started
-    int m_NewNxFullscreen;
-
-    // Whether postprocessing is enabled or not
-    bool m_PostProcessing;
-    // Whether postprocessing pixel glow is enabled or not
-    bool m_PostPixelGlow;
-    BITMAP *m_pYellowGlow;
-	size_t m_YellowGlowHash;
-    BITMAP *m_pRedGlow;
-	size_t m_RedGlowHash;
-	BITMAP *m_pBlueGlow;
-	size_t m_BlueGlowHash;
-
-    // List of effects to apply at the end of each frame, Vector is in total absolute screen coordinates, and the BITMAP is not owned.
-    // This list gets cleared out and re-filled each frame.
-    std::list<PostEffect> m_PostScreenEffects;
-    // List of screen-relative areas that will be processed with glow
-    std::list<Box> m_PostScreenGlowBoxes;
-	// Temp bitmap to rotate post effects in it
-	BITMAP * m_pTempEffectBitmap_16;
-	BITMAP * m_pTempEffectBitmap_32;
-	BITMAP * m_pTempEffectBitmap_64;
-	BITMAP * m_pTempEffectBitmap_128;
-	BITMAP * m_pTempEffectBitmap_256;
-
-    // Whether the screen is split horizontally across the screen, ie as two splitscreens one above the other.
-    bool m_HSplit;
-    // Whether the screen is split vertically across the screen, ie as two splitscreens side by side.
-    bool m_VSplit;
-    // Whether the screen is set to split horizontally in settings
-    bool m_HSplitOverride;
-    // Whether the screen is set to split vertically in settings
-    bool m_VSplitOverride;
-    // Intermediary split screen bitmap.
-    BITMAP *m_pPlayerScreen;
     // Dimensions of each of the screens of each player. Will be smaller than resolution only if the screen is split
     int m_PlayerScreenWidth;
     int m_PlayerScreenHeight;
-
-    // Pixels Per Meter constant
-    float m_PPM;
-    // Meters Per Pixel constant.
-    float m_MPP;
-    // Pixels per Litre contstant
-    float m_PPL;
-    // Litres Per Pixel contstant
-    float m_LPP;
-
-    // Timer for measuring millisecs per frame for performance stats readings
-    Timer *m_pFrameTimer;
-    // History log of readings, for averaging the results
-    std::deque<int> m_MSPFs;
-    // The average of the MSPF reading buffer above, computer each frame
-    int m_MSPFAverage;
-    // The sim speed over real time
-    float m_SimSpeed;
-
-    // The GUI control managers for all teams
-//    std::vector<GUIControlManager *> m_BuyGUIs;
 
     // GUI screen object kept and owned just for the fonts
     AllegroScreen *m_pGUIScreen;
     // Standard fonts for quick access.
     GUIFont *m_pLargeFont;
     GUIFont *m_pSmallFont;
-    // Whether to show performance stats on screen or not
-    bool m_ShowPerfStats;
     // The text to be displayed on each player's screen
     std::string m_ScreenText[MAXSCREENCOUNT];
     // The minimum duration the current message is supposed to show vefore it can be overwritten
@@ -1487,15 +454,6 @@ protected:
     Timer m_FlashTimer[MAXSCREENCOUNT];
 	// Frame target pos for network players
 	Vector m_TargetPos[2][MAXSCREENCOUNT];
-	// Which frame index is being rendered, 0 or 1
-	int m_NetworkFrameCurrent;
-	// Which frame is rendered and ready for transmission, 0 or 1
-	int m_NetworkFrameReady;
-
-	std::list<PostEffect> m_ScreenRelativeEffects[MAXSCREENCOUNT];
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
 
 private:
 
@@ -1509,13 +467,10 @@ private:
 
     void Clear();
 
-
     // Disallow the use of some implicit methods.
     FrameMan(const FrameMan &reference);
     FrameMan & operator=(const FrameMan &rhs);
 
 };
-extern FrameMan g_FrameMan;
-} // namespace RTE
-
-#endif // File
+}
+#endif

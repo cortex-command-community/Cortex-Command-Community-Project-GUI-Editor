@@ -6,8 +6,8 @@
 // Author(s):       Jason Boettcher
 //                  jboett@internode.on.net
 
-
-#include <windows.h>
+#include <Windows.h>
+#include <commdlg.h>
 #include <direct.h>
 #include "GUIEditorLib.h"
 

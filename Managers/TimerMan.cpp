@@ -12,17 +12,25 @@
 // Inclusions of header files
 
 
-#include "RTEError.h"
 #include "TimerMan.h"
 
-using namespace std;
+/* Obsolete Allegro timer
+// Needs to be declared volatile so that the optimizer doens't mess with it
+volatile unsigned long g_MSSinceStart = 0;
 
-namespace RTE
+// Millisecond-counting interrupt timer
+void TimerMSTick()
 {
+   g_MSSinceStart++;
+}
+END_OF_FUNCTION(TimerMSTick);
+*/
+
+namespace RTE {
 
 #define DELTABUFFERSIZE 30
 
-const string TimerMan::m_ClassName = "TimerMan";
+const std::string TimerMan::m_ClassName = "TimerMan";
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -42,12 +50,14 @@ void TimerMan::Clear()
     m_DeltaTimeS = 0.016666666f;
     m_SimTimeTicks = 0;
     m_SimUpdateCount = 0;
+    m_SimUpdatesSinceDrawn = -1;
     m_DrawnSimUpdate = false;
     m_TimeScale = 1.0;
     m_AveragingEnabled = false;
     m_DeltaBuffer.clear();
     m_SimPaused = false;
-    m_OneSimUpdatePerFrame = true;
+    // This gets dynamically turned on for short periods when sim gets heavy (explosions) and slomo effect is appropriate
+    m_OneSimUpdatePerFrame = false;
     m_SimSpeedLimited = true;
 }
 
@@ -70,18 +80,10 @@ int TimerMan::Create()
     install_int(TimerMSTick, 1);
 */
 
-#if defined(WIN32)
     // Get the frequency of ticks/s for this machine
     LARGE_INTEGER tempLInt;
     QueryPerformanceFrequency(&tempLInt);
     m_TicksPerSecond = tempLInt.QuadPart;
-#elif defined(__APPLE__)
-	mach_timebase_info_data_t tbInfo;
-	mach_timebase_info(&tbInfo);
-	
-	double secondsPerTick = 1e-9 * (double)tbInfo.numer / (double)tbInfo.denom /* 1000.0f */;
-	m_TicksPerSecond = 1.0 / secondsPerTick;
-#endif // defined(__APPLE__)
 
     // Reset the real time setting so that we can measure how much real time
     // has passed till the next Update.
@@ -121,19 +123,16 @@ void TimerMan::Destroy()
 void TimerMan::ResetTime()
 {
     // Set the new starting point
-#if defined(WIN32)
     LARGE_INTEGER tempLInt;
     QueryPerformanceCounter(&tempLInt);
     m_StartTime = tempLInt.QuadPart;
-#elif defined(__APPLE__)
-	m_StartTime = mach_absolute_time();
-#endif // defined(__APPLE__)
 
     // Reset the counters
     m_RealTimeTicks = 0;
     m_SimAccumulator = 0;
     m_SimTimeTicks = 0;
     m_SimUpdateCount = 0;
+    m_SimUpdatesSinceDrawn = -1;
     m_DrawnSimUpdate = false;
     m_TimeScale = 1.0;
 }
@@ -150,6 +149,26 @@ int64_t TimerMan::GetSimTimeMS() const
     return (m_SimTimeTicks / m_TicksPerSecond) * 0.001f;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetAbsoulteTime
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Returns current time stamp in microseconds unrelated to TimerMan updates.
+//					Can be used to measure time intervals during single frame update.
+int64_t TimerMan::GetAbsoulteTime()
+{
+	int64_t ticks;
+	LARGE_INTEGER tickReading;
+
+	QueryPerformanceCounter(&tickReading);
+
+	ticks = tickReading.QuadPart;
+	
+	ticks *= 1000000;
+	ticks /= m_TicksPerSecond;
+
+	return ticks;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Update
@@ -161,22 +180,17 @@ int64_t TimerMan::GetSimTimeMS() const
 
 void TimerMan::Update()
 {
+    int64_t prevTime = m_RealTimeTicks;
 
-#if defined(WIN32)
     LARGE_INTEGER tickReading;
 
     // Increase the real time ticks with the amount of actual time passed since the last Update
     QueryPerformanceCounter(&tickReading);
 
-    int64_t prevTime = m_RealTimeTicks;
     m_RealTimeTicks = tickReading.QuadPart - m_StartTime;
-#elif defined(__APPLE__)
-	int64_t prevTime = m_RealTimeTicks;
-	m_RealTimeTicks = mach_absolute_time() - m_StartTime;
-#endif // defined(__APPLE__)
 
     // Figure the increase in real time 
-    int64_t timeIncrease = m_RealTimeTicks - prevTime;
+    uint64_t timeIncrease = m_RealTimeTicks - prevTime;
     // Cap it if too long (as when the app went out of focus)
     if (timeIncrease > m_RealToSimCap)
         timeIncrease = m_RealToSimCap;
@@ -193,15 +207,21 @@ void TimerMan::Update()
 
     RTEAssert(m_SimAccumulator >= 0, "Negative sim time accumulator?!");
 
+    // Reset the counter since the last drawn update. Set it negative since we're counting full pure sim updates and this will be incremented to 0 on next SimUpdate
+    if (m_DrawnSimUpdate)
+        m_SimUpdatesSinceDrawn = -1;
+
     // Override the accumulator and just put one delta time in there so sim updates only once per frame
     if (m_OneSimUpdatePerFrame)
     {
         // Only let it appear to go slower, not faster, if limited
         if (m_SimSpeedLimited && m_SimAccumulator > m_DeltaTime)
             m_SimAccumulator = m_DeltaTime;
+        // Reset the counter of sim updates since the last drawn.. it will always be 0 since every update results in a drawn frame
+        m_SimUpdatesSinceDrawn = -1;
     }
 /*
-#ifdef _DEBUG
+#ifdef DEBUG_BUILD
     // Override the accumulator and just put one delta time in there so sim updates only once per frame
     m_SimAccumulator = m_DeltaTime;
 #endif // _DEBUG
@@ -259,6 +279,7 @@ void TimerMan::UpdateSim()
         m_SimTimeTicks += m_DeltaTime;
         // Increment the sim update count
         ++m_SimUpdateCount;
+        ++m_SimUpdatesSinceDrawn;
 
         // If after deducting the DeltaTime from the Accumulator, there is not enough time for another DeltaTime,
         // then flag this as the last sim update before the frame is drawn

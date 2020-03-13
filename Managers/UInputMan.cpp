@@ -15,7 +15,7 @@
 #include "Writer.h"
 #include "UInputMan.h"
 #include "FrameMan.h"
-#include "ConsoleMan.h"
+//#include "ConsoleMan.h"
 #include "GUIInput.h"
 
 extern volatile bool g_Quit;
@@ -25,8 +25,6 @@ extern int g_IntroState;
 
 namespace RTE
 {
-
-	extern UInputMan g_InputMan;
 
 const string UInputMan::m_ClassName = "UInputMan";
 const string UInputMan::InputScheme::m_sClassName = "InputScheme";
@@ -66,53 +64,6 @@ int UInputMan::InputScheme::InputMapping::Create(const InputMapping &reference)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  ReadProperty
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Reads a property value from a reader stream. If the name isn't
-//                  recognized by this class, then ReadProperty of the parent class
-//                  is called. If the property isn't recognized by any of the base classes,
-//                  false is returned, and the reader's position is untouched.
-
-int UInputMan::InputScheme::InputMapping::ReadProperty(std::string propName, Reader &reader)
-{
-    if (propName == "KeyMap")
-    {
-        int key;
-        reader >> key;
-        if (key != 0)
-            m_KeyMap = key;
-    }
-    else if (propName == "MouseButtonMap")
-        reader >> m_MouseButtonMap;
-
-    return 0;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Save
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves the complete state of this InputMapping with a Writer for
-//                  later recreation with Create(Reader &reader);
-
-int UInputMan::InputScheme::InputMapping::Save(Writer &writer) const
-{
-    //Serializable::Save(writer);
-
-// Gotto write somehting
-//    if (m_KeyMap != 0)
-//    {
-        writer.NewProperty("KeyMap");
-        writer << m_KeyMap;
-//    }
-    if (m_MouseButtonMap >= 0)
-    {
-        writer.NewProperty("MouseButtonMap");
-        writer << m_MouseButtonMap;
-    }
-    return 0;
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -149,156 +100,6 @@ int UInputMan::InputScheme::Create(const InputScheme &reference)
 
     for (int mapping = 0; mapping < INPUT_COUNT; ++mapping)
         m_aInputMapping[mapping].Create(reference.m_aInputMapping[mapping]);
-
-    return 0;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  ReadProperty
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Reads a property value from a reader stream. If the name isn't
-//                  recognized by this class, then ReadProperty of the parent class
-//                  is called. If the property isn't recognized by any of the base classes,
-//                  false is returned, and the reader's position is untouched.
-
-int UInputMan::InputScheme::ReadProperty(std::string propName, Reader &reader)
-{
-    if (propName == "Device")
-        reader >> m_ActiveDevice;
-    else if (propName == "LeftUp")
-        reader >> m_aInputMapping[INPUT_L_UP];
-    else if (propName == "LeftDown")
-        reader >> m_aInputMapping[INPUT_L_DOWN];
-    else if (propName == "LeftLeft")
-        reader >> m_aInputMapping[INPUT_L_LEFT];
-    else if (propName == "LeftRight")
-        reader >> m_aInputMapping[INPUT_L_RIGHT];
-    else if (propName == "RightUp")
-        reader >> m_aInputMapping[INPUT_R_UP];
-    else if (propName == "RightDown")
-        reader >> m_aInputMapping[INPUT_R_DOWN];
-    else if (propName == "RightLeft")
-        reader >> m_aInputMapping[INPUT_R_LEFT];
-    else if (propName == "RightRight")
-        reader >> m_aInputMapping[INPUT_R_RIGHT];
-    else if (propName == "Fire")
-        reader >> m_aInputMapping[INPUT_FIRE];
-    else if (propName == "Aim")
-        reader >> m_aInputMapping[INPUT_AIM];
-    else if (propName == "AimUp")
-        reader >> m_aInputMapping[INPUT_AIM_UP];
-    else if (propName == "AimDown")
-        reader >> m_aInputMapping[INPUT_AIM_DOWN];
-    else if (propName == "AimLeft")
-        reader >> m_aInputMapping[INPUT_AIM_LEFT];
-    else if (propName == "AimRight")
-        reader >> m_aInputMapping[INPUT_AIM_RIGHT];
-    else if (propName == "PieMenu")
-        reader >> m_aInputMapping[INPUT_PIEMENU];
-    else if (propName == "Jump")
-        reader >> m_aInputMapping[INPUT_JUMP];
-    else if (propName == "Crouch")
-        reader >> m_aInputMapping[INPUT_CROUCH];
-    else if (propName == "Next")
-        reader >> m_aInputMapping[INPUT_NEXT];
-    else if (propName == "Prev")
-        reader >> m_aInputMapping[INPUT_PREV];
-    else if (propName == "Start")
-        reader >> m_aInputMapping[INPUT_START];
-    else if (propName == "Back")
-        reader >> m_aInputMapping[INPUT_BACK];
-	else if (propName == "WeaponChangeNext")
-		reader >> m_aInputMapping[INPUT_WEAPON_CHANGE_NEXT];
-	else if (propName == "WeaponChangePrev")
-		reader >> m_aInputMapping[INPUT_WEAPON_CHANGE_PREV];
-	else if (propName == "WeaponPickup")
-		reader >> m_aInputMapping[INPUT_WEAPON_PICKUP];
-	else if (propName == "WeaponDrop")
-		reader >> m_aInputMapping[INPUT_WEAPON_DROP];
-	else if (propName == "WeaponReload")
-		reader >> m_aInputMapping[INPUT_WEAPON_RELOAD];
-
-    return 0;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Save
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves the complete state of this InputScheme with a Writer for
-//                  later recreation with Create(Reader &reader);
-
-int UInputMan::InputScheme::Save(Writer &writer) const
-{
-    //Serializable::Save(writer);
-
-    writer.NewLine();
-    writer << "// 0 = Keyboard only, 1 = Mouse + Keyboard, 2 = Joystick One, 3 = Joystick Two, , 4 = Joystick Three, 5 = Joystick Four";
-    writer.NewProperty("Device");
-    writer << m_ActiveDevice;
-    if (m_SchemePreset > PRESET_NONE)
-    {
-        writer << "// 0 = No Preset, 1 = WASD, 2 = Cursor Keys, 3 = XBox 360 Controller";
-        writer.NewProperty("Preset");
-        writer << m_SchemePreset;
-    }
-    writer.NewProperty("LeftUp");
-    writer << m_aInputMapping[INPUT_L_UP];
-    writer.NewProperty("LeftDown");
-    writer << m_aInputMapping[INPUT_L_DOWN];
-    writer.NewProperty("LeftLeft");
-    writer << m_aInputMapping[INPUT_L_LEFT];
-    writer.NewProperty("LeftRight");
-    writer << m_aInputMapping[INPUT_L_RIGHT];
-    writer.NewProperty("RightUp");
-    writer << m_aInputMapping[INPUT_R_UP];
-    writer.NewProperty("RightDown");
-    writer << m_aInputMapping[INPUT_R_DOWN];
-    writer.NewProperty("RightLeft");
-    writer << m_aInputMapping[INPUT_R_LEFT];
-    writer.NewProperty("RightRight");
-    writer << m_aInputMapping[INPUT_R_RIGHT];
-    writer.NewProperty("Fire");
-    writer << m_aInputMapping[INPUT_FIRE];
-    writer.NewProperty("Aim");
-    writer << m_aInputMapping[INPUT_AIM];
-    writer.NewProperty("AimUp");
-    writer << m_aInputMapping[INPUT_AIM_UP];
-    writer.NewProperty("AimDown");
-    writer << m_aInputMapping[INPUT_AIM_DOWN];
-    writer.NewProperty("AimLeft");
-    writer << m_aInputMapping[INPUT_AIM_LEFT];
-    writer.NewProperty("AimRight");
-    writer << m_aInputMapping[INPUT_AIM_RIGHT];
-    writer.NewProperty("PieMenu");
-    writer << m_aInputMapping[INPUT_PIEMENU];
-    writer.NewProperty("Jump");
-    writer << m_aInputMapping[INPUT_JUMP];
-    writer.NewProperty("Crouch");
-    writer << m_aInputMapping[INPUT_CROUCH];
-    writer.NewProperty("Next");
-    writer << m_aInputMapping[INPUT_NEXT];
-    writer.NewProperty("Prev");
-    writer << m_aInputMapping[INPUT_PREV];
-    writer.NewProperty("Start");
-    writer << m_aInputMapping[INPUT_START];
-    writer.NewProperty("Back");
-    writer << m_aInputMapping[INPUT_BACK];
-	writer.NewProperty("WeaponChangeNext");
-	writer << m_aInputMapping[INPUT_WEAPON_CHANGE_NEXT];
-	writer.NewProperty("WeaponChangePrev");
-	writer << m_aInputMapping[INPUT_WEAPON_CHANGE_PREV];
-	writer.NewProperty("WeaponPickup");
-	writer << m_aInputMapping[INPUT_WEAPON_PICKUP];
-	writer.NewProperty("WeaponDrop");
-	writer << m_aInputMapping[INPUT_WEAPON_DROP];
-	writer.NewProperty("WeaponReload");
-	writer << m_aInputMapping[INPUT_WEAPON_RELOAD];
-	writer.NewProperty("JoystickDeadzone");
-	writer << m_JoystickDeadzone;
-	writer.NewProperty("JoystickDeadzoneType");
-	writer << m_JoystickDeadzoneType;
 
     return 0;
 }
@@ -467,7 +268,7 @@ void UInputMan::Clear()
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Makes the UInputMan object ready for use.
-
+/*
 int UInputMan::Create()
 {
     if (Serializable::Create() < 0)
@@ -484,60 +285,8 @@ int UInputMan::Create()
 
     return 0;
 }
+*/
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  ReadProperty
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Reads a property value from a reader stream. If the name isn't
-//                  recognized by this class, then ReadProperty of the parent class
-//                  is called. If the property isn't recognized by any of the base classes,
-//                  false is returned, and the reader's position is untouched.
-
-int UInputMan::ReadProperty(std::string propName, Reader &reader)
-{
-    int mappedButton = 0;
-
-
-    if (propName == "P1Scheme")
-        reader >> m_aControlScheme[PLAYER_ONE];
-    else if (propName == "P2Scheme")
-        reader >> m_aControlScheme[PLAYER_TWO];
-    else if (propName == "P3Scheme")
-        reader >> m_aControlScheme[PLAYER_THREE];
-    else if (propName == "P4Scheme")
-        reader >> m_aControlScheme[PLAYER_FOUR];
-    else if (propName == "MouseSensitivity")
-        reader >> m_MouseSensitivity;
-	else
-        // See if the base class(es) can find a match instead
-        return Serializable::ReadProperty(propName, reader);
-
-    return 0;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Save
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Saves the complete state of this UInputMan with a Writer for
-//                  later recreation with Create(Reader &reader);
-
-int UInputMan::Save(Writer &writer) const
-{
-    writer.NewProperty("MouseSensitivity");
-    writer << m_MouseSensitivity;
-    writer.NewProperty("P1Scheme");
-    writer << m_aControlScheme[PLAYER_ONE];
-    writer.NewProperty("P2Scheme");
-    writer << m_aControlScheme[PLAYER_TWO];
-    writer.NewProperty("P3Scheme");
-    writer << m_aControlScheme[PLAYER_THREE];
-    writer.NewProperty("P4Scheme");
-    writer << m_aControlScheme[PLAYER_FOUR];
-
-    return 0;
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -956,8 +705,6 @@ Vector UInputMan::AnalogAimValues(int whichPlayer)
 
     // Which Device is used by this player
     int device = m_aControlScheme[whichPlayer].GetDevice();
-	if (m_OverrideInput)
-		device = UInputMan::DEVICE_MOUSE_KEYB;
 
     // Get handy pointer to the relevant input elements
     InputScheme::InputMapping * pElement = m_aControlScheme[whichPlayer].GetInputMappings();
@@ -966,10 +713,7 @@ Vector UInputMan::AnalogAimValues(int whichPlayer)
     if (device == DEVICE_MOUSE_KEYB)
     {
         // Return the normalized mouse analog stick emulation value
-		if (m_OverrideInput && whichPlayer >= 0 && whichPlayer < MAX_PLAYERS)
-			aimValues = m_aNetworkAnalogMoveData[whichPlayer] / m_MouseTrapRadius;
-		else
-			aimValues = m_AnalogMouseData / m_MouseTrapRadius;
+		aimValues = m_AnalogMouseData / m_MouseTrapRadius;
     }
 
     return aimValues;
@@ -1086,16 +830,11 @@ void UInputMan::ForceMouseWithinBox(int x, int y, int width, int height, int whi
     // Only mess with the mouse if the original mouse position is not above the screen and may be grabbing the title bar of the game window
     if (!m_DisableMouseMoving && !m_TrapMousePos && (whichPlayer == -1 || m_aControlScheme[whichPlayer].GetDevice() == DEVICE_MOUSE_KEYB))
     {
-        float windowResMultiplier = g_FrameMan.IsFullscreen() ? g_FrameMan.NxFullscreen() : g_FrameMan.NxWindowed();
+        float windowResMultiplier = 1;
         int mouseX = MAX(x, mouse_x);
         int mouseY = MAX(y, mouse_y);
         mouseX = MIN(mouseX, x + width * windowResMultiplier);
         mouseY = MIN(mouseY, y + height * windowResMultiplier);
-		
-#if !defined(__APPLE__)
-		// [CHRISK] OSX really doesn't like this
-        position_mouse(mouseX, mouseY);
-#endif // !defined(__APPLE__)
     }
 }
 
@@ -1125,7 +864,7 @@ void UInputMan::TrapMousePos(bool trap, int whichPlayer)
 	{ 
 		m_TrapMousePos = trap; 
 	} 
-	m_TrapMousePosPerPlayer[whichPlayer] = trap;
+	//m_TrapMousePosPerPlayer[whichPlayer] = trap;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1498,20 +1237,6 @@ int UInputMan::Update()
 // TEMP!!
 //        g_FrameMan.SaveBitmapToBMP(g_SceneMan.GetTerrain()->GetBGColorBitmap(), "SceneBG");
     }
-
-	// Dump entire map, Ctrl+W
-    if ((key_shifts & KB_CTRL_FLAG) && KeyHeld(KEY_W))
-    {
-        g_FrameMan.SaveWorldToBMP("WorldDump");
-    }
-
-    // Perf stats display toggle
-    if ((key_shifts & KB_CTRL_FLAG) && KeyPressed(KEY_P))
-        g_FrameMan.ShowPerformanceStats(!g_FrameMan.IsShowingPerformanceStats());
-
-    // Force one sim update per graphics frame
-    if ((key_shifts & KB_CTRL_FLAG) && KeyPressed(KEY_O))
-        g_TimerMan.SetOneSimUpdatePerFrame(!g_TimerMan.IsOneSimUpdatePerFrame());
 
 	// Dump all shortcuts to console window
 	if (KeyPressed(KEY_F1))

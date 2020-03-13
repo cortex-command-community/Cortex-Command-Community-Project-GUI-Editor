@@ -26,5 +26,6 @@
 #include <cmath>
 #include <cassert>
 #include <limits>
+#include <functional>
 
 #endif

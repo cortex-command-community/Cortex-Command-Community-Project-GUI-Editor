@@ -9,6 +9,9 @@
 
 #include "FrameMan.h"
 
+#include "Singleton.h"
+#define g_UInputMan UInputMan::Instance()
+
 namespace RTE {
 
 class GUIInput;
@@ -189,34 +192,6 @@ private:
         //                  Anything below 0 is an error signal.
 
             int Create(const InputMapping &reference);
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Virtual method:  ReadProperty
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Reads a property value from a Reader stream. If the name isn't
-        //                  recognized by this class, then ReadProperty of the parent class
-        //                  is called. If the property isn't recognized by any of the base classes,
-        //                  false is returned, and the Reader's position is untouched.
-        // Arguments:       The name of the property to be read.
-        //                  A Reader lined up to the value of the property to be read.
-        // Return value:    An error return value signaling whether the property was successfully
-        //                  read or not. 0 means it was read successfully, and any nonzero indicates
-        //                  that a property of that name could not be found in this or base classes.
-
-            virtual int ReadProperty(std::string propName, Reader &reader);
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Virtual method:  Save
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // Description:     Saves the complete state of this InputMapping to an output stream for
-        //                  later recreation with Create(Reader &reader);
-        // Arguments:       A Writer that the InputMapping will save itself with.
-        // Return value:    An error return value signaling sucess or any particular failure.
-        //                  Anything below 0 is an error signal.
-
-            virtual int Save(Writer &writer) const;
 
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -404,14 +379,6 @@ private:
         void SetPreset(int schemePreset = 0);
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Method:          GetPreset
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Description:     Gets the number of the last preset that this was set to.
-    // Arguments:       None.
-    // Return value:    The last preset number set of this scheme. See InputPreset enum
-
-        int GetPreset() const { return m_SchemePreset; }
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -577,7 +544,7 @@ public:
 // Return value:    A pointer to the requested player's control scheme. Ownership is NOT
 //                  transferred!
 
-	InputScheme * GetControlScheme(int whichPlayer) { if (m_OverrideInput) return &m_aControlScheme[0]; else return &(m_aControlScheme[whichPlayer]); }
+	InputScheme * GetControlScheme(int whichPlayer) { return &(m_aControlScheme[whichPlayer]); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1186,6 +1153,5 @@ private:
     UInputMan(const UInputMan &reference);
     UInputMan & operator=(const UInputMan &rhs);
 };
-extern UInputMan g_InputMan;
 }
 #endif
