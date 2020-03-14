@@ -10,13 +10,14 @@
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
+#include "Timer.h"
+//using namespace RTE;
 
-namespace RTE
+namespace GUI
 {
-
-class Timer;
-
-
+#undef max
+#undef min
+	using RTE::Timer;
 //////////////////////////////////////////////////////////////////////////////////////////
 // Class:           GUIManager
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -231,10 +232,10 @@ private:
     int                     m_UniqueIDCount;
 
     // Timer
-    Timer                   *m_pTimer;
+    RTE::Timer                   *m_pTimer;
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 #endif  //  _GUIMANAGER_

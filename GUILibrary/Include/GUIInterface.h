@@ -3,7 +3,7 @@
 
 // Header file for abstract classes used by the GUI library.
 
-namespace RTE {
+namespace GUI {
 
 #pragma region GUIBitmap
 	/// <summary>

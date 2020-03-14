@@ -1,28 +1,28 @@
-#ifndef _GUIRADIOBUTTON_
-#define _GUIRADIOBUTTON_
+#ifndef _GUICOLLECTIONBOX_
+#define _GUICOLLECTIONBOX_
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIRadioButton.h
+// File:            GUICollectionBox.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIRadioButton class
+// Description:     GUICollectionBox class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
 
-namespace RTE
+namespace GUI
 {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIRadioButton
+// Class:           GUICollectionBox
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A radiobutton control class.
+// Description:     A collection box control class that contains child controls.
 // Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUIRadioButton Created.
+// Class history:   1/15/2004 GUICollectionBox Created.
 
-class GUIRadioButton :
+class GUICollectionBox :
     public GUIControl,
     public GUIPanel
 {
@@ -32,22 +32,37 @@ class GUIRadioButton :
 
 public:
 
-    // RadioButton Notifications
+    // CollectionBox Notifications
     enum {
-        Pushed = 0,
-        UnPushed,
-        Changed,
+        Clicked = 0,
+        MouseMove    // Mouse moved over the panel
     } Notification;
 
+    // Drawing type
+    enum {
+        Color,
+        Image,
+        Panel
+    } DrawType;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIRadioButton
+// Constructor:     GUICollectionBox
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIRadioButton object in
+// Description:     Constructor method used to instantiate a GUICollectionBox object in
 //                  system memory.
 // Arguments:       GUIManager, GUIControlManager.
 
-    GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Destructor:      ~GUICollectionBox
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Destructor method used to clean up this before deletion from memory.
+// Arguments:       None.
+
+    virtual ~GUICollectionBox() { Destroy(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +81,15 @@ public:
 // Arguments:       Properties.
 
     void Create(GUIProperties *Props);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Virtual method:  Destroy
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Destroys and frees this' allocated data
+// Arguments:       None.
+
+    virtual void Destroy();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -103,42 +127,14 @@ public:
 
     void OnMouseUp(int X, int Y, int Buttons, int Modifier);
 
-    
+
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseEnter
+// Method:          OnMouseMove
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse enters the panel.
+// Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseEnter(int X, int Y, int Buttons, int Modifier);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseLeave
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse leaves the panel.
-// Arguments:       Mouse Position, Mouse Buttons, Modifier.
-
-    void OnMouseLeave(int X, int Y, int Buttons, int Modifier);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the panel of the control.
-// Arguments:       None.
-// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
-
-    GUIPanel *GetPanel(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID(void)    { return "RADIOBUTTON"; };
+    void OnMouseMove(int X, int Y, int Buttons, int Modifier);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +165,25 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetPanel
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Returns the panel of the control.
+// Arguments:       None.
+// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
+
+    GUIPanel *GetPanel(void);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetControlID
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Returns a string representing the control's ID
+// Arguments:       None.
+
+    static std::string GetControlID(void)    { return "COLLECTIONBOX"; };
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          StoreProperties
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the control to store the values into properties.
@@ -178,39 +193,67 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetCheck
+// Method:          SetDrawImage
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the check state.
-// Arguments:       State.
+// Description:     Sets the drawing image bitmap to draw
+// Arguments:       Bitmap, ownership IS transferred!
 
-    void SetCheck(bool Check);
+    void SetDrawImage(GUIBitmap *Bitmap);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetCheck
+// Method:          GetDrawImage
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the check state.
+// Description:     Gets the drawing image bitmap that is being drawn
+// Arguments:       Bitmap, ownership IS NOT transferred!
+
+    GUIBitmap * GetDrawImage() { return m_DrawBitmap; }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SetDrawBackground
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Sets whether to draw the background.
+// Arguments:       Draw.
+
+    void SetDrawBackground(bool DrawBack);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SetDrawType
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Sets the drawing type.
+// Arguments:       Type.
+
+    void SetDrawType(int Type);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetDrawType
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the current drawing type.
 // Arguments:       None.
+// Returns:         Type.
 
-    bool GetCheck(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetText
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the text.
-// Arguments:       Text.
-
-    void SetText(const std::string Text);
+    int GetDrawType() const { return m_DrawType; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetText
+// Method:          SetDrawColor
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the text.
-// Arguments:       None.
+// Description:     Sets the drawing color.
+// Arguments:       Color.
 
-    std::string GetText(void);
+    void SetDrawColor(unsigned long Color);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetDrawColor
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the drawing color.
+// Returns:         Color.
+
+    unsigned long GetDrawColor() const { return m_DrawColor; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -231,24 +274,26 @@ private:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Create the checkbox bitmap to draw.
+// Description:     Create the button bitmap to draw.
 // Arguments:       None.
 
     void BuildBitmap(void);
 
 
-// Members
-    
-    GUIBitmap        *m_Image;
-    GUIRect            m_ImageRects[4];
+// Member data
 
-    bool            m_Checked;
-    int                m_Mouseover;
-    std::string        m_Text;
+    GUIBitmap        *m_Background;
+
+    bool            m_DrawBackground;
+    int                m_DrawType;
+    unsigned long            m_DrawColor;
+    GUIBitmap        *m_DrawBitmap;
+
+
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
-#endif  //  _GUICHECKBOX_
+#endif  //  _GUICOLLECTIONBOX_

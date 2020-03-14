@@ -13,7 +13,7 @@
 #include "GUI.h"
 #include "GUIRadioButton.h"
 
-using namespace RTE;
+using namespace GUI;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIRadioButton

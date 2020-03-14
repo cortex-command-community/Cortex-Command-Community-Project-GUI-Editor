@@ -18,7 +18,7 @@
 #include "Reader.h"
 
 
-namespace RTE
+namespace GUI
 {
 
 
@@ -343,7 +343,7 @@ protected:
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
 #endif  //  _GUICONTROLMANAGER_

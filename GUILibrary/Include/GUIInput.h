@@ -11,7 +11,7 @@
 //                  www.shplorb.com/~jackal
 
 
-namespace RTE
+namespace GUI
 {
 
 
@@ -217,7 +217,7 @@ protected:
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
 #endif  //  _GUIINPUT_

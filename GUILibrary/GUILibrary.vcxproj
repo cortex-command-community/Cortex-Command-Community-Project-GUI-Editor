@@ -74,7 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)_Bin\</OutDir>
-    <IntDir>$(SolutionDir)_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)\_Bin\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>RTEGUI.lib.debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -83,7 +83,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)_Bin\</OutDir>
-    <IntDir>$(SolutionDir)_Bin\$(ProjectName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)\_Bin\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>RTEGUI.lib.release</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -92,17 +92,19 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Source;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
       <CallingConvention>Cdecl</CallingConvention>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,21 +129,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Source;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
       <CallingConvention>Cdecl</CallingConvention>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,44 +174,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\GUI.h" />
+    <ClInclude Include="Include\GUIBanner.h" />
+    <ClInclude Include="Include\GUIButton.h" />
+    <ClInclude Include="Include\GUICheckbox.h" />
+    <ClInclude Include="Include\GUICollectionBox.h" />
+    <ClInclude Include="Include\GUIComboBox.h" />
+    <ClInclude Include="Include\GUIControl.h" />
+    <ClInclude Include="Include\GUIControlFactory.h" />
+    <ClInclude Include="Include\GUIControlManager.h" />
+    <ClInclude Include="Include\GUIEvent.h" />
+    <ClInclude Include="Include\GUIFont.h" />
+    <ClInclude Include="Include\GUIInput.h" />
+    <ClInclude Include="Include\GUIInterface.h" />
+    <ClInclude Include="Include\GUILabel.h" />
+    <ClInclude Include="Include\GUIListBox.h" />
+    <ClInclude Include="Include\GUIListPanel.h" />
+    <ClInclude Include="Include\GUIManager.h" />
+    <ClInclude Include="Include\GUIPanel.h" />
+    <ClInclude Include="Include\GUIProgressBar.h" />
+    <ClInclude Include="Include\GUIProperties.h" />
+    <ClInclude Include="Include\GUIPropertyPage.h" />
+    <ClInclude Include="Include\GUIRadioButton.h" />
+    <ClInclude Include="Include\GUIScrollbar.h" />
+    <ClInclude Include="Include\GUIScrollPanel.h" />
+    <ClInclude Include="Include\GUISkin.h" />
+    <ClInclude Include="Include\GUISlider.h" />
+    <ClInclude Include="Include\GUITab.h" />
+    <ClInclude Include="Include\GUITextBox.h" />
+    <ClInclude Include="Include\GUITextPanel.h" />
+    <ClInclude Include="Include\GUIUtil.h" />
     <ClInclude Include="LibraryIncludes.h" />
-    <ClInclude Include="Source\GUI.h" />
-    <ClInclude Include="Source\GUIBanner.h" />
-    <ClInclude Include="Source\GUIButton.h" />
-    <ClInclude Include="Source\GUICheckbox.h" />
-    <ClInclude Include="Source\GUICollectionBox.h" />
-    <ClInclude Include="Source\GUIComboBox.h" />
-    <ClInclude Include="Source\GUIControl.h" />
-    <ClInclude Include="Source\GUIControlFactory.h" />
-    <ClInclude Include="Source\GUIControlManager.h" />
-    <ClInclude Include="Source\GUIEvent.h" />
-    <ClInclude Include="Source\GUIFont.h" />
-    <ClInclude Include="Source\GUIInput.h" />
-    <ClInclude Include="Source\GUILabel.h" />
-    <ClInclude Include="Source\GUIListBox.h" />
-    <ClInclude Include="Source\GUIListPanel.h" />
-    <ClInclude Include="Source\GUIManager.h" />
-    <ClInclude Include="Source\GUIPanel.h" />
-    <ClInclude Include="Source\GUIProgressBar.h" />
-    <ClInclude Include="Source\GUIProperties.h" />
-    <ClInclude Include="Source\GUIPropertyPage.h" />
-    <ClInclude Include="Source\GUIRadioButton.h" />
-    <ClInclude Include="Source\GUIScrollbar.h" />
-    <ClInclude Include="Source\GUIScrollPanel.h" />
-    <ClInclude Include="Source\GUISkin.h" />
-    <ClInclude Include="Source\GUISlider.h" />
-    <ClInclude Include="Source\GUITab.h" />
-    <ClInclude Include="Source\GUITextBox.h" />
-    <ClInclude Include="Source\GUITextPanel.h" />
-    <ClInclude Include="Source\GUIUtil.h" />
-    <ClInclude Include="Source\GUIInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LibraryIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\GUIBanner.cpp" />
     <ClCompile Include="Source\GUIButton.cpp" />

@@ -1,10 +1,10 @@
-#ifndef _GUISCROLLBAR_
-#define _GUISCROLLBAR_
+#ifndef _GUITEXTBOX_
+#define _GUITEXTBOX_
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIScrollbar.h
+// File:            GUITextBox.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIScrollbar class
+// Description:     GUITextBox class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
@@ -14,23 +14,23 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include "GUIScrollPanel.h"
+#include "GUITextPanel.h"
 
 
-namespace RTE
+namespace GUI
 {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIScrollbar
+// Class:           GUITextBox
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A Scrollbar control class.
-// Parent(s):       GUIControl, GUIScrollPanel.
-// Class history:   1/22/2004 GUIScrollbar Created.
+// Description:     A TextBox control class.
+// Parent(s):       GUIControl, GUITextPanel.
+// Class history:   1/20/2004 GUITextBox Created.
 
-class GUIScrollbar :
+class GUITextBox :
     public GUIControl,
-    public GUIScrollPanel
+    public GUITextPanel
 {
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -40,19 +40,20 @@ public:
 
     // Notifications
     enum {
-        ChangeValue=0,
-
-    } Notifications;
+        Changed = 0,
+        Clicked,
+        Enter
+    } Notification;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIScrollbar
+// Constructor:     GUITextBox
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIScrollbar object in
+// Description:     Constructor method used to instantiate a GUITextBox object in
 //                  system memory.
 // Arguments:       GUIManager, GUIControlManager.
 
-    GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -92,21 +93,12 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseDown
+// Method:          Draw
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse goes down on the panel
-// Arguments:       Mouse Position, Mouse Buttons, Modifier.
+// Description:     Draws the panel
+// Arguments:       Screen class
 
-    void OnMouseDown(int X, int Y, int Buttons, int Modifier);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseUp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse goes up on the panel
-// Arguments:       Mouse Position, Mouse Buttons, Modifier.
-
-    void OnMouseUp(int X, int Y, int Buttons, int Modifier);
+    void Draw(GUIScreen *Screen);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -125,16 +117,7 @@ public:
 // Description:     Returns a string representing the control's ID
 // Arguments:       None.
 
-    static std::string GetControlID(void)    { return "SCROLLBAR"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ReceiveSignal
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when receiving a signal.
-// Arguments:       Signal source, Signal code, Signal data.
-
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data);
+    static std::string GetControlID(void)    { return "TEXTBOX"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -165,12 +148,12 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          StoreProperties
+// Method:          ReceiveSignal
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the control to store the values into properties.
-// Arguments:       None.
+// Description:     Called when receiving a signal.
+// Arguments:       Signal source, Signal code, Signal data.
 
-    void StoreProperties(void);
+    void ReceiveSignal(GUIPanel *Source, int Code, int Data);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -187,10 +170,14 @@ public:
 
 private:
 
+    GUIBitmap        *m_DrawBitmap;
+    int              m_HAlignment;
+    int              m_VAlignment;
+
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
-#endif  //  _GUISCROLLBAR_
+#endif  //  _GUITEXTBOX_

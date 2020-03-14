@@ -18,7 +18,7 @@
 #include "GUIInterface.h"
 
 
-namespace RTE
+namespace GUI
 {
 
 class Entity;
@@ -581,7 +581,7 @@ private:
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
 #endif  //  _GUILISTPANEL_

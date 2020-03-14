@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUICollectionBox.h"
 
-using namespace RTE;
+using namespace GUI;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUICollectionBox

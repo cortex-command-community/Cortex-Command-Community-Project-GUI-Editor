@@ -11,7 +11,7 @@
 //                  www.shplorb.com/~jackal
 
 
-namespace RTE
+namespace GUI
 {
 
 
@@ -218,7 +218,7 @@ private:
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
 #endif  //  _GUIFONT_

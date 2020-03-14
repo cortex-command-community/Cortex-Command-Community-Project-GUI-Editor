@@ -18,7 +18,7 @@
 #include "GUIListPanel.h"
 
 
-namespace RTE
+namespace GUI
 {
 
 
@@ -533,7 +533,7 @@ private:
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
 #endif  //  _GUICOMBOBOX_

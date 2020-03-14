@@ -14,7 +14,7 @@
 #include "GUIBanner.h"
 #include "ContentFile.h"
 
-namespace RTE {
+namespace GUI {
 
 std::map<std::string, GUIBanner::FontChar *> GUIBanner::m_sFontCache;
 std::map<std::string, int> GUIBanner::m_sCharCapCache;
@@ -508,4 +508,4 @@ int GUIBanner::CalculateWidth(const char Character, FontMode mode) const
     return 0;
 }
 
-} // namespace RTE
+} // namespace GUI

@@ -1,87 +1,91 @@
-#ifndef _GUISLIDER_
-#define _GUISLIDER_
+#ifndef _GUISCROLLPANEL_
+#define _GUISCROLLPANEL_
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUISlider.h
+// File:            GUIScrollPanel.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUISlider class
+// Description:     GUIScrollPanel class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
 
-namespace RTE
+namespace GUI
 {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUISlider
+// Class:           GUIScrollPanel
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A slider control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUISlider Created.
+// Description:     A scrollbar panel class used for controls requiring a scrollbar.
+// Parent(s):       Panel.
+// Class history:   1/12/2004 GUIScrollPanel Created.
 
-class GUISlider :
-    public GUIControl,
+class GUIScrollPanel :
     public GUIPanel
 {
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Public member variable, method and friend function declarations
 
 public:
 
-    // Slider orientation
+    // Scroll panel orientation
     enum {
         Horizontal,
         Vertical
-    } Orientation;
+    };
 
-    // Tick Direction
+    // Pre-built draw bitmaps
     enum {
-        TopLeft,
-        BottomRight
-    } TickDirection;
+        ButtonStates=0,
+        KnobStates,
+        Back
+    };
 
-    // Slider Notifications
+    // Signals
     enum {
-        Changed = 0,
-    } Notification;
+        ChangeValue=0,
+        Grab,
+        Release
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUISlider
+// Constructor:     GUIScrollPanel
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUISlider object in
+// Description:     Constructor method used to instantiate a GUIScrollPanel object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIManager.
 
-    GUISlider(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUIScrollPanel(GUIManager *Manager);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Constructor:     GUIScrollPanel
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Constructor method used to instantiate a GUIScrollPanel object in
+//                  system memory.
+// Arguments:       None.
+
+    GUIScrollPanel();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been created.
-// Arguments:       Name, Position.
+// Description:     Create the scrollpanel
+// Arguments:       Position, Size.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been created.
-// Arguments:       Properties.
-
-    void Create(GUIProperties *Props);
+    void Create(int X, int Y, int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Destroy
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been destroyed.
+// Description:     Called when the panel has been destroyed.
 // Arguments:       None.
 
     void Destroy(void);    
@@ -106,7 +110,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:  OnMouseDown
+// Method:          OnMouseDown
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Called when the mouse goes down on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
@@ -115,7 +119,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:  OnMouseUp
+// Method:          OnMouseUp
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Called when the mouse goes up on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
@@ -133,100 +137,36 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanel
+// Method:          OnMouseHover
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the panel of the control.
-// Arguments:       None.
-// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
+// Description:     Called when the mouse is hovering over the panel (has to be enabled)
+// Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    GUIPanel *GetPanel(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID(void)    { return "SLIDER"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Move
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control needs to be moved.
-// Arguments:       New position.
-
-    void Move(int X, int Y);
+    void OnMouseHover(int X, int Y, int Buttons, int Modifier);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Resize
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control needs to be resized.
-// Arguments:       New size.
+// Description:     Adjusts the size of the panel.
+// Arguments:       Width, Height.
 
-    void Resize(int Width, int Height);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
-
-    void GetControlRect(int *X, int *Y, int *Width, int *Height);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetOrientation
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the orientation of the slider.
-// Arguments:       Orientation.
-
-    void SetOrientation(int Orientation);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetOrientation
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the orientation of the slider.
-// Arguments:       None.
-
-    int GetOrientation(void);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetTickDirection
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the direction of the ticks.
-// Arguments:       TickDir.
-
-    void SetTickDirection(int TickDir);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetTickDirection
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the direction of the ticks.
-// Arguments:       None.
-
-    int GetTickDirection(void);
+    void SetSize(int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetMinimum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the minimun value.
-// Arguments:       Minimum.
+// Description:     Sets the minimum value for the scrollpanel
+// Arguments:       Minimum value.
 
-    void SetMinimum(int Minimum);
+    void SetMinimum(int Min);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMinimum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the minimun value.
+// Description:     Gets the minimum value for the scrollpanel
 // Arguments:       None.
 
     int GetMinimum(void);
@@ -235,16 +175,16 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetMaximum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the maximun value.
-// Arguments:       Maximum.
+// Description:     Sets the maximum value for the scrollpanel
+// Arguments:       Maximum value.
 
-    void SetMaximum(int Maximum);
+    void SetMaximum(int Max);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMaximum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the maximun value.
+// Description:     Gets the maximum value for the scrollpanel
 // Arguments:       None.
 
     int GetMaximum(void);
@@ -253,7 +193,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetValue
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the value.
+// Description:     Sets the current value for the scrollpanel
 // Arguments:       Value.
 
     void SetValue(int Value);
@@ -262,28 +202,103 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetValue
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the value.
+// Description:     Gets the current value of the scrollpanel.
 // Arguments:       None.
 
     int GetValue(void);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          StoreProperties
+// Method:          SetPageSize
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the control to store the values into properties.
+// Description:     Sets the page size value for the scrollpanel.
+// Arguments:       PageSize.
+
+    void SetPageSize(int PageSize);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetPageSize
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the size of the page.
 // Arguments:       None.
 
-    void StoreProperties(void);
+    int GetPageSize(void);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ApplyProperties
+// Method:          SetOrientation
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Applies new properties to the control.
-// Arguments:       GUIProperties.
+// Description:     Sets the orientation of the scrollpanel.
+// Arguments:       Orientation.
 
-    void ApplyProperties(GUIProperties *Props);
+    void SetOrientation(int Orientation);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetOrientation
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the orientation of the scrollpanel.
+// Arguments:       None.
+
+    int GetOrientation(void);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SetSmallChange
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Sets the small change value.
+// Arguments:       SmallChange.
+
+    void SetSmallChange(int SmallChange);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetSmallChange
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the small change value.
+// Arguments:       None.
+
+    int GetSmallChange(void);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Protected member variable and method declarations
+
+protected:
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          LoadProps
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Load values from a property class.
+// Arguments:       Properties.
+
+    void LoadProps(GUIProperties *Props);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SaveProps
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Save values to a property class.
+// Arguments:       Properties.
+
+    void SaveProps(GUIProperties *Props);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Protected member variable and method declarations
+
+protected:
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          BuildBitmap
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Build the bitmap.
+// Arguments:       None.
+
+    void BuildBitmap(bool UpdateSize, bool UpdateKnob);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -293,56 +308,79 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          BuildBitmap
+// Method:          BuildButton
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Create the slider bitmap to draw.
+// Description:     Build a button.
+// Arguments:       ArrowName, Width, Height.
+
+    void BuildButton(const std::string ArrowName, int Y, int Width, int Height);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          BuildBackground
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Build the background.
 // Arguments:       None.
 
-    void BuildBitmap(void);
+    void BuildBackground(void);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          BuildLine
+// Method:          BuildKnob
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Builds the background line for the slider
-// Arguments:       Section, SrcImage.
+// Description:     Build the knob.
+// Arguments:       None.
 
-    void BuildLine(const std::string Section, GUIBitmap *SrcImage);
+    void BuildKnob(const std::string Section, int X, int Y, int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          CalculateKnob
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Calculates the knob position and size.
+// Description:     Calculate the knob size and position.
 // Arguments:       None.
 
     void CalculateKnob(void);
 
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          AdjustValue
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Adjusts the value.
+// Arguments:       Delta movement.
+
+    void AdjustValue(int Delta);
+
+
 // Members
+    
+    GUISkin                *m_Skin;
+    GUIBitmap            *m_DrawBitmap[3];
+    
+    // User attributes
+    int                    m_Orientation;
+    int                    m_Minimum;
+    int                    m_Maximum;
+    int                    m_Value;
+    int                    m_PageSize;
+    int                    m_SmallChange;
 
-    GUIBitmap        *m_DrawBitmap;
-    GUIBitmap        *m_KnobImage;
-
-    // Properties
-    int                m_Orientation;
-    int                m_TickDirection;
-    int                m_Minimum;
-    int                m_Maximum;
-    int                m_Value;
-
-    // Internal variables
-    int                m_KnobPosition;
-    int                m_KnobSize;
-    bool            m_KnobGrabbed;
-    int                m_KnobGrabPos;
-    int             m_EndThickness;
-    int                m_OldValue;
-
+    // Internal attributes
+    bool                m_RebuildSize;
+    bool                m_RebuildKnob;
+    int                    m_ButtonSize;
+    int                    m_MinimumKnobSize;
+    int                    m_KnobPosition;
+    int                    m_KnobLength;
+    bool                m_ButtonPushed[2];
+    bool                m_GrabbedKnob;
+    bool                m_GrabbedBackg;
+    int                    m_GrabbedPos;
+    int                    m_GrabbedSide;
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
-#endif  //  _GUISLIDER_
+#endif  //  _GUILISTPANEL_

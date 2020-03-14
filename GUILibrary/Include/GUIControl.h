@@ -16,8 +16,8 @@
 
 #include "Writer.h"
 
-
-namespace RTE
+using namespace RTE;
+namespace GUI
 {
 
 
@@ -346,7 +346,7 @@ protected:
 };
 
 
-};  // namespace RTE
+};  // namespace GUI
 
 
 #endif  //  _GUICONTROL_

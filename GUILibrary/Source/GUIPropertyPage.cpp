@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIPropertyPage.h"
 
-using namespace RTE;
+using namespace GUI;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIPropertyPage

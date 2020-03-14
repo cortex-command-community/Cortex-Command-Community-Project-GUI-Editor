@@ -1,28 +1,28 @@
-#ifndef _GUICOLLECTIONBOX_
-#define _GUICOLLECTIONBOX_
+#ifndef _GUIBUTTON_
+#define _GUIBUTTON_
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUICollectionBox.h
+// File:            GUIButton.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUICollectionBox class
+// Description:     GUIButton class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
 
-namespace RTE
+namespace GUI
 {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUICollectionBox
+// Class:           GUIButton
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A collection box control class that contains child controls.
+// Description:     A button control class.
 // Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUICollectionBox Created.
+// Class history:   1/6/2004 GUIButton Created.
 
-class GUICollectionBox :
+class GUIButton :
     public GUIControl,
     public GUIPanel
 {
@@ -32,37 +32,23 @@ class GUICollectionBox :
 
 public:
 
-    // CollectionBox Notifications
+    // Button Notifications
     enum {
-        Clicked = 0,
-        MouseMove    // Mouse moved over the panel
+        Pushed = 0,
+        UnPushed,
+        Clicked,
+        Focused
     } Notification;
 
-    // Drawing type
-    enum {
-        Color,
-        Image,
-        Panel
-    } DrawType;
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUICollectionBox
+// Constructor:     GUIButton
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUICollectionBox object in
+// Description:     Constructor method used to instantiate a GUIButton object in
 //                  system memory.
 // Arguments:       GUIManager, GUIControlManager.
 
-    GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Destructor:      ~GUICollectionBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destructor method used to clean up this before deletion from memory.
-// Arguments:       None.
-
-    virtual ~GUICollectionBox() { Destroy(); }
+    GUIButton(GUIManager *Manager, GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -75,21 +61,21 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Method:          Destroy
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Called when the control has been destroyed.
+// Arguments:       None.
+
+    void Destroy(void);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Called when the control has been created.
 // Arguments:       Properties.
 
     void Create(GUIProperties *Props);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Destroy
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destroys and frees this' allocated data
-// Arguments:       None.
-
-    virtual void Destroy();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -138,30 +124,30 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Move
+// Method:          OnMouseEnter
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control needs to be moved.
-// Arguments:       New position.
+// Description:     Called when the mouse enters the panel.
+// Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void Move(int X, int Y);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Resize
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control needs to be resized.
-// Arguments:       New size.
-
-    void Resize(int Width, int Height);
+    void OnMouseEnter(int X, int Y, int Buttons, int Modifier);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlRect
+// Method:          OnMouseLeave
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
+// Description:     Called when the mouse leaves the panel.
+// Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height);
+    void OnMouseLeave(int X, int Y, int Buttons, int Modifier);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Virtual Method:  OnKeyDown
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Called when a key goes down.
+// Arguments:       KeyCode, Modifier.
+
+    virtual void OnKeyDown(int KeyCode, int Modifier);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +166,16 @@ public:
 // Description:     Returns a string representing the control's ID
 // Arguments:       None.
 
-    static std::string GetControlID(void)    { return "COLLECTIONBOX"; };
+    static std::string GetControlID(void)    { return "BUTTON"; };
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetControlRect
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the rectangle of the control.
+// Arguments:       Position, Size.
+
+    void GetControlRect(int *X, int *Y, int *Width, int *Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -193,67 +188,48 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetDrawImage
+// Method:          Move
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the drawing image bitmap to draw
-// Arguments:       Bitmap, ownership IS transferred!
+// Description:     Called when the control needs to be moved.
+// Arguments:       New position.
 
-    void SetDrawImage(GUIBitmap *Bitmap);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetDrawImage
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the drawing image bitmap that is being drawn
-// Arguments:       Bitmap, ownership IS NOT transferred!
-
-    GUIBitmap * GetDrawImage() { return m_DrawBitmap; }
+    void Move(int X, int Y);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetDrawBackground
+// Method:          Resize
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets whether to draw the background.
-// Arguments:       Draw.
+// Description:     Called when the control needs to be resized.
+// Arguments:       New size.
 
-    void SetDrawBackground(bool DrawBack);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetDrawType
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the drawing type.
-// Arguments:       Type.
-
-    void SetDrawType(int Type);
+    void Resize(int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetDrawType
+// Method:          SetPushed
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the current drawing type.
+// Description:     Forces the button to look pressed down or not.
+// Arguments:       Whether to force the pushed look or not.
+
+    void SetPushed(bool pushed = false) { m_Pushed = pushed; }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          SetText
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Sets the text.
+// Arguments:       Text.
+
+    void SetText(const std::string Text);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Method:          GetText
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     Gets the text.
 // Arguments:       None.
-// Returns:         Type.
 
-    int GetDrawType() const { return m_DrawType; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetDrawColor
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the drawing color.
-// Arguments:       Color.
-
-    void SetDrawColor(unsigned long Color);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetDrawColor
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the drawing color.
-// Returns:         Color.
-
-    unsigned long GetDrawColor() const { return m_DrawColor; }
+    std::string GetText(void);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -280,20 +256,18 @@ private:
     void BuildBitmap(void);
 
 
-// Member data
+// Members
 
-    GUIBitmap        *m_Background;
-
-    bool            m_DrawBackground;
-    int                m_DrawType;
-    unsigned long            m_DrawColor;
     GUIBitmap        *m_DrawBitmap;
 
+    bool            m_Pushed;
+    bool            m_Over;
+    std::string        m_Text;
 
 };
 
 
-}; // namespace RTE
+}; // namespace GUI
 
 
-#endif  //  _GUICOLLECTIONBOX_
+#endif  //  _GUIBUTTON_

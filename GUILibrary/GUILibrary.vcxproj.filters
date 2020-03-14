@@ -5,97 +5,100 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3b9d188e-4bbc-4d3a-8927-dbcd0dff8ccf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\GUI.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIBanner.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIBanner.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIButton.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIButton.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUICheckbox.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUICheckbox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUICollectionBox.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUICollectionBox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIComboBox.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIComboBox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIControl.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIControl.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIControlFactory.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIControlFactory.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIControlManager.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIControlManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIEvent.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIEvent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIFont.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIFont.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIInput.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIInput.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUILabel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIInterface.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIListBox.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUILabel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIListPanel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIListBox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIManager.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIListPanel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIPanel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIProgressBar.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIPanel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIProperties.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIProgressBar.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIPropertyPage.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIProperties.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIRadioButton.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIPropertyPage.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIScrollbar.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIRadioButton.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIScrollPanel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIScrollbar.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUISkin.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIScrollPanel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUISlider.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUISkin.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUITab.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUISlider.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUITextBox.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUITab.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUITextPanel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUITextBox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIUtil.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUITextPanel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIInterface.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Include\GUIUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LibraryIncludes.h" />
   </ItemGroup>
