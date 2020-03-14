@@ -5,18 +5,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{75d4ffee-5b81-4250-a542-af4a50ca4d66}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>c;cpp;h;hpp</Extensions>
-    </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{323d5ac6-d2a4-48b2-887b-9404379ef3fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System\Wrappers">
-      <UniqueIdentifier>{2ef3459b-5f1b-424c-8eec-b7bcbb440d70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,45 +18,7 @@
     <ClCompile Include="Editor\GUIEditorLib.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="System\ContentFile.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Reader.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Timer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Writer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\FrameMan.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\TimerMan.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\UInputMan.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="System\StandardIncludes.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Wrappers\AllegroBitmap.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Wrappers\AllegroInput.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Wrappers\AllegroScreen.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Vector.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTEError.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
+    <ClCompile Include="GUILibrary\LibraryIncludes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -77,54 +30,7 @@
     <ClInclude Include="Editor\GUIEditorLib.h">
       <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="System\ContentFile.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Reader.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Timer.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Writer.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\FrameMan.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\TimerMan.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\UInputMan.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\StandardIncludes.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Wrappers\AllegroBitmap.h">
-      <Filter>System\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Wrappers\AllegroInput.h">
-      <Filter>System\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Wrappers\AllegroScreen.h">
-      <Filter>System\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Vector.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Serializable.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTEError.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Constants.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Singleton.h">
-      <Filter>System</Filter>
-    </ClInclude>
+    <ClInclude Include="GUILibrary\LibraryIncludes.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc">

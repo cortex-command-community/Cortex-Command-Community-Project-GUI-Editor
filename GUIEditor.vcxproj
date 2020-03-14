@@ -68,7 +68,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
@@ -94,7 +94,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
@@ -117,44 +117,17 @@
   <ItemGroup>
     <ClCompile Include="Editor\GUIEditorApp.cpp" />
     <ClCompile Include="Editor\GUIEditorLib.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Managers\FrameMan.cpp" />
-    <ClCompile Include="Managers\TimerMan.cpp" />
-    <ClCompile Include="Managers\UInputMan.cpp" />
-    <ClCompile Include="System\ContentFile.cpp" />
-    <ClCompile Include="System\Reader.cpp" />
-    <ClCompile Include="System\RTEError.cpp" />
-    <ClCompile Include="System\StandardIncludes.cpp">
+    <ClCompile Include="GUILibrary\LibraryIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="System\Timer.cpp" />
-    <ClCompile Include="System\Vector.cpp" />
-    <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
-    <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
-    <ClCompile Include="System\Wrappers\AllegroScreen.cpp" />
-    <ClCompile Include="System\Writer.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\GUIEditorApp.h" />
     <ClInclude Include="Editor\GUIEditorLib.h" />
-    <ClInclude Include="Managers\FrameMan.h" />
-    <ClInclude Include="Managers\TimerMan.h" />
-    <ClInclude Include="Managers\UInputMan.h" />
+    <ClInclude Include="GUILibrary\LibraryIncludes.h" />
     <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="System\Constants.h" />
-    <ClInclude Include="System\ContentFile.h" />
-    <ClInclude Include="System\Reader.h" />
-    <ClInclude Include="System\RTEError.h" />
-    <ClInclude Include="System\Serializable.h" />
-    <ClInclude Include="System\Singleton.h" />
-    <ClInclude Include="System\StandardIncludes.h" />
-    <ClInclude Include="System\Timer.h" />
-    <ClInclude Include="System\Vector.h" />
-    <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
-    <ClInclude Include="System\Wrappers\AllegroInput.h" />
-    <ClInclude Include="System\Wrappers\AllegroScreen.h" />
-    <ClInclude Include="System\Writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
