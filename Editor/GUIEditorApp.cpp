@@ -27,6 +27,7 @@
 using namespace RTE;
 
 
+namespace GUI {
 AllegroScreen    *g_Screen;
 AllegroInput    *g_Input;
 
@@ -282,7 +283,7 @@ bool GUIEditorApp::Update(void)
                 // Add a control
                 if (Event.GetControl()->GetName().substr(0, 2).compare("C_") == 0)
                 {
-                    string Class = ((GUIButton *)Event.GetControl())->GetText();
+					std::string Class = ((GUIButton *)Event.GetControl())->GetText();
                     GUIControl *Parent = m_pRootControl;
 
                     // Is the focused control a container?
@@ -293,7 +294,7 @@ bool GUIEditorApp::Update(void)
                     }
 
                     // Find a suitable control name
-                    string Name = GenerateControlName(Class/*.substr(2)*/);
+					std::string Name = GenerateControlName(Class/*.substr(2)*/);
 
                     if (Parent)
                     {
@@ -427,7 +428,7 @@ void GUIEditorApp::OnQuitButton(void)
 
 void GUIEditorApp::OnLoadButton(bool addControls)
 {
-    string strFilename;
+	std::string strFilename;
     if (GUIEditorLib::DisplayLoadGUIFile(&strFilename))
     {
         m_pControlManager->Load(strFilename, addControls);
@@ -462,7 +463,7 @@ void GUIEditorApp::OnLoadButton(bool addControls)
 
 void GUIEditorApp::OnSaveAsButton(void)
 {
-    string strFilename;
+	std::string strFilename;
     if (GUIEditorLib::DisplaySaveGUIFile(&strFilename))
     {
         // Move the root object to the origin before saving
@@ -683,9 +684,9 @@ void GUIEditorApp::UpdateActiveBoxList(void)
     m_pActiveBoxList->ClearList();
 
     // Go through all the top-level (directly under root) controls and add only the ControlBoxs to the list here
-    vector<GUIControl *> *pControls = m_pControlManager->GetControlList();
+	std::vector<GUIControl *> *pControls = m_pControlManager->GetControlList();
     GUICollectionBox *pBox = 0;
-    for (vector<GUIControl *>::iterator itr = pControls->begin(); itr != pControls->end(); itr++)
+    for (std::vector<GUIControl *>::iterator itr = pControls->begin(); itr != pControls->end(); itr++)
     {
         // Look for CollectionBoxes with the root control as parent
         if ((pBox = dynamic_cast<GUICollectionBox *>(*itr)) && pBox->GetParent() == m_pRootControl)
@@ -720,8 +721,8 @@ GUIControl * GUIEditorApp::ControlUnderMouse(GUIControl *Parent, int MouseX, int
         return NULL;
 
     // Check children
-    vector<GUIControl *> *List = Parent->GetChildren();
-    vector<GUIControl *>::reverse_iterator it;
+	std::vector<GUIControl *> *List = Parent->GetChildren();
+	std::vector<GUIControl *>::reverse_iterator it;
 
     assert(List);
 
@@ -966,7 +967,7 @@ std::string GUIEditorApp::GenerateControlName(std::string strControlType)
     // 10,000 should be enough
     for (int i=1; i<10000; i++)
     {
-        string Name = strControlType;
+		std::string Name = strControlType;
 
         // Use a lower case version of the string
         for (int s=0; s<Name.size(); s++)
@@ -975,8 +976,8 @@ std::string GUIEditorApp::GenerateControlName(std::string strControlType)
         Name.append(itoa(i, buf, 10));
 
         // Check if this name exists
-        vector<GUIControl *> *ControlList = m_pControlManager->GetControlList();
-        vector<GUIControl *>::iterator it;
+		std::vector<GUIControl *> *ControlList = m_pControlManager->GetControlList();
+		std::vector<GUIControl *>::iterator it;
 
         bool Found = false;
 
@@ -1020,4 +1021,5 @@ int GUIEditorApp::ProcessSnapCoord(int Position)
     }
 
     return Position;
+}
 }

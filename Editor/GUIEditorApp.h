@@ -13,7 +13,6 @@
 #include "GUI.h"
 #include "GUIPropertyPage.h"
 #include "GUIListBox.h"
-using namespace RTE;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,8 @@ using namespace RTE;
 // Parent(s):       None.
 // Class history:   02/07/2009 GUIEditorApp Created.
 
+namespace GUI {
+	
 
 class GUIEditorApp
 {
@@ -263,7 +264,7 @@ private:
 	int				m_nGridSize;
 
 };
-
+}
 
 
 #endif  //  File

@@ -25,31 +25,22 @@ GUIEditorApp g_GUIEditor;
 extern HINSTANCE g_hInstance = 0;
 extern HWND g_hWnd = 0;
 
+using namespace GUI;
+GUIEditorApp g_GUIEditor;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:			main
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Entry point for the GUI Editor
 
-int main(int argc, char *argv[])
-{
-	if(!g_GUIEditor.Initialize())
-		return -1;
-	
+int main(int argc, char *argv[]) {
+	if (!g_GUIEditor.Initialize()) { return -1; }
+
 	// Get windows settings
 	g_hWnd = win_get_window();
 	g_hInstance = (HINSTANCE)GetWindowLong(g_hWnd, GWL_HINSTANCE);
 
-
 	// Run editor loop
-	while(1) {
+	while (true) {
 		bool bContinue = g_GUIEditor.Update();
-		if(!bContinue)
-			break;
+		if (!bContinue) { break; }
 	}
-
-
-
 	return 0;
 }
 END_OF_MAIN()

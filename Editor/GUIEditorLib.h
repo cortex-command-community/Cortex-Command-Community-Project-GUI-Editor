@@ -1,51 +1,36 @@
 #ifndef _GUIEDITORLIB_
 #define _GUIEDITORLIB_
 
-using namespace std;
+namespace GUI {
 
+	/// <summary>
+	/// GUI Editor Library class with static functions to handle windows calls
+	/// </summary>
+	class GUIEditorLib {
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIEditorLib
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUI Editor Library class with static functions to handle windows calls
-// Parent(s):       None.
-// Class history:   04/18/2009 GUIEditorApp Created.
-class GUIEditorLib {
-public:
+	public:
 
+		/// <summary>
+		/// Call quit messagebox.
+		/// </summary>
+		/// <param name="strMessage"></param>
+		/// <param name="strTitle"></param>
+		/// <returns>1 for quit & save, -1 for quit, no save, 0 for cancel.</returns>
+		static int QuitMessageBox(std::string strMessage, std::string strTitle);
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          QuitMessageBox
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Call quit messagebox
-	// Arguments:       None.
-	// Returns:			1 for quit & save, -1 for quit, no save, 0 for cancel
+		/// <summary>
+		/// Display load GUI file OS dialog box.
+		/// </summary>
+		/// <param name="strFilename"></param>
+		/// <returns>True if a file was selected.</returns>
+		static bool DisplayLoadGUIFile(std::string *strFilename);
 
-	static	int			QuitMessageBox(string strMessage, string strTitle);
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          DisplayLoadGUIFile
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Display load gui file OS dialog box
-	// Arguments:       None.
-	// Returns:			True if a file was selected
-
-	static	bool		DisplayLoadGUIFile(string *strFilename);
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          DisplaySaveGUIFile
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Display save gui file OS dialog box
-	// Arguments:       None.
-	// Returns:			True if a file was selected
-
-	static	bool		DisplaySaveGUIFile(string *strFilename);
-
-
-};
-
-
-
-#endif  //  File
+		/// <summary>
+		/// Display save GUI file OS dialog box.
+		/// </summary>
+		/// <param name="strFilename"></param>
+		/// <returns>True if a file was selected.</returns>
+		static bool DisplaySaveGUIFile(std::string *strFilename);
+	};
+}
+#endif
