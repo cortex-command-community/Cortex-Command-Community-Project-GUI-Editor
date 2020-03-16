@@ -98,7 +98,7 @@
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;GUI_STANDALONE;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(SolutionDir);$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -138,7 +138,7 @@
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;GUI_STANDALONE;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(SolutionDir);$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -179,6 +179,7 @@
     <ClInclude Include="..\Wrappers\ContentFile.h" />
     <ClInclude Include="..\Wrappers\Reader.h" />
     <ClInclude Include="..\Wrappers\RTEError.h" />
+    <ClInclude Include="..\Wrappers\Serializable.h" />
     <ClInclude Include="..\Wrappers\Timer.h" />
     <ClInclude Include="..\Wrappers\TimerMan.h" />
     <ClInclude Include="..\Wrappers\Vector.h" />

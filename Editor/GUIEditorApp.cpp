@@ -1,83 +1,36 @@
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIEditorApp.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUI Editor App Class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jboett@internode.on.net
-
-
-#include "GUI.h"
-#include "allegro.h"
 #include "GUIEditorApp.h"
-#include "RTEError.h"
+#include "GUIEditorLib.h"
 
-#include "GUI.h"
+#include "GUICollectionBox.h"
+#include "GUIButton.h"
+#include "GUICheckbox.h"
+
 #include "AllegroScreen.h"
 #include "AllegroInput.h"
 #include "AllegroBitmap.h"
 
-#include "GUICollectionBox.h"
-#include "GUIButton.h"
-#include "GUIPropertyPage.h"
-#include "GUICheckbox.h"
-
-#include "GUIEditorLib.h"
-
-using namespace RTE;
-
-
-AllegroScreen    *g_Screen;
-AllegroInput    *g_Input;
-
-extern    GUIEditorApp g_GUIEditor;
 namespace RTE {
+
+volatile bool g_Quit;
+AllegroScreen *g_Screen;
+AllegroInput *g_Input;
+GUIEditorApp g_GUIEditor;
 
 #define ROOTORIGINX 300
 #define ROOTORIGINY 120
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Quit Handler for Allegro
-//////////////////////////////////////////////////////////////////////////////////////////
-volatile bool g_Quit = false;
-void QuitHandler(void)
-{
-    g_GUIEditor.OnQuitButton();
-}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	/// <summary>
+	/// Quit Handler for Allegro.
+	/// </summary>
+	void QuitHandler(void) { g_GUIEditor.OnQuitButton(); }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIEditorApp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIEditorApp object in system
-//                  memory.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIEditorApp::GUIEditorApp()
-{
-
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Destructor:      ~GUIEditorApp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destructor method used to clean up a GUIEditorApp object.
-
-GUIEditorApp::~GUIEditorApp()
-{
-
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Initialize
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Initializes the editor app
-
-bool GUIEditorApp::Initialize(void)
-{
-    allegro_init();
+bool GUIEditorApp::Initialize(void) {
+	allegro_init();
     install_keyboard();
 
     int ResW = 1024;
@@ -114,8 +67,6 @@ bool GUIEditorApp::Initialize(void)
     g_Screen = new AllegroScreen(m_pBackBuffer32);
     g_Input = new AllegroInput(-1);
 
-    
-
     // Set the current palette
     set_palette(newPalette);
 
@@ -127,13 +78,12 @@ bool GUIEditorApp::Initialize(void)
 
     clear_to_color(m_pBackBuffer32, m_BlackColor);
 
-
     // Initialize the UI
     m_pControlManager = new GUIControlManager();
-    m_pControlManager->Create(g_Screen, g_Input, "Base.rte/GUIs/Skins/Editor");
+	m_pControlManager->Create(g_Screen, g_Input, "Assets/EditorSkin");
 
     m_pEditorManager = new GUIControlManager();
-    m_pEditorManager->Create(g_Screen, g_Input, "Base.rte/GUIs/Skins/Editor");
+    m_pEditorManager->Create(g_Screen, g_Input, "Assets/EditorSkin");
 
     m_pEditorManager->EnableMouse();
 
@@ -220,11 +170,7 @@ bool GUIEditorApp::Initialize(void)
     return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Update
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Updates the editor app.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIEditorApp::Update(void)
 {
@@ -245,40 +191,35 @@ bool GUIEditorApp::Update(void)
                 // Invoke an update                
                 //EDInvokeUpdate();
                 
-                // Quit
-                if (Event.GetControl()->GetName() == "btnQuit")
-                {
-                    OnQuitButton();
-                    break;
-                }
+				// Quit
+				if (Event.GetControl()->GetName() == "btnQuit") {
+					OnQuitButton();
+					break;
+				}
 
-                // Load
-                if (Event.GetControl()->GetName() == "btnLoad")
-                {
-                    OnLoadButton();
-                    break;
-                }
+				// Load
+				if (Event.GetControl()->GetName() == "btnLoad") {
+					OnLoadButton();
+					break;
+				}
 
-                // Add
-                if (Event.GetControl()->GetName() == "btnAdd")
-                {
-                    OnLoadButton(true);
-                    break;
-                }
+				// Add
+				if (Event.GetControl()->GetName() == "btnAdd") {
+					OnLoadButton(true);
+					break;
+				}
 
-                // Save
-                if (Event.GetControl()->GetName() == "btnSave")
-                {
-                    OnSaveButton();
-                    break;
-                }
+				// Save
+				if (Event.GetControl()->GetName() == "btnSave") {
+					OnSaveButton();
+					break;
+				}
 
-                // Save As
-                if (Event.GetControl()->GetName() == "btnSaveAs")
-                {
-                    OnSaveAsButton();
-                    break;
-                }
+				// Save As
+				if (Event.GetControl()->GetName() == "btnSaveAs") {
+					OnSaveAsButton();
+					break;
+				}
 
                 // Add a control
                 if (Event.GetControl()->GetName().substr(0, 2).compare("C_") == 0)
@@ -392,39 +333,25 @@ bool GUIEditorApp::Update(void)
     return !g_Quit;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnQuitButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the quit button has been pushed
-
-void GUIEditorApp::OnQuitButton(void)
-{
-    // If dirty, ask if we want to save
-    // Otherwise, just quit
-    if (m_bDirty)
-    {
-        int nRetCode = GUIEditorLib::QuitMessageBox("Save changes made?", "Cortex Command: GUI Editor");
-        if (nRetCode == 1)
-        {
-            OnSaveButton();
-            g_Quit = true;
-        }
-        if (nRetCode == -1)
-            g_Quit = true;
-    }
-    else
-    {
-        g_Quit = true;
-    }
+void GUIEditorApp::OnQuitButton(void) {
+	// If dirty, ask if we want to save
+	// Otherwise, just quit
+	if (m_bDirty) {
+		int nRetCode = GUIEditorLib::QuitMessageBox("Save changes made?", "Cortex Command: GUI Editor");
+		if (nRetCode == 1) {
+			OnSaveButton();
+			g_Quit = true;
+		}
+		if (nRetCode == -1)
+			g_Quit = true;
+	} else {
+		g_Quit = true;
+	}
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnLoadButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the load button has been pushed
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::OnLoadButton(bool addControls)
 {
@@ -455,11 +382,7 @@ void GUIEditorApp::OnLoadButton(bool addControls)
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnSaveAsButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the save as button has been pushed
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::OnSaveAsButton(void)
 {
@@ -480,11 +403,7 @@ void GUIEditorApp::OnSaveAsButton(void)
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnSaveButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the save button has been pushed
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::OnSaveButton(void)
 {
@@ -504,11 +423,7 @@ void GUIEditorApp::OnSaveButton(void)
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ProcessEditor
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Process the editor logic
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::ProcessEditor(void)
 {
@@ -671,12 +586,7 @@ void GUIEditorApp::ProcessEditor(void)
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          UpdateActiveBoxList
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Updates the list of Active CollectionBox:es found in the editor under
-//                  the root box.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::UpdateActiveBoxList(void)
 {
@@ -699,11 +609,7 @@ void GUIEditorApp::UpdateActiveBoxList(void)
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ControlUnderMouse
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks if a control is under the mouse point
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIControl * GUIEditorApp::ControlUnderMouse(GUIControl *Parent, int MouseX, int MouseY)
 {
@@ -737,11 +643,7 @@ GUIControl * GUIEditorApp::ControlUnderMouse(GUIControl *Parent, int MouseX, int
     return Parent;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          HandleUnderMouse
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks if a control's handle is under the mouse point
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int GUIEditorApp::HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY)
 {
@@ -776,11 +678,7 @@ int GUIEditorApp::HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY)
     return -1;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawSelectedControl
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Draws selection info around a control
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::DrawSelectedControl(GUIControl *Control)
 {
@@ -831,11 +729,7 @@ void GUIEditorApp::DrawSelectedControl(GUIControl *Control)
     g_Screen->GetBitmap()->SetClipRect(NULL);
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          DrawSelectionHandle
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Draws a selection handle
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::DrawSelectionHandle(int X, int Y, int Width, int Height)
 {
@@ -843,11 +737,7 @@ void GUIEditorApp::DrawSelectionHandle(int X, int Y, int Width, int Height)
     g_Screen->GetBitmap()->DrawRectangle(X-Width/2, Y-Height/2, Width, Height, 0xFFFFFFFF, false);
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ClearSelection
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Clears selection info
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::ClearSelection(void)
 {
@@ -862,11 +752,7 @@ void GUIEditorApp::ClearSelection(void)
     m_SelectionInfo.m_GrabY = 0;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          MouseInsideBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks if the mouse point is inside a box
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIEditorApp::MouseInsideBox(int MouseX, int MouseY, int X, int Y, int Width, int Height)
 {
@@ -876,12 +762,7 @@ bool GUIEditorApp::MouseInsideBox(int MouseX, int MouseY, int X, int Y, int Widt
     return false;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CalculateHandleResize
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Calculates new position/size of a control given a handle movement
-// Arguments:       Control, Mouse, Handle, Pos, Size
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIEditorApp::CalculateHandleResize(int MouseX, int MouseY, int *X, int *Y, int *Width, int *Height)
 {
@@ -954,11 +835,7 @@ void GUIEditorApp::CalculateHandleResize(int MouseX, int MouseY, int *X, int *Y,
     *Height = CtrlHeight;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GenerateControlName
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Generates a new control name based on the type
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::string GUIEditorApp::GenerateControlName(std::string strControlType)
 {
@@ -999,27 +876,22 @@ std::string GUIEditorApp::GenerateControlName(std::string strControlType)
     return strControlType;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ProcessSnapCoord
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Calculates the nearest snap position (if snap is on)
-
-int GUIEditorApp::ProcessSnapCoord(int Position)
-{
-    if (m_bSnapGrid)
-    {
-        float Fraction = (float)Position / (float)m_nGridSize;
-        int Value = (int)Fraction;
-        Fraction -= Value;
-        if (Fraction >= 0.5f)
-            Fraction = 1;
-        else
-            Fraction = 0;
-
-        Position = (Value + Fraction) * m_nGridSize;
-    }
-
-    return Position;
-}
+	int GUIEditorApp::ProcessSnapCoord(int Position) {
+		if (m_bSnapGrid) {
+			float Fraction = (float)Position / (float)m_nGridSize;
+			int Value = (int)Fraction;
+			Fraction -= Value;
+			Fraction = (Fraction >= 0.5F) ? 1 : 0;
+	/*
+			if (Fraction >= 0.5F)
+				Fraction = 1;
+			else
+				Fraction = 0;
+	*/
+			Position = (Value + Fraction) * m_nGridSize;
+		}
+		return Position;
+	}
 }

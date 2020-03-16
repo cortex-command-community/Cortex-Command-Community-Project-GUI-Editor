@@ -14,19 +14,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include <ISTREAM>
-#include <FSTREAM>
-#include <string>
-#include <list>
-#include "Writer.h"
 
 namespace RTE
 {
-
-// Not necessary anymore since enforce *.rte in dirnames if not packaged.
-//const char g_ReadPackageExtension[8] = ".rte";
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Class:           Reader

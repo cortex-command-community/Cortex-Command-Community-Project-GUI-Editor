@@ -12,11 +12,8 @@
 // Inclusions of header files
 
 #include "Reader.h"
-#include <cctype>
-#include <fstream>
 
 using namespace std;
-//using namespace zip;
 
 namespace RTE
 {

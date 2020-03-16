@@ -12,7 +12,7 @@
 // Inclusions of header files
 
 #include "RTEError.h"
-#include "allegro.h"
+
 
 
 namespace RTE

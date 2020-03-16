@@ -12,13 +12,10 @@
 // Inclusions of header files
 
 #include "ContentFile.h"
-
-#include "allegro.h"
-#include "winalleg.h"
+#include "RTEError.h"
 
 
 using namespace std;
-//using namespace zip;
 
 namespace RTE
 {
@@ -37,26 +34,7 @@ void ContentFile::Clear()
 {
     m_DataPath.erase();
     m_DataModuleID = 0;
-    m_pLoadedData = 0;
-    m_LoadedDataSize = 0;
-    m_pDataFile = 0;
 }
-
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Makes the ContentFile object ready for use.
-
-int ContentFile::Create()
-{
-    // Read all the properties
-    if (Serializable::Create() < 0)
-        return -1;
-
-    return 0;
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
@@ -82,9 +60,6 @@ int ContentFile::Create(const ContentFile &reference)
 
     m_DataPath = reference.m_DataPath;
     m_DataModuleID = reference.m_DataModuleID;
-//    m_pLoadedData = reference.m_pLoadedData;
-//    m_LoadedDataSize = reference.m_LoadedDataSize;
-//    m_pDataFile = reference.m_pDataFile; Don't copy this; only the creator should keep it
 
     return 0;
 }
@@ -98,15 +73,6 @@ int ContentFile::Create(const ContentFile &reference)
 
 void ContentFile::Destroy(bool notInherited)
 {
-/* No, we're leaving all data loaded until engine shutdown - NO WE"RE NOT, LOOK at FreeAllLoaded
-    if (m_pDataFile)
-        unload_datafile_object(m_pDataFile);
-*/
-    // Don't delete this guy, just for conveneice, and is not and owner of the data
-//    delete m_pLoadedData;
-
-//    if (!notInherited)
-//        Serializable::Destroy();
     Clear();
 }
 
@@ -134,10 +100,6 @@ void ContentFile::FreeAllLoaded()
 void ContentFile::SetDataPath(std::string newDataPath)
 {
     m_DataPath = newDataPath;
-
-    // Reset the loaded convenience pointer
-    m_pLoadedData = 0;
-    m_LoadedDataSize = 0;
 };
 
 
@@ -152,40 +114,6 @@ int ContentFile::GetDataModuleID()
 {
     return m_DataModuleID;
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  GetDataSize
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the file size of the content file represented by this ContentFile
-//                  object, in bytes.
-
-unsigned long ContentFile::GetDataSize()
-{
-/*
-    if (!m_pLoadedData)
-        GetContent();
-*/
-    // Now that we have a data, return the size.
-    return m_LoadedDataSize;
-}
-
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  GetDataType
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the Allegro DATAFILE type of the DATAFILE represented by this
-//                  ContentFile.
-
-int ContentFile::GetDataType()
-{
-    if (!m_pDataFile)
-        GetContent();
-
-    // Now that we have a datafile, return the Allegro type.
-    return m_pDataFile->type;
-}
-*/
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -267,54 +195,6 @@ BITMAP * ContentFile::LoadAndReleaseBitmap(int conversionMode)
         // Close the file stream
         pack_fclose(pFile);
     }
-    // If we found a pound sign, make sure it's not on the very end. If not, then go ahead and load from packed stream.
-    else if (separatorPos != m_DataPath.length() - 1)
-    {
-        // Get the Path only, without the object name, using the separator index as length limiter
-        string datafilePath = m_DataPath.substr(0, separatorPos);
-        // Adjusting to the true first character of the datafile object's name string.
-        string objectName = m_DataPath.substr(separatorPos + 1);
-
-        // Try loading the datafile from the specified path + object names.
-        m_pDataFile = load_datafile_object(datafilePath.c_str(), objectName.c_str());
-
-        // Make sure we loaded properly.
-
-/* Don't do this because there is no easy way to copy SAMPLE:s. Just save the datafile and unload it upon destruction.
-        // Create temporary poitner to laoded bitmap; it will be destroyed along with the datafile soon
-        BITMAP *pTempBitmap = (BITMAP *)m_pDataFile->dat;
-
-        // Copy the loaded bitmap
-        if (!(pReturnBitmap = create_bitmap_ex(bitmap_color_depth(pTempBitmap), pTempBitmap->w, pTempBitmap->h)))
-            DDTAbort("Failed to create copy of the loaded datafile's data!");
-        blit(pTempBitmap, pReturnBitmap, 0, 0, 0, 0, pTempBitmap->w, pTempBitmap->h);
-
-        // Now unload the datafile, also destroying the loaded bitmap;
-        unload_datafile_object(m_pDataFile);
-        pTempBitmap = 0;
-*/
-        // Get the loaded data
-        pReturnBitmap = (BITMAP *)m_pDataFile->dat;
-    }
-    
     return pReturnBitmap;
 }
-
-
-
-/* This is foolish
-//////////////////////////////////////////////////////////////////////////////////////////
-// Static method:  ClearAllLoadedData
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Clears out all the previously loaded data shared among all ContentFile
-//                  instances. NEVER USE THIS UNLESS ALL INSTANCES OF CONTENTFILE ARE GONE!
-
-static void ContentFile::ClearAllLoadedData()
-{
-    for (map<string, DATAFILE *>::iterator itr = m_sLoadedDataMap.begin(); itr != m_sLoadedDataMap.end(); ++itr) {
-        unload_datafile_object(itr->second);
-        m_sLoadedDataMap.erase(itr);
-    }
 }
-*/
-} // namespace RTE

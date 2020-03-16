@@ -1,34 +1,15 @@
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            main
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Entry point file for the GUI Library editor
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jboett@internode.on.net
-
-
-#include "TimerMan.h"
 #include "GUIEditorApp.h"
 #include "GUIEditorLib.h"
 
-#include "allegro.h"
-#include "winalleg.h"
-
+using namespace RTE;
 
 extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
-
-
-GUIEditorApp g_GUIEditor;
-
 extern HINSTANCE g_hInstance = 0;
 extern HWND g_hWnd = 0;
 
-using namespace GUI;
-GUIEditorApp g_GUIEditor;
-
-using namespace RTE;
-
+/// <summary>
+/// Entry point for the GUI Library editor.
+/// </summary>
 int main(int argc, char *argv[]) {
 	if (!g_GUIEditor.Initialize()) { return -1; }
 

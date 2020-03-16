@@ -13,11 +13,7 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
-
-#include <cstdio>
-#include <string>
-
-
+#include "allegro.h"
 namespace RTE
 {
 
