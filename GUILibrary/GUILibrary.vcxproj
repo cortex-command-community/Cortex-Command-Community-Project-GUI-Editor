@@ -95,16 +95,17 @@
       <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;GUI_STANDALONE;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
       <CallingConvention>Cdecl</CallingConvention>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,10 +135,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;GUI_STANDALONE;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>$(ProjectDir)LibraryIncludes.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;..\..\Cortex-Command-Community-Project-Source\System;..\..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include;$(SolutionDir)Wrappers;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)LibraryIncludes.h;</ForcedIncludeFiles>
       <DisableSpecificWarnings>4996;4244;4018;4006;4305;</DisableSpecificWarnings>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -146,6 +147,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -174,6 +176,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Wrappers\ContentFile.h" />
+    <ClInclude Include="..\Wrappers\Reader.h" />
+    <ClInclude Include="..\Wrappers\RTEError.h" />
+    <ClInclude Include="..\Wrappers\Timer.h" />
+    <ClInclude Include="..\Wrappers\TimerMan.h" />
+    <ClInclude Include="..\Wrappers\Vector.h" />
+    <ClInclude Include="..\Wrappers\Writer.h" />
     <ClInclude Include="Include\GUI.h" />
     <ClInclude Include="Include\GUIBanner.h" />
     <ClInclude Include="Include\GUIButton.h" />
@@ -207,6 +216,13 @@
     <ClInclude Include="LibraryIncludes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Wrappers\ContentFile.cpp" />
+    <ClCompile Include="..\Wrappers\Reader.cpp" />
+    <ClCompile Include="..\Wrappers\RTEError.cpp" />
+    <ClCompile Include="..\Wrappers\Timer.cpp" />
+    <ClCompile Include="..\Wrappers\TimerMan.cpp" />
+    <ClCompile Include="..\Wrappers\Vector.cpp" />
+    <ClCompile Include="..\Wrappers\Writer.cpp" />
     <ClCompile Include="LibraryIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

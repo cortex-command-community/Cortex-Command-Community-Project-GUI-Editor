@@ -7,7 +7,9 @@
 *.pch
 *.exe
 *.aps
+*.log
 *.vs
 *.vcxproj.user
 
 _Bin
+

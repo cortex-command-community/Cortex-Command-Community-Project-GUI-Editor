@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>c;cpp;h;hpp</Extensions>
     </Filter>
+    <Filter Include="Wrappers">
+      <UniqueIdentifier>{19f78555-2348-4d33-be7f-74aaade17d63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -19,6 +22,15 @@
       <Filter>Editor</Filter>
     </ClCompile>
     <ClCompile Include="GUILibrary\LibraryIncludes.cpp" />
+    <ClCompile Include="Wrappers\AllegroBitmap.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Wrappers\AllegroInput.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Wrappers\AllegroScreen.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -31,6 +43,15 @@
       <Filter>Editor</Filter>
     </ClInclude>
     <ClInclude Include="GUILibrary\LibraryIncludes.h" />
+    <ClInclude Include="Wrappers\AllegroBitmap.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Wrappers\AllegroInput.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Wrappers\AllegroScreen.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc">

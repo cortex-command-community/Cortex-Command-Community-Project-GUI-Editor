@@ -8,6 +8,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{3b9d188e-4bbc-4d3a-8927-dbcd0dff8ccf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Wrappers">
+      <UniqueIdentifier>{c6a55314-6242-4c25-92ff-7d1508cadb9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\GUI.h">
@@ -101,6 +104,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LibraryIncludes.h" />
+    <ClInclude Include="..\Wrappers\ContentFile.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\Reader.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\RTEError.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\Timer.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\TimerMan.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\Writer.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wrappers\Vector.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GUIBanner.cpp">
@@ -188,5 +212,26 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibraryIncludes.cpp" />
+    <ClCompile Include="..\Wrappers\ContentFile.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\Reader.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\RTEError.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\Timer.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\TimerMan.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\Writer.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wrappers\Vector.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

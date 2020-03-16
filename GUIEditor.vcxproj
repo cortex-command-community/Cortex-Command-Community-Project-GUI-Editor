@@ -60,7 +60,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)external\include;..\Cortex-Command-Community-Project-Source\Menus;..\Cortex-Command-Community-Project-Source\Entities;..\Cortex-Command-Community-Project-Source\System;..\Cortex-Command-Community-Project-Source\GUI;..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -70,17 +70,20 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
       <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;</DisableSpecificWarnings>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;ddraw.lib;dxguid.lib;winmm.lib;allegro_static_debug.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\System\fmod\lib;..\..\System\DirectX\lib;..\..\System\Allegro\lib;..\..\external/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_debug.lib;RTEGUI.lib.debug.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
@@ -88,7 +91,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)external\include;..\Cortex-Command-Community-Project-Source\Menus;..\Cortex-Command-Community-Project-Source\Entities;..\Cortex-Command-Community-Project-Source\System;..\Cortex-Command-Community-Project-Source\GUI;..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -96,20 +99,22 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
       <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;</DisableSpecificWarnings>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>true</OmitFramePointers>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;ddraw.lib;dxguid.lib;winmm.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)GUIEditor.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\..\System\fmod\lib;..\..\System\DirectX\lib;..\..\external\lib\win\;..\..\external/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_release.lib;RTEGUI.lib.release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
@@ -123,12 +128,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Wrappers\AllegroBitmap.cpp" />
+    <ClCompile Include="Wrappers\AllegroInput.cpp" />
+    <ClCompile Include="Wrappers\AllegroScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\GUIEditorApp.h" />
     <ClInclude Include="Editor\GUIEditorLib.h" />
     <ClInclude Include="GUILibrary\LibraryIncludes.h" />
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="Wrappers\AllegroBitmap.h" />
+    <ClInclude Include="Wrappers\AllegroInput.h" />
+    <ClInclude Include="Wrappers\AllegroScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
