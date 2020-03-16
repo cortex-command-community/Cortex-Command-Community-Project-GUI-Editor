@@ -19,7 +19,7 @@ struct BITMAP;
 #define MAXBANNERFONTCHARS 256
 
 using namespace RTE;
-namespace GUI
+namespace RTE
 {
 
 
@@ -324,6 +324,6 @@ private:
     Timer m_FrameTimer;
 };
 
-}; // namespace GUI
+}; // namespace RTE
 
 #endif  //  _GUIBanner_

@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUITextPanel.h"
 
-using namespace GUI;
+using namespace RTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUITextPanel

@@ -17,7 +17,7 @@
 #include "GUIScrollPanel.h"
 
 
-namespace GUI
+namespace RTE
 {
 
 
@@ -190,7 +190,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUISCROLLBAR_

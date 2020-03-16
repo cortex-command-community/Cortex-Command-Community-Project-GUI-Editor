@@ -27,11 +27,11 @@
 using namespace RTE;
 
 
-namespace GUI {
 AllegroScreen    *g_Screen;
 AllegroInput    *g_Input;
 
 extern    GUIEditorApp g_GUIEditor;
+namespace RTE {
 
 #define ROOTORIGINX 300
 #define ROOTORIGINY 120

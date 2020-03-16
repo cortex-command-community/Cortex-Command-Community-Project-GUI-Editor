@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-namespace GUI
+namespace RTE
 {
 
 
@@ -265,7 +265,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUIPROPERTIES_

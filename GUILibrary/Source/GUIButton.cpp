@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIButton.h"
 
-using namespace GUI;
+using namespace RTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIButton

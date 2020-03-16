@@ -1,7 +1,7 @@
 #ifndef _GUIUTIL_
 #define _GUIUTIL_
 
-namespace GUI {
+namespace RTE {
 
 #pragma region Rectangle Structure
 	/// <summary>

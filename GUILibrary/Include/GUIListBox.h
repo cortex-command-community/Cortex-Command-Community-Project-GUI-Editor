@@ -17,7 +17,7 @@
 #include "GUIListPanel.h"
 
 
-namespace GUI
+namespace RTE
 {
 
 
@@ -166,7 +166,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUILISTBOX_

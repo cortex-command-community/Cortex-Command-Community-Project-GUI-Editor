@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIListPanel.h"
 
-using namespace GUI;
+using namespace RTE;
 
 #define RIGHTTEXTWIDTH 36
 

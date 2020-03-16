@@ -13,7 +13,7 @@
 #include "Timer.h"
 //using namespace RTE;
 
-namespace GUI
+namespace RTE
 {
 #undef max
 #undef min
@@ -236,6 +236,6 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 #endif  //  _GUIMANAGER_

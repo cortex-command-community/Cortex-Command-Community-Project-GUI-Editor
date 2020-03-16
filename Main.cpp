@@ -18,7 +18,6 @@
 
 extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
 
-using namespace RTE;
 
 GUIEditorApp g_GUIEditor;
 
@@ -28,6 +27,7 @@ extern HWND g_hWnd = 0;
 using namespace GUI;
 GUIEditorApp g_GUIEditor;
 
+using namespace RTE;
 
 int main(int argc, char *argv[]) {
 	if (!g_GUIEditor.Initialize()) { return -1; }

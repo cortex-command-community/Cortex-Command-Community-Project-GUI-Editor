@@ -13,7 +13,7 @@
 
 #include "GUI.h"
 
-using namespace GUI;
+using namespace RTE;
 
 
 bool GUIInput::m_OverrideInput = false;

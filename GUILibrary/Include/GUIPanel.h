@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-namespace GUI
+namespace RTE
 {
 
 // Forward declarations
@@ -698,7 +698,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUIPANEL_

@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIProgressBar.h"
 
-using namespace GUI;
+using namespace RTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIProgressBar

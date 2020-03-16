@@ -11,7 +11,7 @@
 //                  www.shplorb.com/~jackal
 
 
-namespace GUI
+namespace RTE
 {
 
 
@@ -380,7 +380,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUILISTPANEL_

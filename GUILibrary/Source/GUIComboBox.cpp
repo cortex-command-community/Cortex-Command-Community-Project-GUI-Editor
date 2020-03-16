@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIComboBox.h"
 
-using namespace GUI;
+using namespace RTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIComboBox

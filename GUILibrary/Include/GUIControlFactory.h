@@ -11,7 +11,7 @@
 //                  www.shplorb.com/~jackal
 
 
-namespace GUI
+namespace RTE
 {
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ public:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUICONTROLFACTORY_

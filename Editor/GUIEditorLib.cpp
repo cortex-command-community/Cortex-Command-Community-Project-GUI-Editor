@@ -4,7 +4,7 @@
 #include <commdlg.h>
 #include <direct.h>
 
-namespace GUI {
+namespace RTE {
 
 	HINSTANCE g_hInstance = 0;
 	HWND g_hWnd = 0;

@@ -17,7 +17,7 @@
 #include "GUITextPanel.h"
 
 
-namespace GUI
+namespace RTE
 {
 
 
@@ -177,7 +177,7 @@ private:
 };
 
 
-}; // namespace GUI
+}; // namespace RTE
 
 
 #endif  //  _GUITEXTBOX_

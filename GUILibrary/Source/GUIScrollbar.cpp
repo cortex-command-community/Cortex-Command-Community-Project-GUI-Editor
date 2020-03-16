@@ -14,7 +14,7 @@
 #include "GUI.h"
 #include "GUIScrollbar.h"
 
-using namespace GUI;
+using namespace RTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIScrollbar
