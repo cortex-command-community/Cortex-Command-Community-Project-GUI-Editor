@@ -61,7 +61,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)Wrappers;$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -76,6 +76,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <OmitFramePointers>false</OmitFramePointers>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;allegro_static_debug.lib;RTEGUI.lib.debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -93,7 +94,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)Wrappers;$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
@@ -106,6 +107,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>true</OmitFramePointers>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_release.lib;RTEGUI.lib.release.lib;%(AdditionalDependencies)</AdditionalDependencies>
