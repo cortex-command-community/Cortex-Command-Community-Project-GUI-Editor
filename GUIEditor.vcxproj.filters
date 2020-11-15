@@ -144,6 +144,9 @@
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\GUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">

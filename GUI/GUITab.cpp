@@ -121,7 +121,7 @@ void GUITab::ChangeSkin(GUISkin *Skin)
 
 void GUITab::BuildBitmap(void)
 {
-	std::string Filename;
+    string Filename;
     unsigned long ColorIndex = 0;
     int Values[4];
 
@@ -206,8 +206,8 @@ void GUITab::Draw(GUIScreen *Screen)
     // Draw the text
     
     // Add a space to make a gap between checkbox & text
-	std::string Text;
-	std::string space = " ";
+    string Text;
+    string space = " ";
     Text = space.append(m_Text);
 
     if (m_Font) {
@@ -384,8 +384,8 @@ void GUITab::SetCheck(bool Check)
         
     // Go through all my RadioButton siblings and uncheck them        
     if (m_ControlParent) {
-		std::vector<GUIControl *>::iterator it;
-		std::vector<GUIControl *> *Children = m_ControlParent->GetChildren();
+        vector<GUIControl *>::iterator it;
+        vector<GUIControl *> *Children = m_ControlParent->GetChildren();
         
         for(it = Children->begin(); it != Children->end(); it++) {
             GUIControl *C = *it;
@@ -423,7 +423,7 @@ bool GUITab::GetCheck(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUITab::SetText(const std::string Text)
+void GUITab::SetText(const string Text)
 {
     m_Text = Text;
 }
@@ -434,7 +434,7 @@ void GUITab::SetText(const std::string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-std::string GUITab::GetText(void)
+string GUITab::GetText(void)
 {
     return m_Text;
 }

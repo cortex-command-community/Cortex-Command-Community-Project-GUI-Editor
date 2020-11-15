@@ -213,7 +213,7 @@ void GUIPropertyPage::BuildBitmap(void)
     
 
     // Pre-cache the font
-	std::string Filename;
+    string Filename;
     m_Skin->GetValue("PropertyPage", "Font", &Filename);
     m_Skin->GetValue("PropertyPage", "FontShadow", &m_FontShadow);
     m_Skin->GetValue("PropertyPage", "FontColor", &m_FontColor);
@@ -265,7 +265,7 @@ void GUIPropertyPage::Draw(GUIScreen *Screen)
     int Spacer = 2;
     int Y = m_Y+Spacer;
     int Size = 16;
-	std::string Name, Value;
+    string Name, Value;    
     
     for(int i=0; i<Count; i++) {
         m_PageValues.GetVariable(i, &Name, &Value);
@@ -460,7 +460,7 @@ void GUIPropertyPage::SetPropertyValues(GUIProperties *Props)
 
         if (i < m_PageValues.GetCount()) {            
             T->_SetVisible(true);
-			std::string Name, Value;
+            string Name, Value;
             if (m_PageValues.GetVariable(i, &Name, &Value))
                 T->SetText(Value);
         }
@@ -491,7 +491,7 @@ void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, int Code, int Data)
     bool TextSignal = false;
 
     // Is this a text panel?
-	std::vector<GUITextPanel *>::iterator it;
+    vector<GUITextPanel *>::iterator it;
     for(it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
         GUITextPanel *T = *it;
 
@@ -534,7 +534,7 @@ bool GUIPropertyPage::InvokeUpdate(void)
         GUITextPanel *T = (GUITextPanel *)m_TextPanelList.at(i);
         
         if (i < m_PageValues.GetCount()) {
-			std::string Name, Value;
+            string Name, Value;
             if (m_PageValues.GetVariable(i, &Name, &Value)) {
                 if (T->GetText().compare(Value) != 0)
                     Changed = true;
@@ -559,7 +559,7 @@ void GUIPropertyPage::ClearValues(void)
     m_PageValues.Clear();
 
     // Hide the text panels
-	std::vector<GUITextPanel *>::iterator it;
+    vector<GUITextPanel *>::iterator it;
     for(it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
         GUITextPanel *T = *it;
         T->_SetVisible(false);
@@ -574,7 +574,7 @@ void GUIPropertyPage::ClearValues(void)
 
 bool GUIPropertyPage::HasTextFocus(void)
 {
-	std::vector<GUITextPanel *>::iterator it;
+    vector<GUITextPanel *>::iterator it;
     for(it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
         GUITextPanel *T = *it;
 

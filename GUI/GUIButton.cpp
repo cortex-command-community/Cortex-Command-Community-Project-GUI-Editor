@@ -147,7 +147,7 @@ void GUIButton::BuildBitmap(void)
     m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height*3);
 
     // Pre-cache the font
-	std::string Filename;
+    string Filename;
     m_Skin->GetValue("Button_Up", "Font", &Filename);
     m_Skin->GetValue("Button_Up", "FontColor", &m_FontColor);
     m_Skin->GetValue("Button_Up", "FontShadow", &m_FontShadow);
@@ -367,7 +367,7 @@ void GUIButton::StoreProperties(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUIButton::SetText(const std::string Text)
+void GUIButton::SetText(const string Text)
 {
     m_Text = Text;
 
@@ -380,7 +380,7 @@ void GUIButton::SetText(const std::string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-std::string GUIButton::GetText(void)
+string GUIButton::GetText(void)
 {
     return m_Text;
 }

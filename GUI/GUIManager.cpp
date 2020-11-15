@@ -16,7 +16,7 @@
 
 
 using namespace RTE;
-using namespace RTE;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIManager
@@ -76,9 +76,9 @@ void GUIManager::Clear(void)
     m_HoverPanel = 0;
 
     // Double click times
-    m_LastMouseDown[0] = -99999.0F;
-    m_LastMouseDown[1] = -99999.0F;
-    m_LastMouseDown[2] = -99999.0F;
+    m_LastMouseDown[0] = -99999.0f;
+    m_LastMouseDown[1] = -99999.0f;
+    m_LastMouseDown[2] = -99999.0f;
 }
 
 
@@ -123,6 +123,7 @@ void GUIManager::Update(void)
     int MouseX = 0, MouseY = 0;
     int DeltaX, DeltaY;    
     int MouseButtons[3], MouseStates[3];
+	int MouseWheelChange = 0;
     int Released = GUIPanel::MOUSE_NONE;
     int Pushed = GUIPanel::MOUSE_NONE;
     int Buttons = GUIPanel::MOUSE_NONE;
@@ -148,7 +149,7 @@ void GUIManager::Update(void)
     {
         m_Input->GetMousePosition(&MouseX, &MouseY);
         m_Input->GetMouseButtons(MouseButtons, MouseStates);
-        Modifier = m_Input->GetModifier();
+		MouseWheelChange = m_Input->GetMouseWheelChange();
 
         // Calculate mouse movement
         DeltaX = MouseX - m_OldMouseX;
@@ -186,7 +187,7 @@ void GUIManager::Update(void)
         if (Released != GUIPanel::MOUSE_NONE && m_DoubleClickButtons != GUIPanel::MOUSE_NONE) {
             if (CurPanel)
                 CurPanel->OnDoubleClick(MouseX, MouseY, m_DoubleClickButtons, Mod);
-            m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0F;
+            m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0f;
         }
 
         // Mouse Down
@@ -270,6 +271,12 @@ void GUIManager::Update(void)
                 m_MouseOverPanel->OnMouseLeave(MouseX, MouseY, Buttons, Mod);
         }
 
+		if (MouseWheelChange) {
+			if (CurPanel) {
+				CurPanel->OnMouseWheelChange(MouseX, MouseY, Mod, MouseWheelChange);
+			}
+		}
+
         m_MouseOverPanel = CurPanel;
     }
 
@@ -336,8 +343,7 @@ void GUIManager::Draw(GUIScreen *Screen)
 
 void GUIManager::CaptureMouse(GUIPanel *Panel)
 {
-    //RTEAssert(Panel, "No panel!");
-    assert(Panel);
+    RTEAssert(Panel, "No panel!");
 
     // Release any old capture
     ReleaseMouse();
@@ -487,12 +493,11 @@ bool GUIManager::MouseInRect(GUIRect *Rect, int X, int Y)
 
 void GUIManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay)
 {
-    //RTEAssert(Pan, "No Panel!");
-    assert(Pan);
+    RTEAssert(Pan, "No Panel!");
     m_HoverTrack = Enabled;
     m_HoverPanel = Pan;
     if (m_HoverTrack)
-        m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay/1000.0F);
+        m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay/1000.0f);
 }
 
 

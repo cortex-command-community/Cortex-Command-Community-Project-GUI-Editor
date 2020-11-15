@@ -10,14 +10,13 @@
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
-#include "Timer.h"
-//using namespace RTE;
 
 namespace RTE
 {
-#undef max
-#undef min
-	using RTE::Timer;
+
+class Timer;
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Class:           GUIManager
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +57,7 @@ public:
 // Description:     Clears the manager.
 // Arguments:       None.
 
-    void Clear(void);
+    void Clear();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +75,7 @@ public:
 // Description:     Updates the GUI.
 // Arguments:       None.
 
-    void Update(void);
+    void Update();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +111,7 @@ public:
 // Description:     Releases a mouse capture.
 // Arguments:       None.
 
-    void ReleaseMouse(void);
+    void ReleaseMouse();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +120,7 @@ public:
 // Description:     Gets a unique ID for a panel.
 // Arguments:       None.
 
-    int GetPanelID(void);
+    int GetPanelID();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +182,7 @@ private:
 // Description:     Creates the timer.
 // Arguments:       None.
 
-    bool CreateTimer(void);
+    bool CreateTimer();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +191,7 @@ private:
 // Description:     Gets the current time since the timer was created.
 // Arguments:       None.
 
-    float GetTime(void);
+    float GetTime();
 */
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +231,7 @@ private:
     int                     m_UniqueIDCount;
 
     // Timer
-    RTE::Timer                   *m_pTimer;
+    Timer                   *m_pTimer;
 };
 
 

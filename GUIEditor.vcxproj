@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Editor\GUIEditorApp.cpp" />
     <ClCompile Include="Editor\GUIEditorLib.cpp" />
+    <ClCompile Include="GUI\GUI.cpp" />
     <ClCompile Include="GUI\GUIBanner.cpp" />
     <ClCompile Include="GUI\GUIButton.cpp" />
     <ClCompile Include="GUI\GUICheckbox.cpp" />

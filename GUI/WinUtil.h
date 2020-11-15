@@ -1,28 +1,28 @@
-#ifndef _GUIUTIL_
-#define _GUIUTIL_
+#ifndef _WINUTIL_
+#define _WINUTIL_
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIUtil.h
+// File:            WinUtil.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIUtil class
+// Description:     WinUtil class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
-
 
 namespace RTE
 {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIUTIL
+// Class:           WinUtil
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A utility class with misc static functions for different things
+// Description:     A utility class with misc static functions for different things,
+//                  platform specific to windows
 // Parent(s):       None.
-// Class history:   1/4/2004 GUIUtil Created.
+// Class history:   5/21/2008 WinUtil Created.
 
-class GUIUtil {
+class WinUtil {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Public member variable, method and friend function declarations
@@ -31,24 +31,14 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIUtil
+// Constructor:     WinUtil
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIUtil object in system
+// Description:     Constructor method used to instantiate a WinUtil object in system
 //                  memory.
 // Arguments:       None.
 
-    GUIUtil() { };
+    WinUtil() { };
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          TrimString
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Removes the preceeding and ending spaces from a c type string.
-// Arguments:       String.
-
-    static char *TrimString(char *String);
-
-    static char* SafeOverlappingStrCpy(char* dst, char* src);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetClipboardText
@@ -74,4 +64,4 @@ public:
 }; // namespace RTE
 
 
-#endif  //  _GUIUTIL_
+#endif  //  _WINUTIL_

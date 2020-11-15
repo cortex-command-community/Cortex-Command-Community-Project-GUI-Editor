@@ -99,7 +99,7 @@ void GUIControlManager::Destroy(void)
 
 void GUIControlManager::Clear(void)
 {
-	std::vector<GUIControl *>::iterator it;
+    vector<GUIControl *>::iterator it;
 
     // Destroy every control
     for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
@@ -114,7 +114,7 @@ void GUIControlManager::Clear(void)
     m_GUIManager->Clear();
 
     // Destroy the event queue
-	std::vector<GUIEvent *>::iterator ite;
+    vector<GUIEvent *>::iterator ite;
     for(ite = m_EventQueue.begin(); ite != m_EventQueue.end(); ite++) {
         GUIEvent *E = *ite;
         if (E)
@@ -130,9 +130,9 @@ void GUIControlManager::Clear(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Changes the skin of the controls.
 
-void GUIControlManager::ChangeSkin(const std::string SkinDir, const std::string SkinFilename)
+void GUIControlManager::ChangeSkin(const string SkinDir, const std::string SkinFilename)
 {
-	std::vector<GUIControl *>::iterator it;
+    vector<GUIControl *>::iterator it;
 
     m_Skin->Destroy();
     m_Skin->Load(SkinDir, SkinFilename);
@@ -198,9 +198,9 @@ GUIControl *GUIControlManager::AddControl(GUIProperties *Property)
     assert(Property);
 
     // Get the control type and name
-	std::string Type;
+    string Type;
     Property->GetValue("ControlType", &Type);
-	std::string Name;
+    string Name;
     Property->GetValue("Name", &Name);
 
     // Skip if we already have a control of this name
@@ -216,7 +216,7 @@ GUIControl *GUIControlManager::AddControl(GUIProperties *Property)
     Control->ChangeSkin(m_Skin);
 
     // Get the parent control
-	std::string Parent;
+    string Parent;
     Property->GetValue("Parent", &Parent);
     
     GUIControl *Par = GetControl(Parent);
@@ -266,7 +266,7 @@ GUIControl *GUIControlManager::GetControl(const std::string& Name)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the control list
 
-std::vector<GUIControl *> *GUIControlManager::GetControlList(void)
+vector<GUIControl *> *GUIControlManager::GetControlList(void)
 {
     return &m_ControlList;
 }
@@ -296,10 +296,10 @@ GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUI
         return NULL;
 
     // Check children
-	std::vector<GUIControl *> *List = pParent->GetChildren();
-	std::vector<GUIControl *>::reverse_iterator it;
+    vector<GUIControl *> *List = pParent->GetChildren();
+    vector<GUIControl *>::reverse_iterator it;
 
-	assert(List);
+    assert(List);
 
     // Control the depth. If negative, it'll go forever
     if (depth != 0)
@@ -326,7 +326,7 @@ GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUI
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Removes a control by name
 
-void GUIControlManager::RemoveControl(const std::string Name, bool RemoveFromParent)
+void GUIControlManager::RemoveControl(const string Name, bool RemoveFromParent)
 {
     // NOTE: We can't simply remove it because some controls need to remove extra panels
     //         And it's silly to add 'remove' to every control to remove their extra panels
@@ -504,7 +504,7 @@ bool GUIControlManager::Save(Writer *W)
     assert(W);
 
     // Go through each control
-	std::vector<GUIControl *>::iterator it;
+    vector<GUIControl *>::iterator it;
 
     for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
         GUIControl *C = *it;
@@ -522,7 +522,7 @@ bool GUIControlManager::Save(Writer *W)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Loads the layout from a file.
 
-bool GUIControlManager::Load(const std::string Filename, bool keepOld)
+bool GUIControlManager::Load(const string Filename, bool keepOld)
 {
     Reader R;
 
@@ -552,7 +552,7 @@ bool GUIControlManager::Load(Reader *R, bool keepOld)
     if (!keepOld)
         Clear();
 
-	std::vector<GUIProperties *> ControlList;
+    vector<GUIProperties *> ControlList;
     ControlList.clear();
 
     GUIProperties *CurProp = 0;
@@ -614,7 +614,7 @@ bool GUIControlManager::Load(Reader *R, bool keepOld)
     /*
      * Go through each control item and create it
      */
-	std::vector<GUIProperties *>::iterator it;
+    vector<GUIProperties *>::iterator it;
     for(it = ControlList.begin(); it != ControlList.end(); it++) {
         GUIProperties *Prop = *it;
 

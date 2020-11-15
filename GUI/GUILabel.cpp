@@ -96,21 +96,21 @@ void GUILabel::Create(GUIProperties *Props)
     // Get the values
     Props->GetValue("Text", &m_Text);
 
-	std::string alignString;
+    string alignString;
     Props->GetValue("HAlignment", &alignString);
-    if (_stricmp(alignString.c_str(), "left") == 0)
+    if (stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
-    if (_stricmp(alignString.c_str(), "centre") == 0 || _stricmp(alignString.c_str(), "center") == 0)
+    if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0)
         m_HAlignment = GUIFont::Centre;
-    if (_stricmp(alignString.c_str(), "right") == 0)
+    if (stricmp(alignString.c_str(), "right") == 0)
         m_HAlignment = GUIFont::Right;
 
     Props->GetValue("VAlignment", &alignString);
-    if (_stricmp(alignString.c_str(), "top") == 0)
+    if (stricmp(alignString.c_str(), "top") == 0)
         m_VAlignment = GUIFont::Top;
-    if (_stricmp(alignString.c_str(), "middle") == 0)
+    if (stricmp(alignString.c_str(), "middle") == 0)
         m_VAlignment = GUIFont::Middle;
-    if (_stricmp(alignString.c_str(), "bottom") == 0)
+    if (stricmp(alignString.c_str(), "bottom") == 0)
         m_VAlignment = GUIFont::Bottom;
 }
 
@@ -125,7 +125,7 @@ void GUILabel::ChangeSkin(GUISkin *Skin)
     GUIControl::ChangeSkin(Skin);
 
     // Load the font
-	std::string Filename;
+    string Filename;
 
     m_Skin->GetValue("Label", "Font", &Filename);
     m_Font = m_Skin->GetFont(Filename);
@@ -280,7 +280,7 @@ void GUILabel::GetControlRect(int *X, int *Y, int *Width, int *Height)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text of the label.
 
-void GUILabel::SetText(const std::string Text)
+void GUILabel::SetText(const string Text)
 {
     m_Text = Text;
 }
@@ -291,7 +291,7 @@ void GUILabel::SetText(const std::string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text of the label.
 
-std::string GUILabel::GetText(void)
+string GUILabel::GetText(void)
 {
     return m_Text;
 }
@@ -344,20 +344,20 @@ void GUILabel::ApplyProperties(GUIProperties *Props)
 
     m_Properties.GetValue("Text", &m_Text);
 
-	std::string alignString;
+    string alignString;
     m_Properties.GetValue("HAlignment", &alignString);
-    if (_stricmp(alignString.c_str(), "left") == 0)
+    if (stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
-    if (_stricmp(alignString.c_str(), "centre") == 0)
+    if (stricmp(alignString.c_str(), "centre") == 0)
         m_HAlignment = GUIFont::Centre;
-    if (_stricmp(alignString.c_str(), "right") == 0)
+    if (stricmp(alignString.c_str(), "right") == 0)
         m_HAlignment = GUIFont::Right;
 
     m_Properties.GetValue("VAlignment", &alignString);
-    if (_stricmp(alignString.c_str(), "top") == 0)
+    if (stricmp(alignString.c_str(), "top") == 0)
         m_VAlignment = GUIFont::Top;
-    if (_stricmp(alignString.c_str(), "middle") == 0)
+    if (stricmp(alignString.c_str(), "middle") == 0)
         m_VAlignment = GUIFont::Middle;
-    if (_stricmp(alignString.c_str(), "bottom") == 0)
+    if (stricmp(alignString.c_str(), "bottom") == 0)
         m_VAlignment = GUIFont::Bottom;
 }

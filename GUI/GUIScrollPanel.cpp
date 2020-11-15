@@ -110,11 +110,11 @@ void GUIScrollPanel::LoadProps(GUIProperties *Props)
 {
     assert(Props);
 
-	std::string Ori;
+    string Ori;
     Props->GetValue("Orientation", &Ori);
 
     m_Orientation = Horizontal;
-    if (_stricmp(Ori.c_str(), "Vertical") == 0)
+    if (stricmp(Ori.c_str(), "Vertical") == 0)
         m_Orientation = Vertical;
 
     Props->GetValue("Minimum", &m_Minimum);
@@ -244,7 +244,7 @@ void GUIScrollPanel::BuildBitmap(bool UpdateSize, bool UpdateKnob)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Build a button
 
-void GUIScrollPanel::BuildButton(const std::string ArrowName, int Y, int Width, int Height)
+void GUIScrollPanel::BuildButton(const string ArrowName, int Y, int Width, int Height)
 {
     // Create the buttons
     m_Skin->BuildStandardRect(m_DrawBitmap[ButtonStates], 
@@ -258,7 +258,7 @@ void GUIScrollPanel::BuildButton(const std::string ArrowName, int Y, int Width, 
     GUIRect Rect;
     
     // Load the image file
-	std::string Filename;
+    string Filename;
     m_Skin->GetValue(ArrowName, "Filename", &Filename);
     GUIBitmap *Arrow = m_Skin->CreateBitmap(Filename);
     if (!Arrow)
@@ -293,7 +293,7 @@ void GUIScrollPanel::BuildButton(const std::string ArrowName, int Y, int Width, 
 
 void GUIScrollPanel::BuildBackground(void)
 {
-	std::string Filename;
+    string Filename;
     m_Skin->GetValue("ScrollBackground", "Filename", &Filename);
 
     GUIBitmap *Background = m_Skin->CreateBitmap(Filename);

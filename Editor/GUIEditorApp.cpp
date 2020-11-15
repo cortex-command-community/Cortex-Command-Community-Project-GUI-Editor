@@ -9,6 +9,8 @@
 #include "AllegroInput.h"
 #include "AllegroBitmap.h"
 
+#include "RTEError.h"
+
 namespace RTE {
 
 volatile bool g_Quit;
@@ -826,8 +828,8 @@ void GUIEditorApp::CalculateHandleResize(int MouseX, int MouseY, int *X, int *Y,
         CtrlHeight += Diff;
     }
 
-    CtrlWidth = MAX(CtrlWidth, MinSize);
-    CtrlHeight = MAX(CtrlHeight, MinSize);
+    CtrlWidth = std::max(CtrlWidth, MinSize);
+    CtrlHeight = std::max(CtrlHeight, MinSize);
 
     *X = CtrlX;
     *Y = CtrlY;

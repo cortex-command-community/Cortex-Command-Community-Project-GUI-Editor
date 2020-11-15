@@ -13,12 +13,12 @@
 
 #include "Vector.h"
 #include "Timer.h"
+#include "allegro.h"
 
 struct BITMAP;
 
 #define MAXBANNERFONTCHARS 256
 
-using namespace RTE;
 namespace RTE
 {
 

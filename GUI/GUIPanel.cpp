@@ -127,20 +127,20 @@ void GUIPanel::AddChild(GUIPanel *child, bool convertToAbsolutePos)
         child->m_Width = std::max(child->m_Width, 0);
         child->m_Height = std::max(child->m_Height, 0);
 
-        int Z = 0;
-        // Get the last child in the list
+        int zPos = 0;
         if (m_Children.size() > 0) {
-            GUIPanel *p = (GUIPanel *)m_Children.at(m_Children.size()-1);
-            Z = p->GetZPos()+1;
+			GUIPanel *lastChild = m_Children.back();
+			zPos = lastChild->GetZPos() + 1;
         }
 
         // Remove the child from any previous parent
-        if (child->GetParentPanel())
-            child->GetParentPanel()->GUIPanel::RemoveChild(child);
+		if (child->GetParentPanel()) {
+			child->GetParentPanel()->GUIPanel::RemoveChild(child);
+		}
 
         // Setup the inherited values
         child->m_Parent = this;
-        child->Setup(m_Manager, Z);
+        child->Setup(m_Manager, zPos);
 
         // Add the child to the list
         m_Children.push_back(child);
@@ -160,7 +160,7 @@ void GUIPanel::RemoveChild(const GUIPanel *pChild)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-    for(std::vector<GUIPanel *>::iterator itr = m_Children.begin(); itr != m_Children.end(); itr++)
+    for(vector<GUIPanel *>::iterator itr = m_Children.begin(); itr != m_Children.end(); itr++)
     {
         GUIPanel *pPanel = *itr;
         if (pPanel && pPanel == pChild)
@@ -851,7 +851,7 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type)
     int Index = -1;
 
     // Find the child in our children list
-	std::vector<GUIPanel *>::iterator it;
+    vector<GUIPanel *>::iterator it;
     int Count = 0;
     for(it = m_Children.begin(); it != m_Children.end(); it++, Count++) {
         GUIPanel *P = *it;
@@ -896,9 +896,9 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Convert the properties in the panel to a string.
 
-std::string GUIPanel::ToString(void)
+string GUIPanel::ToString(void)
 {
-	std::string OutString = "";
+    string OutString = "";
 
     // Subtract the position from the parent
     int X = m_X;
@@ -953,14 +953,14 @@ void GUIPanel::BuildProperties(GUIProperties *Prop)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Writes a single value to string.
 
-std::string GUIPanel::WriteValue(const std::string Name, int Value)
+string GUIPanel::WriteValue(const string Name, int Value)
 {
     char buf[32];
 
-	std::string OutString = Name;
+    string OutString = Name;
     OutString += " = ";
 
-    sprintf_s(buf, sizeof(buf), "%i", Value);
+    std::snprintf(buf, sizeof(buf), "%i", Value);
     OutString += buf;
     OutString += "\n";
 
@@ -973,9 +973,9 @@ std::string GUIPanel::WriteValue(const std::string Name, int Value)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Writes a single value to string.
 
-std::string GUIPanel::WriteValue(const std::string Name, bool Value)
+string GUIPanel::WriteValue(const string Name, bool Value)
 {
-	std::string OutString = Name;
+    string OutString = Name;
     OutString += " = ";
     OutString += (Value ? "True" : "False");
     OutString += "\n";

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIUtil.h
+// File:            WinUtil.h
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIUtil class
+// Description:     WinUtil class
 // Project:         GUI Library
 // Author(s):       Jason Boettcher
 //                  jackal@shplorb.com
@@ -10,51 +10,18 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include "GUI.h"
+#include <Windows.h>
+#include "WinUtil.h"
 
 using namespace RTE;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          TrimString
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Removes the preceeding and ending spaces from a c type string.
-
-char *GUIUtil::TrimString(char *String)
-{
-    char *ptr = String;
-
-    // Find the first non-space character
-    while(*ptr) {
-        if (*ptr != ' ')
-            break;
-        ptr++;
-    }
-
-    // Add a null terminator after the last character
-    for(int i=strlen(ptr)-1; i>=0; i--) {
-        if (ptr[i] != ' ') {
-            ptr[i+1] = '\0';
-            break;
-        }
-    }
-
-    return ptr;
-}
-
-char* GUIUtil::SafeOverlappingStrCpy(char* dst, char* src)
-{
-	memmove(dst, src, strlen(src) + 1);
-	return dst;
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetClipboardText
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text from the clipboard.
 
-bool GUIUtil::GetClipboardText(string *Text)
+bool WinUtil::GetClipboardText(std::string *Text)
 {
-/* Platform dependent, moved to WinUtil
     HANDLE  CBDataHandle; // handle to the clipboard data
     LPSTR   CBDataPtr;    // pointer to data to send
 
@@ -62,13 +29,15 @@ bool GUIUtil::GetClipboardText(string *Text)
     assert(Text);
     
     // Does the clipboard contain text?
-    if (IsClipboardFormatAvailable(CF_TEXT)) {
-           
+    if (IsClipboardFormatAvailable(CF_TEXT))
+    {
         // Open the clipboard
-        if (OpenClipboard(m_hWnd)) {
+        if (OpenClipboard(0))
+        {
             CBDataHandle = GetClipboardData(CF_TEXT);
                 
-            if (CBDataHandle) {
+            if (CBDataHandle)
+            {
                 CBDataPtr = (LPSTR)GlobalLock(CBDataHandle);
                 int TextSize = strlen(CBDataPtr);
 
@@ -81,11 +50,9 @@ bool GUIUtil::GetClipboardText(string *Text)
 
                 return true;
             }
-
             CloseClipboard();
         }
     }
-*/
     return false;
 }
 
@@ -95,15 +62,15 @@ bool GUIUtil::GetClipboardText(string *Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text in the clipboard.
 
-bool GUIUtil::SetClipboardText(string Text)
+bool WinUtil::SetClipboardText(std::string Text)
 {
-/* Platform dependent
     // Open the clipboard
-    if (OpenClipboard(m_hWnd)) {
-
+    if (OpenClipboard(0))
+    {
         // Allocate global memory for the text
         HGLOBAL hMemory = GlobalAlloc(GMEM_MOVEABLE, Text.size()+1);
-        if (hMemory == 0) {
+        if (hMemory == 0)
+        {
             CloseClipboard();
             return false;
         }
@@ -124,6 +91,5 @@ bool GUIUtil::SetClipboardText(string Text)
 
         return true;
     }
-*/
     return false;
 }

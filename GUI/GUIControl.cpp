@@ -193,8 +193,8 @@ std::vector<GUIControl *> *GUIControl::GetChildren(void)
 
 bool GUIControl::Save(Writer *W)
 {
-	std::string OutString = "";
-	std::string Name;
+    string OutString = "";
+    string Name;
 
     // Get the control to store its properties
     StoreProperties();
@@ -278,18 +278,18 @@ void GUIControl::GetControlRect(int *X, int *Y, int *Width, int *Height)
 int GUIControl::GetAnchor(void)
 {
     int Anchor = 0;
-	std::string Value[4];
+    string Value[4];
 
     int Count = m_Properties.GetValue("Anchor", Value, 4);
 
     for(int i=0; i<Count; i++) {
-        if (_stricmp(Value[i].c_str(), "left") == 0)
+        if (stricmp(Value[i].c_str(), "left") == 0)
             Anchor |= Anchor_Left;
-        if (_stricmp(Value[i].c_str(), "top") == 0)
+        if (stricmp(Value[i].c_str(), "top") == 0)
             Anchor |= Anchor_Top;
-        if (_stricmp(Value[i].c_str(), "right") == 0)
+        if (stricmp(Value[i].c_str(), "right") == 0)
             Anchor |= Anchor_Right;
-        if (_stricmp(Value[i].c_str(), "bottom") == 0)
+        if (stricmp(Value[i].c_str(), "bottom") == 0)
             Anchor |= Anchor_Bottom;
     }
 
@@ -459,7 +459,7 @@ bool GUIControl::IsContainer(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Removes a child based on name.
 
-void GUIControl::RemoveChild(const std::string Name)
+void GUIControl::RemoveChild(const string Name)
 {
     // Note: We do NOT free the children because they are still linked in through their
     // panels.
@@ -467,7 +467,7 @@ void GUIControl::RemoveChild(const std::string Name)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-	std::vector<GUIControl *>::iterator it;
+    vector<GUIControl *>::iterator it;
 
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;
@@ -494,7 +494,7 @@ void GUIControl::RemoveChildren(void)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-	std::vector<GUIControl *>::iterator it;
+    vector<GUIControl *>::iterator it;
 
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;
