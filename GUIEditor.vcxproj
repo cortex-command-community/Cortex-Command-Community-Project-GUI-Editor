@@ -60,7 +60,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)Wrappers;$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -68,18 +68,20 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <OmitFramePointers>false</OmitFramePointers>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;allegro_static_debug.lib;RTEGUI.lib.debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -93,24 +95,26 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)Wrappers;$(SolutionDir)GUILibrary;$(ProjectDir)GUILibrary\Include;$(ProjectDir)GUILibrary\Source;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_ASM;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ForcedIncludeFiles>LibraryIncludes.h;</ForcedIncludeFiles>
+      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeaderFile>LibraryIncludes.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>true</OmitFramePointers>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_release.lib;RTEGUI.lib.release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -128,23 +132,100 @@
   <ItemGroup>
     <ClCompile Include="Editor\GUIEditorApp.cpp" />
     <ClCompile Include="Editor\GUIEditorLib.cpp" />
-    <ClCompile Include="GUILibrary\LibraryIncludes.cpp">
+    <ClCompile Include="GUI\GUIBanner.cpp" />
+    <ClCompile Include="GUI\GUIButton.cpp" />
+    <ClCompile Include="GUI\GUICheckbox.cpp" />
+    <ClCompile Include="GUI\GUICollectionBox.cpp" />
+    <ClCompile Include="GUI\GUIComboBox.cpp" />
+    <ClCompile Include="GUI\GUIControl.cpp" />
+    <ClCompile Include="GUI\GUIControlFactory.cpp" />
+    <ClCompile Include="GUI\GUIControlManager.cpp" />
+    <ClCompile Include="GUI\GUIEvent.cpp" />
+    <ClCompile Include="GUI\GUIFont.cpp" />
+    <ClCompile Include="GUI\GUIInput.cpp" />
+    <ClCompile Include="GUI\GUILabel.cpp" />
+    <ClCompile Include="GUI\GUIListBox.cpp" />
+    <ClCompile Include="GUI\GUIListPanel.cpp" />
+    <ClCompile Include="GUI\GUIManager.cpp" />
+    <ClCompile Include="GUI\GUIPanel.cpp" />
+    <ClCompile Include="GUI\GUIProgressBar.cpp" />
+    <ClCompile Include="GUI\GUIProperties.cpp" />
+    <ClCompile Include="GUI\GUIPropertyPage.cpp" />
+    <ClCompile Include="GUI\GUIRadioButton.cpp" />
+    <ClCompile Include="GUI\GUIScrollbar.cpp" />
+    <ClCompile Include="GUI\GUIScrollPanel.cpp" />
+    <ClCompile Include="GUI\GUISkin.cpp" />
+    <ClCompile Include="GUI\GUISlider.cpp" />
+    <ClCompile Include="GUI\GUITab.cpp" />
+    <ClCompile Include="GUI\GUITextBox.cpp" />
+    <ClCompile Include="GUI\GUITextPanel.cpp" />
+    <ClCompile Include="GUI\GUIUtil.cpp" />
+    <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp" />
+    <ClCompile Include="GUI\Wrappers\AllegroInput.cpp" />
+    <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="System\ContentFile.cpp" />
+    <ClCompile Include="System\Reader.cpp" />
+    <ClCompile Include="System\RTEError.cpp" />
+    <ClCompile Include="System\StandardIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Wrappers\AllegroBitmap.cpp" />
-    <ClCompile Include="Wrappers\AllegroInput.cpp" />
-    <ClCompile Include="Wrappers\AllegroScreen.cpp" />
+    <ClCompile Include="System\Timer.cpp" />
+    <ClCompile Include="System\TimerMan.cpp" />
+    <ClCompile Include="System\Vector.cpp" />
+    <ClCompile Include="System\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\GUIEditorApp.h" />
     <ClInclude Include="Editor\GUIEditorLib.h" />
-    <ClInclude Include="GUILibrary\LibraryIncludes.h" />
+    <ClInclude Include="GUI\GUI.h" />
+    <ClInclude Include="GUI\GUIBanner.h" />
+    <ClInclude Include="GUI\GUIButton.h" />
+    <ClInclude Include="GUI\GUICheckbox.h" />
+    <ClInclude Include="GUI\GUICollectionBox.h" />
+    <ClInclude Include="GUI\GUIComboBox.h" />
+    <ClInclude Include="GUI\GUIControl.h" />
+    <ClInclude Include="GUI\GUIControlFactory.h" />
+    <ClInclude Include="GUI\GUIControlManager.h" />
+    <ClInclude Include="GUI\GUIEvent.h" />
+    <ClInclude Include="GUI\GUIFont.h" />
+    <ClInclude Include="GUI\GUIInput.h" />
+    <ClInclude Include="GUI\GUILabel.h" />
+    <ClInclude Include="GUI\GUIListBox.h" />
+    <ClInclude Include="GUI\GUIListPanel.h" />
+    <ClInclude Include="GUI\GUIManager.h" />
+    <ClInclude Include="GUI\GUIPanel.h" />
+    <ClInclude Include="GUI\GUIProgressBar.h" />
+    <ClInclude Include="GUI\GUIProperties.h" />
+    <ClInclude Include="GUI\GUIPropertyPage.h" />
+    <ClInclude Include="GUI\GUIRadioButton.h" />
+    <ClInclude Include="GUI\GUIScrollbar.h" />
+    <ClInclude Include="GUI\GUIScrollPanel.h" />
+    <ClInclude Include="GUI\GUISkin.h" />
+    <ClInclude Include="GUI\GUISlider.h" />
+    <ClInclude Include="GUI\GUITab.h" />
+    <ClInclude Include="GUI\GUITextBox.h" />
+    <ClInclude Include="GUI\GUITextPanel.h" />
+    <ClInclude Include="GUI\GUIUtil.h" />
+    <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
+    <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
+    <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
+    <ClInclude Include="GUI\Wrappers\GUIInterface.h" />
     <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="Wrappers\AllegroBitmap.h" />
-    <ClInclude Include="Wrappers\AllegroInput.h" />
-    <ClInclude Include="Wrappers\AllegroScreen.h" />
+    <ClInclude Include="System\ContentFile.h" />
+    <ClInclude Include="System\Reader.h" />
+    <ClInclude Include="System\RTEError.h" />
+    <ClInclude Include="System\Serializable.h" />
+    <ClInclude Include="System\StandardIncludes.h" />
+    <ClInclude Include="System\Timer.h" />
+    <ClInclude Include="System\TimerMan.h" />
+    <ClInclude Include="System\Vector.h" />
+    <ClInclude Include="System\Writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
