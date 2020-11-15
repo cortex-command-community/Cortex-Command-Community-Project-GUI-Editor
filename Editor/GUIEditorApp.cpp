@@ -11,29 +11,23 @@
 
 #include "RTEError.h"
 
+#include "TimerMan.h"
+
+using namespace std;
+
 namespace RTE {
 
 volatile bool g_Quit;
 AllegroScreen *g_Screen;
 AllegroInput *g_Input;
-GUIEditorApp g_GUIEditor;
 
 #define ROOTORIGINX 300
 #define ROOTORIGINY 120
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// Quit Handler for Allegro.
-	/// </summary>
-	void QuitHandler(void) { g_GUIEditor.OnQuitButton(); }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool GUIEditorApp::Initialize(void) {
-	allegro_init();
-    install_keyboard();
+bool GUIEditorApp::Initialize() {
+	install_keyboard();
 
     int ResW = 1024;
     int ResH = 768;
@@ -45,16 +39,9 @@ bool GUIEditorApp::Initialize(void) {
 
     set_color_depth(BPP);
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, ResW, ResH, 0, 0);
-    set_close_button_callback(QuitHandler);
     set_window_title("Cortex Command: GUI Editor");
 
     set_color_conversion(COLORCONV_MOST);
-
-    // Just going to discard the bitmap, we're only interested in the palette
-    BITMAP *tempBitmap;
-    PALETTE newPalette;
-    //if (!(tempBitmap = load_bitmap("Palette.bmp", NULL)))// newPalette)))
-      //  RTEAbort("Failed to load palette from bitmap with following path:\n\nBase.rte/palette.bmp");
 
     PALETTE ccpal;
     get_palette(ccpal);
@@ -69,8 +56,10 @@ bool GUIEditorApp::Initialize(void) {
     g_Screen = new AllegroScreen(m_pBackBuffer32);
     g_Input = new AllegroInput(-1);
 
+	PALETTE newPalette;
+
     // Set the current palette
-    set_palette(newPalette);
+    //set_palette(newPalette);
 
     // Update what black is now with the loaded palette
     m_BlackColor = bestfit_color(newPalette, 0, 0, 0);
@@ -328,7 +317,6 @@ bool GUIEditorApp::Update(void)
         DrawSelectedControl(m_SelectionInfo.m_Control);
 
     m_pEditorManager->DrawMouse();
-
 
     blit(m_pBackBuffer32, screen, 0, 0, 0, 0, m_pBackBuffer32->w, m_pBackBuffer32->h);
 

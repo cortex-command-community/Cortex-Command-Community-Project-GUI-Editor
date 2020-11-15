@@ -1,27 +1,50 @@
 #include "GUIEditorApp.h"
 #include "GUIEditorLib.h"
+#include "ContentFile.h"
+#include "TimerMan.h"
 
 using namespace RTE;
 
 extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
-//extern HINSTANCE g_hInstance = 0;
-//extern HWND g_hWnd = 0;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// <summary>
-/// Entry point for the GUI Library editor.
+/// Quit Handler for Allegro.
+/// </summary>
+void QuitHandler(void) { g_GUIEditor.OnQuitButton(); }
+END_OF_FUNCTION(QuitHandler)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// <summary>
+/// Entry point for the GUI editor app.
 /// </summary>
 int main(int argc, char *argv[]) {
-	//if (!g_GUIEditor.Initialize()) { return -1; }
+	allegro_init();
 
-	// Get windows settings
-	//g_hWnd = win_get_window();
-	//g_hInstance = (HINSTANCE)GetWindowLong(g_hWnd, GWL_HINSTANCE);
+	// Enable the exit button on the window
+	LOCK_FUNCTION(QuitHandler);
+	set_close_button_callback(QuitHandler);
 
-	// Run editor loop
-	while (true) {
-		bool bContinue = g_GUIEditor.Update();
-		if (!bContinue) { break; }
+	new TimerMan();
+	g_TimerMan.Create();
+
+	new GUIEditorApp();
+	if (!g_GUIEditor.Initialize()) {
+		std::exit(EXIT_FAILURE);
 	}
+
+	while (true) {
+		if (!g_GUIEditor.Update()) {
+			break;
+		}
+	}
+
+	g_TimerMan.Destroy();
+	ContentFile::FreeAllLoaded();
+
+	std::exit(EXIT_SUCCESS);
 	return 0;
 }
 

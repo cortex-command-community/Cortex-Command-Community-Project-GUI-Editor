@@ -36,7 +36,6 @@ namespace RTE {
 		}
 		BITMAP *returnBitmap = nullptr;
 
-		/* Iterator crashes for god knows what reason
 		std::unordered_map<std::string, BITMAP *>::iterator foundBitmap = m_LoadedBitmaps.find(m_DataPath);
 		if (foundBitmap != m_LoadedBitmaps.end()) {
 			returnBitmap = (*foundBitmap).second;
@@ -44,9 +43,6 @@ namespace RTE {
 			returnBitmap = LoadAndReleaseBitmap(conversionMode);
 			m_LoadedBitmaps.insert({ m_DataPath, returnBitmap });
 		}
-		*/
-
-		returnBitmap = LoadAndReleaseBitmap(conversionMode);
 
 		return returnBitmap;
 	}

@@ -8,12 +8,16 @@
 #include "GUIPropertyPage.h"
 #include "GUIListBox.h"
 
+#include "Singleton.h"
+
+#define g_GUIEditor GUIEditorApp::Instance()
+
 namespace RTE {
 
 	/// <summary>
 	/// GUI Editor Application class that handles the main editor app.
 	/// </summary>
-	class GUIEditorApp {
+	class GUIEditorApp : public Singleton<GUIEditorApp> {
 
 	public:
 
@@ -40,7 +44,7 @@ namespace RTE {
 		/// <summary>
 		/// Destructor method used to clean up a GUIEditorApp object.
 		/// </summary>
-		~GUIEditorApp() {}
+		~GUIEditorApp() = default;
 
 		/// <summary>
 		/// Initializes the editor app.
@@ -178,7 +182,10 @@ namespace RTE {
 		bool m_bDirty;
 		bool m_bSnapGrid;
 		int	m_nGridSize;
+
+		// Disallow the use of some implicit methods.
+		GUIEditorApp(const GUIEditorApp &reference) = delete;
+		GUIEditorApp &operator=(const GUIEditorApp &rhs) = delete;
 	};
-	extern GUIEditorApp g_GUIEditor;
 }
 #endif

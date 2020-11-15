@@ -75,19 +75,20 @@
       </DisableSpecificWarnings>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <OmitFramePointers>false</OmitFramePointers>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;legacy_stdio_definitions.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;winmm.lib;dsound.lib;ws2_32.lib;legacy_stdio_definitions.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 %(AdditionalOptions)</AdditionalOptions>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
@@ -100,7 +101,8 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
       <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
@@ -112,11 +114,13 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;ole32.lib;dinput.lib;dinput8.lib;ddraw.lib;dxguid.lib;winmm.lib;dsound.lib;ws2_32.lib;legacy_stdio_definitions.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)_Bin;$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -124,6 +128,9 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 %(AdditionalOptions)</AdditionalOptions>
+      <LargeAddressAware>true</LargeAddressAware>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <FixedBaseAddress>false</FixedBaseAddress>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
@@ -161,6 +168,7 @@
     <ClCompile Include="GUI\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUITextPanel.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
+    <ClCompile Include="GUI\WinUtil.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
@@ -213,6 +221,7 @@
     <ClInclude Include="GUI\GUITextBox.h" />
     <ClInclude Include="GUI\GUITextPanel.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
+    <ClInclude Include="GUI\WinUtil.h" />
     <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
@@ -223,6 +232,7 @@
     <ClInclude Include="System\Reader.h" />
     <ClInclude Include="System\RTEError.h" />
     <ClInclude Include="System\Serializable.h" />
+    <ClInclude Include="System\Singleton.h" />
     <ClInclude Include="System\StandardIncludes.h" />
     <ClInclude Include="System\Timer.h" />
     <ClInclude Include="System\TimerMan.h" />

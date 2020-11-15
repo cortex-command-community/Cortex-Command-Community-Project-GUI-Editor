@@ -147,6 +147,9 @@
     <ClCompile Include="GUI\GUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\WinUtil.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -285,6 +288,12 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="System\Constants.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\WinUtil.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Singleton.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>

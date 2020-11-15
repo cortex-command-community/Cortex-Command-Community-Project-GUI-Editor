@@ -1,7 +1,5 @@
 #include "Reader.h"
-#include "RTETools.h"
-#include "PresetMan.h"
-#include "SettingsMan.h"
+#include "RTEError.h"
 
 namespace RTE {
 
@@ -45,7 +43,7 @@ namespace RTE {
 		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
 
 		m_DataModuleName = m_FilePath.substr(0, firstSlashPos);
-		m_DataModuleID = g_PresetMan.GetModuleID(m_DataModuleName);
+		//m_DataModuleID = g_PresetMan.GetModuleID(m_DataModuleName);
 
 		m_Stream = new std::ifstream(fileName);
 		if (!failOK) { RTEAssert(m_Stream->good(), "Failed to open data file \'" + std::string(fileName) + "\'!"); }
@@ -77,7 +75,7 @@ namespace RTE {
 
 	int Reader::GetReadModuleID() const {
 		// If we have an invalid ID, try to get a valid one based on the name we do have
-		return (m_DataModuleID < 0) ? g_PresetMan.GetModuleID(m_DataModuleName) : m_DataModuleID;
+		return 0;//(m_DataModuleID < 0) ? g_PresetMan.GetModuleID(m_DataModuleName) : m_DataModuleID;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +256,7 @@ namespace RTE {
 				if (peek == '\n') {
 					m_CurrentLine++;
 					// Only report every few lines
-					if (m_ReportProgress && (m_CurrentLine % g_SettingsMan.LoadingScreenReportPrecision() == 0)) {
+					if (m_ReportProgress && (m_CurrentLine % 100 == 0)) {
 						std::snprintf(report, sizeof(report), "%s%s reading line %i", m_ReportTabs.c_str(), m_FileName.c_str(), m_CurrentLine);
 						m_ReportProgress(std::string(report), false);
 					}
