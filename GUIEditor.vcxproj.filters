@@ -284,6 +284,9 @@
     <ClInclude Include="System\StandardIncludes.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="System\Constants.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc">

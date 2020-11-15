@@ -1,5 +1,2 @@
-// LibraryIncludes.cpp: source file corresponding to the pre-compiled header
-
+// This source file generates the precompiled header out of "StandardIncludes.h" - DO NOT REMOVE
 #include "StandardIncludes.h"
-
-// When you are using pre-compiled headers, this source file is necessary for compilation to succeed.

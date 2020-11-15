@@ -1,12 +1,10 @@
-// LibraryIncludes.h: This is a precompiled header file.
-// Files listed below are compiled only once, improving build performance for future builds.
-// This also affects IntelliSense performance, including code completion and many code browsing features.
-// However, files listed here are ALL re-compiled if any one of them is updated between builds.
-// Do not add files here that you will be updating frequently as this negates the performance advantage.
+#ifndef _RTEINCLUDES_
+#define _RTEINCLUDES_
 
-#ifndef _GUILIBINCLUDES_
-#define _GUILIBINCLUDES_      
+// This restores features removed from the C++17 standard (auto_ptr and some other stuff). This is needed for LuaBind to work because it relies on it heavily.
+#define _HAS_AUTO_PTR_ETC 1
 
+// Inclusion of relevant C++ Standard Library headers.
 #include <cstdlib>
 #include <cstdarg>
 #include <cstddef>
@@ -21,6 +19,7 @@
 #include <set>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 #include <queue>
 #include <deque>
 #include <regex>
@@ -34,8 +33,11 @@
 #include <cerrno>
 #include <cassert>
 #include <limits>
+#include <random>
+#include <array>
 #include <filesystem>
 
+// TODO: Get rid of these once alias qualifiers are added.
 using std::string;
 using std::list;
 using std::pair;
@@ -44,6 +46,9 @@ using std::map;
 using std::set;
 using std::vector;
 using std::ios_base;
+using std::array;
 using std::make_pair;
+using std::min;
+using std::max;
 
 #endif

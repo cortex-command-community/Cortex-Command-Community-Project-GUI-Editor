@@ -2,16 +2,7 @@
 #define _RTEVECTOR_
 
 #include "Serializable.h"
-//#include "RTETools.h"
-
-#pragma region Math Constants
-static constexpr float c_TwoPI = 6.2831853;
-static constexpr float c_PI = 3.1415926;
-static constexpr float c_HalfPI = 1.5707963;
-static constexpr float c_QuarterPI = 0.7853982;
-static constexpr float c_EighthPI = 0.3926991;
-static constexpr float c_SixteenthPI = 0.1963495;
-#pragma endregion
+#include "Constants.h"
 
 namespace RTE {
 
@@ -23,6 +14,8 @@ namespace RTE {
 	class Vector : public Serializable {
 
 	public:
+
+		SerializableOverrideMethods
 
 		float m_X; //!< X value of this vector.
 		float m_Y; //!< Y value of this vector.
@@ -52,7 +45,7 @@ namespace RTE {
 		/// <param name="inputX">Float defining the initial X value of this Vector.</param>
 		/// <param name="inputY">Float defining the initial Y value of this Vector.</param>
 		/// <returns>An error return value signaling success or any particular failure. Anything below 0 is an error signal.</returns>
-		virtual int Create(float inputX, float inputY) { m_X = inputX; m_Y = inputY; return 0; }
+		int Create(float inputX, float inputY) { m_X = inputX; m_Y = inputY; return 0; }
 #pragma endregion
 
 #pragma region Destruction
@@ -60,27 +53,6 @@ namespace RTE {
 		/// Sets both the X and Y of this Vector to zero.
 		/// </summary>
 		void Reset() { m_X = m_Y = 0.0F; }
-#pragma endregion
-
-#pragma region INI Handling
-		/// <summary>
-		/// Reads a property value from a Reader stream. If the name isn't recognized by this class, then ReadProperty of the parent class is called. 
-		/// If the property isn't recognized by any of the base classes, false is returned, and the Reader's position is untouched.
-		/// </summary>
-		/// <param name="propName">The name of the property to be read.</param>
-		/// <param name="reader">A Reader lined up to the value of the property to be read.</param>
-		/// <returns>
-		/// An error return value signaling whether the property was successfully read or not.
-		/// 0 means it was read successfully, and any non-zero indicates that a property of that name could not be found in this or base classes.
-		/// </returns>
-		virtual int ReadProperty(std::string propName, Reader &reader);
-
-		/// <summary>
-		/// Saves the complete state of this Vector to an output stream for later recreation with Create(Reader &reader);
-		/// </summary>
-		/// <param name="writer">A Writer that the Vector will save itself with.</param>
-		/// <returns>An error return value signaling success or any particular failure. Anything below 0 is an error signal.</returns>
-		virtual int Save(Writer &writer) const;
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -100,7 +72,7 @@ namespace RTE {
 		/// Sets the X value of this Vector.
 		/// </summary>
 		/// <param name="newX">An int value that the X value will be set to.</param>
-		void SetIntX(const int newX) { m_X = (float)newX; }
+		void SetIntX(const int newX) { m_X = static_cast<float>(newX); }
 
 		/// <summary>
 		/// Gets the Y value of this Vector.
@@ -118,7 +90,7 @@ namespace RTE {
 		/// Sets the Y value of this Vector.
 		/// </summary>
 		/// <param name="newY">An int value that the Y value will be set to.</param>
-		void SetIntY(const int newY) { m_Y = (float)newY; }
+		void SetIntY(const int newY) { m_Y = static_cast<float>(newY); }
 
 		/// <summary>
 		/// Sets both the X and Y values of this Vector.
@@ -132,19 +104,19 @@ namespace RTE {
 		/// </summary>
 		/// <param name="newX">An int value that the X value will be set to.</param>
 		/// <param name="newY">An int value that the Y value will be set to.</param>
-		void SetIntXY(const int newX, const int newY) { m_X = (float)newX; m_Y = (float)newY; }
+		void SetIntXY(const int newX, const int newY) { m_X = static_cast<float>(newX); m_Y = static_cast<float>(newY); }
 
 		/// <summary>
 		/// Gets the absolute largest of the two elements. Will always be positive.
 		/// </summary>
 		/// <returns>A float describing the largest value of the two, but not the magnitude.</returns>
-		float GetLargest() const { return fabs(fabs(m_X) > fabs(m_Y) ? m_X : m_Y); }
+		float GetLargest() const { return std::fabs((std::fabs(m_X) > std::fabs(m_Y)) ? m_X : m_Y); }
 
 		/// <summary>
 		/// Gets the absolute smallest of the two elements. Will always be positive.
 		/// </summary>
 		/// <returns>A float describing the smallest value of the two, but not the magnitude.</returns>
-		float GetSmallest() const { return fabs(fabs(m_X) > fabs(m_Y) ? m_Y : m_X); }
+		float GetSmallest() const { return std::fabs((std::fabs(m_X) > std::fabs(m_Y)) ? m_Y : m_X); }
 
 		/// <summary>
 		/// Gets a Vector identical to this except that its X component is flipped.
@@ -173,17 +145,29 @@ namespace RTE {
 		void FlipY(bool flipY = true) { m_Y = flipY ? -m_Y : m_Y; }
 
 		/// <summary>
+		/// Indicates whether the X component of this Vector is 0.
+		/// </summary>
+		/// <returns>Whether the X component of this Vector is 0.</returns>
+		bool XIsZero() const { return m_X == 0; }
+
+		/// <summary>
+		/// Indicates whether the Y component of this Vector is 0.
+		/// </summary>
+		/// <returns>Whether the Y component of this Vector is 0.</returns>
+		bool YIsZero() const { return m_Y == 0; }
+
+		/// <summary>
 		/// Indicates whether both X and Y components of this Vector are 0.
 		/// </summary>
 		/// <returns>Whether both X and Y components of this Vector are 0.</returns>
-		bool IsZero() const { return m_X == 0 && m_Y == 0; }
+		bool IsZero() const { return XIsZero() && YIsZero(); }
 
 		/// <summary>
 		/// Indicates whether the X and Y components of this Vector each have opposite signs to their corresponding components of a passed in Vector.
 		/// </summary>
 		/// <param name="opp">The Vector to compare with.</param>
-		/// <returns>Whether both x and y components of this Vector are 0.</returns>
-		bool IsOpposedTo(const Vector &opp) { return (!m_X && !opp.m_X) || (m_X < 0 && opp.m_X > 0) || (m_X > 0 && opp.m_X < 0) && (!m_Y && !opp.m_Y) || (m_Y < 0 && opp.m_Y > 0) || (m_Y > 0 && opp.m_Y < 0); }
+		/// <returns>Whether the X and Y components of this Vector each have opposite signs to their corresponding components of a passed in Vector.</returns>
+		bool IsOpposedTo(const Vector &opp) { return ((XIsZero() && opp.XIsZero()) || (std::signbit(m_X) != std::signbit(opp.m_X))) && ((YIsZero() && opp.YIsZero()) || (std::signbit(m_Y) != std::signbit(opp.m_Y))); }
 #pragma endregion
 
 #pragma region Magnitude
@@ -191,10 +175,10 @@ namespace RTE {
 		/// Gets the magnitude of this Vector.
 		/// </summary>
 		/// <returns>A float describing the magnitude.</returns>
-		float GetMagnitude() const { return sqrt((m_X * m_X) + (m_Y * m_Y)); }
+		float GetMagnitude() const { return std::sqrt(std::pow(m_X, 2.0F) + std::pow(m_Y, 2.0F)); }
 
 		/// <summary>
-		/// Sets the magnitude of this Vector and keeps its angle intact.
+		/// Sets the magnitude of this Vector. A negative magnitude will invert the Vector's direction.
 		/// </summary>
 		/// <param name="newMag">A float value that the magnitude will be set to.</param>
 		/// <returns>A reference to this after the change.</returns>
@@ -224,14 +208,14 @@ namespace RTE {
 		/// <summary>
 		/// Get this Vector's absolute angle in radians. e.g: when x = 1, y = 0, the value returned here will be 0. x = 0, y = 1 yields -pi/2 here.
 		/// </summary>
-		/// <returns>The absolute angle in radians.</returns>
+		/// <returns>The absolute angle in radians, in the interval [-0.5 pi, 1.5 pi).</returns>
 		float GetAbsRadAngle() const;
 
 		/// <summary>
 		/// Get this Vector's absolute angle in degrees. e.g: when x = 1, y = 0, the value returned here will be 0. x = 0, y = 1 yields -90 here.
 		/// </summary>
-		/// <returns>The absolute angle in degrees.</returns>
-		float GetAbsDegAngle() const;
+		/// <returns>The absolute angle in degrees, in the interval [-90, 270).</returns>
+		float GetAbsDegAngle() const { return GetAbsRadAngle() / c_PI * 180.0F; }
 
 		/// <summary>
 		/// Rotate this Vector relatively by an angle in radians.
@@ -245,14 +229,14 @@ namespace RTE {
 		/// </summary>
 		/// <param name="angle">The angle in degrees to rotate by. Positive angles rotate counter-clockwise, and negative angles clockwise.</param>
 		/// <returns>This vector, rotated.</returns>
-		Vector & DegRotate(float angle);
+		Vector & DegRotate(float angle) { return RadRotate(angle * c_PI / 180.0F); }
 
 		/// <summary>
 		/// Set this Vector to an absolute rotation based on the absolute rotation of another Vector.
 		/// </summary>
 		/// <param name="refVector">The reference Vector whose absolute angle from positive X (0 degrees) this Vector will be rotated to.</param>
 		/// <returns>This vector, rotated.</returns>
-		Vector & AbsRotateTo(const Vector &refVector);
+		Vector & AbsRotateTo(const Vector &refVector) { return RadRotate(refVector.GetAbsRadAngle() - GetAbsRadAngle()); }
 
 		/// <summary>
 		/// Returns a Vector that is perpendicular to this, rotated PI/2.
@@ -264,83 +248,83 @@ namespace RTE {
 		/// Makes this vector perpendicular to its previous state, rotated PI/2. Much faster than RadRotate by PI/2.
 		/// </summary>
 		/// <returns>Vector reference to this after the operation.</returns>
-		Vector & Perpendicularize() { float temp = -m_X; m_X = m_Y; m_Y = temp; return *this; }
+		Vector & Perpendicularize() { *this = GetPerpendicular(); return *this; }
 #pragma endregion
 
 #pragma region Rounding
 		/// <summary>
 		/// Rounds the X and Y values of this Vector upwards. E.g. 0.49 -> 0.0 and 0.5 -> 1.0.
 		/// </summary>
-		void Round() { m_X = floorf(m_X + 0.5); m_Y = floorf(m_Y + 0.5); }
+		void Round() { m_X = std::roundf(m_X); m_Y = std::roundf(m_Y); }
 
 		/// <summary>
 		/// Sets the X and Y of this Vector to the nearest half value. E.g. 1.0 -> 1.5 and 0.9 -> 0.5.
 		/// </summary>
-		void ToHalf() { m_X = floorf(m_X) + 0.5; m_Y = floorf(m_Y) + 0.5; }
+		void ToHalf() { m_X = std::roundf(m_X * 2) / 2; m_Y = std::roundf(m_Y * 2) / 2; }
 
 		/// <summary>
-		/// Sets the X and Y of this Vector.to the greatest integers that are not greater than their original values. E.g. -1.02 becomes -2.0.
+		/// Sets the X and Y of this Vector to the greatest integers that are not greater than their original values. E.g. -1.02 becomes -2.0.
 		/// </summary>
-		void Floor() { m_X = floorf(m_X); m_Y = floorf(m_Y); }
+		void Floor() { m_X = std::floor(m_X); m_Y = std::floor(m_Y); }
 
 		/// <summary>
-		/// Sets the X and Y of this Vector.to the lowest integers that are not less than their original values. E.g. -1.02 becomes -1.0.
+		/// Sets the X and Y of this Vector to the lowest integers that are not less than their original values. E.g. -1.02 becomes -1.0.
 		/// </summary>
-		void Ceiling() { m_X = ceil(m_X); m_Y = ceil(m_Y); }
+		void Ceiling() { m_X = std::ceil(m_X); m_Y = std::ceil(m_Y); }
 
 		/// <summary>
 		/// Returns a rounded copy of this Vector. Does not alter this Vector.
 		/// </summary>
 		/// <returns>A rounded copy of this Vector.</returns>
-		Vector GetRounded() const { Vector returnVector(GetRoundIntX(), GetRoundIntY()); return returnVector; }
+		Vector GetRounded() const { Vector returnVector = *this; returnVector.Round();  return returnVector; }
 
 		/// <summary>
 		/// Returns the rounded integer X value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the X value of this Vector.</returns>
-		int GetRoundIntX() const { return static_cast<int>(floorf(m_X + 0.5)); }
+		int GetRoundIntX() const { return static_cast<int>(std::roundf(m_X)); }
 
 		/// <summary>
 		/// Returns the rounded integer Y value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the Y value of this Vector.</returns>
-		int GetRoundIntY() const { return static_cast<int>(floorf(m_Y + 0.5)); }
+		int GetRoundIntY() const { return static_cast<int>(std::roundf(m_Y)); }
 
 		/// <summary>
 		/// Returns a floored copy of this Vector. Does not alter this Vector.
 		/// </summary>
 		/// <returns>A floored copy of this Vector.</returns>
-		Vector GetFloored() const { Vector returnVector(GetFloorIntX(), GetFloorIntY()); return returnVector; }
+		Vector GetFloored() const { Vector returnVector = *this; returnVector.Floor(); return returnVector; }
 
 		/// <summary>
 		/// Returns the greatest integer that is not greater than the X value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the X value of this Vector.</returns>
-		int GetFloorIntX() const { return static_cast<int>(floorf(m_X)); }
+		int GetFloorIntX() const { return static_cast<int>(m_X); }
 
 		/// <summary>
 		/// Returns the greatest integer that is not greater than the Y value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the Y value of this Vector.</returns>
-		int GetFloorIntY() const { return static_cast<int>(floorf(m_Y)); }
+		int GetFloorIntY() const { return static_cast<int>(m_Y); }
 
 		/// <summary>
-		/// Returns a ceiling:ed copy of this Vector. Does not alter this Vector.
+		/// Returns a ceilinged copy of this Vector. Does not alter this Vector.
 		/// </summary>
 		/// <returns>A ceilinged copy of this Vector.</returns>
-		Vector GetCeilinged() const { Vector returnVector(GetCeilingIntX(), GetCeilingIntY()); return returnVector; }
+		Vector GetCeilinged() const { Vector returnVector = *this; returnVector.Ceiling(); return returnVector; }
 
 		/// <summary>
 		/// Returns the lowest integer that is not less than the X value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the X value of this Vector.</returns>
-		int GetCeilingIntX() const { return static_cast<int>(ceil(m_X)); }
+		int GetCeilingIntX() const { return static_cast<int>(std::ceil(m_X)); }
 
 		/// <summary>
 		/// Returns the lowest integer that is not less than the Y value of this Vector.
 		/// </summary>
 		/// <returns>An int value that represents the Y value of this Vector.</returns>
-		int GetCeilingIntY() const { return static_cast<int>(ceil(m_Y)); }
+		int GetCeilingIntY() const { return static_cast<int>(std::ceil(m_Y)); }
 #pragma endregion
 
 #pragma region Vector Products
@@ -541,14 +525,14 @@ namespace RTE {
 		/// </summary>
 		/// <param name="rhs">An int index indicating which element is requested (X = 0, Y = 1).</param>
 		/// <returns>The requested element.</returns>
-		const float & operator[](const int &rhs) const { return rhs == 0 ? m_X : m_Y; }
+		const float & operator[](const int &rhs) const { return (rhs == 0) ? m_X : m_Y; }
 
 		/// <summary>
 		/// Array subscripting to access either the X or Y element of this Vector.
 		/// </summary>
 		/// <param name="rhs">An int index indicating which element is requested (X = 0, Y = 1).</param>
 		/// <returns>The requested element.</returns>
-		float & operator[](const int &rhs) { return rhs == 0 ? m_X : m_Y; }
+		float & operator[](const int &rhs) { return (rhs == 0) ? m_X : m_Y; }
 #pragma endregion
 
 #pragma region Class Info
@@ -556,12 +540,12 @@ namespace RTE {
 		/// Gets the class name of this Vector.
 		/// </summary>
 		/// <returns>A string with the friendly-formatted type name of this Vector.</returns>
-		virtual const std::string & GetClassName() const { return m_ClassName; }
+		const std::string & GetClassName() const override { return c_ClassName; }
 #pragma endregion
 
 	protected:
 
-		static const std::string m_ClassName; //!< A string with the friendly-formatted type name of this.
+		static const std::string c_ClassName; //!< A string with the friendly-formatted type name of this.
 
 	private:
 

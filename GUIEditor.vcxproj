@@ -218,6 +218,7 @@
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
     <ClInclude Include="GUI\Wrappers\GUIInterface.h" />
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="System\Constants.h" />
     <ClInclude Include="System\ContentFile.h" />
     <ClInclude Include="System\Reader.h" />
     <ClInclude Include="System\RTEError.h" />
