@@ -64,13 +64,13 @@ namespace RTE {
 		/// Gets the start real time value of this Timer.
 		/// </summary>
 		/// <returns>An int64 value that represents the amount of real time in ms from when windows was started to when Reset() of this Timer was called.</returns>
-		int64_t GetStartRealTimeMS() const { return m_StartRealTime; }
+		long long GetStartRealTimeMS() const { return m_StartRealTime; }
 
 		/// <summary>
 		/// Sets the start real time value of this Timer.
 		/// </summary>
 		/// <param name="newStartTime">An int64 with the new real time value (ms since the OS was started).</param>
-		void SetStartRealTimeMS(const int64_t newStartTime) { m_StartRealTime = newStartTime * m_TicksPerMS; }
+		void SetStartRealTimeMS(const long long newStartTime) { m_StartRealTime = newStartTime * m_TicksPerMS; }
 
 		/// <summary>
 		/// Gets the real time limit value of this Timer, RELATVE to the start time.
@@ -129,7 +129,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="when">A unsigned long specifying till when there is time.</param>
 		/// <returns>A unsigned long with the time left till the passed in value, or negative if this Timer is already past that point in time.</returns>
-		unsigned long LeftTillRealMS(int64_t when) { return when - GetElapsedRealTimeMS(); }
+		unsigned long LeftTillRealMS(long long when) { return when - GetElapsedRealTimeMS(); }
 
 		/// <summary>
 		/// Returns true if the elapsed real time is past a certain amount of time relative to this' start.
@@ -155,21 +155,6 @@ namespace RTE {
 		/// </summary>
 		/// <returns>A bool only yielding true if the elapsed real time is greater than the set limit value. If no limit has been set, this returns false.</returns>
 		bool IsPastRealTimeLimit() { return (m_RealTimeLimit == 0) ? true : (m_RealTimeLimit > 0 && (g_TimerMan.GetRealTickCount() - m_StartRealTime) > m_RealTimeLimit); }
-
-		/// <summary>
-		/// Returns how much progress has been made toward the set time limit previously set by SetRealTimeLimitMS.
-		/// 0 means no progress, 1.0 means the timer has reached, or is beyond the limit.
-		/// </summary>
-		/// <returns>A normalized scalar between 0.0 - 1.0 showing the progress toward the limit.</returns>
-		double RealTimeLimitProgress() const { return (m_RealTimeLimit == 0) ? 1.0 : (std::min(1.0, GetElapsedRealTimeMS() / (m_RealTimeLimit / m_TicksPerMS))); }
-
-		/// <summary>
-		/// Returns true or false, depending on whether the elapsed time falls in one of two repeating intervals which divide it.
-		/// This is useful for blink animations etc.
-		/// </summary>
-		/// <param name="period">An int with the alternating period in ms. The time specified here is how long it will take for the switch to alternate.</param>
-		/// <returns>Whether the elapsed time is in the first state or not.</returns>
-		bool AlternateReal(int period) const { return (static_cast<int>(GetElapsedRealTimeMS()) % (period * 2)) > period; }
 #pragma endregion
 
 #pragma region Simulation Time
@@ -177,13 +162,13 @@ namespace RTE {
 		/// Gets the start time value of this Timer.
 		/// </summary>
 		/// <returns>An int64 value that represents the amount of time in ticks from when windows was started to when Reset() of this Timer was called.</returns>
-		int64_t GetStartSimTimeMS() const { return m_StartSimTime; }
+		long long GetStartSimTimeMS() const { return m_StartSimTime; }
 
 		/// <summary>
 		/// Sets the start time value of this Timer, in ticks
 		/// </summary>
 		/// <param name="newStartTime">An int64 with the new time value (ms since windows was started).</param>
-		void SetStartSimTimeMS(const int64_t newStartTime) { m_StartSimTime = newStartTime * m_TicksPerMS; }
+		void SetStartSimTimeMS(const long long newStartTime) { m_StartSimTime = newStartTime * m_TicksPerMS; }
 
 		/// <summary>
 		/// Sets the sim time limit value of this Timer, RELATVE to the start time.
@@ -268,21 +253,6 @@ namespace RTE {
 		/// </summary>
 		/// <returns>A bool only yielding true if the elapsed real time is greater than the set limit value. If no limit has been set, this returns false.</returns>
 		bool IsPastSimTimeLimit() const { return (m_SimTimeLimit == 0) ? true : (m_SimTimeLimit > 0 && (g_TimerMan.GetSimTickCount() - m_StartSimTime) > m_SimTimeLimit); }
-
-		/// <summary>
-		/// Returns how much progress has been made toward the set time limit previously set by SetSimTimeLimitMS.
-		/// 0 means no progress, 1.0 means the timer has reached, or is beyond the limit.
-		/// </summary>
-		/// <returns>A normalized scalar between 0.0 - 1.0 showing the progress toward the limit.</returns>
-		double SimTimeLimitProgress() const { return (m_SimTimeLimit == 0) ? 1.0 : (std::min(1.0, GetElapsedSimTimeMS() / (m_SimTimeLimit / m_TicksPerMS))); }
-
-		/// <summary>
-		/// Returns true or false, depending on whether the elapsed time falls in one of two repeating intervals which divide it.
-		/// This is useful for blink animations etc.
-		/// </summary>
-		/// <param name="period">An int with the alternating period in ms. The time specified here is how long it will take for the switch to alternate.</param>
-		/// <returns>Whether the elapsed time is in the first state or not.</returns>
-		bool AlternateSim(int period) const { return (period == 0) ? true : (static_cast<int>(GetElapsedSimTimeMS()) % (period * 2)) > period; }
 #pragma endregion
 
 #pragma region Class Info
@@ -299,11 +269,11 @@ namespace RTE {
 
 		double m_TicksPerMS; //!< Ticks per MS.
 
-		int64_t m_StartRealTime; //!< Absolute tick count when this was started in real time.
-		int64_t m_RealTimeLimit; //!< Tick count, relative to the start time, when this should indicate end or expired in real time.
+		long long m_StartRealTime; //!< Absolute tick count when this was started in real time.
+		long long m_RealTimeLimit; //!< Tick count, relative to the start time, when this should indicate end or expired in real time.
 
-		int64_t m_StartSimTime; //!< Absolute tick count when this was started in simulation time.
-		int64_t m_SimTimeLimit; //!< Tick count, relative to the start time, when this should indicate end or expired in simulation time.
+		long long m_StartSimTime; //!< Absolute tick count when this was started in simulation time.
+		long long m_SimTimeLimit; //!< Tick count, relative to the start time, when this should indicate end or expired in simulation time.
 
 	private:
 

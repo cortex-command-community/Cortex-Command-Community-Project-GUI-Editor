@@ -2,19 +2,12 @@
 #define _RTEERROR_
 
 #include "allegro.h"
-//#include "loadpng.h"
 
 #undef max
 #undef min
 
-#ifdef _WIN32
-#define DebuggerBreak __debugbreak();
-#else
-#define DebuggerBreak ;
-#endif
-
-#if defined DEBUG_BUILD || defined MIN_DEBUG_BUILD
-#define AbortAction DebuggerBreak
+#if defined DEBUG_BUILD
+#define AbortAction __debugbreak();
 #else
 #define AbortAction std::exit(EXIT_FAILURE);
 #endif

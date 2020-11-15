@@ -10,15 +10,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	extern bool RTEAbortFunc(const char *description, const char *file, int line) {
-		// Save out the screen bitmap, after making a copy of it, faster sometimes
-		if (screen) {
-			BITMAP *abortScreenBuffer = create_bitmap(screen->w, screen->h);
-			blit(screen, abortScreenBuffer, 0, 0, 0, 0, screen->w, screen->h);
-			PALETTE palette;
-			get_palette(palette);
-			save_bmp("abortscreen.bmp", abortScreenBuffer, palette);
-			destroy_bitmap(abortScreenBuffer);
-		}
 		// Ditch the video mode so the message box appears without problems
 		if (screen != 0) { set_gfx_mode(GFX_TEXT, 0, 0, 0, 0); }
 		// Set title of the messagebox
@@ -26,7 +17,7 @@ namespace RTE {
 
 		char message[512];
 
-#if defined DEBUG_BUILD || defined MIN_DEBUG_BUILD 	
+#if defined DEBUG_BUILD	
 		// Show message box with explanation
 		std::snprintf(message, sizeof(message), "Runtime Error in file %s, line %i, because:\n\n%s\n\nThe last frame has been dumped to 'abortscreen.bmp'", file, line, description);
 		allegro_message(message);

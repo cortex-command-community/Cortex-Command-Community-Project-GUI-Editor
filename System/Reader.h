@@ -3,8 +3,6 @@
 
 namespace RTE {
 
-	typedef std::function<void(std::string, bool)> ProgressCallback; //!< Convenient name definition for the progress report callback function.
-
 	/// <summary>
 	/// Reads RTE objects from std::istreams.
 	/// </summary>
@@ -25,7 +23,7 @@ namespace RTE {
 		/// <param name="overwrites">Whether object definitions read here overwrite existing ones with the same names.</param>
 		/// <param name="fpProgressCallback">A function pointer to a function that will be called and sent a string with information about the progress of this Reader's reading.</param>
 		/// <param name="failOK">Whether it's ok for the file to not be there, ie we're only trying to open, and if it's not there, then fail silently.</param>
-		Reader(const char *fileName, bool overwrites = false, ProgressCallback fpProgressCallback = 0, bool failOK = false) { Clear(); Create(fileName, overwrites, fpProgressCallback, failOK); }
+		Reader(const char *fileName, bool overwrites = false, bool failOK = false) { Clear(); Create(fileName, overwrites, failOK); }
 
 		/// <summary>
 		/// Makes the Reader object ready for use.
@@ -38,7 +36,7 @@ namespace RTE {
 		/// <param name="fpProgressCallback">A function pointer to a function that will be called and sent a string with information about the progress of this Reader's reading.</param>
 		/// <param name="failOK">Whether it's ok for the file to not be there, ie we're only trying to open, and if it's not there, then fail silently.</param>
 		/// <returns>An error return value signaling success or any particular failure.  Anything below 0 is an error signal.</returns>
-		int Create(const char *fileName, bool overwrites = false, ProgressCallback fpProgressCallback = 0, bool failOK = false);
+		int Create(const char *fileName, bool overwrites = false, bool failOK = false);
 #pragma endregion
 
 #pragma region Destruction
@@ -54,18 +52,6 @@ namespace RTE {
 #pragma endregion
 
 #pragma region Getters and Setters
-		/// <summary>
-		/// Gets the name of Data Module this reader is reading from.
-		/// </summary>
-		/// <returns>A string with the friendly-formatted type name of this Reader.</returns>
-		const std::string & GetReadModuleName() const { return m_DataModuleName; }
-
-		/// <summary>
-		/// Gets the ID of Data Module this reader is reading from.
-		/// </summary>
-		/// <returns>A string with the friendly-formatted type name of this Reader.</returns>
-		int GetReadModuleID() const;
-
 		/// <summary>
 		/// Gets a pointer to the istream of this reader.
 		/// </summary>
@@ -235,13 +221,8 @@ namespace RTE {
 		std::list<StreamInfo> m_StreamStack; //!< Stack of stream and filepath pairs, each one representing a file opened to read from within another.
 		bool m_EndOfStreams; //!< All streams have been depleted.
 
-		ProgressCallback m_ReportProgress; //!< Function pointer to report our reading progress to, by calling it and passing a descriptive string to it.
-
 		std::string m_FilePath; //!< Currently used stream's filepath.
 		std::string m_FileName; //!< Only the name of the currently read file, excluding the path.
-
-		std::string m_DataModuleName; //!< The current name of the data module being read from, including the .rte extension.
-		int m_DataModuleID; //!< The current ID of the data module being read from.
 
 		unsigned short m_PreviousIndent; //!< Count of tabs encountered on the last line DiscardEmptySpace() discarded.
 		short m_IndentDifference; //!< Difference in indentation from the last line to the current line.

@@ -8,7 +8,7 @@ struct BITMAP;
 namespace RTE {
 
 /// <summary>
-/// A representation of a content file that is stored either directly on on disk or packaged in another file.
+/// A representation of a content file that is stored either directly on disk or packaged in another file.
 /// </summary>
 class ContentFile : public Serializable {
 
@@ -28,7 +28,7 @@ public:
 	/// <summary>
 	/// Destructor method used to clean up a ContentFile object before deletion from system memory.
 	/// </summary>
-    virtual ~ContentFile() { Destroy(); }
+    ~ContentFile() { Destroy(); }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Virtual method:  Create
@@ -39,7 +39,7 @@ public:
 // Return value:    An error return value signaling success or any particular failure.
 //                  Anything below 0 is an error signal.
 
-    virtual int Create(const char *filePath);
+    int Create(const char *filePath);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -51,20 +51,6 @@ public:
 //                  Anything below 0 is an error signal.
 
     int Create(const ContentFile &reference);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Reset
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Resets the entire ContentFile, including its inherited members, to their
-//                  default settings or values.
-// Arguments:       None.
-// Return value:    None.
-
-    virtual void Reset() { Clear(); /*Serializable::Reset();*/ }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 
 namespace RTE {
 
-	const string ContentFile::m_ClassName = "ContentFile";
+	const std::string ContentFile::m_ClassName = "ContentFile";
 	std::unordered_map<std::string, BITMAP *> ContentFile::m_LoadedBitmaps;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,18 +16,15 @@ namespace RTE {
 		m_IndentDifference = 0;
 		m_ObjectEndings = 0;
 		m_EndOfStreams = false;
-		m_ReportProgress = 0;
 		m_ReportTabs = "\t";
 		m_FileName.clear();
-		m_DataModuleName.clear();
-		m_DataModuleID = -1;
 		m_OverwriteExisting = false;
 		m_SkipIncludes = false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int Reader::Create(const char *fileName, bool overwrites, ProgressCallback fpProgressCallback, bool failOK) {
+	int Reader::Create(const char *fileName, bool overwrites, bool failOK) {
 		m_FilePath = fileName;
 
 		if (m_FilePath.empty()) {
@@ -42,21 +39,11 @@ namespace RTE {
 		int firstSlashPos = m_FilePath.find_first_of('/');
 		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
 
-		m_DataModuleName = m_FilePath.substr(0, firstSlashPos);
-		//m_DataModuleID = g_PresetMan.GetModuleID(m_DataModuleName);
-
 		m_Stream = new std::ifstream(fileName);
 		if (!failOK) { RTEAssert(m_Stream->good(), "Failed to open data file \'" + std::string(fileName) + "\'!"); }
 
 		m_OverwriteExisting = overwrites;
 
-		// Report that we're starting a new file
-		m_ReportProgress = fpProgressCallback;
-		if (m_ReportProgress && m_Stream->good()) {
-			char report[512];
-			std::snprintf(report, sizeof(report), "\t%s on line %i", m_FileName.c_str(), m_CurrentLine);
-			m_ReportProgress(std::string(report), true);
-		}
 		return m_Stream->good() ? 0 : -1;
 	}
 
@@ -69,13 +56,6 @@ namespace RTE {
 			delete streamInfo.Stream;
 		}
 		Clear();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int Reader::GetReadModuleID() const {
-		// If we have an invalid ID, try to get a valid one based on the name we do have
-		return 0;//(m_DataModuleID < 0) ? g_PresetMan.GetModuleID(m_DataModuleName) : m_DataModuleID;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -253,14 +233,7 @@ namespace RTE {
 			// Discard newlines and reset the tab count for the new line, also count the lines
 			} else if (peek == '\n' || peek == '\r') {
 				// So we don't count lines twice when there are both newline and carriage return at the end of lines
-				if (peek == '\n') {
-					m_CurrentLine++;
-					// Only report every few lines
-					if (m_ReportProgress && (m_CurrentLine % 100 == 0)) {
-						std::snprintf(report, sizeof(report), "%s%s reading line %i", m_ReportTabs.c_str(), m_FileName.c_str(), m_CurrentLine);
-						m_ReportProgress(std::string(report), false);
-					}
-				}
+				if (peek == '\n') { m_CurrentLine++; }
 				indent = 0;
 				discardedLine = true;
 				m_Stream->ignore(1);
@@ -331,12 +304,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool Reader::StartIncludeFile() {
-		// Report that we're including a file
-		if (m_ReportProgress) {
-			char report[512];
-			std::snprintf(report, sizeof(report), "%s%s on line %i includes:", m_ReportTabs.c_str(), m_FileName.c_str(), m_CurrentLine);
-			m_ReportProgress(std::string(report), false);
-		}
 		// Push the current stream onto the StreamStack for future retrieval when the new include file has run out of data.
 		m_StreamStack.push_back(StreamInfo(m_Stream, m_FilePath, m_CurrentLine, m_PreviousIndent));
 
@@ -368,16 +335,6 @@ namespace RTE {
 		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
 		m_FileName = m_FilePath.substr(firstSlashPos + 1);
 
-		// Report that we're starting a new file
-		if (m_ReportProgress) {
-			m_ReportTabs = "\t";
-			for (unsigned int i = 0; i < m_StreamStack.size(); ++i) {
-				m_ReportTabs.append("\t");
-			}
-			char report[512];
-			std::snprintf(report, sizeof(report), "%s%s on line %i", m_ReportTabs.c_str(), m_FileName.c_str(), m_CurrentLine);
-			m_ReportProgress(std::string(report), true);
-		}
 		// Discard any fluff in the beginning of the new file
 		DiscardEmptySpace();
 		// indicate success
@@ -387,12 +344,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool Reader::EndIncludeFile() {
-		// Do final report on the file we're closing
-		if (m_ReportProgress) {
-			char report[512];
-			std::snprintf(report, sizeof(report), "%s%s - done! %c", m_ReportTabs.c_str(), m_FileName.c_str(), -42);
-			m_ReportProgress(std::string(report), false);
-		}
 		if (m_StreamStack.empty()) {
 			m_EndOfStreams = true;
 			return false;
@@ -412,16 +363,6 @@ namespace RTE {
 
 		m_FileName = m_FilePath.substr(firstSlashPos + 1);
 
-		// Report that we're going back a file
-		if (m_ReportProgress) {
-			m_ReportTabs = "\t";
-			for (unsigned int i = 0; i < m_StreamStack.size(); ++i) {
-				m_ReportTabs.append("\t");
-			}
-			char report[512];
-			std::snprintf(report, sizeof(report), "%s%s on line %i", m_ReportTabs.c_str(), m_FileName.c_str(), m_CurrentLine);
-			m_ReportProgress(std::string(report), true);
-		}
 		// Set up the resumed file for reading again
 		DiscardEmptySpace();
 		return true;
