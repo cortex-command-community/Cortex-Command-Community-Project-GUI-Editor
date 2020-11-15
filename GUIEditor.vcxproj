@@ -225,7 +225,7 @@
     <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
-    <ClInclude Include="GUI\Wrappers\GUIInterface.h" />
+    <ClInclude Include="GUI\Wrappers\Interface.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="System\Constants.h" />
     <ClInclude Include="System\ContentFile.h" />

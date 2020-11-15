@@ -281,9 +281,6 @@
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h">
       <Filter>GUI\Wrappers</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Wrappers\GUIInterface.h">
-      <Filter>GUI\Wrappers</Filter>
-    </ClInclude>
     <ClInclude Include="System\StandardIncludes.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -295,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="System\Singleton.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Wrappers\Interface.h">
+      <Filter>GUI\Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
