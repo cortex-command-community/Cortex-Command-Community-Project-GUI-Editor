@@ -1,156 +1,63 @@
-#ifndef _RTEError_
-#define _RTEError_
+#ifndef _RTEERROR_
+#define _RTEERROR_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            RTEError.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Source file for general error handling functions.
-// Project:         Retro Terrain Engine
-// Author(s):       Daniel Tabar
-//                  data@datarealms.com
-//                  http://www.datarealms.com
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
 #include "allegro.h"
-namespace RTE
-{
+//#include "loadpng.h"
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Global function: DDTAbortFunc
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Abort on Error function. Will try to dump a screenshot, show an
-//                  abortion message, and then quit the program immediately.
-// Arguments:       The description of the abortion.
-//                  The source file in which the abortion is made.
-//                  The line where the abortion is made.
-// Return value:    None.
+#undef max
+#undef min
 
-extern bool DDTAbortFunc(const char *description,
-                         const char *file,
-                         int line);
+#ifdef _WIN32
+#define DebuggerBreak __debugbreak();
+#else
+#define DebuggerBreak ;
+#endif
 
-extern bool DDTAbortFunc(const std::string description,
-                         const char *file,
-                         int line);
+#if defined DEBUG_BUILD || defined MIN_DEBUG_BUILD
+#define AbortAction DebuggerBreak
+#else
+#define AbortAction std::exit(EXIT_FAILURE);
+#endif
 
-#ifdef WIN32
+namespace RTE {
 
-    #define DDTAbort(description)                              \
-    {                                                       \
-        if (DDTAbortFunc(description, __FILE__, __LINE__))      \
-        {                                                   \
-            _asm { int 3 }                                  \
-        }                                                   \
-    }
+	/// <summary>
+	/// Pops up a message box dialog in the OS. For debug purposes mostly.
+	/// </summary>
+	/// <param name="message">The string that the message box should display.</param>
+	extern void ShowMessageBox(std::string message);
 
-#else // WIN32
+	/// <summary>
+	/// Abort on Error function. Will try to dump a screenshot, show an abort message, and then quit the program immediately.
+	/// </summary>
+	/// <param name="description">The description of the abortion.</param>
+	/// <param name="file">The source file in which the abortion is made.</param>
+	/// <param name="line">The line where the abortion is made.</param>
+	extern bool RTEAbortFunc(const char *description, const char *file, int line);
+	extern bool RTEAbortFunc(const std::string description, const char *file, int line);
 
-    #define DDTAbort(description)                              \
-    {                                                       \
-        if (DDTAbortFunc(description, __FILE__, __LINE__))      \
-        {                                                   \
-        }                                                   \
-    }
+	#define RTEAbort(description) {											\
+		if (RTEAbortFunc(description, __FILE__, __LINE__)) { AbortAction }	\
+	}
 
-#endif // WIN32
+	/// <summary>
+	/// A souped-up, customized assert function that brings up a nice dialog box on assert failure.
+	/// The user can choose to break or ignore the particular assertion failure once, or to always ignore.
+	/// </summary>
+	/// <param name="expression">The expression that will be asserted to be true.</param>
+	/// <param name="description">The description of the assertion.</param>
+	/// <param name="file">The source file in which the assertion is made.</param>
+	/// <param name="line">The line where the assertion is made.</param>
+	/// <param name="alwaysIgnore">A reference to a bool that is used in an "Always ignore" functionality.</param>
+	/// <returns>Whether the assertion failed AND the user chose to break in the dialog box.</returns>
+	extern bool RTEAssertFunc(bool expression, const char *description, const char *file, int line, bool &alwaysIgnore);
+	extern bool RTEAssertFunc(bool expression, const std::string description, const char *file, int line, bool &alwaysIgnore);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Global function: DDTAssert
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A souped-up, customized assert function that brings up a nice dialog
-//                  box on assert failure, where the user can choose to: break, ignore
-//                  the particular assertion failure once, or to always ignore.
-// Arguments:       The expression that will be asserted to be true.
-//                  The description of the assertion.
-//                  The source file in which the assertion is made.
-//                  The line where the assertion is made.
-//                  A referece to a bool that is used in an "Always ignore" functionality.
-// Return value:    Whether the assertion failed AND the user chose to break in the dialog
-//                  box.
-
-extern bool DDTAssert(bool expression,
-                      const char *description,
-                      const char *file,
-                      int line,
-                      bool &alwaysIgnore);
-
-extern bool DDTAssert(bool expression,
-                      const std::string description,
-                      const char *file,
-                      int line,
-                      bool &alwaysIgnore);
-
-// Always-exists version of Assert
-#ifdef WIN32
-
-    #define AAssert(expression, description)                                                     \
-    {                                                                                           \
-        static bool alwaysIgnore = false;                                                       \
-        if (!alwaysIgnore)                                                                      \
-        {                                                                                       \
-            if (DDTAssert((int)(expression), description, __FILE__, __LINE__, alwaysIgnore))    \
-            {                                                                                   \
-                _asm { int 3 }                                                                  \
-            }                                                                                   \
-        }                                                                                       \
-    }
-
-#else // WIN32
-
-    #define AAssert(expression, description)                                                     \
-    {                                                                                           \
-        static bool alwaysIgnore = false;                                                       \
-        if (!alwaysIgnore)                                                                      \
-        {                                                                                       \
-            if (DDTAssert((intptr_t)(expression), description, __FILE__, __LINE__, alwaysIgnore))    \
-            {                                                                                   \
-            }                                                                                   \
-        }                                                                                       \
-    }
-
-#endif // WIN32
-
-// Debug-only version of Assert
-#ifdef _DEBUG
-
-    #ifdef WIN32
-
-        #define DAssert(expression, description)                                                    \
-        {                                                                                           \
-            static bool alwaysIgnore = false;                                                       \
-            if (!alwaysIgnore)                                                                      \
-            {                                                                                       \
-                if (DDTAssert((int)(expression), description, __FILE__, __LINE__, alwaysIgnore))    \
-                {                                                                                   \
-                    _asm { int 3 }                                                                  \
-                }                                                                                   \
-            }                                                                                       \
-        }
-
-    #else // WIN32
-
-        #define DAssert(expression, description)                                                    \
-        {                                                                                           \
-            static bool alwaysIgnore = false;                                                       \
-            if (!alwaysIgnore)                                                                      \
-            {                                                                                       \
-                if (DDTAssert((int)(expression), description, __FILE__, __LINE__, alwaysIgnore))    \
-                {                                                                                   \
-                }                                                                                   \
-            }                                                                                       \
-        }
-
-    #endif // WIN32
-
-#else // _DEBUG
-
-    #define DAssert(expression, description)
-
-#endif // _DEBUG
-
-} // Namespace RTE
-
-#endif // File
+	#define RTEAssert(expression, description) {															\
+		static bool alwaysIgnore = false;																	\
+		if (!alwaysIgnore) {																				\
+			if (RTEAssertFunc(expression, description, __FILE__, __LINE__, alwaysIgnore)) { AbortAction }	\
+		}																									\
+	}
+}
+#endif
