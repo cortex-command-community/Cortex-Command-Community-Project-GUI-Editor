@@ -1,6 +1,6 @@
 /*         ______   ___    ___
  *        /\  _  \ /\_ \  /\_ \
- *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___ 
+ *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___
  *         \ \  __ \ \ \ \  \ \ \   /'__`\ /'_ `\/\`'__\/ __`\
  *          \ \ \/\ \ \_\ \_ \_\ \_/\  __//\ \L\ \ \ \//\ \L\ \
  *           \ \_\ \_\/\____\/\____\ \____\ \____ \ \_\\ \____/
@@ -77,74 +77,14 @@ AL_VAR(SYSTEM_DRIVER, system_directx);
 
 
 
-/*******************************************/
-/************ keyboard drivers *************/
-/*******************************************/
-#define KEYBOARD_DIRECTX         AL_ID('D','X',' ',' ')
-
-
-
-/*******************************************/
-/************* mouse drivers ***************/
-/*******************************************/
-#define MOUSE_DIRECTX            AL_ID('D','X',' ',' ')
-
-
 
 /*******************************************/
 /*************** gfx drivers ***************/
 /*******************************************/
 #define GFX_DIRECTX              AL_ID('D','X','A','C')
-#define GFX_DIRECTX_ACCEL        AL_ID('D','X','A','C')
-#define GFX_DIRECTX_SAFE         AL_ID('D','X','S','A')
-#define GFX_DIRECTX_SOFT         AL_ID('D','X','S','O')
 #define GFX_DIRECTX_WIN          AL_ID('D','X','W','N')
-#define GFX_DIRECTX_WIN_BORDERLESS AL_ID('D','X','W','B')
-#define GFX_DIRECTX_OVL          AL_ID('D','X','O','V')
-#define GFX_GDI                  AL_ID('G','D','I','B')
 
-AL_VAR(GFX_DRIVER, gfx_directx_accel);
-AL_VAR(GFX_DRIVER, gfx_directx_safe);
-AL_VAR(GFX_DRIVER, gfx_directx_soft);
 AL_VAR(GFX_DRIVER, gfx_directx_win);
-AL_VAR(GFX_DRIVER, gfx_directx_win_borderless);
-AL_VAR(GFX_DRIVER, gfx_directx_ovl);
-AL_VAR(GFX_DRIVER, gfx_gdi);
 
 #define GFX_DRIVER_DIRECTX                                              \
-   {  GFX_DIRECTX_ACCEL,   &gfx_directx_accel,     TRUE  },             \
-   {  GFX_DIRECTX_SOFT,    &gfx_directx_soft,      TRUE  },             \
-   {  GFX_DIRECTX_SAFE,    &gfx_directx_safe,      TRUE  },             \
-   {  GFX_DIRECTX_WIN,     &gfx_directx_win,       TRUE  },             \
-   {  GFX_DIRECTX_WIN_BORDERLESS,&gfx_directx_win_borderless,       TRUE  },             \
-   {  GFX_DIRECTX_OVL,     &gfx_directx_ovl,       TRUE  },             \
-   {  GFX_GDI,             &gfx_gdi,               FALSE },
-
-
-
-/********************************************/
-/*************** sound drivers **************/
-/********************************************/
-#define DIGI_DIRECTX(n)          AL_ID('D','X','A'+(n),' ')
-#define DIGI_DIRECTAMX(n)        AL_ID('A','X','A'+(n),' ')
-#define DIGI_WAVOUTID(n)         AL_ID('W','O','A'+(n),' ')
-#define MIDI_WIN32MAPPER         AL_ID('W','3','2','M')
-#define MIDI_WIN32(n)            AL_ID('W','3','2','A'+(n))
-#define MIDI_WIN32_IN(n)         AL_ID('W','3','2','A'+(n))
-
-
-
-/*******************************************/
-/************ joystick drivers *************/
-/*******************************************/
-#define JOY_TYPE_DIRECTX         AL_ID('D','X',' ',' ')
-#define JOY_TYPE_WIN32           AL_ID('W','3','2',' ')
-
-AL_VAR(JOYSTICK_DRIVER, joystick_directx);
-AL_VAR(JOYSTICK_DRIVER, joystick_win32);
-
-#define JOYSTICK_DRIVER_DIRECTX                                   \
-      { JOY_TYPE_DIRECTX,        &joystick_directx,  TRUE  },
-
-#define JOYSTICK_DRIVER_WIN32                                     \
-      { JOY_TYPE_WIN32,          &joystick_win32,  TRUE  },
+   {  GFX_DIRECTX_WIN,     &gfx_directx_win,       TRUE  },

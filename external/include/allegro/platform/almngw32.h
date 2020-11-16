@@ -1,6 +1,6 @@
-/*         ______   ___    ___ 
- *        /\  _  \ /\_ \  /\_ \ 
- *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___ 
+/*         ______   ___    ___
+ *        /\  _  \ /\_ \  /\_ \
+ *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___
  *         \ \  __ \ \ \ \  \ \ \   /'__`\ /'_ `\/\`'__\/ __`\
  *          \ \ \/\ \ \_\ \_ \_\ \_/\  __//\ \L\ \ \ \//\ \L\ \
  *           \ \_\ \_\/\____\/\____\ \____\ \____ \ \_\\ \____/
@@ -29,7 +29,9 @@
 /* a static auto config */
 /* older mingw's don't seem to have inttypes.h */
 /* #define ALLEGRO_HAVE_INTTYPES_H */
-#define ALLEGRO_HAVE_STDINT_H	1
+#ifndef ALLEGRO_HAVE_STDINT_H
+#define ALLEGRO_HAVE_STDINT_H   1
+#endif
 
 
 /* describe this platform */

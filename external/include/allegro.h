@@ -32,7 +32,6 @@
 #include "allegro/mouse.h"
 #include "allegro/timer.h"
 #include "allegro/keyboard.h"
-#include "allegro/joystick.h"
 
 #include "allegro/palette.h"
 #include "allegro/gfx.h"
@@ -45,9 +44,6 @@
 
 #include "allegro/fli.h"
 #include "allegro/config.h"
-#include "allegro/gui.h"
-
-#include "allegro/sound.h"
 
 #include "allegro/file.h"
 #include "allegro/lzss.h"
@@ -78,5 +74,3 @@
 #endif
 
 #endif          /* ifndef ALLEGRO_H */
-
-

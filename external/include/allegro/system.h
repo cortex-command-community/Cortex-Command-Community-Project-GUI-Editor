@@ -32,6 +32,14 @@ struct BITMAP;
 struct GFX_VTABLE;
 struct GFX_MODE;
 
+typedef struct RESIZE_DISPLAY_EVENT
+{
+   int old_w, old_h;
+   int new_w, new_h;
+   int is_maximized : 1; /* 1 if this event is because the user maximized the window */
+   int is_restored : 1;  /* 1 if this event is because the user restored the window */
+} RESIZE_DISPLAY_EVENT;
+
 #define ALLEGRO_ERROR_SIZE 256
 
 AL_ARRAY(char, allegro_id);
@@ -61,8 +69,10 @@ AL_ARRAY(char, allegro_error);
 #define OSTYPE_QNX         AL_ID('Q','N','X',' ')
 #define OSTYPE_UNIX        AL_ID('U','N','I','X')
 #define OSTYPE_BEOS        AL_ID('B','E','O','S')
+#define OSTYPE_HAIKU       AL_ID('H','A','I','K')
 #define OSTYPE_MACOS       AL_ID('M','A','C',' ')
 #define OSTYPE_MACOSX      AL_ID('M','A','C','X')
+#define OSTYPE_PSP         AL_ID('K','P','S','P')
 
 AL_VAR(int, os_type);
 AL_VAR(int, os_version);
@@ -93,7 +103,7 @@ AL_FUNC(void, allegro_exit, (void));
 AL_PRINTFUNC(void, allegro_message, (AL_CONST char *msg, ...), 1, 2);
 AL_FUNC(void, get_executable_name, (char *output, int size));
 AL_FUNC(int, set_close_button_callback, (AL_METHOD(void, proc, (void))));
-
+AL_FUNC(int, set_resize_callback, (AL_METHOD(void, proc, (RESIZE_DISPLAY_EVENT *ev))));
 
 AL_FUNC(void, check_cpu, (void));
 
@@ -175,17 +185,17 @@ AL_FUNC(void, check_cpu, (void));
 
 /* Information for Power PC processors */
 /* these defines are taken from <mach-o/machine.h> */
-#define CPU_MODEL_POWERPC_601	       1
-#define CPU_MODEL_POWERPC_602	       2
-#define CPU_MODEL_POWERPC_603	       3
-#define CPU_MODEL_POWERPC_603e	       4
-#define CPU_MODEL_POWERPC_603ev	       5
-#define CPU_MODEL_POWERPC_604	       6
-#define CPU_MODEL_POWERPC_604e	       7
-#define CPU_MODEL_POWERPC_620	       8
-#define CPU_MODEL_POWERPC_750	       9
-#define CPU_MODEL_POWERPC_7400	       10
-#define CPU_MODEL_POWERPC_7450	       11
+#define CPU_MODEL_POWERPC_601          1
+#define CPU_MODEL_POWERPC_602          2
+#define CPU_MODEL_POWERPC_603          3
+#define CPU_MODEL_POWERPC_603e         4
+#define CPU_MODEL_POWERPC_603ev        5
+#define CPU_MODEL_POWERPC_604          6
+#define CPU_MODEL_POWERPC_604e         7
+#define CPU_MODEL_POWERPC_620          8
+#define CPU_MODEL_POWERPC_750          9
+#define CPU_MODEL_POWERPC_7400         10
+#define CPU_MODEL_POWERPC_7450         11
 
 AL_ARRAY(char, cpu_vendor);
 AL_VAR(int, cpu_family);
@@ -205,6 +215,7 @@ typedef struct SYSTEM_DRIVER
    AL_METHOD(int, find_resource, (char *dest, AL_CONST char *resource, int size));
    AL_METHOD(void, set_window_title, (AL_CONST char *name));
    AL_METHOD(int, set_close_button_callback, (AL_METHOD(void, proc, (void))));
+   AL_METHOD(int, set_resize_callback, (AL_METHOD(void, proc, (RESIZE_DISPLAY_EVENT *ev))));
    AL_METHOD(void, message, (AL_CONST char *msg));
    AL_METHOD(void, assert, (AL_CONST char *msg));
    AL_METHOD(void, save_console_state, (void));
@@ -228,11 +239,8 @@ typedef struct SYSTEM_DRIVER
    AL_METHOD(void, lock_mutex, (void *handle));
    AL_METHOD(void, unlock_mutex, (void *handle));
    AL_METHOD(_DRIVER_INFO *, gfx_drivers, (void));
-   AL_METHOD(_DRIVER_INFO *, digi_drivers, (void));
-   AL_METHOD(_DRIVER_INFO *, midi_drivers, (void));
    AL_METHOD(_DRIVER_INFO *, keyboard_drivers, (void));
    AL_METHOD(_DRIVER_INFO *, mouse_drivers, (void));
-   AL_METHOD(_DRIVER_INFO *, joystick_drivers, (void));
    AL_METHOD(_DRIVER_INFO *, timer_drivers, (void));
 } SYSTEM_DRIVER;
 
@@ -248,5 +256,3 @@ AL_ARRAY(_DRIVER_INFO, _system_driver_list);
 #include "inline/system.inl"
 
 #endif          /* ifndef ALLEGRO_SYSTEM_H */
-
-

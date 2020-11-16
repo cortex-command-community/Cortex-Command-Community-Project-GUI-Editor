@@ -24,7 +24,7 @@
 #endif
 
 
-#ifndef ALLEGRO_LIB_BUILD
+#ifndef ALLEGRO_SRC
 
    #ifndef ALLEGRO_NO_CLEAR_BITMAP_ALIAS
       #if (defined ALLEGRO_GCC)
@@ -58,7 +58,7 @@
       AL_ALIAS(fixed fhypot(fixed x, fixed y), fixhypot(x, y))
    #endif
 
-#endif  /* !defined ALLEGRO_LIB_BUILD */
+#endif  /* !defined ALLEGRO_SRC */
 
 
 #define KB_NORMAL       1
@@ -70,47 +70,6 @@
 #define cpu_mmx         (cpu_capabilities & CPU_MMX)
 #define cpu_3dnow       (cpu_capabilities & CPU_3DNOW)
 #define cpu_cpuid       (cpu_capabilities & CPU_ID)
-
-#define joy_x           (joy[0].stick[0].axis[0].pos)
-#define joy_y           (joy[0].stick[0].axis[1].pos)
-#define joy_left        (joy[0].stick[0].axis[0].d1)
-#define joy_right       (joy[0].stick[0].axis[0].d2)
-#define joy_up          (joy[0].stick[0].axis[1].d1)
-#define joy_down        (joy[0].stick[0].axis[1].d2)
-#define joy_b1          (joy[0].button[0].b)
-#define joy_b2          (joy[0].button[1].b)
-#define joy_b3          (joy[0].button[2].b)
-#define joy_b4          (joy[0].button[3].b)
-#define joy_b5          (joy[0].button[4].b)
-#define joy_b6          (joy[0].button[5].b)
-#define joy_b7          (joy[0].button[6].b)
-#define joy_b8          (joy[0].button[7].b)
-
-#define joy2_x          (joy[1].stick[0].axis[0].pos)
-#define joy2_y          (joy[1].stick[0].axis[1].pos)
-#define joy2_left       (joy[1].stick[0].axis[0].d1)
-#define joy2_right      (joy[1].stick[0].axis[0].d2)
-#define joy2_up         (joy[1].stick[0].axis[1].d1)
-#define joy2_down       (joy[1].stick[0].axis[1].d2)
-#define joy2_b1         (joy[1].button[0].b)
-#define joy2_b2         (joy[1].button[1].b)
-
-#define joy_throttle    (joy[0].stick[2].axis[0].pos)
-
-#define joy_hat         ((joy[0].stick[1].axis[0].d1) ? 1 :             \
-                           ((joy[0].stick[1].axis[0].d2) ? 3 :          \
-                              ((joy[0].stick[1].axis[1].d1) ? 4 :       \
-                                 ((joy[0].stick[1].axis[1].d2) ? 2 :    \
-                                    0))))
-
-#define JOY_HAT_CENTRE        0
-#define JOY_HAT_CENTER        0
-#define JOY_HAT_LEFT          1
-#define JOY_HAT_DOWN          2
-#define JOY_HAT_RIGHT         3
-#define JOY_HAT_UP            4
-
-AL_FUNC_DEPRECATED(int, initialise_joystick, (void));
 
 
 /* in case you want to spell 'palette' as 'pallete' */
@@ -132,16 +91,6 @@ AL_FUNC_DEPRECATED(int, initialise_joystick, (void));
 
 /* a pretty vague name */
 #define fix_filename_path              canonicalize_filename
-
-
-/* the good old file selector */
-#define OLD_FILESEL_WIDTH   -1
-#define OLD_FILESEL_HEIGHT  -1
-
-AL_INLINE_DEPRECATED(int, file_select, (AL_CONST char *message, char *path, AL_CONST char *ext),
-{
-   return file_select_ex(message, path, ext, 1024, OLD_FILESEL_WIDTH, OLD_FILESEL_HEIGHT);
-})
 
 
 /* the old (and broken!) file enumeration function */
@@ -182,11 +131,6 @@ AL_PRINTFUNC_DEPRECATED(void, textprintf_justify, (struct BITMAP *bmp, AL_CONST 
 AL_INLINE_DEPRECATED(void, draw_character, (BITMAP *bmp, BITMAP *sprite, int x, int y, int color),
 {
    draw_character_ex(bmp, sprite, x, y, color, _textmode);
-})
-
-AL_INLINE_DEPRECATED(int, gui_textout, (struct BITMAP *bmp, AL_CONST char *s, int x, int y, int color, int centre),
-{
-   return gui_textout_ex(bmp, s, x, y, color, _textmode, centre);
 })
 
 
@@ -234,7 +178,7 @@ AL_INLINE_DEPRECATED(int, get_file_encoding, (void),
 })
 
 
-#ifdef ALLEGRO_LIB_BUILD
+#ifdef ALLEGRO_SRC
    AL_FUNC(int,  timer_can_simulate_retrace, (void));
    AL_FUNC(void, timer_simulate_retrace, (int enable));
 #else
@@ -248,4 +192,3 @@ AL_FUNC_DEPRECATED(int,  timer_is_using_retrace, (void));
 #endif
 
 #endif          /* ifndef ALLEGRO_COMPAT_H */
-

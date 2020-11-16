@@ -1,6 +1,6 @@
-/*         ______   ___    ___ 
- *        /\  _  \ /\_ \  /\_ \ 
- *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___ 
+/*         ______   ___    ___
+ *        /\  _  \ /\_ \  /\_ \
+ *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___
  *         \ \  __ \ \ \ \  \ \ \   /'__`\ /'_ `\/\`'__\/ __`\
  *          \ \ \/\ \ \_\ \_ \_\ \_/\  __//\ \L\ \ \ \//\ \L\ \
  *           \ \_\ \_\/\____\/\____\ \____\ \____ \ \_\\ \____/
@@ -51,8 +51,10 @@
 
 
 /* describe how function prototypes look to MSVC */
-#if (defined ALLEGRO_STATICLINK) || (defined ALLEGRO_SRC)
+#if defined ALLEGRO_STATICLINK
    #define _AL_DLL
+#elif defined ALLEGRO_SRC
+   #define _AL_DLL   __declspec(dllexport)
 #else
    #define _AL_DLL   __declspec(dllimport)
 #endif
@@ -75,9 +77,13 @@
 
 #define INLINE       __inline
 
+#if _MSC_VER < 1700
 #define LONG_LONG    __int64
 #define int64_t      signed __int64
 #define uint64_t     unsigned __int64
+#else
+#define LONG_LONG    long long
+#endif
 
 #define AL_CONST     const
 

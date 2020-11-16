@@ -40,15 +40,6 @@ AL_VAR(int, _allegro_count);
 AL_VAR(int, _allegro_in_exit);
 
 
-/* These functions are referenced by 4.2.0 binaries, but should no longer be
- * used by newer versions directly.
- * _get_allegro_version would be marked deprecated except that misc/fixdll.*
- * would complain about it being missing.
- */
-AL_FUNC(int, _get_allegro_version, (void));
-AL_FUNC(int, _install_allegro, (int system_id, int *errno_ptr, AL_METHOD(int, atexit_ptr, (AL_METHOD(void, func, (void))))));
-
-
 /* flag to decide whether to disable the screensaver */
 enum {
   NEVER_DISABLED,
@@ -75,6 +66,8 @@ AL_FUNCPTR(int, _al_trace_handler, (AL_CONST char *msg));
 AL_FUNC(void *, _al_malloc, (size_t size));
 AL_FUNC(void, _al_free, (void *mem));
 AL_FUNC(void *, _al_realloc, (void *mem, size_t size));
+AL_FUNC(char *, _al_strdup, (AL_CONST char *string));
+AL_FUNC(char *, _al_ustrdup, (AL_CONST char *string));
 
 
 
@@ -197,46 +190,6 @@ AL_ARRAY(volatile char, _key);
 AL_VAR(volatile int, _key_shifts);
 
 
-#if (defined ALLEGRO_DOS) || (defined ALLEGRO_DJGPP) || (defined ALLEGRO_WATCOM) || \
-    (defined ALLEGRO_QNX) || (defined ALLEGRO_BEOS)
-
-AL_ARRAY(char *, _pckeys_names);
-
-AL_FUNC(void, _pckeys_init, (void));
-AL_FUNC(void, _handle_pckey, (int code));
-AL_FUNC(int,  _pckey_scancode_to_ascii, (int scancode));
-AL_FUNC(AL_CONST char *, _pckey_scancode_to_name, (int scancode));
-
-AL_VAR(unsigned short *, _key_ascii_table);
-AL_VAR(unsigned short *, _key_capslock_table);
-AL_VAR(unsigned short *, _key_shift_table);
-AL_VAR(unsigned short *, _key_control_table);
-AL_VAR(unsigned short *, _key_altgr_lower_table);
-AL_VAR(unsigned short *, _key_altgr_upper_table);
-AL_VAR(unsigned short *, _key_accent1_lower_table);
-AL_VAR(unsigned short *, _key_accent1_upper_table);
-AL_VAR(unsigned short *, _key_accent2_lower_table);
-AL_VAR(unsigned short *, _key_accent2_upper_table);
-AL_VAR(unsigned short *, _key_accent3_lower_table);
-AL_VAR(unsigned short *, _key_accent3_upper_table);
-AL_VAR(unsigned short *, _key_accent4_lower_table);
-AL_VAR(unsigned short *, _key_accent4_upper_table);
-
-AL_VAR(int, _key_accent1);
-AL_VAR(int, _key_accent2);
-AL_VAR(int, _key_accent3);
-AL_VAR(int, _key_accent4);
-AL_VAR(int, _key_accent1_flag);
-AL_VAR(int, _key_accent2_flag);
-AL_VAR(int, _key_accent3_flag);
-AL_VAR(int, _key_accent4_flag);
-
-AL_VAR(int, _key_standard_kb);
-
-AL_VAR(char *, _keyboard_layout);
-
-#endif
-
 #if (defined ALLEGRO_WINDOWS)
 
    AL_FUNC(int, _al_win_open, (const char *filename, int mode, int perm));
@@ -252,28 +205,6 @@ AL_VAR(char *, _keyboard_layout);
    #define _al_unlink(filename)             unlink(filename)
 
 #endif
-
-
-/* various bits of joystick stuff */
-AL_VAR(int, _joy_type);
-
-AL_VAR(int, _joystick_installed);
-
-
-/* some GUI innards that other people need to use */
-AL_FUNC(int, _gui_shadow_box_proc, (int msg, DIALOG *d, int c));
-AL_FUNC(int, _gui_ctext_proc, (int msg, DIALOG *d, int c));
-AL_FUNC(int, _gui_button_proc, (int msg, DIALOG *d, int c));
-AL_FUNC(int, _gui_edit_proc, (int msg, DIALOG *d, int c));
-AL_FUNC(int, _gui_list_proc, (int msg, DIALOG *d, int c));
-AL_FUNC(int, _gui_text_list_proc, (int msg, DIALOG *d, int c));
-
-AL_FUNC(void, _handle_scrollable_scroll_click, (DIALOG *d, int listsize, int *offset, int height));
-AL_FUNC(void, _handle_scrollable_scroll, (DIALOG *d, int listsize, int *idx, int *offset));
-AL_FUNC(void, _handle_listbox_click, (DIALOG *d));
-AL_FUNC(void, _draw_scrollable_frame, (DIALOG *d, int listsize, int offset, int height, int fg_color, int bg));
-AL_FUNC(void, _draw_listbox, (DIALOG *d));
-AL_FUNC(void, _draw_textbox, (char *thetext, int *listsize, int draw, int offset, int wword, int tabsize, int x, int y, int w, int h, int disabled, int fore, int deselect, int disable));
 
 
 /* text- and font-related stuff */
@@ -304,7 +235,7 @@ AL_VAR(FONT_VTABLE *, font_vtable_trans);
 AL_FUNC(FONT_GLYPH *, _mono_find_glyph, (AL_CONST FONT *f, int ch));
 AL_FUNC(BITMAP *, _color_find_glyph, (AL_CONST FONT *f, int ch));
 
-typedef struct FONT_MONO_DATA 
+typedef struct FONT_MONO_DATA
 {
    int begin, end;                  /* first char and one-past-the-end char */
    FONT_GLYPH **glyphs;             /* our glyphs */
@@ -321,7 +252,7 @@ typedef struct FONT_COLOR_DATA
 
 /* caches and tables for svga bank switching */
 AL_VAR(int, _last_bank_1);
-AL_VAR(int, _last_bank_2); 
+AL_VAR(int, _last_bank_2);
 
 AL_VAR(int *, _gfx_bank);
 
@@ -382,15 +313,15 @@ AL_VAR(int, _safe_gfx_mode_change);
 #ifdef ALLEGRO_I386
    #define BYTES_PER_PIXEL(bpp)     (((int)(bpp) + 7) / 8)
 #else
-   #ifdef ALLEGRO_MPW 
+   #ifdef ALLEGRO_MPW
       /* in Mac 24 bit is a unsigned long */
-      #define BYTES_PER_PIXEL(bpp)  (((bpp) <= 8) ? 1					\
-				     : (((bpp) <= 16) ? 2		\
-					: 4))
+      #define BYTES_PER_PIXEL(bpp)  (((bpp) <= 8) ? 1                                   \
+                                     : (((bpp) <= 16) ? 2               \
+                                        : 4))
    #else
-      #define BYTES_PER_PIXEL(bpp)  (((bpp) <= 8) ? 1					\
-				     : (((bpp) <= 16) ? 2		\
-					: (((bpp) <= 24) ? 3 : 4)))
+      #define BYTES_PER_PIXEL(bpp)  (((bpp) <= 8) ? 1                                   \
+                                     : (((bpp) <= 16) ? 2               \
+                                        : (((bpp) <= 24) ? 3 : 4)))
    #endif
 #endif
 
@@ -431,12 +362,12 @@ AL_VAR(int, _dispsw_status);
 
 
 /* current drawing mode */
-AL_VAR(int, _drawing_mode);
-AL_VAR(BITMAP *, _drawing_pattern);
-AL_VAR(int, _drawing_x_anchor);
-AL_VAR(int, _drawing_y_anchor);
-AL_VAR(unsigned int, _drawing_x_mask);
-AL_VAR(unsigned int, _drawing_y_mask);
+AL_VAR(ALLEGRO_TLS int, _drawing_mode);
+AL_VAR(ALLEGRO_TLS BITMAP *, _drawing_pattern);
+AL_VAR(ALLEGRO_TLS int, _drawing_x_anchor);
+AL_VAR(ALLEGRO_TLS int, _drawing_y_anchor);
+AL_VAR(ALLEGRO_TLS unsigned int, _drawing_x_mask);
+AL_VAR(ALLEGRO_TLS unsigned int, _drawing_y_mask);
 
 AL_FUNCPTR(int *, _palette_expansion_table, (int bpp));
 
@@ -541,6 +472,7 @@ AL_FUNC(void, _linear_putpixel8, (BITMAP *bmp, int x, int y, int color));
 AL_FUNC(void, _linear_vline8, (BITMAP *bmp, int x, int y_1, int y2, int color));
 AL_FUNC(void, _linear_hline8, (BITMAP *bmp, int x1, int y, int x2, int color));
 AL_FUNC(void, _linear_draw_sprite8, (BITMAP *bmp, BITMAP *sprite, int x, int y));
+AL_FUNC(void, _linear_draw_sprite_ex8, (BITMAP *bmp, BITMAP *sprite, int x, int y, int mode, int flip));
 AL_FUNC(void, _linear_draw_sprite_v_flip8, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_h_flip8, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_vh_flip8, (BITMAP *bmp, BITMAP *sprite, int x, int y));
@@ -576,6 +508,7 @@ AL_FUNC(void, _linear_putpixel16, (BITMAP *bmp, int x, int y, int color));
 AL_FUNC(void, _linear_vline16, (BITMAP *bmp, int x, int y_1, int y2, int color));
 AL_FUNC(void, _linear_hline16, (BITMAP *bmp, int x1, int y, int x2, int color));
 AL_FUNC(void, _linear_draw_sprite16, (BITMAP *bmp, BITMAP *sprite, int x, int y));
+AL_FUNC(void, _linear_draw_sprite_ex16, (BITMAP *bmp, BITMAP *sprite, int x, int y, int mode, int flip));
 AL_FUNC(void, _linear_draw_256_sprite16, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_v_flip16, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_h_flip16, (BITMAP *bmp, BITMAP *sprite, int x, int y));
@@ -603,6 +536,7 @@ AL_FUNC(void, _linear_putpixel24, (BITMAP *bmp, int x, int y, int color));
 AL_FUNC(void, _linear_vline24, (BITMAP *bmp, int x, int y_1, int y2, int color));
 AL_FUNC(void, _linear_hline24, (BITMAP *bmp, int x1, int y, int x2, int color));
 AL_FUNC(void, _linear_draw_sprite24, (BITMAP *bmp, BITMAP *sprite, int x, int y));
+AL_FUNC(void, _linear_draw_sprite_ex24, (BITMAP *bmp, BITMAP *sprite, int x, int y, int mode, int flip));
 AL_FUNC(void, _linear_draw_256_sprite24, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_v_flip24, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_h_flip24, (BITMAP *bmp, BITMAP *sprite, int x, int y));
@@ -630,6 +564,7 @@ AL_FUNC(void, _linear_putpixel32, (BITMAP *bmp, int x, int y, int color));
 AL_FUNC(void, _linear_vline32, (BITMAP *bmp, int x, int y_1, int y2, int color));
 AL_FUNC(void, _linear_hline32, (BITMAP *bmp, int x1, int y, int x2, int color));
 AL_FUNC(void, _linear_draw_sprite32, (BITMAP *bmp, BITMAP *sprite, int x, int y));
+AL_FUNC(void, _linear_draw_sprite_ex32, (BITMAP *bmp, BITMAP *sprite, int x, int y, int mode, int flip));
 AL_FUNC(void, _linear_draw_256_sprite32, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_v_flip32, (BITMAP *bmp, BITMAP *sprite, int x, int y));
 AL_FUNC(void, _linear_draw_sprite_h_flip32, (BITMAP *bmp, BITMAP *sprite, int x, int y));
@@ -801,8 +736,8 @@ typedef struct POLYGON_SEGMENT
    unsigned char *texture;          /* the texture map */
    int umask, vmask, vshift;        /* texture map size information */
    int seg;                         /* destination bitmap selector */
-   uintptr_t zbuf_addr;		    /* Z-buffer address */
-   uintptr_t read_addr;		    /* reading address for transparency modes */
+   uintptr_t zbuf_addr;             /* Z-buffer address */
+   uintptr_t read_addr;             /* reading address for transparency modes */
 } POLYGON_SEGMENT;
 
 
@@ -811,7 +746,7 @@ typedef AL_METHOD(void, SCANLINE_FILLER, (uintptr_t addr, int w, POLYGON_SEGMENT
 
 
 /* an active polygon edge */
-typedef struct POLYGON_EDGE 
+typedef struct POLYGON_EDGE
 {
    int top;                         /* top y position */
    int bottom;                      /* bottom y position */
@@ -820,7 +755,7 @@ typedef struct POLYGON_EDGE
    POLYGON_SEGMENT dat;             /* texture/gouraud information */
    struct POLYGON_EDGE *prev;       /* doubly linked list */
    struct POLYGON_EDGE *next;
-   struct POLYGON_INFO *poly;	    /* father polygon */
+   struct POLYGON_INFO *poly;       /* father polygon */
 } POLYGON_EDGE;
 
 
@@ -837,9 +772,9 @@ typedef struct POLYGON_INFO         /* a polygon waiting rendering */
    int alpha;                       /* blender alpha */
    int b15, b16, b24, b32;          /* blender colors */
    COLOR_MAP *cmap;                 /* trans color map */
-   SCANLINE_FILLER drawer;	    /* scanline drawing functions */
-   SCANLINE_FILLER alt_drawer; 
-   POLYGON_EDGE *left_edge;	    /* true edges used in interpolation */
+   SCANLINE_FILLER drawer;          /* scanline drawing functions */
+   SCANLINE_FILLER alt_drawer;
+   POLYGON_EDGE *left_edge;         /* true edges used in interpolation */
    POLYGON_EDGE *right_edge;
    POLYGON_SEGMENT info;            /* base information for scanline functions */
 } POLYGON_INFO;
@@ -1070,102 +1005,12 @@ AL_FUNC(void, _poly_zbuf_ptex_mask_trans32, (uintptr_t addr, int w, POLYGON_SEGM
 #endif
 
 
-/* sound lib stuff */
-AL_VAR(MIDI_DRIVER, _midi_none);
-AL_VAR(int, _digi_volume);
-AL_VAR(int, _midi_volume);
-AL_VAR(int, _sound_flip_pan); 
-AL_VAR(int, _sound_hq);
-AL_VAR(int, _sound_stereo);
-AL_VAR(int, _sound_bits);
-AL_VAR(int, _sound_freq);
-AL_VAR(int, _sound_port);
-AL_VAR(int, _sound_dma);
-AL_VAR(int, _sound_irq);
-
-AL_VAR(int, _sound_installed);
-AL_VAR(int, _sound_input_installed);
-
-AL_FUNC(int, _midi_allocate_voice, (int min, int max));
-
-AL_VAR(volatile long, _midi_tick);
-
-AL_FUNC(int, _digmid_find_patches, (char *dir, int dir_size, char *file, int size_of_file));
-
-#define VIRTUAL_VOICES  256
-
-
-typedef struct          /* a virtual (as seen by the user) soundcard voice */
-{
-   AL_CONST SAMPLE *sample;      /* which sample are we playing? (NULL = free) */
-   int num;             /* physical voice number (-1 = been killed off) */
-   int autokill;        /* set to free the voice when the sample finishes */
-   long time;           /* when we were started (for voice allocation) */
-   int priority;        /* how important are we? */
-} VOICE;
-
-
-typedef struct          /* a physical (as used by hardware) soundcard voice */
-{
-   int num;             /* the virtual voice currently using me (-1 = free) */
-   int playmode;        /* are we looping? */
-   int vol;             /* current volume (fixed point .12) */
-   int dvol;            /* volume delta, for ramping */
-   int target_vol;      /* target volume, for ramping */
-   int pan;             /* current pan (fixed point .12) */
-   int dpan;            /* pan delta, for sweeps */
-   int target_pan;      /* target pan, for sweeps */
-   int freq;            /* current frequency (fixed point .12) */
-   int dfreq;           /* frequency delta, for sweeps */
-   int target_freq;     /* target frequency, for sweeps */
-} PHYS_VOICE;
-
-AL_ARRAY(PHYS_VOICE, _phys_voice);
-
-
-#define MIXER_DEF_SFX               8
-#define MIXER_MAX_SFX               64
-
-AL_FUNC(int,  _mixer_init, (int bufsize, int freq, int stereo, int is16bit, int *voices));
-AL_FUNC(void, _mixer_exit, (void));
-AL_FUNC(void, _mix_some_samples, (uintptr_t buf, unsigned short seg, int issigned));
-AL_FUNC(void, _mixer_init_voice, (int voice, AL_CONST SAMPLE *sample));
-AL_FUNC(void, _mixer_release_voice, (int voice));
-AL_FUNC(void, _mixer_start_voice, (int voice));
-AL_FUNC(void, _mixer_stop_voice, (int voice));
-AL_FUNC(void, _mixer_loop_voice, (int voice, int loopmode));
-AL_FUNC(int,  _mixer_get_position, (int voice));
-AL_FUNC(void, _mixer_set_position, (int voice, int position));
-AL_FUNC(int,  _mixer_get_volume, (int voice));
-AL_FUNC(void, _mixer_set_volume, (int voice, int volume));
-AL_FUNC(void, _mixer_ramp_volume, (int voice, int tyme, int endvol));
-AL_FUNC(void, _mixer_stop_volume_ramp, (int voice));
-AL_FUNC(int,  _mixer_get_frequency, (int voice));
-AL_FUNC(void, _mixer_set_frequency, (int voice, int frequency));
-AL_FUNC(void, _mixer_sweep_frequency, (int voice, int tyme, int endfreq));
-AL_FUNC(void, _mixer_stop_frequency_sweep, (int voice));
-AL_FUNC(int,  _mixer_get_pan, (int voice));
-AL_FUNC(void, _mixer_set_pan, (int voice, int pan));
-AL_FUNC(void, _mixer_sweep_pan, (int voice, int tyme, int endpan));
-AL_FUNC(void, _mixer_stop_pan_sweep, (int voice));
-AL_FUNC(void, _mixer_set_echo, (int voice, int strength, int delay));
-AL_FUNC(void, _mixer_set_tremolo, (int voice, int rate, int depth));
-AL_FUNC(void, _mixer_set_vibrato, (int voice, int rate, int depth));
-
-AL_FUNC(void, _dummy_noop1, (int p));
-AL_FUNC(void, _dummy_noop2, (int p1, int p2));
-AL_FUNC(void, _dummy_noop3, (int p1, int p2, int p3));
-AL_FUNC(int,  _dummy_load_patches, (AL_CONST char *patches, AL_CONST char *drums));
-AL_FUNC(void, _dummy_adjust_patches, (AL_CONST char *patches, AL_CONST char *drums));
-AL_FUNC(void, _dummy_key_on, (int inst, int note, int bend, int vol, int pan));
-
-
 /* datafile ID's for compatibility with the old datafile format */
 #define V1_DAT_MAGIC             0x616C6C2EL
 
 #define V1_DAT_DATA              0
 #define V1_DAT_FONT              1
-#define V1_DAT_BITMAP_16         2 
+#define V1_DAT_BITMAP_16         2
 #define V1_DAT_BITMAP_256        3
 #define V1_DAT_SPRITE_16         4
 #define V1_DAT_SPRITE_256        5
@@ -1175,8 +1020,6 @@ AL_FUNC(void, _dummy_key_on, (int inst, int note, int bend, int vol, int pan));
 #define V1_DAT_FONT_PROP         9
 #define V1_DAT_BITMAP            10
 #define V1_DAT_PALETTE           11
-#define V1_DAT_SAMPLE            12
-#define V1_DAT_MIDI              13
 #define V1_DAT_RLE_SPRITE        14
 #define V1_DAT_FLI               15
 #define V1_DAT_C_SPRITE          16
@@ -1211,22 +1054,11 @@ AL_FUNC(void, _construct_datafile, (DATAFILE *data));
 /* for readbmp.c */
 AL_FUNC(void, _register_bitmap_file_type_init, (void));
 
-/* for readsmp.c */
-AL_FUNC(void, _register_sample_file_type_init, (void));
-
 /* for readfont.c */
 AL_FUNC(void, _register_font_file_type_init, (void));
 
 
 /* for module linking system; see comment in allegro.c */
-struct _AL_LINKER_MIDI
-{
-   AL_METHOD(int, init, (void));
-   AL_METHOD(void, exit, (void));
-};
-
-AL_VAR(struct _AL_LINKER_MIDI *, _al_linker_midi);
-
 struct _AL_LINKER_MOUSE
 {
    AL_METHOD(void, set_mouse_etc, (void));

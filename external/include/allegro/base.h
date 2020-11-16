@@ -28,6 +28,7 @@
    #include <stdlib.h>
    #include <time.h>
    #include <string.h>
+   #include <wchar.h>
 #endif
 
 #if (defined DEBUGMODE) && (defined FORTIFY)
@@ -45,17 +46,23 @@
 #endif
 
 #define ALLEGRO_VERSION          4
-#define ALLEGRO_SUB_VERSION      2
-#define ALLEGRO_WIP_VERSION      3
-#define ALLEGRO_VERSION_STR      "4.2.3"
-#define ALLEGRO_DATE_STR         "2009"
-#define ALLEGRO_DATE             20091029    /* yyyymmdd */
+#define ALLEGRO_SUB_VERSION      4
+#define ALLEGRO_WIP_VERSION      2
+#define ALLEGRO_VERSION_STR      "4.4.2 (SVN)"
+#define ALLEGRO_DATE_STR         "2010"
+#define ALLEGRO_DATE             20100303    /* yyyymmdd */
 
 /*******************************************/
 /************ Some global stuff ************/
 /*******************************************/
 
-#ifndef TRUE 
+
+/* Asm build disabled as of 4.3.10+. */
+#ifndef ALLEGRO_NO_ASM
+   #define ALLEGRO_NO_ASM
+#endif
+
+#ifndef TRUE
    #define TRUE         -1
    #define FALSE        0
 #endif
@@ -63,14 +70,21 @@
 #undef MIN
 #undef MAX
 #undef MID
-     
+
 #define MIN(x,y)     (((x) < (y)) ? (x) : (y))
 #define MAX(x,y)     (((x) > (y)) ? (x) : (y))
-#define MID(x,y,z)   MAX((x), MIN((y), (z)))
-     
+
+/* Returns the median of x, y, z */
+#define MID(x,y,z)   ((x) > (y) ? ((y) > (z) ? (y) : ((x) > (z) ?    \
+                       (z) : (x))) : ((y) > (z) ? ((z) > (x) ? (z) : \
+                       (x)): (y)))
+
+/* Optimized version of MID for when x <= z. */
+#define CLAMP(x,y,z) MAX((x), MIN((y), (z)))
+
 #undef ABS
 #define ABS(x)       (((x) >= 0) ? (x) : (-(x)))
-     
+
 #undef SGN
 #define SGN(x)       (((x) >= 0) ? 1 : -1)
 
@@ -87,10 +101,16 @@ typedef struct _DRIVER_INFO         /* info about a hardware driver */
    int autodetect;                  /* set to allow autodetection */
 } _DRIVER_INFO;
 
+#ifdef _MSC_VER
+  #define ALLEGRO_TLS //__declspec(thread)
+#elif __GNUC__
+  #define ALLEGRO_TLS __thread
+#else
+  #define ALLEGRO_TLS
+#endif
+
 #ifdef __cplusplus
    }
 #endif
 
 #endif          /* ifndef ALLEGRO_BASE_H */
-
-

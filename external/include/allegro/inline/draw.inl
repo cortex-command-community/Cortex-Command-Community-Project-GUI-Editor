@@ -249,6 +249,25 @@ AL_INLINE(void, draw_sprite, (BITMAP *bmp, BITMAP *sprite, int x, int y),
    }
 })
 
+AL_INLINE(void, draw_sprite_ex, (BITMAP *bmp, BITMAP *sprite, int x, int y,
+                                 int mode, int flip),
+{
+   ASSERT(bmp);
+   ASSERT(sprite);
+
+   if (mode == DRAW_SPRITE_TRANS) {
+      ASSERT((bmp->vtable->color_depth == sprite->vtable->color_depth) ||
+             (sprite->vtable->color_depth == 32) ||
+            ((sprite->vtable->color_depth == 8) &&
+             (bmp->vtable->color_depth == 32)));
+      bmp->vtable->draw_sprite_ex(bmp, sprite, x, y, mode, flip);
+   }
+   else {
+      ASSERT(bmp->vtable->color_depth == sprite->vtable->color_depth);
+      bmp->vtable->draw_sprite_ex(bmp, sprite, x, y, mode, flip);
+   }
+})
+
 
 AL_INLINE(void, draw_sprite_v_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y),{
    ASSERT(bmp);
@@ -258,7 +277,6 @@ AL_INLINE(void, draw_sprite_v_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y),
    bmp->vtable->draw_sprite_v_flip(bmp, sprite, x, y);
 })
 
-
 AL_INLINE(void, draw_sprite_h_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y),{
    ASSERT(bmp);
    ASSERT(sprite);
@@ -266,7 +284,6 @@ AL_INLINE(void, draw_sprite_h_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y),
 
    bmp->vtable->draw_sprite_h_flip(bmp, sprite, x, y);
 })
-
 
 AL_INLINE(void, draw_sprite_vh_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y),
 {
@@ -276,7 +293,6 @@ AL_INLINE(void, draw_sprite_vh_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y)
 
    bmp->vtable->draw_sprite_vh_flip(bmp, sprite, x, y);
 })
-
 
 AL_INLINE(void, draw_trans_sprite, (BITMAP *bmp, BITMAP *sprite, int x, int y),
 {
@@ -332,9 +348,9 @@ AL_INLINE(void, rotate_sprite, (BITMAP *bmp, BITMAP *sprite, int x, int y, fixed
    ASSERT(sprite);
 
    bmp->vtable->pivot_scaled_sprite_flip(bmp, sprite, (x<<16) + (sprite->w * 0x10000) / 2,
-			     			      (y<<16) + (sprite->h * 0x10000) / 2,
-			     			      sprite->w << 15, sprite->h << 15,
-			     			      angle, 0x10000, FALSE);
+                                                      (y<<16) + (sprite->h * 0x10000) / 2,
+                                                      sprite->w << 15, sprite->h << 15,
+                                                      angle, 0x10000, FALSE);
 })
 
 
@@ -344,9 +360,9 @@ AL_INLINE(void, rotate_sprite_v_flip, (BITMAP *bmp, BITMAP *sprite, int x, int y
    ASSERT(sprite);
 
    bmp->vtable->pivot_scaled_sprite_flip(bmp, sprite, (x<<16) + (sprite->w * 0x10000) / 2,
-			     			      (y<<16) + (sprite->h * 0x10000) / 2,
-			     			      sprite->w << 15, sprite->h << 15,
-			     			      angle, 0x10000, TRUE);
+                                                      (y<<16) + (sprite->h * 0x10000) / 2,
+                                                      sprite->w << 15, sprite->h << 15,
+                                                      angle, 0x10000, TRUE);
 })
 
 
@@ -356,9 +372,9 @@ AL_INLINE(void, rotate_scaled_sprite, (BITMAP *bmp, BITMAP *sprite, int x, int y
    ASSERT(sprite);
 
    bmp->vtable->pivot_scaled_sprite_flip(bmp, sprite, (x<<16) + (sprite->w * scale) / 2,
-			     			      (y<<16) + (sprite->h * scale) / 2,
-			     			      sprite->w << 15, sprite->h << 15,
-			     			      angle, scale, FALSE);
+                                                      (y<<16) + (sprite->h * scale) / 2,
+                                                      sprite->w << 15, sprite->h << 15,
+                                                      angle, scale, FALSE);
 })
 
 
@@ -368,9 +384,9 @@ AL_INLINE(void, rotate_scaled_sprite_v_flip, (BITMAP *bmp, BITMAP *sprite, int x
    ASSERT(sprite);
 
    bmp->vtable->pivot_scaled_sprite_flip(bmp, sprite, (x<<16) + (sprite->w * scale) / 2,
-			     			      (y<<16) + (sprite->h * scale) / 2,
-			     			      sprite->w << 15, sprite->h << 15,
-			     			      angle, scale, TRUE);
+                                                      (y<<16) + (sprite->h * scale) / 2,
+                                                      sprite->w << 15, sprite->h << 15,
+                                                      angle, scale, TRUE);
 })
 
 
@@ -539,5 +555,3 @@ AL_INLINE(int, _getpixel32, (BITMAP *bmp, int x, int y),
 #endif
 
 #endif          /* ifndef ALLEGRO_DRAW_INL */
-
-

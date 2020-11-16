@@ -1,6 +1,6 @@
-/*         ______   ___    ___ 
- *        /\  _  \ /\_ \  /\_ \ 
- *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___ 
+/*         ______   ___    ___
+ *        /\  _  \ /\_ \  /\_ \
+ *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___
  *         \ \  __ \ \ \ \  \ \ \   /'__`\ /'_ `\/\`'__\/ __`\
  *          \ \ \/\ \ \_\ \_ \_\ \_/\  __//\ \L\ \ \ \//\ \L\ \
  *           \ \_\ \_\/\____\/\____\ \____\ \____ \ \_\\ \____/
@@ -48,6 +48,8 @@
       #include "allegro/platform/albcc32.h"
    #elif defined ALLEGRO_MSVC
       #include "allegro/platform/almsvc.h"
+   #elif defined ALLEGRO_HAIKU
+      #include "allegro/platform/albecfg.h"
    #elif defined ALLEGRO_BEOS
       #include "allegro/platform/albecfg.h"
    #elif defined ALLEGRO_MPW
@@ -58,6 +60,8 @@
       #include "allegro/platform/alqnxcfg.h"
    #elif defined ALLEGRO_UNIX
       #include "allegro/platform/alucfg.h"
+   #elif defined ALLEGRO_PSP
+      #include "allegro/platform/alpspcfg.h"
    #else
       #error platform not supported
    #endif
@@ -77,6 +81,14 @@
          #define AL_INLINE(type, name, args, code)    \
             static inline type name args;             \
             static inline type name args code
+      /* Needed if this header is included by C99 user code, as
+       * "extern __inline__" is defined differently in C99 (it exports
+       * a new global function symbol).
+       */
+      #elif __GNUC_STDC_INLINE__
+         #define AL_INLINE(type, name, args, code)    \
+            extern __inline__ __attribute__((__gnu_inline__)) type name args;         \
+            extern __inline__ __attribute__((__gnu_inline__)) type name args code
       #else
          #define AL_INLINE(type, name, args, code)    \
             extern __inline__ type name args;         \
@@ -108,7 +120,7 @@
          #define ZERO_SIZE_ARRAY(type, name)  type name[] /* ISO C99 flexible array members */
       #endif
    #endif
-   
+
    #ifndef LONG_LONG
       #define LONG_LONG       long long
       #ifdef ALLEGRO_GUESS_INTTYPES_OK
@@ -130,7 +142,7 @@
          #define _AL_SINCOS(x, s, c)  __asm__ ("fsincos" : "=t" (c), "=u" (s) : "0" (x))
       #endif
    #endif
-   
+
    #ifdef __arm__
       #define ALLEGRO_ARM
    #endif
@@ -421,4 +433,3 @@
    #define ALLEGRO_COLORCONV_ALIGNED_WIDTH
    #define ALLEGRO_NO_COLORCOPY
 #endif
-

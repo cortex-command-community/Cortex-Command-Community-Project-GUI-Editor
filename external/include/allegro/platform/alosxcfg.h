@@ -1,6 +1,6 @@
-/*         ______   ___    ___ 
- *        /\  _  \ /\_ \  /\_ \ 
- *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___ 
+/*         ______   ___    ___
+ *        /\  _  \ /\_ \  /\_ \
+ *        \ \ \L\ \\//\ \ \//\ \      __     __   _ __   ___
  *         \ \  __ \ \ \ \  \ \ \   /'__`\ /'_ `\/\`'__\/ __`\
  *          \ \ \/\ \ \_\ \_ \_\ \_/\  __//\ \L\ \ \ \//\ \L\ \
  *           \ \_\ \_\/\____\/\____\ \____\ \____ \ \_\\ \____/
@@ -34,7 +34,6 @@
 #define ALLEGRO_HAVE_LIBPTHREAD 1
 #define ALLEGRO_HAVE_DIRENT_H   1
 #define ALLEGRO_HAVE_INTTYPES_H 1
-#define ALLEGRO_HAVE_STDINT_H   1
 #define ALLEGRO_HAVE_SYS_TIME_H 1
 #define ALLEGRO_HAVE_SYS_STAT_H 1
 #define ALLEGRO_HAVE_MKSTEMP    1
@@ -56,7 +55,7 @@
 /* Exclude ASM */
 
 #ifndef ALLEGRO_NO_ASM
-	#define ALLEGRO_NO_ASM
+        #define ALLEGRO_NO_ASM
 #endif
 
 /* Arrange for other headers to be included later on */

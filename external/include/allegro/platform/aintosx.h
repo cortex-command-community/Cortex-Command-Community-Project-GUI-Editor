@@ -61,7 +61,6 @@
 
 
 @interface AllegroAppDelegate : NSObject
-- (BOOL)application: (NSApplication *)theApplication openFile: (NSString *)filename;
 - (void)applicationDidFinishLaunching: (NSNotification *)aNotification;
 - (void)applicationDidChangeScreenParameters: (NSNotification *)aNotification;
 + (void)app_main: (id)arg;
@@ -79,6 +78,9 @@
 @interface AllegroWindowDelegate : NSObject
 - (BOOL)windowShouldClose: (id)sender;
 - (void)windowDidDeminiaturize: (NSNotification *)aNotification;
+- (void)windowDidResize: (NSNotification *)aNotification;
+- (void)windowDidBecomeKey:(NSNotification *)notification;
+- (void)windowDidResignKey:(NSNotification *)notification;
 @end
 
 
@@ -120,7 +122,7 @@ typedef struct HID_DEVICE
    int cur_app;
 } HID_DEVICE;
 
-typedef struct 
+typedef struct
 {
    int count;
    int capacity;
@@ -171,16 +173,21 @@ AL_VAR(NSCursor *, osx_cursor);
 AL_VAR(AllegroWindow *, osx_window);
 AL_ARRAY(char, osx_window_title);
 AL_VAR(int, osx_window_first_expose);
+AL_VAR(int, osx_skip_events_processing);
+AL_VAR(void *, osx_skip_events_processing_mutex);
 AL_VAR(CGDirectPaletteRef, osx_palette);
 AL_VAR(int, osx_palette_dirty);
 AL_VAR(int, osx_mouse_warped);
 AL_VAR(int, osx_skip_mouse_move);
 AL_VAR(int, osx_emulate_mouse_buttons);
 AL_VAR(NSTrackingRectTag, osx_mouse_tracking_rect);
-extern AL_METHOD(void, osx_window_close_hook, (void));
-
 
 #endif
+
+extern AL_METHOD(void, osx_window_close_hook, (void));
+extern AL_METHOD(void, osx_resize_callback, (RESIZE_DISPLAY_EVENT *ev));
+extern AL_METHOD(void, osx_mouse_enter_callback, (void));
+extern AL_METHOD(void, osx_mouse_leave_callback, (void));
 
 #endif
 
