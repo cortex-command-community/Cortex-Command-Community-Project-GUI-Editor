@@ -10,11 +10,17 @@
 
 namespace RTE {
 
-	volatile bool g_Quit;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// Quit Handler for Allegro.
+	/// </summary>
+	void QuitHandler() { g_GUIEditor.OnQuitButton(); }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::Clear() {
+		m_Quit = false;
 		m_ResX = 1024;
 		m_ResY = 768;
 		m_BackBuffer = nullptr;
@@ -36,80 +42,82 @@ namespace RTE {
 	bool GUIEditorApp::Initialize() {
 		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);
+		set_window_title("Cortex Command: GUI Editor");
 		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
+		set_close_button_callback(QuitHandler);
 
 		m_BackBuffer = create_bitmap(m_ResX, m_ResY);
 		clear_to_color(m_BackBuffer, 0);
 
-		g_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
-		g_Input = std::make_unique<AllegroInput>(-1);
+		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
+		m_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
+
 		m_ControlManager = std::make_unique<GUIControlManager>();
-		m_ControlManager->Create(g_Screen.get(), g_Input.get(), "Assets/EditorSkin");
+		m_ControlManager->Create(m_Screen.get(), m_Input.get(), "Assets/EditorSkin");
 
 		m_EditorManager = std::make_unique<GUIControlManager>();
-		m_EditorManager->Create(g_Screen.get(), g_Input.get(), "Assets/EditorSkin");
+		m_EditorManager->Create(m_Screen.get(), m_Input.get(), "Assets/EditorSkin");
 
 		m_EditorManager->EnableMouse();
 
-
-		GUICollectionBox * g_EdBase = (GUICollectionBox *)m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768);
-		g_EdBase->SetDrawBackground(true);
-		g_EdBase->SetDrawColor(makecol(32, 32, 32));
-		g_EdBase->SetDrawType(GUICollectionBox::Color);
+		GUICollectionBox *editorBase = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768));
+		editorBase->SetDrawBackground(true);
+		editorBase->SetDrawColor(makecol(32, 32, 32));
+		editorBase->SetDrawType(GUICollectionBox::Color);
 
 		// Add an area showing the editing box
-		GUICollectionBox *g_EdArea = (GUICollectionBox *)m_EditorManager->AddControl("editArea", "COLLECTIONBOX", g_EdBase, m_RootOriginX, m_RootOriginY, 640, 480);
-		g_EdArea->SetDrawBackground(true);
-		g_EdArea->SetDrawColor(makecol(64, 64, 64));
-		g_EdArea->SetDrawType(GUICollectionBox::Color);
+		GUICollectionBox *editorArea = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("editArea", "COLLECTIONBOX", editorBase, m_RootOriginX, m_RootOriginY, 640, 480));
+		editorArea->SetDrawBackground(true);
+		editorArea->SetDrawColor(makecol(64, 64, 64));
+		editorArea->SetDrawType(GUICollectionBox::Color);
 
 		// Add the root collection box for the edited document
-		GUICollectionBox *Root = (GUICollectionBox *)m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, 640, 480);
+		GUICollectionBox *Root = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, 640, 480));
 		Root->SetDrawBackground(false);
 		m_RootControl.reset(Root);
 
 		// Add the left tool buttons
-		GUIButton *Quit = (GUIButton *)m_EditorManager->AddControl("btnQuit", "BUTTON", g_EdBase, 5, 5, 80, 20);
+		GUIButton *Quit = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnQuit", "BUTTON", editorBase, 5, 5, 80, 20));
 		Quit->SetText("Quit");
-		GUIButton *Load = (GUIButton *)m_EditorManager->AddControl("btnLoad", "BUTTON", g_EdBase, 5, 30, 80, 20);
+		GUIButton *Load = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnLoad", "BUTTON", editorBase, 5, 30, 80, 20));
 		Load->SetText("Load");
-		GUIButton *Add = (GUIButton *)m_EditorManager->AddControl("btnAdd", "BUTTON", g_EdBase, 90, 30, 40, 20);
+		GUIButton *Add = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnAdd", "BUTTON", editorBase, 90, 30, 40, 20));
 		Add->SetText("Add");
-		GUIButton *Save = (GUIButton *)m_EditorManager->AddControl("btnSave", "BUTTON", g_EdBase, 5, 55, 80, 20);
+		GUIButton *Save = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSave", "BUTTON", editorBase, 5, 55, 80, 20));
 		Save->SetText("Save");
-		GUIButton *SaveAs = (GUIButton *)m_EditorManager->AddControl("btnSaveAs", "BUTTON", g_EdBase, 5, 80, 80, 20);
+		GUIButton *SaveAs = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSaveAs", "BUTTON", editorBase, 5, 80, 80, 20));
 		SaveAs->SetText("Save As");
 
-		GUIButton *Ctrl = (GUIButton *)m_EditorManager->AddControl("C_BUTTON", "BUTTON", g_EdBase, 160, 5, 80, 20);
+		GUIButton *Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_BUTTON", "BUTTON", editorBase, 160, 5, 80, 20));
 		Ctrl->SetText("BUTTON");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", g_EdBase, 160, 30, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", editorBase, 160, 30, 80, 20));
 		Ctrl->SetText("CHECKBOX");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", g_EdBase, 160, 55, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", editorBase, 160, 55, 80, 20));
 		Ctrl->SetText("COLLECTIONBOX");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", g_EdBase, 160, 80, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", editorBase, 160, 80, 80, 20));
 		Ctrl->SetText("COMBOBOX");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_LABEL", "BUTTON", g_EdBase, 250, 5, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LABEL", "BUTTON", editorBase, 250, 5, 80, 20));
 		Ctrl->SetText("LABEL");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_LISTBOX", "BUTTON", g_EdBase, 250, 30, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LISTBOX", "BUTTON", editorBase, 250, 30, 80, 20));
 		Ctrl->SetText("LISTBOX");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", g_EdBase, 250, 55, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", editorBase, 250, 55, 80, 20));
 		Ctrl->SetText("PROGRESSBAR");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", g_EdBase, 250, 80, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", editorBase, 250, 80, 80, 20));
 		Ctrl->SetText("RADIOBUTTON");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", g_EdBase, 340, 5, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", editorBase, 340, 5, 80, 20));
 		Ctrl->SetText("SCROLLBAR");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_SLIDER", "BUTTON", g_EdBase, 340, 30, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SLIDER", "BUTTON", editorBase, 340, 30, 80, 20));
 		Ctrl->SetText("SLIDER");
-		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", g_EdBase, 340, 55, 80, 20);
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", editorBase, 340, 55, 80, 20));
 		Ctrl->SetText("TEXTBOX");
 
-		m_PropertyPage.reset((GUIPropertyPage *)m_EditorManager->AddControl("props", "PROPERTYPAGE", g_EdBase, 5, 120, 250, 250));
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("props", "PROPERTYPAGE", editorBase, 5, 120, 250, 250)));
 
-		m_ActiveBoxList.reset((GUIListBox *)m_EditorManager->AddControl("active", "LISTBOX", g_EdBase, 5, 400, 150, 250));
+		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("active", "LISTBOX", editorBase, 5, 400, 150, 250)));
 
-		GUICheckbox *Snap = (GUICheckbox *)m_EditorManager->AddControl("snap", "CHECKBOX", g_EdBase, 450, 10, 80, 16);
+		GUICheckbox *Snap = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("snap", "CHECKBOX", editorBase, 450, 10, 80, 16));
 		Snap->SetText("Snap");
 		Snap->SetCheck(GUICheckbox::Checked);
 
@@ -121,8 +129,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorApp::Update() {
-		clear_to_color(m_BackBuffer, 0);
-
 		m_EditorManager->Update();
 
 		// Process the editor events
@@ -164,21 +170,16 @@ namespace RTE {
 
 					// Add a control
 					if (Event.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
-						std::string Class = ((GUIButton *)Event.GetControl())->GetText();
+						std::string Class = (dynamic_cast<GUIButton *>(Event.GetControl()))->GetText();
 						GUIControl *Parent = m_RootControl.get();
 
 						// Is the focused control a container?
-						if (m_SelectionInfo.m_Control) {
-							if (m_SelectionInfo.m_Control->IsContainer())
-								Parent = m_SelectionInfo.m_Control;
-						}
+						if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { Parent = m_SelectionInfo.Control; }
 
 						// Find a suitable control name
 						std::string Name = GenerateControlName(Class/*.substr(2)*/);
 
-						if (Parent) {
-							m_ControlManager->AddControl(Name, Class, Parent, 0, 0, -1, -1);
-						}
+						if (Parent) { m_ControlManager->AddControl(Name, Class, Parent, 0, 0, -1, -1); }
 
 						break;
 					}
@@ -195,7 +196,7 @@ namespace RTE {
 							// Update the focused control properties
 
 							// Apply the properties
-							GUIControl *C = m_SelectionInfo.m_Control;
+							GUIControl *C = m_SelectionInfo.Control;
 							if (C) {
 								C->ApplyProperties(m_PropertyPage->GetPropertyValues());
 								// Update the active box list in case the name of a top-level box changed
@@ -212,33 +213,30 @@ namespace RTE {
 					}
 
 					// Active Box changed
-					if (Event.GetControl()->GetName() == "active") {
-						// Clicks in the list
-						if (Event.GetMsg() == GUIListBox::MouseDown) {
-							GUIListPanel::Item *pItem = m_ActiveBoxList->GetSelected();
-							if (pItem) {
-								// Try to find the box of that name, and select it
-								GUIControl *pBoxControl = m_ControlManager->GetControl(pItem->m_Name);
-								if (pBoxControl) {
-									m_SelectionInfo.m_GrabbedControl = false;
-									m_SelectionInfo.m_GrabbedHandle = false;
-									m_SelectionInfo.m_Control = pBoxControl;
-								}
+					if (Event.GetControl()->GetName() == "active" && Event.GetMsg() == GUIListBox::MouseDown) {
+						const GUIListPanel::Item *pItem = m_ActiveBoxList->GetSelected();
+						if (pItem) {
+							// Try to find the box of that name, and select it
+							GUIControl *pBoxControl = m_ControlManager->GetControl(pItem->m_Name);
+							if (pBoxControl) {
+								m_SelectionInfo.GrabbedControl = false;
+								m_SelectionInfo.GrabbedHandle = false;
+								m_SelectionInfo.Control = pBoxControl;
 							}
-							// Deselection if clicked on no list item
-							else {
-								m_SelectionInfo.m_GrabbedControl = false;
-								m_SelectionInfo.m_GrabbedHandle = false;
-								m_SelectionInfo.m_Control = NULL;
-							}
+						}
+						// Deselection if clicked on no list item
+						else {
+							m_SelectionInfo.GrabbedControl = false;
+							m_SelectionInfo.GrabbedHandle = false;
+							m_SelectionInfo.Control = nullptr;
 						}
 					}
 
-
 					// Snap
-					if (Event.GetControl()->GetName() == "snap") {
-						m_SnapToGrid = ((GUICheckbox *)Event.GetControl())->GetCheck() == GUICheckbox::Checked;
-					}
+					if (Event.GetControl()->GetName() == "snap") { m_SnapToGrid = (dynamic_cast<GUICheckbox *>(Event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
+					break;
+
+				default:
 					break;
 			}
 		}
@@ -250,13 +248,23 @@ namespace RTE {
 		// Process the editor
 		ProcessEditor();
 
-		if (m_SelectionInfo.m_Control) { DrawSelectedControl(m_SelectionInfo.m_Control); }
+		if (m_SelectionInfo.Control) { DrawSelectedControl(m_SelectionInfo.Control); }
 
 		m_EditorManager->DrawMouse();
 
-		blit(m_BackBuffer, screen, 0, 0, 0, 0, m_BackBuffer->w, m_BackBuffer->h);
+		return !m_Quit;
+	}
 
-		return !g_Quit;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::FlipFrameBuffers() const {
+		blit(m_BackBuffer, screen, 0, 0, 0, 0, m_BackBuffer->w, m_BackBuffer->h);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::ClearBackBuffer() const {
+		clear_to_color(m_BackBuffer, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,11 +274,11 @@ namespace RTE {
 			int result = GUIEditorLib::QuitMessageBox("Save changes made?", "Cortex Command: GUI Editor");
 			if (result == 1) {
 				OnSaveButton();
-				g_Quit = true;
+				m_Quit = true;
 			}
-			if (result == -1) { g_Quit = true; }
+			if (result == -1) { m_Quit = true; }
 		} else {
-			g_Quit = true;
+			m_Quit = true;
 		}
 	}
 
@@ -343,124 +351,120 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::ProcessEditor() {
-		int Events[3], States[3];
-		int MouseX, MouseY;
-		g_Input->GetMouseButtons(Events, States);
-		g_Input->GetMousePosition(&MouseX, &MouseY);
+		std::array<int, 3> Events;
+		std::array<int, 3> States;
+		int MouseX;
+		int MouseY;
+		m_Input->GetMouseButtons(Events.data(), States.data());
+		m_Input->GetMousePosition(&MouseX, &MouseY);
 
-		unsigned char KeyboardBuffer[256];
-		g_Input->GetKeyboard(KeyboardBuffer);
+		std::array<unsigned char, 256> KeyboardBuffer;
+		m_Input->GetKeyboard(KeyboardBuffer.data());
 
 		// Delete key
-		if (KeyboardBuffer[GUIInput::Key_Delete] == GUIInput::Pushed && !m_PropertyPage->HasTextFocus()) {
-			// Remove the control
-			if (m_SelectionInfo.m_Control) {
-				m_ControlManager->RemoveControl(m_SelectionInfo.m_Control->GetName(), true);
+		if (KeyboardBuffer.at(GUIInput::Key_Delete) == GUIInput::Pushed && !m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
+			m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
+			m_SelectionInfo.Control = nullptr;
+			m_SelectionInfo.GrabbedControl = false;
+			m_SelectionInfo.GrabbedHandle = false;
 
-				m_SelectionInfo.m_Control = NULL;
-				m_SelectionInfo.m_GrabbedControl = false;
-				m_SelectionInfo.m_GrabbedHandle = false;
-
-				m_PropertyPage->ClearValues();
-			}
+			m_PropertyPage->ClearValues();
 		}
 
 		// Escape key
-		if (KeyboardBuffer[GUIInput::Key_Escape] == GUIInput::Pushed) {
+		if (KeyboardBuffer.at(GUIInput::Key_Escape) == GUIInput::Pushed) {
 			// Undo any grab
-			m_SelectionInfo.m_GrabbedControl = false;
-			m_SelectionInfo.m_GrabbedHandle = false;
+			m_SelectionInfo.GrabbedControl = false;
+			m_SelectionInfo.GrabbedHandle = false;
 		}
 
 
 		// If click released
-		if (Events[0] == GUIInput::Released) {
+		if (Events.at(0) == GUIInput::Released) {
 			// Move the control after a grab
-			if (m_SelectionInfo.m_GrabbedControl && m_SelectionInfo.m_TriggerGrab) {
-				if (m_SelectionInfo.m_Control) {
-					// TODO: Check if not moved to another parent
-					int DestX = ProcessSnapCoord(MouseX + m_SelectionInfo.m_GrabX);
-					int DestY = ProcessSnapCoord(MouseY + m_SelectionInfo.m_GrabY);
-					m_SelectionInfo.m_Control->Move(DestX, DestY);
+			if (m_SelectionInfo.GrabbedControl && m_SelectionInfo.TriggerGrab && m_SelectionInfo.Control) {
+				// TODO: Check if not moved to another parent
+				int DestX = ProcessSnapCoord(MouseX + m_SelectionInfo.GrabX);
+				int DestY = ProcessSnapCoord(MouseY + m_SelectionInfo.GrabY);
+				m_SelectionInfo.Control->Move(DestX, DestY);
 
-					m_UnsavedChanges = true;
-				}
+				m_UnsavedChanges = true;
 			}
 
 			// Resize/Move control after a grab
-			if (m_SelectionInfo.m_GrabbedHandle && m_SelectionInfo.m_TriggerGrab) {
-				if (m_SelectionInfo.m_Control) {
-					int X, Y, Width, Height;
-					CalculateHandleResize(MouseX, MouseY, &X, &Y, &Width, &Height);
+			if (m_SelectionInfo.GrabbedHandle && m_SelectionInfo.TriggerGrab && m_SelectionInfo.Control) {
+				int X;
+				int Y;
+				int Width;
+				int Height;
+				CalculateHandleResize(MouseX, MouseY, &X, &Y, &Width, &Height);
 
-					m_SelectionInfo.m_Control->Move(X, Y);
-					m_SelectionInfo.m_Control->Resize(Width, Height);
+				m_SelectionInfo.Control->Move(X, Y);
+				m_SelectionInfo.Control->Resize(Width, Height);
 
-					m_UnsavedChanges = true;
-				}
+				m_UnsavedChanges = true;
 			}
 
 			// Update properties
-			if (!ControlUnderMouse(m_PropertyPage.get(), MouseX, MouseY)) {
-				if (m_SelectionInfo.m_Control) {
-					m_SelectionInfo.m_Control->StoreProperties();
+			if (!ControlUnderMouse(m_PropertyPage.get(), MouseX, MouseY) && m_SelectionInfo.Control) {
+				m_SelectionInfo.Control->StoreProperties();
 
-					GUIProperties P;
-					P.Update(m_SelectionInfo.m_Control->GetProperties(), true);
-					m_SelectionInfo.m_Control->GetPanel()->BuildProperties(&P);
-					m_PropertyPage->SetPropertyValues(&P);
+				GUIProperties P;
+				P.Update(m_SelectionInfo.Control->GetProperties(), true);
+				m_SelectionInfo.Control->GetPanel()->BuildProperties(&P);
+				m_PropertyPage->SetPropertyValues(&P);
 
-					m_UnsavedChanges = true;
-				}
+				m_UnsavedChanges = true;
 			}
 
-			m_SelectionInfo.m_GrabbedControl = false;
-			m_SelectionInfo.m_GrabbedHandle = false;
-			m_SelectionInfo.m_TriggerGrab = false;
+			m_SelectionInfo.GrabbedControl = false;
+			m_SelectionInfo.GrabbedHandle = false;
+			m_SelectionInfo.TriggerGrab = false;
 		}
 
 
 		// Check for grabbing handles
-		if (!m_SelectionInfo.m_GrabbedControl && m_SelectionInfo.m_Control && Events[0] == GUIInput::Pushed) {
-			int HandleIndex = HandleUnderMouse(m_SelectionInfo.m_Control, MouseX, MouseY);
+		if (!m_SelectionInfo.GrabbedControl && m_SelectionInfo.Control && Events.at(0) == GUIInput::Pushed) {
+			int HandleIndex = HandleUnderMouse(m_SelectionInfo.Control, MouseX, MouseY);
 			if (HandleIndex != -1) {
-				m_SelectionInfo.m_GrabbedControl = false;
-				m_SelectionInfo.m_GrabbedHandle = true;
-				m_SelectionInfo.m_HandleIndex = HandleIndex;
+				m_SelectionInfo.GrabbedControl = false;
+				m_SelectionInfo.GrabbedHandle = true;
+				m_SelectionInfo.HandleIndex = HandleIndex;
 
-				m_SelectionInfo.m_GrabX = MouseX;
-				m_SelectionInfo.m_GrabY = MouseY;
-				m_SelectionInfo.m_ClickX = MouseX;
-				m_SelectionInfo.m_ClickY = MouseY;
+				m_SelectionInfo.GrabX = MouseX;
+				m_SelectionInfo.GrabY = MouseY;
+				m_SelectionInfo.ClickX = MouseX;
+				m_SelectionInfo.ClickY = MouseY;
 			}
 		}
 
 		// If we've grabbed a control or handle, and we've moved far enough from the starting spot, trigger the grab
 		// This prevents quickly selecting a control and slightly moving a couple pixels before releasing
-		if ((m_SelectionInfo.m_GrabbedControl || m_SelectionInfo.m_GrabbedHandle) && !m_SelectionInfo.m_TriggerGrab) {
+		if ((m_SelectionInfo.GrabbedControl || m_SelectionInfo.GrabbedHandle) && !m_SelectionInfo.TriggerGrab) {
 			int MoveDist = 4;
 
-			if (fabsf(m_SelectionInfo.m_ClickX - MouseX) >= MoveDist || fabsf(m_SelectionInfo.m_ClickY - MouseY) >= MoveDist) { m_SelectionInfo.m_TriggerGrab = true; }
+			if (std::fabs(m_SelectionInfo.ClickX - MouseX) >= MoveDist || std::fabs(m_SelectionInfo.ClickY - MouseY) >= MoveDist) { m_SelectionInfo.TriggerGrab = true; }
 		}
 
-
-
 		// Check if mouse clicked on a control
-		if (!m_SelectionInfo.m_GrabbedControl && !m_SelectionInfo.m_GrabbedHandle && Events[0] == GUIInput::Pushed) {
+		if (!m_SelectionInfo.GrabbedControl && !m_SelectionInfo.GrabbedHandle && Events.at(0) == GUIInput::Pushed) {
 			GUIControl *C = ControlUnderMouse(m_RootControl.get(), MouseX, MouseY);
 			if (C && C != m_RootControl.get()) {
-				int X, Y, Width, Height;
+				int X;
+				int Y;
+				int Width;
+				int Height;
 				C->GetControlRect(&X, &Y, &Width, &Height);
 
-				m_SelectionInfo.m_GrabbedHandle = false;
+				m_SelectionInfo.GrabbedHandle = false;
 
-				m_SelectionInfo.m_GrabbedControl = true;
-				m_SelectionInfo.m_GrabX = X - MouseX;
-				m_SelectionInfo.m_GrabY = Y - MouseY;
-				m_SelectionInfo.m_ClickX = MouseX;
-				m_SelectionInfo.m_ClickY = MouseY;
+				m_SelectionInfo.GrabbedControl = true;
+				m_SelectionInfo.GrabX = X - MouseX;
+				m_SelectionInfo.GrabY = Y - MouseY;
+				m_SelectionInfo.ClickX = MouseX;
+				m_SelectionInfo.ClickY = MouseY;
 
-				m_SelectionInfo.m_Control = C;
+				m_SelectionInfo.Control = C;
 
 				// Set the properties
 				C->StoreProperties();
@@ -472,9 +476,9 @@ namespace RTE {
 
 			} else if (C == m_RootControl.get()) {
 				// Unselect control
-				m_SelectionInfo.m_GrabbedControl = false;
-				m_SelectionInfo.m_GrabbedHandle = false;
-				m_SelectionInfo.m_Control = nullptr;
+				m_SelectionInfo.GrabbedControl = false;
+				m_SelectionInfo.GrabbedHandle = false;
+				m_SelectionInfo.Control = nullptr;
 
 				m_PropertyPage->ClearValues();
 			}
@@ -486,19 +490,20 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateActiveBoxList() {
+	void GUIEditorApp::UpdateActiveBoxList() const {
 		// Clear the list so we can repopulate it
 		m_ActiveBoxList->ClearList();
 
 		// Go through all the top-level (directly under root) controls and add only the ControlBoxs to the list here
 		std::vector<GUIControl *> *pControls = m_ControlManager->GetControlList();
 		GUICollectionBox *pBox = nullptr;
+
 		for (std::vector<GUIControl *>::iterator itr = pControls->begin(); itr != pControls->end(); itr++) {
 			// Look for CollectionBoxes with the root control as parent
 			if ((pBox = dynamic_cast<GUICollectionBox *>(*itr)) && pBox->GetParent() == m_RootControl.get()) {
 				m_ActiveBoxList->AddItem(pBox->GetName());
 				// Check if this is selected in the editor, and if so, select it in the list too
-				if (pBox == m_SelectionInfo.m_Control) { m_ActiveBoxList->SetSelectedIndex(m_ActiveBoxList->GetItemList()->size() - 1); }
+				if (pBox == m_SelectionInfo.Control) { m_ActiveBoxList->SetSelectedIndex(m_ActiveBoxList->GetItemList()->size() - 1); }
 			}
 		}
 	}
@@ -509,14 +514,17 @@ namespace RTE {
 		assert(Parent);
 
 		// Clicked on the parent?
-		int X, Y, Width, Height;
+		int X;
+		int Y;
+		int Width;
+		int Height;
 		Parent->GetControlRect(&X, &Y, &Width, &Height);
 
 		if (MouseX < X || MouseX > X + Width) {
-			return NULL;
+			return nullptr;
 		}
 		if (MouseY < Y || MouseY > Y + Height) {
-			return NULL;
+			return nullptr;
 		}
 
 		// Check children
@@ -538,8 +546,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorApp::HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY) {
-		int X, Y, Width, Height;
+	int GUIEditorApp::HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY) const {
+		int X;
+		int Y;
+		int Width;
+		int Height;
 		Control->GetControlRect(&X, &Y, &Width, &Height);
 
 		int RegionSize = 6;
@@ -552,10 +563,8 @@ namespace RTE {
 			}
 
 			nHandle++;
-			if (i != 1) {
-				if (MouseInsideBox(MouseX, MouseY, X + Width / 2 - RegionSize, Y + i * (Height / 2) - RegionSize, RegionSize * 2, RegionSize * 2)) {
-					return nHandle;
-				}
+			if (i != 1 && MouseInsideBox(MouseX, MouseY, X + Width / 2 - RegionSize, Y + i * (Height / 2) - RegionSize, RegionSize * 2, RegionSize * 2)) {
+				return nHandle;
 			}
 
 			nHandle++;
@@ -574,37 +583,40 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::DrawSelectedControl(GUIControl *Control) {
-		int i;
 		int HandleSize = 6;
 
 		assert(Control);
 
-		int MouseX, MouseY;
-		g_Input->GetMousePosition(&MouseX, &MouseY);
+		int MouseX;
+		int MouseY;
+		m_Input->GetMousePosition(&MouseX, &MouseY);
 
-		int X, Y, Width, Height;
+		int X;
+		int Y;
+		int Width;
+		int Height;
 		Control->GetControlRect(&X, &Y, &Width, &Height);
 
 		// If we've grabbed the control, draw the selection lines where the mouse is
-		if (m_SelectionInfo.m_GrabbedControl && m_SelectionInfo.m_TriggerGrab) {
-			X = MouseX + m_SelectionInfo.m_GrabX;
-			Y = MouseY + m_SelectionInfo.m_GrabY;
+		if (m_SelectionInfo.GrabbedControl && m_SelectionInfo.TriggerGrab) {
+			X = MouseX + m_SelectionInfo.GrabX;
+			Y = MouseY + m_SelectionInfo.GrabY;
 
 			X = ProcessSnapCoord(X);
 			Y = ProcessSnapCoord(Y);
 		}
 
 		// Grabbed handles
-		if (m_SelectionInfo.m_GrabbedHandle && m_SelectionInfo.m_TriggerGrab) {
+		if (m_SelectionInfo.GrabbedHandle && m_SelectionInfo.TriggerGrab) {
 			CalculateHandleResize(MouseX, MouseY, &X, &Y, &Width, &Height);
 		}
 
 
 		GUIRect Rect;
 		SetRect(&Rect, X - 6, Y - 6, X + Width + 6, Y + Height + 6);
-		g_Screen->GetBitmap()->SetClipRect(&Rect);
+		m_Screen->GetBitmap()->SetClipRect(&Rect);
 
-		g_Screen->GetBitmap()->DrawRectangle(X, Y, Width, Height, 0xFFCCCCCC, false);
+		m_Screen->GetBitmap()->DrawRectangle(X, Y, Width, Height, 0xFFCCCCCC, false);
 
 		// Draw the handles
 		for (int i = 0; i < 3; i++) {
@@ -615,28 +627,28 @@ namespace RTE {
 			DrawSelectionHandle(X + Width, Y + i * (Height / 2), HandleSize, HandleSize);
 		}
 
-		g_Screen->GetBitmap()->SetClipRect(NULL);
+		m_Screen->GetBitmap()->SetClipRect(nullptr);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::DrawSelectionHandle(int xPos, int yPos, int width, int height) const {
-		g_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFF000000, true);
-		g_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFFFFFFFF, false);
+		m_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFF000000, true);
+		m_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFFFFFFFF, false);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::ClearSelection() {
-		m_SelectionInfo.m_GrabbedControl = false;
-		m_SelectionInfo.m_GrabbedHandle = false;
-		m_SelectionInfo.m_TriggerGrab = false;
+		m_SelectionInfo.GrabbedControl = false;
+		m_SelectionInfo.GrabbedHandle = false;
+		m_SelectionInfo.TriggerGrab = false;
 
-		m_SelectionInfo.m_Control = nullptr;
-		m_SelectionInfo.m_HandleIndex = 0;
+		m_SelectionInfo.Control = nullptr;
+		m_SelectionInfo.HandleIndex = 0;
 
-		m_SelectionInfo.m_GrabX = 0;
-		m_SelectionInfo.m_GrabY = 0;
+		m_SelectionInfo.GrabX = 0;
+		m_SelectionInfo.GrabY = 0;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -648,18 +660,24 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::CalculateHandleResize(int MouseX, int MouseY, int *X, int *Y, int *Width, int *Height) {
-		int CtrlX, CtrlY, CtrlWidth, CtrlHeight;
-		m_SelectionInfo.m_Control->GetControlRect(&CtrlX, &CtrlY, &CtrlWidth, &CtrlHeight);
-		GUIControl *Parent = m_SelectionInfo.m_Control->GetParent();
+		int CtrlX;
+		int CtrlY;
+		int CtrlWidth;
+		int CtrlHeight;
+		m_SelectionInfo.Control->GetControlRect(&CtrlX, &CtrlY, &CtrlWidth, &CtrlHeight);
+		GUIControl *Parent = m_SelectionInfo.Control->GetParent();
 
 		int MinSize = 5;
 
-		int ParentX, ParentY, ParentWidth, ParentHeight;
+		int ParentX;
+		int ParentY;
+		int ParentWidth;
+		int ParentHeight;
 		Parent->GetControlRect(&ParentX, &ParentY, &ParentWidth, &ParentHeight);
 
 		// Left Move/Resize
-		if (m_SelectionInfo.m_HandleIndex == 0 || m_SelectionInfo.m_HandleIndex == 3 || m_SelectionInfo.m_HandleIndex == 6) {
-			int Diff = MouseX - m_SelectionInfo.m_GrabX;
+		if (m_SelectionInfo.HandleIndex == 0 || m_SelectionInfo.HandleIndex == 3 || m_SelectionInfo.HandleIndex == 6) {
+			int Diff = MouseX - m_SelectionInfo.GrabX;
 			if (CtrlX + Diff < ParentX) { Diff = ParentX - CtrlX; }
 			if (CtrlWidth - Diff < MinSize) { Diff = CtrlWidth - MinSize; }
 
@@ -669,8 +687,8 @@ namespace RTE {
 			CtrlWidth -= Diff;
 		}
 		// Top Move/Resize
-		if (m_SelectionInfo.m_HandleIndex == 0 || m_SelectionInfo.m_HandleIndex == 1 || m_SelectionInfo.m_HandleIndex == 2) {
-			int Diff = MouseY - m_SelectionInfo.m_GrabY;
+		if (m_SelectionInfo.HandleIndex == 0 || m_SelectionInfo.HandleIndex == 1 || m_SelectionInfo.HandleIndex == 2) {
+			int Diff = MouseY - m_SelectionInfo.GrabY;
 			if (CtrlY + Diff < ParentY) { Diff = ParentY - CtrlY; }
 			if (CtrlHeight - Diff < MinSize) { Diff = CtrlHeight - MinSize; }
 
@@ -680,8 +698,8 @@ namespace RTE {
 			CtrlHeight -= Diff;
 		}
 		// Right Resize
-		if (m_SelectionInfo.m_HandleIndex == 2 || m_SelectionInfo.m_HandleIndex == 5 || m_SelectionInfo.m_HandleIndex == 8) {
-			int Diff = MouseX - m_SelectionInfo.m_GrabX;
+		if (m_SelectionInfo.HandleIndex == 2 || m_SelectionInfo.HandleIndex == 5 || m_SelectionInfo.HandleIndex == 8) {
+			int Diff = MouseX - m_SelectionInfo.GrabX;
 			if (CtrlX + CtrlWidth + Diff > ParentX + ParentWidth) { Diff = (ParentX + ParentWidth) - (CtrlX + CtrlWidth); }
 
 			Diff = ProcessSnapCoord(Diff);
@@ -689,8 +707,8 @@ namespace RTE {
 			CtrlWidth += Diff;
 		}
 		// Bottom Resize
-		if (m_SelectionInfo.m_HandleIndex == 6 || m_SelectionInfo.m_HandleIndex == 7 || m_SelectionInfo.m_HandleIndex == 8) {
-			int Diff = MouseY - m_SelectionInfo.m_GrabY;
+		if (m_SelectionInfo.HandleIndex == 6 || m_SelectionInfo.HandleIndex == 7 || m_SelectionInfo.HandleIndex == 8) {
+			int Diff = MouseY - m_SelectionInfo.GrabY;
 			if (CtrlY + CtrlHeight + Diff > ParentY + ParentHeight) { Diff = (ParentY + ParentHeight) - (CtrlY + CtrlHeight); }
 
 			Diff = ProcessSnapCoord(Diff);
@@ -709,19 +727,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIEditorApp::GenerateControlName(std::string strControlType) {
-		char buf[64];
-
+	std::string GUIEditorApp::GenerateControlName(std::string strControlType) const {
 		// 10,000 should be enough
 		for (int i = 1; i < 10000; i++) {
 			std::string Name = strControlType;
-
 			// Use a lower case version of the string
-			for (int s = 0; s < Name.size(); s++) {
-				Name.at(s) = tolower(Name.at(s));
-			}
-
-			Name.append(itoa(i, buf, 10));
+			std::transform(Name.begin(), Name.end(), Name.begin(), tolower);
+			Name.append(std::to_string(i));
 
 			// Check if this name exists
 			std::vector<GUIControl *> *ControlList = m_ControlManager->GetControlList();

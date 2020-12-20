@@ -20,32 +20,10 @@ namespace RTE {
 
 	public:
 
-		// Selection structure
-		struct Selection {
-			bool m_GrabbedControl;
-			bool m_GrabbedHandle;
-			bool m_TriggerGrab;
-
-			GUIControl *m_Control;
-			int m_HandleIndex;
-
-			int m_GrabX;
-			int m_GrabY;
-			int	m_ClickX;
-			int m_ClickY;
-
-
-		};
-
 		/// <summary>
 		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
 		/// </summary>
 		GUIEditorApp() { Clear(); }
-
-		/// <summary>
-		/// Destructor method used to clean up a GUIEditorApp object.
-		/// </summary>
-		~GUIEditorApp() = default;
 
 		/// <summary>
 		/// Initializes the editor app.
@@ -63,6 +41,16 @@ namespace RTE {
 		/// Called when the quit button has been pushed.
 		/// </summary>
 		void OnQuitButton();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void FlipFrameBuffers() const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void ClearBackBuffer() const;
 
 	protected:
 
@@ -90,7 +78,7 @@ namespace RTE {
 		/// <summary>
 		/// Updates the list of Active top level ControlBoxs found in the editor.
 		/// </summary>
-		void UpdateActiveBoxList();
+		void UpdateActiveBoxList() const;
 
 		/// <summary>
 		/// Checks if a control is under the mouse point.
@@ -108,7 +96,7 @@ namespace RTE {
 		/// <param name="MouseX"></param>
 		/// <param name="MouseY"></param>
 		/// <returns>Handle index. -1 if no handle under the mouse.</returns>
-		int HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY);
+		int HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY) const;
 
 		/// <summary>
 		/// Checks if the mouse point is inside a box.
@@ -158,7 +146,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="strControlType">Control Type.</param>
 		/// <returns></returns>
-		std::string GenerateControlName(std::string strControlType);
+		std::string GenerateControlName(std::string strControlType) const;
 
 		/// <summary>
 		/// Calculates the nearest snap position (if snap is on).
@@ -169,11 +157,30 @@ namespace RTE {
 
 	private:
 
+		/// <summary>
+		/// GUI element selection structure.
+		/// </summary>
+		struct Selection {
+			bool GrabbedControl;
+			bool GrabbedHandle;
+			bool TriggerGrab;
+
+			GUIControl *Control;
+			int HandleIndex;
+
+			int GrabX;
+			int GrabY;
+			int	ClickX;
+			int ClickY;
+		};
+
+		bool m_Quit;
+
 		int m_ResX;
 		int m_ResY;
 		BITMAP *m_BackBuffer;
-		std::unique_ptr<AllegroScreen> g_Screen;
-		std::unique_ptr<AllegroInput> g_Input;
+		std::unique_ptr<AllegroScreen> m_Screen;
+		std::unique_ptr<AllegroInput> m_Input;
 		std::unique_ptr<GUIControlManager> m_ControlManager;
 		std::unique_ptr<GUIControlManager> m_EditorManager;
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage;

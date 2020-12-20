@@ -16,7 +16,7 @@ namespace RTE {
 		/// <param name="strMessage"></param>
 		/// <param name="strTitle"></param>
 		/// <returns>1 for quit & save, -1 for quit, no save, 0 for cancel.</returns>
-		static int QuitMessageBox(std::string strMessage, std::string strTitle);
+		static int QuitMessageBox(const std::string &strMessage, const std::string &strTitle);
 
 		/// <summary>
 		/// Display load GUI file OS dialog box.
