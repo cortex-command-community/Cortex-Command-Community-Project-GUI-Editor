@@ -63,6 +63,11 @@ namespace RTEGUI {
 	protected:
 
 		/// <summary>
+		/// 
+		/// </summary>
+		void CreateEditorElements();
+
+		/// <summary>
 		/// Called when the load button has been pushed.
 		/// </summary>
 		/// <param name="addControls">Whether to add controls as opposed to wiping out the current layout.</param>
@@ -196,6 +201,7 @@ namespace RTEGUI {
 		std::unique_ptr<GUIListBox> m_ActiveBoxList;
 		std::unique_ptr<GUIControl> m_RootControl;
 		std::unique_ptr<GUICollectionBox> m_EditorBase;
+		std::unique_ptr<GUICollectionBox> m_LeftColumn;
 		Selection m_SelectionInfo;
 		std::string m_Filename;
 
@@ -205,6 +211,8 @@ namespace RTEGUI {
 		int	m_GridSize;
 		int m_RootOriginX;
 		int m_RootOriginY;
+		int m_WorkspaceWidth;
+		int m_WorkspaceHeight;
 
 		/// <summary>
 		/// 

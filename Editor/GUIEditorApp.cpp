@@ -26,7 +26,7 @@ namespace RTEGUI {
 		m_WindowResized = false;
 		m_Quit = false;
 		m_ResX = 1024;
-		m_ResY = 768;
+		m_ResY = 600;
 		m_BackBuffer = nullptr;
 		m_ControlManager = nullptr;
 		m_EditorManager = nullptr;
@@ -38,8 +38,10 @@ namespace RTEGUI {
 		m_UnsavedChanges = false;
 		m_SnapToGrid = true;
 		m_GridSize = 5;
-		m_RootOriginX = 300;
-		m_RootOriginY = 120;
+		m_RootOriginX = 335;
+		m_RootOriginY = 60;
+		m_WorkspaceWidth = 640;
+		m_WorkspaceHeight = 480;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +62,6 @@ namespace RTEGUI {
 		m_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
-
 		m_ControlManager = std::make_unique<GUIControlManager>();
 		m_ControlManager->Create(m_Screen.get(), m_Input.get(), "Assets");
 
@@ -69,66 +70,28 @@ namespace RTEGUI {
 
 		m_EditorManager->EnableMouse();
 
-		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768)));
+		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("EditorBase", "COLLECTIONBOX", nullptr, 0, 0, m_ResX, m_ResY)));
 		m_EditorBase->SetDrawBackground(true);
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
 		m_EditorBase->SetDrawType(GUICollectionBox::Color);
 
+		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("LeftColumn", "COLLECTIONBOX", m_EditorBase.get(), 0, 0, 290, m_ResY)));
+		m_LeftColumn->SetDrawBackground(true);
+		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
+		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
+
 		// Add an area showing the editing box
-		GUICollectionBox *editorArea = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("editArea", "COLLECTIONBOX", m_EditorBase.get(), m_RootOriginX, m_RootOriginY, 640, 480));
-		editorArea->SetDrawBackground(true);
-		editorArea->SetDrawColor(makecol(64, 64, 64));
-		editorArea->SetDrawType(GUICollectionBox::Color);
+		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight));
+		workspace->SetDrawBackground(true);
+		workspace->SetDrawColor(makecol(64, 64, 64));
+		workspace->SetDrawType(GUICollectionBox::Color);
 
 		// Add the root collection box for the edited document
-		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, 640, 480));
+		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight));
 		rootBox->SetDrawBackground(false);
 		m_RootControl.reset(rootBox);
 
-		// Add the left tool buttons
-		GUIButton *quitButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("QuitButton", "BUTTON", m_EditorBase.get(), 5, 5, 80, 20));
-		quitButton->SetText("Quit");
-		GUIButton *loadButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("LoadButton", "BUTTON", m_EditorBase.get(), 5, 30, 80, 20));
-		loadButton->SetText("Load");
-		GUIButton *addButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("AddButton", "BUTTON", m_EditorBase.get(), 90, 30, 40, 20));
-		addButton->SetText("Add");
-		GUIButton *saveButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveButton", "BUTTON", m_EditorBase.get(), 5, 55, 80, 20));
-		saveButton->SetText("Save");
-		GUIButton *saveAsButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveAsButton", "BUTTON", m_EditorBase.get(), 5, 80, 80, 20));
-		saveAsButton->SetText("Save As");
-
-		GUIButton *addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", m_EditorBase.get(), 160, 5, 80, 20));
-		addControlButton->SetText("COLLECTIONBOX");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LISTBOX", "BUTTON", m_EditorBase.get(), 160, 30, 80, 20));
-		addControlButton->SetText("LISTBOX");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_BUTTON", "BUTTON", m_EditorBase.get(), 160, 55, 80, 20));
-		addControlButton->SetText("BUTTON");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", m_EditorBase.get(), 160, 80, 80, 20));
-		addControlButton->SetText("COMBOBOX");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LABEL", "BUTTON", m_EditorBase.get(), 250, 5, 80, 20));
-		addControlButton->SetText("LABEL");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", m_EditorBase.get(), 250, 30, 80, 20));
-		addControlButton->SetText("CHECKBOX");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", m_EditorBase.get(), 250, 55, 80, 20));
-		addControlButton->SetText("TEXTBOX");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", m_EditorBase.get(), 250, 80, 80, 20));
-		addControlButton->SetText("RADIOBUTTON");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", m_EditorBase.get(), 340, 5, 80, 20));
-		addControlButton->SetText("SCROLLBAR");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SLIDER", "BUTTON", m_EditorBase.get(), 340, 30, 80, 20));
-		addControlButton->SetText("SLIDER");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", m_EditorBase.get(), 340, 55, 80, 20));
-		addControlButton->SetText("PROGRESSBAR");
-		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TAB", "BUTTON", m_EditorBase.get(), 340, 80, 80, 20));
-		addControlButton->SetText("TAB");
-
-		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("props", "PROPERTYPAGE", m_EditorBase.get(), 5, 120, 250, 250)));
-
-		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("active", "LISTBOX", m_EditorBase.get(), 5, 400, 150, 250)));
-
-		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("snap", "CHECKBOX", m_EditorBase.get(), 450, 10, 80, 16));
-		snapCheckbox->SetText("Snap");
-		snapCheckbox->SetCheck(GUICheckbox::Checked);
+		CreateEditorElements();
 
 		ClearSelection();
 
@@ -137,10 +100,68 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIEditorApp::CreateEditorElements() {
+		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 200, 55));
+		filePanel->SetDrawType(GUICollectionBox::Panel);
+
+		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("LoadButton", "BUTTON", filePanel, 5, 5, 60, 20));
+		toolboxButton->SetText("Load");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("AddButton", "BUTTON", filePanel, 5, 30, 60, 20));
+		toolboxButton->SetText("Add File");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveButton", "BUTTON", filePanel, 70, 5, 60, 20));
+		toolboxButton->SetText("Save");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveAsButton", "BUTTON", filePanel, 70, 30, 60, 20));
+		toolboxButton->SetText("Save As");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("QuitButton", "BUTTON", filePanel, 135, 5, 60, 20));
+		toolboxButton->SetText("Quit");
+
+		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), filePanel->GetRelXPos(), filePanel->GetRelYPos() + 65, 270, 155));
+		editorControls->SetDrawType(GUICollectionBox::Panel);
+
+		GUICollectionBox *elementPanel = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("NewElementPanel", "COLLECTIONBOX", editorControls, 5, 25, 260, 105));
+		elementPanel->SetDrawType(GUICollectionBox::Panel);
+
+		GUIButton *elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", elementPanel, 5, 5, 80, 20));
+		elementButton->SetText("CollectionBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LISTBOX", "BUTTON", elementPanel, 5, 30, 80, 20));
+		elementButton->SetText("ListBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_BUTTON", "BUTTON", elementPanel, 5, 55, 80, 20));
+		elementButton->SetText("Button");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", elementPanel, 5, 80, 80, 20));
+		elementButton->SetText("ComboBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LABEL", "BUTTON", elementPanel, 90, 5, 80, 20));
+		elementButton->SetText("Label");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", elementPanel, 90, 30, 80, 20));
+		elementButton->SetText("CheckBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", elementPanel, 90, 55, 80, 20));
+		elementButton->SetText("TextBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", elementPanel, 90, 80, 80, 20));
+		elementButton->SetText("RadioButton");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", elementPanel, 175, 5, 80, 20));
+		elementButton->SetText("ScrollBar");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SLIDER", "BUTTON", elementPanel, 175, 30, 80, 20));
+		elementButton->SetText("Slider");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", elementPanel, 175, 55, 80, 20));
+		elementButton->SetText("ProgressBar");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TAB", "BUTTON", elementPanel, 175, 80, 80, 20));
+		elementButton->SetText("Tab");
+
+		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelXPos() + 5, elementPanel->GetRelYPos() - 20, 100, 20));
+		newElementLabel->SetText("Add New Element :");
+
+		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("SnapCheckBox", "CHECKBOX", editorControls, gridSizeLabel->GetRelXPos() + 110, gridSizeLabel->GetRelYPos(), 75, 15));
+		snapCheckbox->SetText("Snap to Grid");
+		snapCheckbox->SetCheck(GUICheckbox::Checked);
+
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 245)));
+
+		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_LeftColumn.get(), m_PropertyPage.get()->GetRelXPos(), m_PropertyPage.get()->GetRelYPos() + 255, 270, 105)));
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	bool GUIEditorApp::Update() {
 		m_EditorManager->Update();
-
-		// Process the editor events
 		GUIEvent event;
 		while (m_EditorManager->GetEvent(&event)) {
 			switch (event.GetType()) {
@@ -168,42 +189,32 @@ namespace RTEGUI {
 
 					// Add a control
 					if (event.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
-						std::string Class = (dynamic_cast<GUIButton *>(event.GetControl()))->GetText();
-						GUIControl *Parent = m_RootControl.get();
+						std::string controlClass = event.GetControl()->GetName().substr(2, std::string::npos);
+						GUIControl *parent = m_RootControl.get();
 
 						// Is the focused control a container?
-						if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { Parent = m_SelectionInfo.Control; }
+						if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { parent = m_SelectionInfo.Control; }
 
 						// Find a suitable control name
-						std::string Name = GenerateControlName(Class/*.substr(2)*/);
+						std::string name = GenerateControlName(controlClass);
 
-						if (Parent) { m_ControlManager->AddControl(Name, Class, Parent, 0, 0, -1, -1); }
-
+						if (parent) { m_ControlManager->AddControl(name, controlClass, parent, 0, 0, -1, -1); }
 						break;
 					}
-
 					break;
-
-				// Notification
 				case GUIEvent::Notification:
-
 					// Property Page changed
-					if (event.GetControl()->GetName() == "props") {
-
+					if (event.GetControl()->GetName() == "PropertyPage") {
 						if (event.GetMsg() == GUIPropertyPage::Enter) {
 							// Update the focused control properties
-
-							// Apply the properties
-							GUIControl *C = m_SelectionInfo.Control;
-							if (C) {
-								C->ApplyProperties(m_PropertyPage->GetPropertyValues());
+							GUIControl *control = m_SelectionInfo.Control;
+							if (control) {
+								control->ApplyProperties(m_PropertyPage->GetPropertyValues());
 								// Update the active box list in case the name of a top-level box changed
 								UpdateActiveBoxList();
 							}
-
 							m_UnsavedChanges = true;
 						}
-
 						if (event.GetMsg() == GUIPropertyPage::Changed) {
 							// The properties are dirty and need to be updated
 							m_UnsavedChanges = true;
@@ -211,19 +222,18 @@ namespace RTEGUI {
 					}
 
 					// Active Box changed
-					if (event.GetControl()->GetName() == "active" && event.GetMsg() == GUIListBox::MouseDown) {
-						const GUIListPanel::Item *pItem = m_ActiveBoxList->GetSelected();
-						if (pItem) {
+					if (event.GetControl()->GetName() == "ActiveCollectionBoxes" && event.GetMsg() == GUIListBox::MouseDown) {
+						const GUIListPanel::Item *item = m_ActiveBoxList->GetSelected();
+						if (item) {
 							// Try to find the box of that name, and select it
-							GUIControl *pBoxControl = m_ControlManager->GetControl(pItem->m_Name);
-							if (pBoxControl) {
+							GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name);
+							if (boxControl) {
 								m_SelectionInfo.GrabbedControl = false;
 								m_SelectionInfo.GrabbedHandle = false;
-								m_SelectionInfo.Control = pBoxControl;
+								m_SelectionInfo.Control = boxControl;
 							}
-						}
-						// Deselection if clicked on no list item
-						else {
+						} else {
+							// Deselection if clicked on no list item
 							m_SelectionInfo.GrabbedControl = false;
 							m_SelectionInfo.GrabbedHandle = false;
 							m_SelectionInfo.Control = nullptr;
@@ -231,25 +241,17 @@ namespace RTEGUI {
 					}
 
 					// Snap
-					if (event.GetControl()->GetName() == "snap") { m_SnapToGrid = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
+					if (event.GetControl()->GetName() == "SnapCheckBox") { m_SnapToGrid = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
 					break;
-
 				default:
 					break;
 			}
 		}
-
 		m_EditorManager->Draw();
-
 		m_ControlManager->Draw();
-
-		// Process the editor
 		ProcessEditor();
-
 		if (m_SelectionInfo.Control) { DrawSelectedControl(m_SelectionInfo.Control); }
-
 		m_EditorManager->DrawMouse();
-
 		return !m_Quit;
 	}
 
@@ -257,6 +259,8 @@ namespace RTEGUI {
 
 	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
 		m_EditorBase.get()->Resize(resizeInfo->new_w, resizeInfo->new_h);
+		m_LeftColumn.get()->Resize(m_LeftColumn.get()->GetWidth(), resizeInfo->new_h);
+		m_ActiveBoxList.get()->Resize(m_ActiveBoxList.get()->GetWidth(), resizeInfo->new_h - m_ActiveBoxList.get()->GetRelYPos() - 5);
 		m_WindowResized = true;
 	}
 
