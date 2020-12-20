@@ -1,5 +1,5 @@
 #include "GUIEditorApp.h"
-#include "GUIEditorLib.h"
+#include "GUIEditorUtil.h"
 
 #include "GUIButton.h"
 #include "GUICheckbox.h"

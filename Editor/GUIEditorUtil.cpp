@@ -1,4 +1,4 @@
-#include "GUIEditorLib.h"
+#include "GUIEditorUtil.h"
 
 #include <Windows.h>
 #include <commdlg.h>
@@ -8,8 +8,8 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorLib::QuitMessageBox(const std::string &strMessage, const std::string &strTitle) {
-		int nRetCode = MessageBox(nullptr, strMessage.c_str(), strTitle.c_str(), MB_YESNOCANCEL);
+	int GUIEditorUtil::QuitMessageBox(const std::string &message, const std::string &title) {
+		int nRetCode = MessageBox(nullptr, message.c_str(), title.c_str(), MB_YESNOCANCEL);
 
 		if (nRetCode == IDNO) { return -1; }
 		if (nRetCode == IDYES) { return 1; }
@@ -18,7 +18,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorLib::DisplayLoadGUIFile(std::string *strFilename) {
+	bool GUIEditorUtil::DisplayLoadGUIFile(std::string *filename) {
 		OPENFILENAMEA ofn; // common dialog box structure
 		char szFile[260]; // File name
 
@@ -38,7 +38,7 @@ namespace RTEGUI {
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
 		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = NULL;
+		ofn.lpstrFileTitle = nullptr;
 		ofn.nMaxFileTitle = 0;
 		ofn.lpstrTitle = "Open";
 		ofn.lpstrInitialDir = szCurrentDir;
@@ -46,7 +46,7 @@ namespace RTEGUI {
 		ofn.lpstrDefExt = "ini";
 
 		if (GetOpenFileName(&ofn)) {
-			*strFilename = std::string(szFile);
+			*filename = std::string(szFile);
 			_chdir(szCurrentDir);
 			return true;
 		}
@@ -56,7 +56,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorLib::DisplaySaveGUIFile(std::string *strFilename) {
+	bool GUIEditorUtil::DisplaySaveGUIFile(std::string *filename) {
 		OPENFILENAMEA ofn; // common dialog box structure
 		char szFile[260]; // File name
 
@@ -76,7 +76,7 @@ namespace RTEGUI {
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
 		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = NULL;
+		ofn.lpstrFileTitle = nullptr;
 		ofn.nMaxFileTitle = 0;
 		ofn.lpstrTitle = "Save As";
 		ofn.lpstrInitialDir = szCurrentDir;
@@ -93,7 +93,7 @@ namespace RTEGUI {
 					return false;
 				}
 			}
-			*strFilename = std::string(szFile);
+			*filename = std::string(szFile);
 			_chdir(szCurrentDir);
 			return true;
 		}

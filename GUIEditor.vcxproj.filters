@@ -24,9 +24,6 @@
     <ClCompile Include="Editor\GUIEditorApp.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\GUIEditorLib.cpp">
-      <Filter>Editor</Filter>
-    </ClCompile>
     <ClCompile Include="System\ContentFile.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -150,15 +147,15 @@
     <ClCompile Include="GUI\WinUtil.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\GUIEditorUtil.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Editor\GUIEditorApp.h">
-      <Filter>Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Editor\GUIEditorLib.h">
       <Filter>Editor</Filter>
     </ClInclude>
     <ClInclude Include="System\ContentFile.h">
@@ -295,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Wrappers\Interface.h">
       <Filter>GUI\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\GUIEditorUtil.h">
+      <Filter>Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
