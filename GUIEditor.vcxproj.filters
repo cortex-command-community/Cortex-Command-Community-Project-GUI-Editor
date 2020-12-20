@@ -33,20 +33,8 @@
     <ClCompile Include="System\RTEError.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="System\Timer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\TimerMan.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Vector.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="System\Writer.cpp">
       <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIBanner.cpp">
-      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GUIButton.cpp">
       <Filter>GUI</Filter>
@@ -141,9 +129,6 @@
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\WinUtil.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -173,9 +158,6 @@
     <ClInclude Include="System\Timer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\TimerMan.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\Vector.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -183,9 +165,6 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUI.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIBanner.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIButton.h">
@@ -279,9 +258,6 @@
       <Filter>GUI\Wrappers</Filter>
     </ClInclude>
     <ClInclude Include="System\StandardIncludes.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Constants.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="GUI\WinUtil.h">

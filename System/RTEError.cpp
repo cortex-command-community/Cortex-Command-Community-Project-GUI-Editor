@@ -1,15 +1,10 @@
 #include "RTEError.h"
-//#include "Constants.h"
 
 namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	extern void ShowMessageBox(std::string message) { allegro_message(message.c_str()); }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	extern bool RTEAbortFunc(const char *description, const char *file, int line) {
+	bool RTEAbortFunc(const char *description, const char *file, int line) {
 		// Ditch the video mode so the message box appears without problems
 		if (screen != 0) { set_gfx_mode(GFX_TEXT, 0, 0, 0, 0); }
 		// Set title of the messagebox
@@ -17,7 +12,7 @@ namespace RTE {
 
 		char message[512];
 
-#if defined DEBUG_BUILD	
+#if defined DEBUG_BUILD
 		// Show message box with explanation
 		std::snprintf(message, sizeof(message), "Runtime Error in file %s, line %i, because:\n\n%s\n\nThe last frame has been dumped to 'abortscreen.bmp'", file, line, description);
 		allegro_message(message);
@@ -32,7 +27,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	extern bool RTEAbortFunc(const std::string description, const char *file, int line) {
+	bool RTEAbortFunc(const std::string description, const char *file, int line) {
 		return RTEAbortFunc(description.c_str(), file, line);
 	}
 
@@ -42,7 +37,7 @@ namespace RTE {
 		if (!expression) {
 			// TODO: Make this display a box in the game asking whether to ignore or abort. For now, always abort.
 			RTEAbortFunc(description, __FILE__, __LINE__);
-			
+
 			// True so that the debugbreak code is run and the debugger goes there.
 			return true;
 		}
@@ -51,7 +46,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	extern bool RTEAssertFunc(bool expression, std::string description, const char *file, int line, bool &alwaysIgnore) {
+	bool RTEAssertFunc(bool expression, std::string description, const char *file, int line, bool &alwaysIgnore) {
 		return RTEAssertFunc(expression, description.c_str(), file, line, alwaysIgnore);
 	}
 }

@@ -123,8 +123,6 @@
   <ItemGroup>
     <ClCompile Include="Editor\GUIEditorApp.cpp" />
     <ClCompile Include="Editor\GUIEditorUtil.cpp" />
-    <ClCompile Include="GUI\GUI.cpp" />
-    <ClCompile Include="GUI\GUIBanner.cpp" />
     <ClCompile Include="GUI\GUIButton.cpp" />
     <ClCompile Include="GUI\GUICheckbox.cpp" />
     <ClCompile Include="GUI\GUICollectionBox.cpp" />
@@ -164,16 +162,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="System\Timer.cpp" />
-    <ClCompile Include="System\TimerMan.cpp" />
-    <ClCompile Include="System\Vector.cpp" />
     <ClCompile Include="System\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\GUIEditorApp.h" />
     <ClInclude Include="Editor\GUIEditorUtil.h" />
     <ClInclude Include="GUI\GUI.h" />
-    <ClInclude Include="GUI\GUIBanner.h" />
     <ClInclude Include="GUI\GUIButton.h" />
     <ClInclude Include="GUI\GUICheckbox.h" />
     <ClInclude Include="GUI\GUICollectionBox.h" />
@@ -207,7 +201,6 @@
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
     <ClInclude Include="GUI\Wrappers\Interface.h" />
     <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="System\Constants.h" />
     <ClInclude Include="System\ContentFile.h" />
     <ClInclude Include="System\Reader.h" />
     <ClInclude Include="System\RTEError.h" />
@@ -215,7 +208,6 @@
     <ClInclude Include="System\Singleton.h" />
     <ClInclude Include="System\StandardIncludes.h" />
     <ClInclude Include="System\Timer.h" />
-    <ClInclude Include="System\TimerMan.h" />
     <ClInclude Include="System\Vector.h" />
     <ClInclude Include="System\Writer.h" />
   </ItemGroup>

@@ -5,7 +5,6 @@
 #include "GUICheckbox.h"
 #include "AllegroBitmap.h"
 #include "RTEError.h"
-#include "TimerMan.h"
 
 namespace RTEGUI {
 

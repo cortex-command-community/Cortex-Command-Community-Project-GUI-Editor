@@ -1,11 +1,10 @@
 #include "GUIEditorApp.h"
 #include "GUIEditorUtil.h"
 #include "ContentFile.h"
-#include "TimerMan.h"
+#include "allegro.h"
+#include "winalleg.h"
 
 using namespace RTEGUI;
-
-extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +13,6 @@ extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
 /// </summary>
 int main(int argc, char **argv) {
 	allegro_init();
-
 	if (!g_GUIEditor.Initialize()) { std::exit(EXIT_FAILURE); }
 
 	while (true) {
@@ -24,11 +22,9 @@ int main(int argc, char **argv) {
 		}
 		g_GUIEditor.FlipFrameBuffers();
 	}
-
 	ContentFile::FreeAllLoaded();
 
 	std::exit(EXIT_SUCCESS);
-	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
