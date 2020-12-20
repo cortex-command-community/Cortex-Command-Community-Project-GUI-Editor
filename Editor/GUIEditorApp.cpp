@@ -120,6 +120,8 @@ namespace RTEGUI {
 		addControlButton->SetText("SLIDER");
 		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", m_EditorBase.get(), 340, 55, 80, 20));
 		addControlButton->SetText("PROGRESSBAR");
+		addControlButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TAB", "BUTTON", m_EditorBase.get(), 340, 80, 80, 20));
+		addControlButton->SetText("TAB");
 
 		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("props", "PROPERTYPAGE", m_EditorBase.get(), 5, 120, 250, 250)));
 
