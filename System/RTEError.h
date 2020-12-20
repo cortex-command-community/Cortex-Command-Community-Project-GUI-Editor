@@ -3,9 +3,6 @@
 
 #include "allegro.h"
 
-#undef max
-#undef min
-
 #if defined DEBUG_BUILD
 #define AbortAction __debugbreak();
 #else
