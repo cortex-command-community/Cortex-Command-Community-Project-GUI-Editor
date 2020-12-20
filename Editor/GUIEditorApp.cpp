@@ -81,7 +81,7 @@ namespace RTEGUI {
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
 		m_EditorBase->SetDrawType(GUICollectionBox::Color);
 
-		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("LeftColumn", "COLLECTIONBOX", m_EditorBase.get(), 0, 0, 290, m_ResY)));
+		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 290, m_ResY)));
 		m_LeftColumn->SetDrawBackground(true);
 		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
 		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
@@ -279,10 +279,12 @@ namespace RTEGUI {
 					break;
 			}
 		}
-		m_EditorManager->Draw();
-		m_ControlManager->Draw();
 		ProcessEditor();
+
+		m_EditorBase.get()->Draw(m_Screen.get());
+		m_ControlManager->Draw();
 		if (m_SelectionInfo.Control) { DrawSelectedControl(m_SelectionInfo.Control); }
+		m_LeftColumn.get()->Draw(m_Screen.get());
 		m_EditorManager->DrawMouse();
 		return !m_Quit;
 	}
