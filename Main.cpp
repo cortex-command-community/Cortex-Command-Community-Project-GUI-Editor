@@ -27,10 +27,8 @@ int main(int argc, char *argv[]) {
 	LOCK_FUNCTION(QuitHandler);
 	set_close_button_callback(QuitHandler);
 
-	new TimerMan();
 	g_TimerMan.Create();
 
-	new GUIEditorApp();
 	if (!g_GUIEditor.Initialize()) {
 		std::exit(EXIT_FAILURE);
 	}
