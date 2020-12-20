@@ -144,11 +144,6 @@ namespace RTEGUI {
 		void DrawSelectionHandle(int xPos, int yPos, int width, int height) const;
 
 		/// <summary>
-		/// Clears selection info.
-		/// </summary>
-		void ClearSelection();
-
-		/// <summary>
 		/// Calculates new position/size of a control given a handle movement.
 		/// </summary>
 		/// <param name="MouseX">Mouse.</param>
@@ -190,6 +185,19 @@ namespace RTEGUI {
 			int GrabY;
 			int	ClickX;
 			int ClickY;
+
+			/// <summary>
+			/// Clears selection info.
+			/// </summary>
+			void ClearSelection() {
+				GrabbedControl = false;
+				GrabbedHandle = false;
+				TriggerGrab = false;
+				Control = nullptr;
+				HandleIndex = 0;
+				GrabX = 0;
+				GrabY = 0;
+			}
 		};
 
 		bool m_Quit;

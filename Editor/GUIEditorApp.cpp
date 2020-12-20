@@ -1,24 +1,29 @@
 #include "GUIEditorApp.h"
 #include "GUIEditorUtil.h"
-
 #include "GUIButton.h"
 #include "GUICheckbox.h"
-#include "AllegroBitmap.h"
+#include "GUIListBox.h"
+#include "GUILabel.h"
+#include "GUITextBox.h"
 #include "RTEError.h"
+#include "allegro.h"
+#include "winalleg.h"
 
 namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/// <summary>
-	/// Quit Handler for Allegro.
+	/// Quit handler for Allegro.
 	/// </summary>
-	void QuitHandler() { g_GUIEditor.OnQuitButton(); }
+	static void QuitHandler() { g_GUIEditor.OnQuitButton(); }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/// <summary>
-	/// 
+	/// Resize handler for Allegro.
 	/// </summary>
-	void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
+	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -94,7 +99,8 @@ namespace RTEGUI {
 
 		CreateEditorElements();
 
-		ClearSelection();
+
+		m_SelectionInfo.ClearSelection();
 
 		return true;
 	}
@@ -351,7 +357,7 @@ namespace RTEGUI {
 
 			// Clear settings
 			m_UnsavedChanges = false;
-			ClearSelection();
+			m_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 
 			UpdateActiveBoxList();
@@ -679,20 +685,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::ClearSelection() {
-		m_SelectionInfo.GrabbedControl = false;
-		m_SelectionInfo.GrabbedHandle = false;
-		m_SelectionInfo.TriggerGrab = false;
-
-		m_SelectionInfo.Control = nullptr;
-		m_SelectionInfo.HandleIndex = 0;
-
-		m_SelectionInfo.GrabX = 0;
-		m_SelectionInfo.GrabY = 0;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool GUIEditorApp::MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const {
 		return (mousePosX >= xPos && mousePosX <= xPos + width && mousePosY >= yPos && mousePosY <= yPos + height) ? true : false;
 	}
@@ -768,8 +760,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	std::string GUIEditorApp::GenerateControlName(std::string controlType) const {
-		// 10,000 should be enough
-		for (int i = 1; i < 10000; i++) {
+		for (int i = 1; i < 1000; i++) {
 			std::string name = controlType;
 			// Use a lower case version of the string
 			std::transform(name.begin(), name.end(), name.begin(), tolower);
@@ -792,7 +783,7 @@ namespace RTEGUI {
 				return name;
 			}
 		}
-		// Error: Tried all 10,000 numbers
+		// Error: Tried all 1000 numbers
 		return controlType;
 	}
 
