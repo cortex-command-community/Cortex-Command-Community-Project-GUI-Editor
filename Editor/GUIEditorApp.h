@@ -1,12 +1,11 @@
 #ifndef _GUIEDITORAPP_
 #define _GUIEDITORAPP_
 
-#include "allegro.h"
-#include "winalleg.h"
-
 #include "GUI.h"
 #include "GUIPropertyPage.h"
 #include "GUIListBox.h"
+#include "AllegroScreen.h"
+#include "AllegroInput.h"
 
 #include "Singleton.h"
 
@@ -34,12 +33,14 @@ namespace RTE {
 			int m_GrabY;
 			int	m_ClickX;
 			int m_ClickY;
+
+
 		};
 
 		/// <summary>
 		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
 		/// </summary>
-		GUIEditorApp() { Initialize(); }
+		GUIEditorApp() { Clear(); }
 
 		/// <summary>
 		/// Destructor method used to clean up a GUIEditorApp object.
@@ -119,7 +120,7 @@ namespace RTE {
 		/// <param name="Width"></param>
 		/// <param name="Height"></param>
 		/// <returns>True/False.</returns>
-		bool MouseInsideBox(int MouseX, int MouseY, int X, int Y, int Width, int Height);
+		bool MouseInsideBox(int mouseX, int mouseY, int xPos, int yPos, int width, int height) const;
 
 		/// <summary>
 		/// Draws selection info around a control.
@@ -134,7 +135,7 @@ namespace RTE {
 		/// <param name="Y"></param>
 		/// <param name="Width">Size.</param>
 		/// <param name="Height"></param>
-		void DrawSelectionHandle(int X, int Y, int Width, int Height);
+		void DrawSelectionHandle(int xPos, int yPos, int width, int height) const;
 
 		/// <summary>
 		/// Clears selection info.
@@ -164,17 +165,20 @@ namespace RTE {
 		/// </summary>
 		/// <param name="Position">Position.</param>
 		/// <returns></returns>
-		int ProcessSnapCoord(int Position);
+		int ProcessSnapCoord(int position) const;
 
 	private:
 
-		int m_BlackColor;
+		int m_ResX;
+		int m_ResY;
 		BITMAP *m_BackBuffer;
-		GUIControlManager *m_ControlManager;
-		GUIControlManager *m_EditorManager;
-		GUIPropertyPage	*m_PropertyPage;
-		GUIListBox *m_ActiveBoxList;
-		GUIControl *m_RootControl;
+		std::unique_ptr<AllegroScreen> g_Screen;
+		std::unique_ptr<AllegroInput> g_Input;
+		std::unique_ptr<GUIControlManager> m_ControlManager;
+		std::unique_ptr<GUIControlManager> m_EditorManager;
+		std::unique_ptr<GUIPropertyPage> m_PropertyPage;
+		std::unique_ptr<GUIListBox> m_ActiveBoxList;
+		std::unique_ptr<GUIControl> m_RootControl;
 		Selection m_SelectionInfo;
 		std::string m_Filename;
 
@@ -182,6 +186,13 @@ namespace RTE {
 		bool m_UnsavedChanges;
 		bool m_SnapToGrid;
 		int	m_GridSize;
+		int m_RootOriginX;
+		int m_RootOriginY;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void Clear();
 
 		// Disallow the use of some implicit methods.
 		GUIEditorApp(const GUIEditorApp &reference) = delete;

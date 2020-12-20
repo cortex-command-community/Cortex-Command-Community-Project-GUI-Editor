@@ -4,94 +4,71 @@
 #include "GUICollectionBox.h"
 #include "GUIButton.h"
 #include "GUICheckbox.h"
-
-#include "AllegroScreen.h"
-#include "AllegroInput.h"
 #include "AllegroBitmap.h"
-
 #include "RTEError.h"
-
 #include "TimerMan.h"
-
-#define ROOTORIGINX 300
-#define ROOTORIGINY 120
 
 namespace RTE {
 
 	volatile bool g_Quit;
-	AllegroScreen *g_Screen;
-	AllegroInput *g_Input;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::Clear() {
+		m_ResX = 1024;
+		m_ResY = 768;
+		m_BackBuffer = nullptr;
+		m_ControlManager = nullptr;
+		m_EditorManager = nullptr;
+		m_PropertyPage = nullptr;
+		m_ActiveBoxList = nullptr;
+		m_RootControl = nullptr;
+		m_Filename.clear();
+		m_UnsavedChanges = false;
+		m_SnapToGrid = true;
+		m_GridSize = 5;
+		m_RootOriginX = 300;
+		m_RootOriginY = 120;
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorApp::Initialize() {
-		install_keyboard();
-
-		int ResW = 1024;
-		int ResH = 768;
-		int BPP = 32;
-
-		COLOR_MAP m_LessTransTable;
-		COLOR_MAP m_HalfTransTable;
-		COLOR_MAP m_MoreTransTable;
-
-		set_color_depth(BPP);
-		set_gfx_mode(GFX_AUTODETECT_WINDOWED, ResW, ResH, 0, 0);
-		set_window_title("Cortex Command: GUI Editor");
-
+		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);
+		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
 
-		PALETTE ccpal;
-		get_palette(ccpal);
-		create_trans_table(&m_LessTransTable, ccpal, 192, 192, 192, 0);
-		create_trans_table(&m_HalfTransTable, ccpal, 128, 128, 128, 0);
-		create_trans_table(&m_MoreTransTable, ccpal, 64, 64, 64, 0);
-		color_map = &m_HalfTransTable;
-
-		m_BackBuffer = create_bitmap_ex(BPP, ResW, ResH);
+		m_BackBuffer = create_bitmap(m_ResX, m_ResY);
 		clear_to_color(m_BackBuffer, 0);
 
-		g_Screen = new AllegroScreen(m_BackBuffer);
-		g_Input = new AllegroInput(-1);
-
-		PALETTE newPalette;
-
-		// Set the current palette
-		//set_palette(newPalette);
-
-		// Update what black is now with the loaded palette
-		m_BlackColor = bestfit_color(newPalette, 0, 0, 0);
-
-		// Free the temp bitmap that had the palette
-		//destroy_bitmap(tempBitmap);
-
-		clear_to_color(m_BackBuffer, m_BlackColor);
+		g_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
+		g_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
-		m_ControlManager = new GUIControlManager();
-		m_ControlManager->Create(g_Screen, g_Input, "Assets/EditorSkin");
+		m_ControlManager = std::make_unique<GUIControlManager>();
+		m_ControlManager->Create(g_Screen.get(), g_Input.get(), "Assets/EditorSkin");
 
-		m_EditorManager = new GUIControlManager();
-		m_EditorManager->Create(g_Screen, g_Input, "Assets/EditorSkin");
+		m_EditorManager = std::make_unique<GUIControlManager>();
+		m_EditorManager->Create(g_Screen.get(), g_Input.get(), "Assets/EditorSkin");
 
 		m_EditorManager->EnableMouse();
 
 
-		GUICollectionBox * g_EdBase = (GUICollectionBox *)m_EditorManager->AddControl("base", "COLLECTIONBOX", NULL, 0, 0, 1024, 768);
+		GUICollectionBox * g_EdBase = (GUICollectionBox *)m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768);
 		g_EdBase->SetDrawBackground(true);
 		g_EdBase->SetDrawColor(makecol(32, 32, 32));
 		g_EdBase->SetDrawType(GUICollectionBox::Color);
 
 		// Add an area showing the editing box
-		GUICollectionBox *g_EdArea = (GUICollectionBox *)m_EditorManager->AddControl("editArea", "COLLECTIONBOX", g_EdBase, ROOTORIGINX, ROOTORIGINY, 640, 480);
+		GUICollectionBox *g_EdArea = (GUICollectionBox *)m_EditorManager->AddControl("editArea", "COLLECTIONBOX", g_EdBase, m_RootOriginX, m_RootOriginY, 640, 480);
 		g_EdArea->SetDrawBackground(true);
 		g_EdArea->SetDrawColor(makecol(64, 64, 64));
 		g_EdArea->SetDrawType(GUICollectionBox::Color);
 
 		// Add the root collection box for the edited document
-		GUICollectionBox *Root = (GUICollectionBox *)m_ControlManager->AddControl("root", "COLLECTIONBOX", NULL, ROOTORIGINX, ROOTORIGINY, 640, 480);
+		GUICollectionBox *Root = (GUICollectionBox *)m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, 640, 480);
 		Root->SetDrawBackground(false);
-		m_RootControl = Root;
+		m_RootControl.reset(Root);
 
 		// Add the left tool buttons
 		GUIButton *Quit = (GUIButton *)m_EditorManager->AddControl("btnQuit", "BUTTON", g_EdBase, 5, 5, 80, 20);
@@ -128,32 +105,14 @@ namespace RTE {
 		Ctrl = (GUIButton *)m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", g_EdBase, 340, 55, 80, 20);
 		Ctrl->SetText("TEXTBOX");
 
-		m_PropertyPage = (GUIPropertyPage *)m_EditorManager->AddControl("props", "PROPERTYPAGE", g_EdBase, 5, 120, 250, 250);
+		m_PropertyPage.reset((GUIPropertyPage *)m_EditorManager->AddControl("props", "PROPERTYPAGE", g_EdBase, 5, 120, 250, 250));
 
-		m_ActiveBoxList = (GUIListBox *)m_EditorManager->AddControl("active", "LISTBOX", g_EdBase, 5, 400, 150, 250);
+		m_ActiveBoxList.reset((GUIListBox *)m_EditorManager->AddControl("active", "LISTBOX", g_EdBase, 5, 400, 150, 250));
 
 		GUICheckbox *Snap = (GUICheckbox *)m_EditorManager->AddControl("snap", "CHECKBOX", g_EdBase, 450, 10, 80, 16);
 		Snap->SetText("Snap");
 		Snap->SetCheck(GUICheckbox::Checked);
 
-		m_SnapToGrid = true;
-		m_GridSize = 5;
-
-
-		/*m_ControlManager->Load("Base.rte/GUIs/ObjectPickerGUI.ini");
-		GUIControl *C = *m_ControlManager->GetControlList()->begin();
-		m_RootControl = C;
-		C->Move(ROOTORIGINX, ROOTORIGINY);
-		C->StoreProperties();
-
-		GUIProperties cProps;
-		cProps.Update(C->GetProperties(), true);
-		C->GetPanel()->BuildProperties(&cProps);
-		*/
-
-
-		// Clear settings
-		m_UnsavedChanges = false;
 		ClearSelection();
 
 		return true;
@@ -162,7 +121,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorApp::Update() {
-		clear_to_color(m_BackBuffer, m_BlackColor);
+		clear_to_color(m_BackBuffer, 0);
 
 		m_EditorManager->Update();
 
@@ -173,10 +132,6 @@ namespace RTE {
 
 				// Command
 				case GUIEvent::Command:
-
-					// Invoke an update
-					//EDInvokeUpdate();
-
 					// Quit
 					if (Event.GetControl()->GetName() == "btnQuit") {
 						OnQuitButton();
@@ -210,7 +165,7 @@ namespace RTE {
 					// Add a control
 					if (Event.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
 						std::string Class = ((GUIButton *)Event.GetControl())->GetText();
-						GUIControl *Parent = m_RootControl;
+						GUIControl *Parent = m_RootControl.get();
 
 						// Is the focused control a container?
 						if (m_SelectionInfo.m_Control) {
@@ -327,9 +282,9 @@ namespace RTE {
 			m_ControlManager->Load(strFilename, addControls);
 
 			GUIControl *C = m_ControlManager->GetControlList()->front();
-			m_RootControl = C;
+			m_RootControl.reset(C);
 
-			C->Move(ROOTORIGINX, ROOTORIGINY);
+			C->Move(m_RootOriginX, m_RootOriginY);
 
 			C->StoreProperties();
 
@@ -359,7 +314,7 @@ namespace RTE {
 			m_ControlManager->Save(strFilename);
 
 			// Move it back
-			m_RootControl->Move(ROOTORIGINX, ROOTORIGINY);
+			m_RootControl->Move(m_RootOriginX, m_RootOriginY);
 
 			m_Filename = strFilename;
 
@@ -379,7 +334,7 @@ namespace RTE {
 			m_ControlManager->Save(m_Filename);
 
 			// Move it back
-			m_RootControl->Move(ROOTORIGINX, ROOTORIGINY);
+			m_RootControl->Move(m_RootOriginX, m_RootOriginY);
 
 			m_UnsavedChanges = false;
 		}
@@ -446,7 +401,7 @@ namespace RTE {
 			}
 
 			// Update properties
-			if (!ControlUnderMouse(m_PropertyPage, MouseX, MouseY)) {
+			if (!ControlUnderMouse(m_PropertyPage.get(), MouseX, MouseY)) {
 				if (m_SelectionInfo.m_Control) {
 					m_SelectionInfo.m_Control->StoreProperties();
 
@@ -492,8 +447,8 @@ namespace RTE {
 
 		// Check if mouse clicked on a control
 		if (!m_SelectionInfo.m_GrabbedControl && !m_SelectionInfo.m_GrabbedHandle && Events[0] == GUIInput::Pushed) {
-			GUIControl *C = ControlUnderMouse(m_RootControl, MouseX, MouseY);
-			if (C && C != m_RootControl) {
+			GUIControl *C = ControlUnderMouse(m_RootControl.get(), MouseX, MouseY);
+			if (C && C != m_RootControl.get()) {
 				int X, Y, Width, Height;
 				C->GetControlRect(&X, &Y, &Width, &Height);
 
@@ -515,11 +470,11 @@ namespace RTE {
 				C->GetPanel()->BuildProperties(&P);
 				m_PropertyPage->SetPropertyValues(&P);
 
-			} else if (C == m_RootControl) {
+			} else if (C == m_RootControl.get()) {
 				// Unselect control
 				m_SelectionInfo.m_GrabbedControl = false;
 				m_SelectionInfo.m_GrabbedHandle = false;
-				m_SelectionInfo.m_Control = NULL;
+				m_SelectionInfo.m_Control = nullptr;
 
 				m_PropertyPage->ClearValues();
 			}
@@ -537,10 +492,10 @@ namespace RTE {
 
 		// Go through all the top-level (directly under root) controls and add only the ControlBoxs to the list here
 		std::vector<GUIControl *> *pControls = m_ControlManager->GetControlList();
-		GUICollectionBox *pBox = 0;
+		GUICollectionBox *pBox = nullptr;
 		for (std::vector<GUIControl *>::iterator itr = pControls->begin(); itr != pControls->end(); itr++) {
 			// Look for CollectionBoxes with the root control as parent
-			if ((pBox = dynamic_cast<GUICollectionBox *>(*itr)) && pBox->GetParent() == m_RootControl) {
+			if ((pBox = dynamic_cast<GUICollectionBox *>(*itr)) && pBox->GetParent() == m_RootControl.get()) {
 				m_ActiveBoxList->AddItem(pBox->GetName());
 				// Check if this is selected in the editor, and if so, select it in the list too
 				if (pBox == m_SelectionInfo.m_Control) { m_ActiveBoxList->SetSelectedIndex(m_ActiveBoxList->GetItemList()->size() - 1); }
@@ -665,9 +620,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::DrawSelectionHandle(int X, int Y, int Width, int Height) {
-		g_Screen->GetBitmap()->DrawRectangle(X - Width / 2, Y - Height / 2, Width, Height, 0xFF000000, true);
-		g_Screen->GetBitmap()->DrawRectangle(X - Width / 2, Y - Height / 2, Width, Height, 0xFFFFFFFF, false);
+	void GUIEditorApp::DrawSelectionHandle(int xPos, int yPos, int width, int height) const {
+		g_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFF000000, true);
+		g_Screen->GetBitmap()->DrawRectangle(xPos - width / 2, yPos - height / 2, width, height, 0xFFFFFFFF, false);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -677,7 +632,7 @@ namespace RTE {
 		m_SelectionInfo.m_GrabbedHandle = false;
 		m_SelectionInfo.m_TriggerGrab = false;
 
-		m_SelectionInfo.m_Control = NULL;
+		m_SelectionInfo.m_Control = nullptr;
 		m_SelectionInfo.m_HandleIndex = 0;
 
 		m_SelectionInfo.m_GrabX = 0;
@@ -686,11 +641,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorApp::MouseInsideBox(int MouseX, int MouseY, int X, int Y, int Width, int Height) {
-		if (MouseX >= X && MouseX <= X + Width && MouseY >= Y && MouseY <= Y + Height) {
-			return true;
-		}
-		return false;
+	bool GUIEditorApp::MouseInsideBox(int mouseX, int mouseY, int xPos, int yPos, int width, int height) const {
+		return (mouseX >= xPos && mouseX <= xPos + width && mouseY >= yPos && mouseY <= yPos + height) ? true : false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -796,20 +748,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorApp::ProcessSnapCoord(int Position) {
+	int GUIEditorApp::ProcessSnapCoord(int position) const {
 		if (m_SnapToGrid) {
-			float Fraction = (float)Position / (float)m_GridSize;
-			int Value = (int)Fraction;
-			Fraction -= Value;
-			Fraction = (Fraction >= 0.5F) ? 1 : 0;
-	/*
-			if (Fraction >= 0.5F)
-				Fraction = 1;
-			else
-				Fraction = 0;
-	*/
-			Position = (Value + Fraction) * m_GridSize;
+			float fraction = static_cast<float>(position) / static_cast<float>(m_GridSize);
+			float value = std::floor(fraction);
+			fraction -= value;
+			fraction = (fraction >= 0.5F) ? 1 : 0;
+			position = static_cast<int>((value + fraction)) * m_GridSize;
 		}
-		return Position;
+		return position;
 	}
 }

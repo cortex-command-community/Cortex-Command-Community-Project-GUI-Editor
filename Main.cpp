@@ -22,6 +22,9 @@ END_OF_FUNCTION(QuitHandler)
 /// </summary>
 int main(int argc, char *argv[]) {
 	allegro_init();
+	install_keyboard();
+
+	set_window_title("Cortex Command: GUI Editor");
 
 	// Enable the exit button on the window
 	LOCK_FUNCTION(QuitHandler);
