@@ -1,7 +1,6 @@
 #include "GUIEditorApp.h"
 #include "GUIEditorLib.h"
 
-#include "GUICollectionBox.h"
 #include "GUIButton.h"
 #include "GUICheckbox.h"
 #include "AllegroBitmap.h"
@@ -17,9 +16,15 @@ namespace RTE {
 	/// </summary>
 	void QuitHandler() { g_GUIEditor.OnQuitButton(); }
 
+	/// <summary>
+	/// 
+	/// </summary>
+	void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::Clear() {
+		m_WindowResized = false;
 		m_Quit = false;
 		m_ResX = 1024;
 		m_ResY = 768;
@@ -29,6 +34,7 @@ namespace RTE {
 		m_PropertyPage = nullptr;
 		m_ActiveBoxList = nullptr;
 		m_RootControl = nullptr;
+		m_EditorBase = nullptr;
 		m_Filename.clear();
 		m_UnsavedChanges = false;
 		m_SnapToGrid = true;
@@ -45,8 +51,10 @@ namespace RTE {
 		set_window_title("Cortex Command: GUI Editor");
 		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
 		set_close_button_callback(QuitHandler);
+		set_resize_callback(ResizeHandler);
 
-		m_BackBuffer = create_bitmap(m_ResX, m_ResY);
+		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
+		m_BackBuffer = create_bitmap(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 		clear_to_color(m_BackBuffer, 0);
 
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
@@ -62,13 +70,13 @@ namespace RTE {
 
 		m_EditorManager->EnableMouse();
 
-		GUICollectionBox *editorBase = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768));
-		editorBase->SetDrawBackground(true);
-		editorBase->SetDrawColor(makecol(32, 32, 32));
-		editorBase->SetDrawType(GUICollectionBox::Color);
+		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("base", "COLLECTIONBOX", nullptr, 0, 0, 1024, 768)));
+		m_EditorBase->SetDrawBackground(true);
+		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
+		m_EditorBase->SetDrawType(GUICollectionBox::Color);
 
 		// Add an area showing the editing box
-		GUICollectionBox *editorArea = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("editArea", "COLLECTIONBOX", editorBase, m_RootOriginX, m_RootOriginY, 640, 480));
+		GUICollectionBox *editorArea = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("editArea", "COLLECTIONBOX", m_EditorBase.get(), m_RootOriginX, m_RootOriginY, 640, 480));
 		editorArea->SetDrawBackground(true);
 		editorArea->SetDrawColor(makecol(64, 64, 64));
 		editorArea->SetDrawType(GUICollectionBox::Color);
@@ -79,45 +87,45 @@ namespace RTE {
 		m_RootControl.reset(Root);
 
 		// Add the left tool buttons
-		GUIButton *Quit = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnQuit", "BUTTON", editorBase, 5, 5, 80, 20));
+		GUIButton *Quit = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnQuit", "BUTTON", m_EditorBase.get(), 5, 5, 80, 20));
 		Quit->SetText("Quit");
-		GUIButton *Load = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnLoad", "BUTTON", editorBase, 5, 30, 80, 20));
+		GUIButton *Load = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnLoad", "BUTTON", m_EditorBase.get(), 5, 30, 80, 20));
 		Load->SetText("Load");
-		GUIButton *Add = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnAdd", "BUTTON", editorBase, 90, 30, 40, 20));
+		GUIButton *Add = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnAdd", "BUTTON", m_EditorBase.get(), 90, 30, 40, 20));
 		Add->SetText("Add");
-		GUIButton *Save = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSave", "BUTTON", editorBase, 5, 55, 80, 20));
+		GUIButton *Save = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSave", "BUTTON", m_EditorBase.get(), 5, 55, 80, 20));
 		Save->SetText("Save");
-		GUIButton *SaveAs = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSaveAs", "BUTTON", editorBase, 5, 80, 80, 20));
+		GUIButton *SaveAs = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("btnSaveAs", "BUTTON", m_EditorBase.get(), 5, 80, 80, 20));
 		SaveAs->SetText("Save As");
 
-		GUIButton *Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_BUTTON", "BUTTON", editorBase, 160, 5, 80, 20));
+		GUIButton *Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_BUTTON", "BUTTON", m_EditorBase.get(), 160, 5, 80, 20));
 		Ctrl->SetText("BUTTON");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", editorBase, 160, 30, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_CHECKBOX", "BUTTON", m_EditorBase.get(), 160, 30, 80, 20));
 		Ctrl->SetText("CHECKBOX");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", editorBase, 160, 55, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COLLECTIONBOX", "BUTTON", m_EditorBase.get(), 160, 55, 80, 20));
 		Ctrl->SetText("COLLECTIONBOX");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", editorBase, 160, 80, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_COMBOBOX", "BUTTON", m_EditorBase.get(), 160, 80, 80, 20));
 		Ctrl->SetText("COMBOBOX");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LABEL", "BUTTON", editorBase, 250, 5, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LABEL", "BUTTON", m_EditorBase.get(), 250, 5, 80, 20));
 		Ctrl->SetText("LABEL");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LISTBOX", "BUTTON", editorBase, 250, 30, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_LISTBOX", "BUTTON", m_EditorBase.get(), 250, 30, 80, 20));
 		Ctrl->SetText("LISTBOX");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", editorBase, 250, 55, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_PROGRESSBAR", "BUTTON", m_EditorBase.get(), 250, 55, 80, 20));
 		Ctrl->SetText("PROGRESSBAR");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", editorBase, 250, 80, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_RADIOBUTTON", "BUTTON", m_EditorBase.get(), 250, 80, 80, 20));
 		Ctrl->SetText("RADIOBUTTON");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", editorBase, 340, 5, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SCROLLBAR", "BUTTON", m_EditorBase.get(), 340, 5, 80, 20));
 		Ctrl->SetText("SCROLLBAR");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SLIDER", "BUTTON", editorBase, 340, 30, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_SLIDER", "BUTTON", m_EditorBase.get(), 340, 30, 80, 20));
 		Ctrl->SetText("SLIDER");
-		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", editorBase, 340, 55, 80, 20));
+		Ctrl = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("C_TEXTBOX", "BUTTON", m_EditorBase.get(), 340, 55, 80, 20));
 		Ctrl->SetText("TEXTBOX");
 
-		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("props", "PROPERTYPAGE", editorBase, 5, 120, 250, 250)));
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("props", "PROPERTYPAGE", m_EditorBase.get(), 5, 120, 250, 250)));
 
-		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("active", "LISTBOX", editorBase, 5, 400, 150, 250)));
+		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("active", "LISTBOX", m_EditorBase.get(), 5, 400, 150, 250)));
 
-		GUICheckbox *Snap = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("snap", "CHECKBOX", editorBase, 450, 10, 80, 16));
+		GUICheckbox *Snap = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("snap", "CHECKBOX", m_EditorBase.get(), 450, 10, 80, 16));
 		Snap->SetText("Snap");
 		Snap->SetCheck(GUICheckbox::Checked);
 
@@ -257,7 +265,18 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::FlipFrameBuffers() const {
+	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
+		m_EditorBase.get()->Resize(resizeInfo->new_w, resizeInfo->new_h);
+		m_WindowResized = true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::FlipFrameBuffers() {
+		if (m_WindowResized) {
+			acknowledge_resize();
+			m_WindowResized = false;
+		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, m_BackBuffer->w, m_BackBuffer->h);
 	}
 

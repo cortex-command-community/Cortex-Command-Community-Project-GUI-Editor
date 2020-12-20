@@ -3,6 +3,7 @@
 
 #include "GUI.h"
 #include "GUIPropertyPage.h"
+#include "GUICollectionBox.h"
 #include "GUIListBox.h"
 #include "AllegroScreen.h"
 #include "AllegroInput.h"
@@ -45,7 +46,12 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		void FlipFrameBuffers() const;
+		void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void FlipFrameBuffers();
 
 		/// <summary>
 		/// 
@@ -175,6 +181,7 @@ namespace RTE {
 		};
 
 		bool m_Quit;
+		bool m_WindowResized;
 
 		int m_ResX;
 		int m_ResY;
@@ -186,6 +193,7 @@ namespace RTE {
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage;
 		std::unique_ptr<GUIListBox> m_ActiveBoxList;
 		std::unique_ptr<GUIControl> m_RootControl;
+		std::unique_ptr<GUICollectionBox> m_EditorBase;
 		Selection m_SelectionInfo;
 		std::string m_Filename;
 
