@@ -149,6 +149,11 @@ namespace RTEGUI {
 		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelXPos() + 5, elementPanel->GetRelYPos() - 20, 100, 20));
 		newElementLabel->SetText("Add New Element :");
 
+		GUILabel *gridSizeLabel = dynamic_cast<GUILabel *>(m_EditorManager->AddControl("GridSizeLabel", "LABEL", editorControls, 10, 135, 75, 15));
+		gridSizeLabel->SetText("Grid Size :");
+		GUITextBox *gridSizeTextbox = dynamic_cast<GUITextBox *>(m_EditorManager->AddControl("GridSizeTextBox", "TEXTBOX", editorControls, gridSizeLabel->GetRelXPos() + 55, gridSizeLabel->GetRelYPos(), 30, 15));
+		gridSizeTextbox->SetText(std::to_string(m_GridSize));
+
 		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("SnapCheckBox", "CHECKBOX", editorControls, gridSizeLabel->GetRelXPos() + 110, gridSizeLabel->GetRelYPos(), 75, 15));
 		snapCheckbox->SetText("Snap to Grid");
 		snapCheckbox->SetCheck(GUICheckbox::Checked);
@@ -238,6 +243,20 @@ namespace RTEGUI {
 							m_SelectionInfo.GrabbedHandle = false;
 							m_SelectionInfo.Control = nullptr;
 						}
+					}
+
+					// Grid size changed
+					if (event.GetControl()->GetName() == "GridSizeTextBox" && event.GetMsg() == GUITextBox::Enter) {
+						const std::string newValue = dynamic_cast<GUITextBox *>(event.GetControl())->GetText();
+						bool validEntry = true;
+						for (const char &stringChar : newValue) {
+							if (!std::isdigit(stringChar)) {
+								validEntry = false;
+								break;
+							}
+						}
+						m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
+						dynamic_cast<GUITextBox *>(event.GetControl())->SetText(std::to_string(m_GridSize));
 					}
 
 					// Snap
