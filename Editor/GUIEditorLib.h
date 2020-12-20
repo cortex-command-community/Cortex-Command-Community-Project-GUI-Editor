@@ -1,7 +1,7 @@
 #ifndef _GUIEDITORLIB_
 #define _GUIEDITORLIB_
 
-namespace RTE {
+namespace RTEGUI {
 
 	/// <summary>
 	/// GUI Editor Library class with static functions to handle windows calls

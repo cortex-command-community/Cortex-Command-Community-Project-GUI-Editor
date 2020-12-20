@@ -12,7 +12,9 @@
 
 #define g_GUIEditor GUIEditorApp::Instance()
 
-namespace RTE {
+using namespace RTE;
+
+namespace RTEGUI {
 
 	/// <summary>
 	/// GUI Editor Application class that handles the main editor app.

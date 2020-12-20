@@ -3,7 +3,7 @@
 #include "ContentFile.h"
 #include "TimerMan.h"
 
-using namespace RTE;
+using namespace RTEGUI;
 
 extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
 
