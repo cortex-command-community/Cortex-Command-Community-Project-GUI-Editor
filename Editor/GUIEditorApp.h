@@ -58,6 +58,11 @@ namespace RTEGUI {
 		/// <summary>
 		/// 
 		/// </summary>
+		void DrawZoomedWorkspace();
+
+		/// <summary>
+		/// 
+		/// </summary>
 		void ClearBackBuffer() const;
 
 	protected:
@@ -208,6 +213,7 @@ namespace RTEGUI {
 		// Editor setup
 		bool m_UnsavedChanges;
 		bool m_SnapToGrid;
+		bool m_Zoom;
 		int	m_GridSize;
 		int m_RootOriginX;
 		int m_RootOriginY;

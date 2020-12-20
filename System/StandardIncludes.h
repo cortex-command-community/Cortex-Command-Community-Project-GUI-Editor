@@ -39,6 +39,7 @@
 #endif
 
 // Inclusion of relevant C++ Standard Library headers.
+#include <cctype>
 #include <string>
 #include <vector>
 #include <list>

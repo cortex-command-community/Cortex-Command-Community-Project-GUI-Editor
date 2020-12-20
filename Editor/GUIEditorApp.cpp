@@ -37,6 +37,7 @@ namespace RTEGUI {
 		m_Filename.clear();
 		m_UnsavedChanges = false;
 		m_SnapToGrid = true;
+		m_Zoom = false;
 		m_GridSize = 5;
 		m_RootOriginX = 335;
 		m_RootOriginY = 60;
@@ -158,6 +159,10 @@ namespace RTEGUI {
 		snapCheckbox->SetText("Snap to Grid");
 		snapCheckbox->SetCheck(GUICheckbox::Checked);
 
+		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 100, snapCheckbox->GetRelYPos(), 75, 15));
+		zoomCheckBox->SetText("Zoom");
+		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
+
 		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 245)));
 
 		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_LeftColumn.get(), m_PropertyPage.get()->GetRelXPos(), m_PropertyPage.get()->GetRelYPos() + 255, 270, 105)));
@@ -261,6 +266,8 @@ namespace RTEGUI {
 
 					// Snap
 					if (event.GetControl()->GetName() == "SnapCheckBox") { m_SnapToGrid = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
+					// Zoom
+					if (event.GetControl()->GetName() == "ZoomCheckBox") { m_Zoom = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
 					break;
 				default:
 					break;
@@ -290,7 +297,17 @@ namespace RTEGUI {
 			acknowledge_resize();
 			m_WindowResized = false;
 		}
+		if (m_Zoom) { DrawZoomedWorkspace(); }
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, m_BackBuffer->w, m_BackBuffer->h);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::DrawZoomedWorkspace() {
+		BITMAP *tempBackbuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+		stretch_blit(m_BackBuffer, tempBackbuffer, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+		blit(tempBackbuffer, m_BackBuffer, 0, 0, m_RootOriginX, m_RootOriginY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+		destroy_bitmap(tempBackbuffer);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
