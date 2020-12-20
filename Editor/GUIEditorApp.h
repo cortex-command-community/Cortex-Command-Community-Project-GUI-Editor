@@ -22,7 +22,7 @@ namespace RTE {
 	public:
 
 		// Selection structure
-		typedef struct {
+		struct Selection {
 			bool m_GrabbedControl;
 			bool m_GrabbedHandle;
 			bool m_TriggerGrab;
@@ -34,7 +34,7 @@ namespace RTE {
 			int m_GrabY;
 			int	m_ClickX;
 			int m_ClickY;
-		} Selection;
+		};
 
 		/// <summary>
 		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
@@ -168,20 +168,20 @@ namespace RTE {
 
 	private:
 
-		unsigned char m_BlackColor;
-		BITMAP *m_pBackBuffer32;
-		GUIControlManager *m_pControlManager;
-		GUIControlManager *m_pEditorManager;
-		GUIPropertyPage	*m_pPropertyPage;
-		GUIListBox *m_pActiveBoxList;
-		GUIControl *m_pRootControl;
+		int m_BlackColor;
+		BITMAP *m_BackBuffer;
+		GUIControlManager *m_ControlManager;
+		GUIControlManager *m_EditorManager;
+		GUIPropertyPage	*m_PropertyPage;
+		GUIListBox *m_ActiveBoxList;
+		GUIControl *m_RootControl;
 		Selection m_SelectionInfo;
-		std::string m_strFilename;
+		std::string m_Filename;
 
 		// Editor setup
-		bool m_bDirty;
-		bool m_bSnapGrid;
-		int	m_nGridSize;
+		bool m_UnsavedChanges;
+		bool m_SnapToGrid;
+		int	m_GridSize;
 
 		// Disallow the use of some implicit methods.
 		GUIEditorApp(const GUIEditorApp &reference) = delete;
