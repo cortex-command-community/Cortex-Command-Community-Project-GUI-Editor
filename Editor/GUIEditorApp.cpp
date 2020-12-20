@@ -295,7 +295,7 @@ namespace RTEGUI {
 
 	void GUIEditorApp::OnLoadButton(bool addControls) {
 		std::string filename;
-		if (GUIEditorUtil::DisplayLoadGUIFile(&filename)) {
+		if (GUIEditorUtil::DisplayLoadGUIFile(&filename, "Cortex Command: GUI Editor")) {
 			m_ControlManager->Load(filename, addControls);
 
 			GUIControl *control = m_ControlManager->GetControlList()->front();
@@ -324,7 +324,7 @@ namespace RTEGUI {
 
 	void GUIEditorApp::OnSaveAsButton() {
 		std::string filename;
-		if (GUIEditorUtil::DisplaySaveGUIFile(&filename)) {
+		if (GUIEditorUtil::DisplaySaveGUIFile(&filename, "Cortex Command: GUI Editor")) {
 			// Move the root object to the origin before saving
 			m_RootControl->Move(0, 0);
 
