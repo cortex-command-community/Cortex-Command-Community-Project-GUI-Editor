@@ -95,7 +95,7 @@ namespace RTEGUI {
 		// Add the root collection box for the edited document
 		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight));
 		rootBox->SetDrawBackground(false);
-		m_RootControl.reset(rootBox);
+		m_RootControl = rootBox;
 
 		CreateEditorElements();
 
@@ -206,7 +206,7 @@ namespace RTEGUI {
 					// Add a control
 					if (event.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
 						std::string controlClass = event.GetControl()->GetName().substr(2, std::string::npos);
-						GUIControl *parent = m_RootControl.get();
+						GUIControl *parent = m_RootControl;
 
 						// Is the focused control a container?
 						if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { parent = m_SelectionInfo.Control; }
@@ -345,7 +345,7 @@ namespace RTEGUI {
 			m_ControlManager->Load(filename, addControls);
 
 			GUIControl *control = m_ControlManager->GetControlList()->front();
-			m_RootControl.reset(control);
+			m_RootControl = control;
 
 			control->Move(m_RootOriginX, m_RootOriginY);
 
@@ -503,8 +503,8 @@ namespace RTEGUI {
 
 		// Check if mouse clicked on a control
 		if (!m_SelectionInfo.GrabbedControl && !m_SelectionInfo.GrabbedHandle && mouseEvents.at(0) == GUIInput::Pushed) {
-			GUIControl *control = ControlUnderMouse(m_RootControl.get(), mousePosX, mousePosY);
-			if (control && control != m_RootControl.get()) {
+			GUIControl *control = ControlUnderMouse(m_RootControl, mousePosX, mousePosY);
+			if (control && control != m_RootControl) {
 				int xPos;
 				int yPos;
 				int width;
@@ -529,7 +529,7 @@ namespace RTEGUI {
 				control->GetPanel()->BuildProperties(&properties);
 				m_PropertyPage->SetPropertyValues(&properties);
 
-			} else if (control == m_RootControl.get()) {
+			} else if (control == m_RootControl) {
 				// Unselect control
 				m_SelectionInfo.GrabbedControl = false;
 				m_SelectionInfo.GrabbedHandle = false;
@@ -555,7 +555,7 @@ namespace RTEGUI {
 
 		for (std::vector<GUIControl *>::iterator itr = controls->begin(); itr != controls->end(); itr++) {
 			// Look for CollectionBoxes with the root control as parent
-			if ((collectionBox = dynamic_cast<GUICollectionBox *>(*itr)) && collectionBox->GetParent() == m_RootControl.get()) {
+			if ((collectionBox = dynamic_cast<GUICollectionBox *>(*itr)) && collectionBox->GetParent() == m_RootControl) {
 				m_ActiveBoxList->AddItem(collectionBox->GetName());
 				// Check if this is selected in the editor, and if so, select it in the list too
 				if (collectionBox == m_SelectionInfo.Control) { m_ActiveBoxList->SetSelectedIndex(m_ActiveBoxList->GetItemList()->size() - 1); }

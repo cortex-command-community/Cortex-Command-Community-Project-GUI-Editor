@@ -212,9 +212,9 @@ namespace RTEGUI {
 		std::unique_ptr<GUIControlManager> m_EditorManager;
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage;
 		std::unique_ptr<GUIListBox> m_ActiveBoxList;
-		std::unique_ptr<GUIControl> m_RootControl;
 		std::unique_ptr<GUICollectionBox> m_EditorBase;
 		std::unique_ptr<GUICollectionBox> m_LeftColumn;
+		GUIControl *m_RootControl;
 		Selection m_SelectionInfo;
 		std::string m_Filename;
 
