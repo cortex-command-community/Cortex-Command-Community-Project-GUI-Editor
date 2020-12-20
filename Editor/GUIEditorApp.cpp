@@ -63,10 +63,10 @@ namespace RTEGUI {
 		// Initialize the UI
 
 		m_ControlManager = std::make_unique<GUIControlManager>();
-		m_ControlManager->Create(m_Screen.get(), m_Input.get(), "Assets/EditorSkin");
+		m_ControlManager->Create(m_Screen.get(), m_Input.get(), "Assets");
 
 		m_EditorManager = std::make_unique<GUIControlManager>();
-		m_EditorManager->Create(m_Screen.get(), m_Input.get(), "Assets/EditorSkin");
+		m_EditorManager->Create(m_Screen.get(), m_Input.get(), "Assets");
 
 		m_EditorManager->EnableMouse();
 
