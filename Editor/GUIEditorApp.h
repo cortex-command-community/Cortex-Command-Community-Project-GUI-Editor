@@ -95,7 +95,7 @@ namespace RTEGUI {
 		/// <param name="MouseX"></param>
 		/// <param name="MouseY"></param>
 		/// <returns>GUIControl. NULL if no control under the mouse.</returns>
-		GUIControl *ControlUnderMouse(GUIControl *Parent, int MouseX, int MouseY);
+		GUIControl *ControlUnderMouse(GUIControl *parent, int mousePosX, int mousePosY);
 
 		/// <summary>
 		/// Checks if a control's handle is under the mouse point.
@@ -104,7 +104,7 @@ namespace RTEGUI {
 		/// <param name="MouseX"></param>
 		/// <param name="MouseY"></param>
 		/// <returns>Handle index. -1 if no handle under the mouse.</returns>
-		int HandleUnderMouse(GUIControl *Control, int MouseX, int MouseY) const;
+		int HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const;
 
 		/// <summary>
 		/// Checks if the mouse point is inside a box.
@@ -116,13 +116,13 @@ namespace RTEGUI {
 		/// <param name="Width"></param>
 		/// <param name="Height"></param>
 		/// <returns>True/False.</returns>
-		bool MouseInsideBox(int mouseX, int mouseY, int xPos, int yPos, int width, int height) const;
+		bool MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const;
 
 		/// <summary>
 		/// Draws selection info around a control.
 		/// </summary>
 		/// <param name="Control">GUIControl.</param>
-		void DrawSelectedControl(GUIControl *Control);
+		void DrawSelectedControl(GUIControl *control);
 
 		/// <summary>
 		/// Draws a selection handle.
@@ -147,14 +147,14 @@ namespace RTEGUI {
 		/// <param name="Y"></param>
 		/// <param name="Width">Size.</param>
 		/// <param name="Height"></param>
-		void CalculateHandleResize(int MouseX, int MouseY, int *X, int *Y, int *Width, int *Height);
+		void CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height);
 
 		/// <summary>
 		/// Generates a new control name based on the type.
 		/// </summary>
 		/// <param name="strControlType">Control Type.</param>
 		/// <returns></returns>
-		std::string GenerateControlName(std::string strControlType) const;
+		std::string GenerateControlName(std::string controlType) const;
 
 		/// <summary>
 		/// Calculates the nearest snap position (if snap is on).
