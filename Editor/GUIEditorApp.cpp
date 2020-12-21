@@ -531,14 +531,27 @@ namespace RTEGUI {
 		m_Input->GetKeyboard(keyboardBuffer.data());
 
 		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
-		// Delete key
 			if (keyboardBuffer.at(GUIInput::Key_Delete) == GUIInput::Pushed) {
 				m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
 				m_SelectionInfo.Control = nullptr;
 				m_SelectionInfo.GrabbedControl = false;
 				m_SelectionInfo.GrabbedHandle = false;
-
 				m_PropertyPage->ClearValues();
+			} else {
+				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
+				if (keyboardBuffer.at(GUIInput::Key_UpArrow) == GUIInput::Pushed) {
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - m_GridSize);
+					m_UnsavedChanges = true;
+				} else if (keyboardBuffer.at(GUIInput::Key_DownArrow) == GUIInput::Pushed) {
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + m_GridSize);
+					m_UnsavedChanges = true;
+				} else if (keyboardBuffer.at(GUIInput::Key_LeftArrow) == GUIInput::Pushed) {
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - m_GridSize, selectedElement->GetYPos());
+					m_UnsavedChanges = true;
+				} else if (keyboardBuffer.at(GUIInput::Key_RightArrow) == GUIInput::Pushed) {
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + m_GridSize, selectedElement->GetYPos());
+					m_UnsavedChanges = true;
+				}
 			}
 		}
 
