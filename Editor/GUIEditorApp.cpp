@@ -99,7 +99,6 @@ namespace RTEGUI {
 
 		CreateEditorElements();
 
-
 		m_SelectionInfo.ClearSelection();
 
 		return true;
@@ -279,7 +278,8 @@ namespace RTEGUI {
 					break;
 			}
 		}
-		ProcessEditor();
+		ProcessMouseInput();
+		ProcessKeyboardInput();
 
 		m_EditorBase.get()->Draw(m_Screen.get());
 		m_ControlManager->Draw();
@@ -407,34 +407,13 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::ProcessEditor() {
+	void GUIEditorApp::ProcessMouseInput() {
 		std::array<int, 3> mouseEvents;
 		std::array<int, 3> mouseStates;
 		int mousePosX;
 		int mousePosY;
 		m_Input->GetMouseButtons(mouseEvents.data(), mouseStates.data());
 		m_Input->GetMousePosition(&mousePosX, &mousePosY);
-
-		std::array<unsigned char, 256> keyboardBuffer;
-		m_Input->GetKeyboard(keyboardBuffer.data());
-
-		// Delete key
-		if (keyboardBuffer.at(GUIInput::Key_Delete) == GUIInput::Pushed && !m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
-			m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
-			m_SelectionInfo.Control = nullptr;
-			m_SelectionInfo.GrabbedControl = false;
-			m_SelectionInfo.GrabbedHandle = false;
-
-			m_PropertyPage->ClearValues();
-		}
-
-		// Escape key
-		if (keyboardBuffer.at(GUIInput::Key_Escape) == GUIInput::Pushed) {
-			// Undo any grab
-			m_SelectionInfo.GrabbedControl = false;
-			m_SelectionInfo.GrabbedHandle = false;
-		}
-
 
 		// If click released
 		if (mouseEvents.at(0) == GUIInput::Released) {
@@ -542,6 +521,31 @@ namespace RTEGUI {
 
 			// Update the active box list in case we selected/deselected a top level collection box
 			UpdateActiveBoxList();
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::ProcessKeyboardInput() {
+		std::array<unsigned char, 256> keyboardBuffer;
+		m_Input->GetKeyboard(keyboardBuffer.data());
+
+		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
+		// Delete key
+			if (keyboardBuffer.at(GUIInput::Key_Delete) == GUIInput::Pushed) {
+				m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
+				m_SelectionInfo.Control = nullptr;
+				m_SelectionInfo.GrabbedControl = false;
+				m_SelectionInfo.GrabbedHandle = false;
+
+				m_PropertyPage->ClearValues();
+			}
+		}
+
+		// Escape key - Undo any grab
+		if (keyboardBuffer.at(GUIInput::Key_Escape) == GUIInput::Pushed) {
+			m_SelectionInfo.ClearSelection();
+			m_PropertyPage->ClearValues();
 		}
 	}
 

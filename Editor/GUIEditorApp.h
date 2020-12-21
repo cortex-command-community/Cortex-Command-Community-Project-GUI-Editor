@@ -91,7 +91,9 @@ namespace RTEGUI {
 		/// <summary>
 		/// Process the editor logic.
 		/// </summary>
-		void ProcessEditor();
+		void ProcessMouseInput();
+
+		void ProcessKeyboardInput();
 
 		/// <summary>
 		/// Updates the list of Active top level ControlBoxs found in the editor.
