@@ -215,7 +215,6 @@ namespace RTEGUI {
 					break;
 			}
 		}
-		PopulateActiveBoxList();
 
 		m_EditorBase.get()->Draw(m_Screen.get());
 		m_ControlManager->Draw();
@@ -268,6 +267,8 @@ namespace RTEGUI {
 		std::string name = GenerateControlName(controlClass);
 
 		if (parent) { m_ControlManager->AddControl(name, controlClass, parent, 0, 0, -1, -1); }
+
+		PopulateActiveBoxList();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,6 +345,7 @@ namespace RTEGUI {
 			m_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 		}
+		PopulateActiveBoxList();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
