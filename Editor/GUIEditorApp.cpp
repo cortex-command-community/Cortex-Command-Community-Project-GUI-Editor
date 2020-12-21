@@ -27,31 +27,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::Clear() {
-		m_WindowResized = false;
-		m_Quit = false;
-		m_ResX = 1024;
-		m_ResY = 600;
-		m_BackBuffer = nullptr;
-		m_ControlManager = nullptr;
-		m_EditorManager = nullptr;
-		m_PropertyPage = nullptr;
-		m_ActiveBoxList = nullptr;
-		m_RootControl = nullptr;
-		m_EditorBase = nullptr;
-		m_Filename.clear();
-		m_UnsavedChanges = false;
-		m_SnapToGrid = true;
-		m_Zoom = false;
-		m_GridSize = 5;
-		m_RootOriginX = 335;
-		m_RootOriginY = 60;
-		m_WorkspaceWidth = 640;
-		m_WorkspaceHeight = 480;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool GUIEditorApp::Initialize() {
 		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);

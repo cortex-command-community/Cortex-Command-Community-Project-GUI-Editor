@@ -26,7 +26,7 @@ namespace RTEGUI {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
 		/// </summary>
-		GUIEditorApp() { Clear(); }
+		GUIEditorApp() = default;
 
 		/// <summary>
 		/// Initializes the editor app.
@@ -188,17 +188,17 @@ namespace RTEGUI {
 		/// GUI element selection structure.
 		/// </summary>
 		struct Selection {
-			bool GrabbedControl;
-			bool GrabbedHandle;
-			bool TriggerGrab;
+			bool GrabbedControl = false;
+			bool GrabbedHandle = false;
+			bool TriggerGrab = false;
 
-			GUIControl *Control;
-			int HandleIndex;
+			GUIControl *Control = nullptr;
+			int HandleIndex = 0;
 
-			int GrabX;
-			int GrabY;
-			int	ClickX;
-			int ClickY;
+			int GrabX = 0;
+			int GrabY = 0;
+			int	ClickX = 0;
+			int ClickY = 0;
 
 			/// <summary>
 			/// Clears selection info.
@@ -214,38 +214,33 @@ namespace RTEGUI {
 			}
 		};
 
-		bool m_Quit;
-		bool m_WindowResized;
+		bool m_Quit = false;
+		bool m_WindowResized = false;
 
-		int m_ResX;
-		int m_ResY;
-		BITMAP *m_BackBuffer;
-		std::unique_ptr<AllegroScreen> m_Screen;
-		std::unique_ptr<AllegroInput> m_Input;
-		std::unique_ptr<GUIControlManager> m_ControlManager;
-		std::unique_ptr<GUIControlManager> m_EditorManager;
-		std::unique_ptr<GUIPropertyPage> m_PropertyPage;
-		std::unique_ptr<GUIListBox> m_ActiveBoxList;
-		std::unique_ptr<GUICollectionBox> m_EditorBase;
-		std::unique_ptr<GUICollectionBox> m_LeftColumn;
-		GUIControl *m_RootControl;
+		int m_ResX = 1024;
+		int m_ResY = 600;
+		BITMAP *m_BackBuffer = nullptr;
+		std::unique_ptr<AllegroScreen> m_Screen = nullptr;
+		std::unique_ptr<AllegroInput> m_Input = nullptr;
+		std::unique_ptr<GUIControlManager> m_ControlManager = nullptr;
+		std::unique_ptr<GUIControlManager> m_EditorManager = nullptr;
+		std::unique_ptr<GUIPropertyPage> m_PropertyPage = nullptr;
+		std::unique_ptr<GUIListBox> m_ActiveBoxList = nullptr;
+		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr;
+		std::unique_ptr<GUICollectionBox> m_LeftColumn = nullptr;
+		GUIControl *m_RootControl = nullptr;
 		Selection m_SelectionInfo;
-		std::string m_Filename;
+		std::string m_Filename = "";
 
 		// Editor setup
-		bool m_UnsavedChanges;
-		bool m_SnapToGrid;
-		bool m_Zoom;
-		int	m_GridSize;
-		int m_RootOriginX;
-		int m_RootOriginY;
-		int m_WorkspaceWidth;
-		int m_WorkspaceHeight;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void Clear();
+		bool m_UnsavedChanges = false;
+		bool m_SnapToGrid = true;
+		bool m_Zoom = false;
+		int	m_GridSize = 5;
+		int m_RootOriginX = 335;
+		int m_RootOriginY = 60;
+		int m_WorkspaceWidth = 640;
+		int m_WorkspaceHeight = 480;
 
 		// Disallow the use of some implicit methods.
 		GUIEditorApp(const GUIEditorApp &reference) = delete;
