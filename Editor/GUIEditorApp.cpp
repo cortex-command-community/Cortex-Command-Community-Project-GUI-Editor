@@ -2,10 +2,8 @@
 #include "GUIEditorUtil.h"
 #include "GUIButton.h"
 #include "GUICheckbox.h"
-#include "GUIListBox.h"
 #include "GUILabel.h"
 #include "GUITextBox.h"
-#include "RTEError.h"
 #include "allegro.h"
 #include "winalleg.h"
 
@@ -13,24 +11,10 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// Quit handler for Allegro.
-	/// </summary>
-	static void QuitHandler() { g_GUIEditor.OnQuitButton(); }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/// <summary>
-	/// Resize handler for Allegro.
-	/// </summary>
-	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool GUIEditorApp::Initialize() {
 		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);
-		set_window_title("Cortex Command: GUI Editor");
+		set_window_title("Cortex Command GUI Editor");
 		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
 		set_close_button_callback(QuitHandler);
 		set_resize_callback(ResizeHandler);
@@ -62,13 +46,13 @@ namespace RTEGUI {
 		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
 
 		// Add an area showing the editing box
-		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight));
+		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
 		workspace->SetDrawBackground(true);
 		workspace->SetDrawColor(makecol(64, 64, 64));
 		workspace->SetDrawType(GUICollectionBox::Color);
 
 		// Add the root collection box for the edited document
-		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight));
+		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_ControlManager->AddControl("root", "COLLECTIONBOX", nullptr, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
 		rootBox->SetDrawBackground(false);
 		m_RootControl = rootBox;
 
@@ -168,7 +152,7 @@ namespace RTEGUI {
 					} else if (editorEvent.GetControl()->GetName() == "SaveButton") {
 						OnSaveButton();
 					} else if (editorEvent.GetControl()->GetName() == "SaveAsButton") {
-						OnSaveAsButton();
+						OnSaveButton(true);
 					} else if (editorEvent.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
 						AddNewControl(editorEvent);
 					}
@@ -242,15 +226,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
-		m_EditorBase.get()->Resize(resizeInfo->new_w, resizeInfo->new_h);
-		m_LeftColumn.get()->Resize(m_LeftColumn.get()->GetWidth(), resizeInfo->new_h);
-		m_ActiveBoxList.get()->Resize(m_ActiveBoxList.get()->GetWidth(), resizeInfo->new_h - m_ActiveBoxList.get()->GetRelYPos() - 5);
-		m_WindowResized = true;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIEditorApp::DrawEditor() {
 		if (m_WindowResized) {
 			acknowledge_resize();
@@ -266,89 +241,11 @@ namespace RTEGUI {
 
 		if (m_Zoom) {
 			BITMAP *tempBackbuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			stretch_blit(m_BackBuffer, tempBackbuffer, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			blit(tempBackbuffer, m_BackBuffer, 0, 0, m_RootOriginX, m_RootOriginY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			stretch_blit(m_BackBuffer, tempBackbuffer, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			blit(tempBackbuffer, m_BackBuffer, 0, 0, m_WorkspacePosX, m_WorkspacePosY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
 			destroy_bitmap(tempBackbuffer);
 		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::OnQuitButton() {
-		if (m_UnsavedChanges) {
-			int result = GUIEditorUtil::QuitMessageBox("Save changes made?", "Cortex Command: GUI Editor");
-			if (result == 1) {
-				OnSaveButton();
-				m_Quit = true;
-			}
-			if (result == -1) { m_Quit = true; }
-		} else {
-			m_Quit = true;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::OnLoadButton(bool addControls) {
-		std::string filename;
-		if (GUIEditorUtil::DisplayLoadGUIFile(&filename, "Cortex Command: GUI Editor")) {
-			m_ControlManager->Load(filename, addControls);
-			m_Filename = filename;
-
-			GUIControl *control = m_ControlManager->GetControlList()->front();
-			m_RootControl = control;
-
-			control->Move(m_RootOriginX, m_RootOriginY);
-
-			control->StoreProperties();
-
-			GUIProperties controlProps;
-			controlProps.Update(control->GetProperties(), true);
-			control->GetPanel()->BuildProperties(&controlProps);
-
-			// Clear settings
-			m_UnsavedChanges = false;
-			m_SelectionInfo.ClearSelection();
-			m_PropertyPage->ClearValues();
-		}
-		PopulateActiveBoxList();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::OnSaveAsButton() {
-		std::string filename;
-		if (GUIEditorUtil::DisplaySaveGUIFile(&filename, "Cortex Command: GUI Editor")) {
-			// Move the root object to the origin before saving
-			m_RootControl->Move(0, 0);
-
-			m_ControlManager->Save(filename);
-			m_Filename = filename;
-
-			// Move it back
-			m_RootControl->Move(m_RootOriginX, m_RootOriginY);
-
-			m_UnsavedChanges = false;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::OnSaveButton() {
-		if (m_Filename.size() == 0) {
-			OnSaveAsButton();
-		} else {
-			// Move the root object to the origin before saving
-			m_RootControl->Move(0, 0);
-
-			m_ControlManager->Save(m_Filename);
-
-			// Move it back
-			m_RootControl->Move(m_RootOriginX, m_RootOriginY);
-
-			m_UnsavedChanges = false;
-		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,5 +678,68 @@ namespace RTEGUI {
 			position = static_cast<int>((value + fraction)) * m_GridSize;
 		}
 		return position;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::OnLoadButton(bool addControls) {
+		std::string newFilename;
+		if (GUIEditorUtil::DisplayLoadGUIFile(&newFilename, "Cortex Command GUI Editor")) {
+			m_ControlManager->Load(newFilename, addControls);
+			m_Filename = newFilename;
+
+			GUIControl *newRootControl = m_ControlManager->GetControlList()->front();
+			m_RootControl = newRootControl;
+			newRootControl->Move(m_WorkspacePosX, m_WorkspacePosY);
+			newRootControl->StoreProperties();
+
+			GUIProperties newRootControlProps;
+			newRootControlProps.Update(newRootControl->GetProperties(), true);
+			newRootControl->GetPanel()->BuildProperties(&newRootControlProps);
+
+			m_SelectionInfo.ClearSelection();
+			m_PropertyPage->ClearValues();
+			m_UnsavedChanges = false;
+
+			PopulateActiveBoxList();
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::OnSaveButton(bool saveAsNewFile) {
+		if (saveAsNewFile || m_Filename.empty()) {
+			std::string newFilename;
+			if (GUIEditorUtil::DisplaySaveGUIFile(&newFilename, "Cortex Command GUI Editor")) { m_Filename = newFilename; }
+		}
+		// Move the root object to top left corner before saving so it is displayed correctly in-game.
+		m_RootControl->Move(0, 0);
+
+		m_ControlManager->Save(m_Filename);
+
+		// Move the root object back to the workspace position in the editor
+		m_RootControl->Move(m_WorkspacePosX, m_WorkspacePosY);
+
+		m_UnsavedChanges = false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::OnQuitButton() {
+		int quitResult = 1;
+		if (m_UnsavedChanges) {
+			quitResult = GUIEditorUtil::QuitMessageBox("Save changes made?", "Cortex Command GUI Editor");
+			if (quitResult == 1) { OnSaveButton(); }
+		}
+		m_Quit = (quitResult != 0) ? true : false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
+		m_EditorBase.get()->Resize(resizeInfo->new_w, resizeInfo->new_h);
+		m_LeftColumn.get()->Resize(m_LeftColumn.get()->GetWidth(), resizeInfo->new_h);
+		m_ActiveBoxList.get()->Resize(m_ActiveBoxList.get()->GetWidth(), resizeInfo->new_h - m_ActiveBoxList.get()->GetRelYPos() - 5);
+		m_WindowResized = true;
 	}
 }

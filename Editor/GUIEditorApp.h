@@ -23,6 +23,7 @@ namespace RTEGUI {
 
 	public:
 
+#pragma region Creation
 		/// <summary>
 		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
 		/// </summary>
@@ -33,7 +34,9 @@ namespace RTEGUI {
 		/// </summary>
 		/// <returns>False if initialization failed.</returns>
 		bool Initialize();
+#pragma endregion
 
+#pragma region Concrete Methods
 		/// <summary>
 		/// Updates the editor app.
 		/// </summary>
@@ -41,44 +44,12 @@ namespace RTEGUI {
 		bool Update();
 
 		/// <summary>
-		/// 
-		/// </summary>
-		void UpdatePropertyPage(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="editorEvent"></param>
-		void UpdateGridSize(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="editorEvent"></param>
-		void AddNewControl(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// Called when the quit button has been pushed.
-		/// </summary>
-		void OnQuitButton();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
-
-		/// <summary>
-		/// 
+		/// Draws the editor to the screen.
 		/// </summary>
 		void DrawEditor();
+#pragma endregion
 
-	protected:
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void CreateEditorElements();
-
+#pragma region File Panel Button Handling
 		/// <summary>
 		/// Called when the load button has been pushed.
 		/// </summary>
@@ -88,12 +59,28 @@ namespace RTEGUI {
 		/// <summary>
 		/// Called when the save button has been pushed.
 		/// </summary>
-		void OnSaveButton();
+		/// <param name="saveAsNewFile">Whether to save to a new file or not.</param>
+		void OnSaveButton(bool saveAsNewFile = false);
 
 		/// <summary>
-		/// Called when the save as button has been pushed.
+		/// Called when the quit button has been pushed.
 		/// </summary>
-		void OnSaveAsButton();
+		void OnQuitButton();
+#pragma endregion
+
+#pragma region Allegro Callback Handling
+		/// <summary>
+		/// Called when the window has been resized.
+		/// </summary>
+		void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
+#pragma endregion
+
+	protected:
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void CreateEditorElements();
 
 		/// <summary>
 		/// Process the editor logic.
@@ -182,6 +169,23 @@ namespace RTEGUI {
 		/// <returns></returns>
 		int ProcessSnapCoord(int position) const;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdatePropertyPage(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="editorEvent"></param>
+		void UpdateGridSize(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="editorEvent"></param>
+		void AddNewControl(GUIEvent &editorEvent);
+
 	private:
 
 		/// <summary>
@@ -237,8 +241,8 @@ namespace RTEGUI {
 		bool m_SnapToGrid = true;
 		bool m_Zoom = false;
 		int	m_GridSize = 5;
-		int m_RootOriginX = 335;
-		int m_RootOriginY = 60;
+		int m_WorkspacePosX = 335;
+		int m_WorkspacePosY = 60;
 		int m_WorkspaceWidth = 640;
 		int m_WorkspaceHeight = 480;
 
@@ -246,5 +250,13 @@ namespace RTEGUI {
 		GUIEditorApp(const GUIEditorApp &reference) = delete;
 		GUIEditorApp &operator=(const GUIEditorApp &rhs) = delete;
 	};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// Callback functions for handling events in Allegro.
+	/// </summary>
+	static void QuitHandler() { g_GUIEditor.OnQuitButton(); }
+	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
 }
 #endif
