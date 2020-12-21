@@ -176,110 +176,46 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorApp::Update() {
+		ProcessMouseInput();
+		ProcessKeyboardInput();
+
 		m_EditorManager->Update();
-		GUIEvent event;
-		while (m_EditorManager->GetEvent(&event)) {
-			switch (event.GetType()) {
+		GUIEvent editorEvent;
+		while (m_EditorManager->GetEvent(&editorEvent)) {
+			switch (editorEvent.GetType()) {
 				case GUIEvent::Command:
-					if (event.GetControl()->GetName() == "QuitButton") {
+					if (editorEvent.GetControl()->GetName() == "QuitButton") {
 						OnQuitButton();
-						break;
-					}
-					if (event.GetControl()->GetName() == "LoadButton") {
+					} else if (editorEvent.GetControl()->GetName() == "LoadButton") {
 						OnLoadButton();
-						break;
-					}
-					if (event.GetControl()->GetName() == "AddButton") {
+					} else if (editorEvent.GetControl()->GetName() == "AddButton") {
 						OnLoadButton(true);
-						break;
-					}
-					if (event.GetControl()->GetName() == "SaveButton") {
+					} else if (editorEvent.GetControl()->GetName() == "SaveButton") {
 						OnSaveButton();
-						break;
-					}
-					if (event.GetControl()->GetName() == "SaveAsButton") {
+					} else if (editorEvent.GetControl()->GetName() == "SaveAsButton") {
 						OnSaveAsButton();
-						break;
-					}
-
-					// Add a control
-					if (event.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
-						std::string controlClass = event.GetControl()->GetName().substr(2, std::string::npos);
-						GUIControl *parent = m_RootControl;
-
-						// Is the focused control a container?
-						if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { parent = m_SelectionInfo.Control; }
-
-						// Find a suitable control name
-						std::string name = GenerateControlName(controlClass);
-
-						if (parent) { m_ControlManager->AddControl(name, controlClass, parent, 0, 0, -1, -1); }
-						break;
+					} else if (editorEvent.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
+						AddNewControl(editorEvent);
 					}
 					break;
 				case GUIEvent::Notification:
-					// Property Page changed
-					if (event.GetControl()->GetName() == "PropertyPage") {
-						if (event.GetMsg() == GUIPropertyPage::Enter) {
-							// Update the focused control properties
-							GUIControl *control = m_SelectionInfo.Control;
-							if (control) {
-								control->ApplyProperties(m_PropertyPage->GetPropertyValues());
-								// Update the active box list in case the name of a top-level box changed
-								UpdateActiveBoxList();
-							}
-							m_UnsavedChanges = true;
-						}
-						if (event.GetMsg() == GUIPropertyPage::Changed) {
-							// The properties are dirty and need to be updated
-							m_UnsavedChanges = true;
-						}
+					if (editorEvent.GetControl()->GetName() == "ActiveCollectionBoxes" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
+						UpdateActiveBoxList();
+					} else if (editorEvent.GetControl()->GetName() == "PropertyPage") {
+						UpdatePropertyPage(editorEvent);
+					} else if (editorEvent.GetControl()->GetName() == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Enter) {
+						UpdateGridSize(editorEvent);
+					} else if (editorEvent.GetControl()->GetName() == "SnapCheckBox") {
+						m_SnapToGrid = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
+					} else if (editorEvent.GetControl()->GetName() == "ZoomCheckBox") {
+						m_Zoom = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
 					}
-
-					// Active Box changed
-					if (event.GetControl()->GetName() == "ActiveCollectionBoxes" && event.GetMsg() == GUIListBox::MouseDown) {
-						const GUIListPanel::Item *item = m_ActiveBoxList->GetSelected();
-						if (item) {
-							// Try to find the box of that name, and select it
-							GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name);
-							if (boxControl) {
-								m_SelectionInfo.GrabbedControl = false;
-								m_SelectionInfo.GrabbedHandle = false;
-								m_SelectionInfo.Control = boxControl;
-							}
-						} else {
-							// Deselection if clicked on no list item
-							m_SelectionInfo.GrabbedControl = false;
-							m_SelectionInfo.GrabbedHandle = false;
-							m_SelectionInfo.Control = nullptr;
-						}
-					}
-
-					// Grid size changed
-					if (event.GetControl()->GetName() == "GridSizeTextBox" && event.GetMsg() == GUITextBox::Enter) {
-						const std::string newValue = dynamic_cast<GUITextBox *>(event.GetControl())->GetText();
-						bool validEntry = true;
-						for (const char &stringChar : newValue) {
-							if (!std::isdigit(stringChar)) {
-								validEntry = false;
-								break;
-							}
-						}
-						m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
-						dynamic_cast<GUITextBox *>(event.GetControl())->SetText(std::to_string(m_GridSize));
-					}
-
-					// Snap
-					if (event.GetControl()->GetName() == "SnapCheckBox") { m_SnapToGrid = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
-					// Zoom
-					if (event.GetControl()->GetName() == "ZoomCheckBox") { m_Zoom = (dynamic_cast<GUICheckbox *>(event.GetControl()))->GetCheck() == GUICheckbox::Checked; }
 					break;
 				default:
 					break;
 			}
 		}
-		ProcessMouseInput();
-		ProcessKeyboardInput();
+		PopulateActiveBoxList();
 
 		m_EditorBase.get()->Draw(m_Screen.get());
 		m_ControlManager->Draw();
@@ -287,6 +223,51 @@ namespace RTEGUI {
 		m_LeftColumn.get()->Draw(m_Screen.get());
 		m_EditorManager->DrawMouse();
 		return !m_Quit;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdateGridSize(GUIEvent &editorEvent) {
+		const std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		bool validEntry = true;
+		for (const char &stringChar : newValue) {
+			if (!std::isdigit(stringChar)) {
+				validEntry = false;
+				break;
+			}
+		}
+		m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
+		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(m_GridSize));
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdatePropertyPage(GUIEvent &editorEvent) {
+		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
+			// Update the focused control properties
+			GUIControl *control = m_SelectionInfo.Control;
+			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
+			m_UnsavedChanges = true;
+		}
+		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
+			// The properties are dirty and need to be updated
+			m_UnsavedChanges = true;
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::AddNewControl(GUIEvent &editorEvent) {
+		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
+		GUIControl *parent = m_RootControl;
+
+		// Is the focused control a container?
+		if (m_SelectionInfo.Control && m_SelectionInfo.Control->IsContainer()) { parent = m_SelectionInfo.Control; }
+
+		// Find a suitable control name
+		std::string name = GenerateControlName(controlClass);
+
+		if (parent) { m_ControlManager->AddControl(name, controlClass, parent, 0, 0, -1, -1); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,6 +326,7 @@ namespace RTEGUI {
 		std::string filename;
 		if (GUIEditorUtil::DisplayLoadGUIFile(&filename, "Cortex Command: GUI Editor")) {
 			m_ControlManager->Load(filename, addControls);
+			m_Filename = filename;
 
 			GUIControl *control = m_ControlManager->GetControlList()->front();
 			m_RootControl = control;
@@ -361,10 +343,6 @@ namespace RTEGUI {
 			m_UnsavedChanges = false;
 			m_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
-
-			UpdateActiveBoxList();
-
-			m_Filename = filename;
 		}
 	}
 
@@ -377,11 +355,10 @@ namespace RTEGUI {
 			m_RootControl->Move(0, 0);
 
 			m_ControlManager->Save(filename);
+			m_Filename = filename;
 
 			// Move it back
 			m_RootControl->Move(m_RootOriginX, m_RootOriginY);
-
-			m_Filename = filename;
 
 			m_UnsavedChanges = false;
 		}
@@ -518,9 +495,6 @@ namespace RTEGUI {
 
 				m_PropertyPage->ClearValues();
 			}
-
-			// Update the active box list in case we selected/deselected a top level collection box
-			UpdateActiveBoxList();
 		}
 	}
 
@@ -539,6 +513,7 @@ namespace RTEGUI {
 				m_PropertyPage->ClearValues();
 			} else {
 				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
+
 				if (keyboardBuffer.at(GUIInput::Key_UpArrow) == GUIInput::Pushed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - m_GridSize);
 					m_UnsavedChanges = true;
@@ -564,7 +539,27 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateActiveBoxList() const {
+	void GUIEditorApp::UpdateActiveBoxList() {
+		const GUIListPanel::Item *item = m_ActiveBoxList->GetSelected();
+		if (item) {
+			// Try to find the box of that name, and select it
+			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name);
+			if (boxControl) {
+				m_SelectionInfo.GrabbedControl = false;
+				m_SelectionInfo.GrabbedHandle = false;
+				m_SelectionInfo.Control = boxControl;
+			}
+		} else {
+			// Deselection if clicked on no list item
+			m_SelectionInfo.GrabbedControl = false;
+			m_SelectionInfo.GrabbedHandle = false;
+			m_SelectionInfo.Control = nullptr;
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::PopulateActiveBoxList() const {
 		// Clear the list so we can repopulate it
 		m_ActiveBoxList->ClearList();
 

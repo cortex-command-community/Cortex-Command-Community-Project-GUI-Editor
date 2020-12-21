@@ -41,6 +41,23 @@ namespace RTEGUI {
 		bool Update();
 
 		/// <summary>
+		/// 
+		/// </summary>
+		void UpdatePropertyPage(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="editorEvent"></param>
+		void UpdateGridSize(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="editorEvent"></param>
+		void AddNewControl(GUIEvent &editorEvent);
+
+		/// <summary>
 		/// Called when the quit button has been pushed.
 		/// </summary>
 		void OnQuitButton();
@@ -98,7 +115,12 @@ namespace RTEGUI {
 		/// <summary>
 		/// Updates the list of Active top level ControlBoxs found in the editor.
 		/// </summary>
-		void UpdateActiveBoxList() const;
+		void UpdateActiveBoxList();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void PopulateActiveBoxList() const;
 
 		/// <summary>
 		/// Checks if a control is under the mouse point.
