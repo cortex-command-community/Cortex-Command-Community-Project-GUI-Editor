@@ -215,12 +215,6 @@ namespace RTEGUI {
 					break;
 			}
 		}
-
-		m_EditorBase.get()->Draw(m_Screen.get());
-		m_ControlManager->Draw();
-		if (m_SelectionInfo.Control) { DrawSelectedControl(m_SelectionInfo.Control); }
-		m_LeftColumn.get()->Draw(m_Screen.get());
-		m_EditorManager->DrawMouse();
 		return !m_Quit;
 	}
 
@@ -282,28 +276,26 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::FlipFrameBuffers() {
+	void GUIEditorApp::DrawEditor() {
 		if (m_WindowResized) {
 			acknowledge_resize();
 			m_WindowResized = false;
 		}
-		if (m_Zoom) { DrawZoomedWorkspace(); }
-		blit(m_BackBuffer, screen, 0, 0, 0, 0, m_BackBuffer->w, m_BackBuffer->h);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::DrawZoomedWorkspace() {
-		BITMAP *tempBackbuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-		stretch_blit(m_BackBuffer, tempBackbuffer, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-		blit(tempBackbuffer, m_BackBuffer, 0, 0, m_RootOriginX, m_RootOriginY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-		destroy_bitmap(tempBackbuffer);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::ClearBackBuffer() const {
 		clear_to_color(m_BackBuffer, 0);
+
+		m_EditorBase.get()->Draw(m_Screen.get());
+		m_ControlManager->Draw();
+		if (m_SelectionInfo.Control) { DrawSelectedControl(m_SelectionInfo.Control); }
+		m_LeftColumn.get()->Draw(m_Screen.get());
+		m_EditorManager->DrawMouse();
+
+		if (m_Zoom) {
+			BITMAP *tempBackbuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			stretch_blit(m_BackBuffer, tempBackbuffer, m_RootOriginX, m_RootOriginY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			blit(tempBackbuffer, m_BackBuffer, 0, 0, m_RootOriginX, m_RootOriginY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			destroy_bitmap(tempBackbuffer);
+		}
+		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,11 +16,10 @@ int main(int argc, char **argv) {
 	if (!g_GUIEditor.Initialize()) { std::exit(EXIT_FAILURE); }
 
 	while (true) {
-		g_GUIEditor.ClearBackBuffer();
 		if (!g_GUIEditor.Update()) {
 			break;
 		}
-		g_GUIEditor.FlipFrameBuffers();
+		g_GUIEditor.DrawEditor();
 	}
 	ContentFile::FreeAllLoaded();
 

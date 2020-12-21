@@ -70,17 +70,7 @@ namespace RTEGUI {
 		/// <summary>
 		/// 
 		/// </summary>
-		void FlipFrameBuffers();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void DrawZoomedWorkspace();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void ClearBackBuffer() const;
+		void DrawEditor();
 
 	protected:
 
