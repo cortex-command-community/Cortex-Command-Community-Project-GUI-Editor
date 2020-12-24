@@ -684,7 +684,7 @@ namespace RTEGUI {
 
 	void GUIEditorApp::OnLoadButton(bool addControls) {
 		std::string newFilename;
-		if (GUIEditorUtil::DisplayLoadGUIFile(&newFilename, "Cortex Command GUI Editor")) {
+		if (GUIEditorUtil::DisplayLoadGUIFile(&newFilename, win_get_window())) {
 			m_ControlManager->Load(newFilename, addControls);
 			m_Filename = newFilename;
 
@@ -710,7 +710,7 @@ namespace RTEGUI {
 	void GUIEditorApp::OnSaveButton(bool saveAsNewFile) {
 		if (saveAsNewFile || m_Filename.empty()) {
 			std::string newFilename;
-			if (GUIEditorUtil::DisplaySaveGUIFile(&newFilename, "Cortex Command GUI Editor")) { m_Filename = newFilename; }
+			if (GUIEditorUtil::DisplaySaveGUIFile(&newFilename, win_get_window())) { m_Filename = newFilename; }
 		}
 		// Move the root object to top left corner before saving so it is displayed correctly in-game.
 		m_RootControl->Move(0, 0);
@@ -728,7 +728,7 @@ namespace RTEGUI {
 	void GUIEditorApp::OnQuitButton() {
 		int quitResult = 1;
 		if (m_UnsavedChanges) {
-			quitResult = GUIEditorUtil::QuitMessageBox("Save changes made?", "Cortex Command GUI Editor");
+			quitResult = GUIEditorUtil::QuitMessageBox("Save changes made?", win_get_window());
 			if (quitResult == 1) { OnSaveButton(); }
 		}
 		m_Quit = (quitResult != 0) ? true : false;

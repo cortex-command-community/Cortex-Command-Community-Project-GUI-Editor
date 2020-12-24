@@ -8,8 +8,8 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorUtil::QuitMessageBox(const std::string &message, const std::string &title) {
-		int result = MessageBox(FindWindow(nullptr, title.c_str()), message.c_str(), title.c_str(), MB_YESNOCANCEL);
+	int GUIEditorUtil::QuitMessageBox(const std::string &message, const HWND &windowHandle) {
+		int result = MessageBox(windowHandle, message.c_str(), "Cortex Command GUI Editor", MB_YESNOCANCEL);
 
 		if (result == IDNO) { return -1; }
 		if (result == IDYES) { return 1; }
@@ -18,7 +18,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorUtil::DisplayLoadGUIFile(std::string *filename, const std::string &title) {
+	bool GUIEditorUtil::DisplayLoadGUIFile(std::string *filename, const HWND &windowHandle) {
 		OPENFILENAMEA ofn; // common dialog box structure
 		char szFile[260]; // File name
 
@@ -33,7 +33,7 @@ namespace RTEGUI {
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
 		ofn.hInstance = nullptr;
-		ofn.hwndOwner = FindWindow(nullptr, title.c_str());
+		ofn.hwndOwner = windowHandle;
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
@@ -56,7 +56,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorUtil::DisplaySaveGUIFile(std::string *filename, const std::string &title) {
+	bool GUIEditorUtil::DisplaySaveGUIFile(std::string *filename, const HWND &windowHandle) {
 		OPENFILENAMEA ofn; // common dialog box structure
 		char szFile[260]; // File name
 
@@ -71,7 +71,7 @@ namespace RTEGUI {
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
 		ofn.hInstance = nullptr;
-		ofn.hwndOwner = FindWindow(nullptr, title.c_str());
+		ofn.hwndOwner = windowHandle;
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
@@ -88,7 +88,7 @@ namespace RTEGUI {
 			FILE *fp = fopen(szFile, "rt");
 			if (fp) {
 				fclose(fp);
-				if (MessageBox(FindWindow(nullptr, title.c_str()), "File Exists\nOverwrite it?", "Confirmation", MB_YESNO) == IDNO) {
+				if (MessageBox(windowHandle, "File Exists\nOverwrite it?", "Confirmation", MB_YESNO) == IDNO) {
 					_chdir(szCurrentDir);
 					return false;
 				}
