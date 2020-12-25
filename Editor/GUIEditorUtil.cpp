@@ -19,86 +19,78 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorUtil::DisplayLoadGUIFile(std::string *filename, const HWND &windowHandle) {
-		OPENFILENAMEA ofn; // common dialog box structure
-		char szFile[260]; // File name
+		OPENFILENAMEA dialogBox;
+		std::string filenameToLoad(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 
-		// Save the current working directory
-		char szCurrentDir[_MAX_PATH];
-		_getcwd(szCurrentDir, _MAX_PATH);
-
-		// Clear the filename (otherwise it won't work)
-		memset(szFile, 0, sizeof(szFile));
+		std::string currentDir(MAX_PATH, '\0');
+		currentDir = std::filesystem::current_path().string();
 
 		// Initialize OPENFILENAME
-		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hInstance = nullptr;
-		ofn.hwndOwner = windowHandle;
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrTitle = "Open";
-		ofn.lpstrInitialDir = szCurrentDir;
-		ofn.Flags = OFN_PATHMUSTEXIST;
-		ofn.lpstrDefExt = "ini";
+		ZeroMemory(&dialogBox, sizeof(OPENFILENAME));
+		dialogBox.lStructSize = sizeof(OPENFILENAME);
+		dialogBox.hInstance = nullptr;
+		dialogBox.hwndOwner = windowHandle;
+		dialogBox.lpstrFile = filenameToLoad.data();
+		dialogBox.nMaxFile = filenameToLoad.size();
+		dialogBox.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
+		dialogBox.nFilterIndex = 1;
+		dialogBox.lpstrFileTitle = nullptr;
+		dialogBox.nMaxFileTitle = 0;
+		dialogBox.lpstrTitle = "Open";
+		dialogBox.lpstrInitialDir = currentDir.data();
+		dialogBox.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+		dialogBox.lpstrDefExt = "ini";
 
-		if (GetOpenFileName(&ofn)) {
-			*filename = std::string(szFile);
-			_chdir(szCurrentDir);
+		if (GetOpenFileName(&dialogBox)) {
+			*filename = std::string(filenameToLoad.data());
+			std::filesystem::current_path(currentDir);
 			return true;
 		}
-		_chdir(szCurrentDir);
+		std::filesystem::current_path(currentDir);
 		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIEditorUtil::DisplaySaveGUIFile(std::string *filename, const HWND &windowHandle) {
-		OPENFILENAMEA ofn; // common dialog box structure
-		char szFile[260]; // File name
+		OPENFILENAMEA dialogBox;
+		std::string filenameToSave(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 
-		// Save the current working directory
-		char szCurrentDir[_MAX_PATH];
-		_getcwd(szCurrentDir, _MAX_PATH);
-
-		// Clear the filename (otherwise it won't work)
-		memset(szFile, 0, sizeof(szFile));
+		std::string currentDir(MAX_PATH, '\0');
+		currentDir = std::filesystem::current_path().string();
 
 		// Initialize OPENFILENAME
-		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hInstance = nullptr;
-		ofn.hwndOwner = windowHandle;
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrTitle = "Save As";
-		ofn.lpstrInitialDir = szCurrentDir;
-		ofn.Flags = OFN_PATHMUSTEXIST;
-		ofn.lpstrDefExt = "ini";
+		ZeroMemory(&dialogBox, sizeof(OPENFILENAME));
+		dialogBox.lStructSize = sizeof(OPENFILENAME);
+		dialogBox.hInstance = nullptr;
+		dialogBox.hwndOwner = windowHandle;
+		dialogBox.lpstrFile = filenameToSave.data();
+		dialogBox.nMaxFile = filenameToSave.size();
+		dialogBox.lpstrFilter = "GUI Files (*.ini)\0*.ini\0All Files\0*.*";
+		dialogBox.nFilterIndex = 1;
+		dialogBox.lpstrFileTitle = nullptr;
+		dialogBox.nMaxFileTitle = 0;
+		dialogBox.lpstrTitle = "Save As";
+		dialogBox.lpstrInitialDir = currentDir.data();
+		dialogBox.Flags = OFN_PATHMUSTEXIST;
+		dialogBox.lpstrDefExt = "ini";
 
-		if (GetSaveFileName(&ofn)) {
+		if (GetSaveFileName(&dialogBox)) {
 			// Check if the file exists
-			FILE *fp = fopen(szFile, "rt");
-			if (fp) {
-				fclose(fp);
+			FILE *file = fopen(filenameToSave.c_str(), "rt");
+			if (file) {
+				fclose(file);
 				if (MessageBox(windowHandle, "File Exists\nOverwrite it?", "Confirmation", MB_YESNO) == IDNO) {
-					_chdir(szCurrentDir);
+					std::filesystem::current_path(currentDir);
 					return false;
 				}
 			}
-			*filename = std::string(szFile);
-			_chdir(szCurrentDir);
+			*filename = filenameToSave;
+			std::filesystem::current_path(currentDir);
 			return true;
 		}
 		// Restore the current working directory
-		_chdir(szCurrentDir);
+		std::filesystem::current_path(currentDir);
 		return false;
 	}
 }
