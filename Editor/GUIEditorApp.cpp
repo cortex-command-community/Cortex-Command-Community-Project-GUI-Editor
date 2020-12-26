@@ -196,12 +196,16 @@ namespace RTEGUI {
 				m_SelectionInfo.GrabbedControl = false;
 				m_SelectionInfo.GrabbedHandle = false;
 				m_SelectionInfo.Control = boxControl;
+
+				PopulateControlsInActiveCollectionBoxList(dynamic_cast<GUICollectionBox *>(boxControl));
 			}
 		} else {
 			// Deselection if clicked on no list item
 			m_SelectionInfo.GrabbedControl = false;
 			m_SelectionInfo.GrabbedHandle = false;
 			m_SelectionInfo.Control = nullptr;
+
+			m_ControlsInActiveCollectionBoxList->ClearList();
 		}
 	}
 
@@ -217,8 +221,24 @@ namespace RTEGUI {
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) {
 				m_ActiveCollectionBoxList->AddItem(collectionBox->GetName());
 				// Check if this is selected in the editor, and if so, select it in the list too
-				if (collectionBox == m_SelectionInfo.Control) { m_ActiveCollectionBoxList->SetSelectedIndex(m_ActiveCollectionBoxList->GetItemList()->size() - 1); }
+				if (m_SelectionInfo.Control == collectionBox) {
+					m_ActiveCollectionBoxList->SetSelectedIndex(m_ActiveCollectionBoxList->GetItemList()->size() - 1);
+					PopulateControlsInActiveCollectionBoxList(collectionBox);
+				}
 			}
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::PopulateControlsInActiveCollectionBoxList(GUICollectionBox *collectionBox) const {
+		m_ControlsInActiveCollectionBoxList->ClearList();
+
+		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
+		for (GUIControl *control : *collectionBox->GetChildren()) {
+			m_ControlsInActiveCollectionBoxList->AddItem(control->GetName());
+			// Check if this is selected in the editor, and if so, select it in the list too
+			if (collectionBox == m_SelectionInfo.Control) { m_ControlsInActiveCollectionBoxList->SetSelectedIndex(m_ActiveCollectionBoxList->GetItemList()->size() - 1); }
 		}
 	}
 
