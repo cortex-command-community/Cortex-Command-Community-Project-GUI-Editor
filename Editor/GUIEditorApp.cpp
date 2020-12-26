@@ -599,6 +599,14 @@ namespace RTEGUI {
 			m_PropertyPage->ClearValues();
 		}
 
+		if (m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed) {
+			if (m_KeyStates.at(KEY_S) == pressed) {
+				OnSaveButton((m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed) ? true : false);
+			} else if (m_KeyStates.at(KEY_O) == pressed) {
+				OnLoadButton((m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed) ? true : false);
+			}
+		}
+
 		m_PrevKeyStates = m_KeyStates;
 	}
 
