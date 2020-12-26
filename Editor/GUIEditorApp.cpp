@@ -580,17 +580,19 @@ namespace RTEGUI {
 			} else {
 				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
 
+				int nudgeSize = (m_KeyStates.at(KEY_LSHIFT) == pressed || m_PrevKeyStates.at(KEY_RSHIFT) == pressed) ? 1 : m_GridSize;
+
 				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - m_GridSize);
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - nudgeSize);
 					m_UnsavedChanges = true;
 				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + m_GridSize);
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + nudgeSize);
 					m_UnsavedChanges = true;
 				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - m_GridSize, selectedElement->GetYPos());
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - nudgeSize, selectedElement->GetYPos());
 					m_UnsavedChanges = true;
 				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + m_GridSize, selectedElement->GetYPos());
+					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + nudgeSize, selectedElement->GetYPos());
 					m_UnsavedChanges = true;
 				}
 			}
