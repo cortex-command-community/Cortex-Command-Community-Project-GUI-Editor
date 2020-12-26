@@ -655,7 +655,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::DrawSelectionResizeBox(int xPos, int yPos) const {
-		int boxSize = 5;
+		int boxSize = (m_Zoom) ? 5 : 7;
 		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0x000000, true);
 		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0xFFFFFF, false);
 	}
