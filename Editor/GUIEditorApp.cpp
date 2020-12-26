@@ -52,18 +52,18 @@ namespace RTEGUI {
 		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
 		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
 
-		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 200, 55));
+		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 270, 55));
 		filePanel->SetDrawType(GUICollectionBox::Panel);
 
-		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("LoadButton", "BUTTON", filePanel, 5, 5, 60, 20));
+		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("LoadButton", "BUTTON", filePanel, 5, 5, 85, 20));
 		toolboxButton->SetText("Load");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("AddButton", "BUTTON", filePanel, 5, 30, 60, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("AddButton", "BUTTON", filePanel, 5, 30, 85, 20));
 		toolboxButton->SetText("Add File");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveButton", "BUTTON", filePanel, 70, 5, 60, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveButton", "BUTTON", filePanel, 95, 5, 85, 20));
 		toolboxButton->SetText("Save");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveAsButton", "BUTTON", filePanel, 70, 30, 60, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("SaveAsButton", "BUTTON", filePanel, 95, 30, 85, 20));
 		toolboxButton->SetText("Save As");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("QuitButton", "BUTTON", filePanel, 135, 5, 60, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorManager->AddControl("QuitButton", "BUTTON", filePanel, 185, 5, 80, 20));
 		toolboxButton->SetText("Quit");
 
 		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), filePanel->GetRelXPos(), filePanel->GetRelYPos() + 65, 270, 155));
@@ -113,9 +113,15 @@ namespace RTEGUI {
 		zoomCheckBox->SetText("Zoom");
 		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
 
-		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 245)));
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 360)));
 
-		m_ActiveBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_LeftColumn.get(), m_PropertyPage.get()->GetRelXPos(), m_PropertyPage.get()->GetRelYPos() + 255, 270, 105)));
+		m_RightColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("RightColumn", "COLLECTIONBOX", nullptr, m_ResX - 290, 0, 290, m_ResY)));
+		m_RightColumn->SetDrawBackground(true);
+		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
+		m_RightColumn->SetDrawType(GUICollectionBox::Color);
+
+		m_ActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_RightColumn.get(), 15, 5, 270, 200)));
+		m_ControlsInActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ControlsInActiveCollectionBox", "LISTBOX", m_RightColumn.get(), 15, m_ActiveCollectionBoxList->GetRelYPos() + 210, 270, 380)));
 
 		// Add an area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
@@ -162,7 +168,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::UpdateActiveBoxList() {
-		const GUIListPanel::Item *item = m_ActiveBoxList->GetSelected();
+		const GUIListPanel::Item *item = m_ActiveCollectionBoxList->GetSelected();
 		if (item) {
 			// Try to find the box of that name, and select it
 			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name);
@@ -182,16 +188,16 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::PopulateActiveBoxList() const {
-		m_ActiveBoxList->ClearList();
+		m_ActiveCollectionBoxList->ClearList();
 		GUICollectionBox *collectionBox = nullptr;
 
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
 		for (GUIControl *control : *m_ControlManager->GetControlList()) {
 			// Look for CollectionBoxes with the root control as parent
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) {
-				m_ActiveBoxList->AddItem(collectionBox->GetName());
+				m_ActiveCollectionBoxList->AddItem(collectionBox->GetName());
 				// Check if this is selected in the editor, and if so, select it in the list too
-				if (collectionBox == m_SelectionInfo.Control) { m_ActiveBoxList->SetSelectedIndex(m_ActiveBoxList->GetItemList()->size() - 1); }
+				if (collectionBox == m_SelectionInfo.Control) { m_ActiveCollectionBoxList->SetSelectedIndex(m_ActiveCollectionBoxList->GetItemList()->size() - 1); }
 			}
 		}
 	}
@@ -648,10 +654,11 @@ namespace RTEGUI {
 		}
 		clear_to_color(m_BackBuffer, 0);
 
-		m_EditorBase.get()->Draw(m_Screen.get());
+		m_EditorBase->Draw(m_Screen.get());
 		m_ControlManager->Draw();
 		if (m_SelectionInfo.Control) { DrawSelectionBox(m_SelectionInfo.Control); }
-		m_LeftColumn.get()->Draw(m_Screen.get());
+		m_LeftColumn->Draw(m_Screen.get());
+		m_RightColumn->Draw(m_Screen.get());
 		m_EditorManager->DrawMouse();
 
 		if (m_Zoom) {
@@ -720,9 +727,11 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
-		m_EditorBase.get()->Resize(resizeInfo->new_w, resizeInfo->new_h);
-		m_LeftColumn.get()->Resize(m_LeftColumn.get()->GetWidth(), resizeInfo->new_h);
-		m_ActiveBoxList.get()->Resize(m_ActiveBoxList.get()->GetWidth(), resizeInfo->new_h - m_ActiveBoxList.get()->GetRelYPos() - 5);
+		m_EditorBase->Resize(resizeInfo->new_w, resizeInfo->new_h);
+		m_LeftColumn->Resize(m_LeftColumn->GetWidth(), resizeInfo->new_h);
+		m_RightColumn->Resize(m_RightColumn->GetWidth(), resizeInfo->new_h);
+		m_RightColumn->Move(resizeInfo->new_w - m_RightColumn->GetWidth(), 0);
+		m_ControlsInActiveCollectionBoxList->Resize(m_ActiveCollectionBoxList->GetWidth(), resizeInfo->new_h - m_ControlsInActiveCollectionBoxList->GetRelYPos() - 5);
 		m_WindowResized = true;
 	}
 }

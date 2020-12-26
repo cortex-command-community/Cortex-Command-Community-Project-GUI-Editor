@@ -110,7 +110,7 @@ namespace RTEGUI {
 		bool m_Quit = false;
 		bool m_WindowResized = false;
 
-		int m_ResX = 1024;
+		int m_ResX = 1280;
 		int m_ResY = 600;
 		BITMAP *m_BackBuffer = nullptr;
 		std::unique_ptr<AllegroScreen> m_Screen = nullptr;
@@ -118,9 +118,11 @@ namespace RTEGUI {
 		std::unique_ptr<GUIControlManager> m_ControlManager = nullptr;
 		std::unique_ptr<GUIControlManager> m_EditorManager = nullptr;
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage = nullptr;
-		std::unique_ptr<GUIListBox> m_ActiveBoxList = nullptr;
+		std::unique_ptr<GUIListBox> m_ActiveCollectionBoxList = nullptr;
+		std::unique_ptr<GUIListBox> m_ControlsInActiveCollectionBoxList = nullptr;
 		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr;
 		std::unique_ptr<GUICollectionBox> m_LeftColumn = nullptr;
+		std::unique_ptr<GUICollectionBox> m_RightColumn = nullptr;
 		GUIControl *m_RootControl = nullptr;
 		Selection m_SelectionInfo;
 		std::string m_Filename = "";
@@ -130,7 +132,7 @@ namespace RTEGUI {
 		bool m_SnapToGrid = true;
 		bool m_Zoom = false;
 		int	m_GridSize = 5;
-		int m_WorkspacePosX = 335;
+		int m_WorkspacePosX = 320;
 		int m_WorkspacePosY = 60;
 		int m_WorkspaceWidth = 640;
 		int m_WorkspaceHeight = 480;
