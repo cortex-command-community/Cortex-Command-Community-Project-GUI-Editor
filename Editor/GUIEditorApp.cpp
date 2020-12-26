@@ -125,8 +125,8 @@ namespace RTEGUI {
 		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
 		m_RightColumn->SetDrawType(GUICollectionBox::Color);
 
-		m_ActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_RightColumn.get(), 15, 5, 270, 200)));
-		m_ControlsInActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ControlsInActiveCollectionBox", "LISTBOX", m_RightColumn.get(), 15, m_ActiveCollectionBoxList->GetRelYPos() + 210, 270, 380)));
+		m_ActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ActiveCollectionBoxes", "LISTBOX", m_RightColumn.get(), 15, 5, 270, 230)));
+		m_ControlsInActiveCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorManager->AddControl("ControlsInActiveCollectionBox", "LISTBOX", m_RightColumn.get(), 15, m_ActiveCollectionBoxList->GetRelYPos() + 240, 270, 350)));
 
 		// Add an area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
@@ -211,7 +211,19 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::PopulateActiveBoxList() const {
+	void GUIEditorApp::AddItemToActiveCollectionBoxList(GUIControl *control, const std::string &indent) const {
+		m_ActiveCollectionBoxList->AddItem(indent + control->GetName());
+
+		for (GUIControl *childControl : *control->GetChildren()) {
+			if ((control = dynamic_cast<GUICollectionBox *>(childControl))) {
+				AddItemToActiveCollectionBoxList(control, indent + "\t");
+			}
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::PopulateActiveCollectionBoxList() const {
 		m_ActiveCollectionBoxList->ClearList();
 		GUICollectionBox *collectionBox = nullptr;
 
@@ -220,6 +232,12 @@ namespace RTEGUI {
 			// Look for CollectionBoxes with the root control as parent
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) {
 				m_ActiveCollectionBoxList->AddItem(collectionBox->GetName());
+
+				for (GUIControl *childControl : *collectionBox->GetChildren()) {
+					if ((collectionBox = dynamic_cast<GUICollectionBox *>(childControl))) {
+						AddItemToActiveCollectionBoxList(collectionBox, "\t");
+					}
+				}
 				// Check if this is selected in the editor, and if so, select it in the list too
 				if (m_SelectionInfo.Control == collectionBox) {
 					m_ActiveCollectionBoxList->SetSelectedIndex(m_ActiveCollectionBoxList->GetItemList()->size() - 1);
@@ -409,7 +427,7 @@ namespace RTEGUI {
 
 		if (parent) { m_ControlManager->AddControl(name, controlClass, parent, 0, 0, -1, -1); }
 
-		PopulateActiveBoxList();
+		PopulateActiveCollectionBoxList();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -734,7 +752,7 @@ namespace RTEGUI {
 			m_PropertyPage->ClearValues();
 			m_UnsavedChanges = false;
 
-			PopulateActiveBoxList();
+			PopulateActiveCollectionBoxList();
 		}
 	}
 

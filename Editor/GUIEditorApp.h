@@ -156,7 +156,12 @@ namespace RTEGUI {
 		/// <summary>
 		/// 
 		/// </summary>
-		void PopulateActiveBoxList() const;
+		void AddItemToActiveCollectionBoxList(GUIControl *control, const std::string &indent) const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void PopulateActiveCollectionBoxList() const;
 
 		/// <summary>
 		/// 
