@@ -214,6 +214,12 @@ namespace RTEGUI {
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="control"></param>
+		void UpdateControlProperties(GUIControl *control, bool setUnsavedChanges = true);
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="editorEvent"></param>
 		void UpdateGridSize(GUIEvent &editorEvent);
 

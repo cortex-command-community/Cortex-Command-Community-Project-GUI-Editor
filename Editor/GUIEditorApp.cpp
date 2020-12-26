@@ -172,6 +172,19 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIEditorApp::UpdateControlProperties(GUIControl *control, bool setUnsavedChanges) {
+		control->StoreProperties();
+
+		GUIProperties properties;
+		properties.Update(control->GetProperties(), true);
+		control->GetPanel()->BuildProperties(&properties);
+		m_PropertyPage->SetPropertyValues(&properties);
+
+		if (setUnsavedChanges) { m_UnsavedChanges = true; }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void GUIEditorApp::UpdateActiveBoxList() {
 		const GUIListPanel::Item *item = m_ActiveCollectionBoxList->GetSelected();
 		if (item) {
@@ -482,16 +495,7 @@ namespace RTEGUI {
 			}
 
 			// Update properties
-			if (!ControlUnderMouse(m_PropertyPage.get(), mousePosX, mousePosY) && m_SelectionInfo.Control) {
-				m_SelectionInfo.Control->StoreProperties();
-
-				GUIProperties properties;
-				properties.Update(m_SelectionInfo.Control->GetProperties(), true);
-				m_SelectionInfo.Control->GetPanel()->BuildProperties(&properties);
-				m_PropertyPage->SetPropertyValues(&properties);
-
-				m_UnsavedChanges = true;
-			}
+			if (!ControlUnderMouse(m_PropertyPage.get(), mousePosX, mousePosY) && m_SelectionInfo.Control) { UpdateControlProperties(m_SelectionInfo.Control); }
 
 			m_SelectionInfo.GrabbedControl = false;
 			m_SelectionInfo.GrabbedHandle = false;
@@ -518,7 +522,6 @@ namespace RTEGUI {
 		// This prevents quickly selecting a control and slightly moving a couple pixels before releasing
 		if ((m_SelectionInfo.GrabbedControl || m_SelectionInfo.GrabbedHandle) && !m_SelectionInfo.TriggerGrab) {
 			int moveDist = 4;
-
 			if (std::fabs(m_SelectionInfo.ClickX - mousePosX) >= moveDist || std::fabs(m_SelectionInfo.ClickY - mousePosY) >= moveDist) { m_SelectionInfo.TriggerGrab = true; }
 		}
 
@@ -532,24 +535,16 @@ namespace RTEGUI {
 				int height;
 				control->GetControlRect(&xPos, &yPos, &width, &height);
 
-				m_SelectionInfo.GrabbedHandle = false;
-
 				m_SelectionInfo.GrabbedControl = true;
+				m_SelectionInfo.GrabbedHandle = false;
+				m_SelectionInfo.Control = control;
+
 				m_SelectionInfo.GrabX = xPos - mousePosX;
 				m_SelectionInfo.GrabY = yPos - mousePosY;
 				m_SelectionInfo.ClickX = mousePosX;
 				m_SelectionInfo.ClickY = mousePosY;
 
-				m_SelectionInfo.Control = control;
-
-				// Set the properties
-				control->StoreProperties();
-
-				GUIProperties properties;
-				properties.Update(control->GetProperties(), true);
-				control->GetPanel()->BuildProperties(&properties);
-				m_PropertyPage->SetPropertyValues(&properties);
-
+				UpdateControlProperties(m_SelectionInfo.Control, false);
 			} else if (control == m_RootControl) {
 				// Unselect control
 				m_SelectionInfo.GrabbedControl = false;
@@ -584,16 +579,16 @@ namespace RTEGUI {
 
 				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - nudgeSize);
-					m_UnsavedChanges = true;
+					UpdateControlProperties(m_SelectionInfo.Control);
 				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + nudgeSize);
-					m_UnsavedChanges = true;
+					UpdateControlProperties(m_SelectionInfo.Control);
 				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - nudgeSize, selectedElement->GetYPos());
-					m_UnsavedChanges = true;
+					UpdateControlProperties(m_SelectionInfo.Control);
 				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + nudgeSize, selectedElement->GetYPos());
-					m_UnsavedChanges = true;
+					UpdateControlProperties(m_SelectionInfo.Control);
 				}
 			}
 		}
