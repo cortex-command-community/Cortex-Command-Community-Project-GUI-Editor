@@ -18,6 +18,8 @@ namespace RTEGUI {
 		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
 		set_close_button_callback(QuitHandler);
 		set_resize_callback(ResizeHandler);
+		set_display_switch_callback(SWITCH_OUT, SwitchOutHandler);
+		set_display_switch_callback(SWITCH_IN, SwitchInHandler);
 
 		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
 		m_BackBuffer = create_bitmap(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));

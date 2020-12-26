@@ -271,5 +271,7 @@ namespace RTEGUI {
 	/// </summary>
 	static void QuitHandler() { g_GUIEditor.OnQuitButton(); }
 	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
+	static void SwitchOutHandler() { remove_keyboard(); }
+	static void SwitchInHandler() { install_keyboard(); }
 }
 #endif
