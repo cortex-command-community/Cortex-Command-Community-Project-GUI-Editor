@@ -73,10 +73,10 @@ void AllegroInput::Update() {
 
 	// Modifiers
 	m_Modifier = ModNone;
-	if (key_shifts & KB_SHIFT_FLAG) { m_Modifier |= ModShift; }
-	if (key_shifts & KB_ALT_FLAG) { m_Modifier |= ModAlt; }
-	if (key_shifts & KB_CTRL_FLAG) { m_Modifier |= ModCtrl; }
-	if (key_shifts & KB_COMMAND_FLAG) { m_Modifier |= ModCommand; }
+	if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) { m_Modifier |= ModShift; }
+	if (key[KEY_ALT]) { m_Modifier |= ModAlt; }
+	if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) { m_Modifier |= ModCtrl; }
+	if (key[KEY_COMMAND]) { m_Modifier |= ModCommand; }
 
 	if (mouse_needs_poll()) { poll_mouse(); }
 
