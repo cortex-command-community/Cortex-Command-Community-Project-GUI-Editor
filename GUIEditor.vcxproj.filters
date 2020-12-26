@@ -129,9 +129,6 @@
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\WinUtil.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="Editor\GUIEditorUtil.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
@@ -259,9 +256,6 @@
     </ClInclude>
     <ClInclude Include="System\StandardIncludes.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\WinUtil.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="System\Singleton.h">
       <Filter>System</Filter>

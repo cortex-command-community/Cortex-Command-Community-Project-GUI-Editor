@@ -150,7 +150,6 @@
     <ClCompile Include="GUI\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUITextPanel.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
-    <ClCompile Include="GUI\WinUtil.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
@@ -195,7 +194,6 @@
     <ClInclude Include="GUI\GUITextBox.h" />
     <ClInclude Include="GUI\GUITextPanel.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
-    <ClInclude Include="GUI\WinUtil.h" />
     <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
