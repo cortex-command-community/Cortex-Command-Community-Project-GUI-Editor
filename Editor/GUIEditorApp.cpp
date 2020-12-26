@@ -143,7 +143,9 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::UpdateGridSize(GUIEvent &editorEvent) {
-		const std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		if (newValue.empty()) { newValue = "1"; }
+
 		bool validEntry = true;
 		for (const char &stringChar : newValue) {
 			if (!std::isdigit(stringChar)) {
