@@ -109,9 +109,12 @@ namespace RTEGUI {
 		snapCheckbox->SetText("Snap to Grid");
 		snapCheckbox->SetCheck(GUICheckbox::Checked);
 
-		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 100, snapCheckbox->GetRelYPos(), 75, 15));
-		zoomCheckBox->SetText("Zoom");
-		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
+		// Only allow workspace zoom if the screen resolution is FHD or above, smaller resolutions can't fully display it
+		if (m_BackBuffer->w >= 1920 && m_BackBuffer->h >= 1080) {
+			GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 100, snapCheckbox->GetRelYPos(), 75, 15));
+			zoomCheckBox->SetText("Zoom");
+			zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
+		}
 
 		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 360)));
 
