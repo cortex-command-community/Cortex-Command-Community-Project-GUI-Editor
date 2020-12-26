@@ -8,7 +8,7 @@ using HWND = HWND__*;
 namespace RTEGUI {
 
 	/// <summary>
-	/// GUI Editor Library class with static functions to handle windows calls
+	/// GUI Editor Library class with static functions to handle Windows calls.
 	/// </summary>
 	class GUIEditorUtil {
 

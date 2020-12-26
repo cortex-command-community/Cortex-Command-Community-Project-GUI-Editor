@@ -75,117 +75,6 @@ namespace RTEGUI {
 		void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
 #pragma endregion
 
-	protected:
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void CreateEditorElements();
-
-		/// <summary>
-		/// Process the editor logic.
-		/// </summary>
-		void ProcessMouseInput();
-
-		void ProcessKeyboardInput();
-
-		/// <summary>
-		/// Updates the list of Active top level ControlBoxs found in the editor.
-		/// </summary>
-		void UpdateActiveBoxList();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void PopulateActiveBoxList() const;
-
-		/// <summary>
-		/// Checks if a control is under the mouse point.
-		/// </summary>
-		/// <param name="Parent"></param>
-		/// <param name="MouseX"></param>
-		/// <param name="MouseY"></param>
-		/// <returns>GUIControl. NULL if no control under the mouse.</returns>
-		GUIControl *ControlUnderMouse(GUIControl *parent, int mousePosX, int mousePosY);
-
-		/// <summary>
-		/// Checks if a control's handle is under the mouse point.
-		/// </summary>
-		/// <param name="Control"></param>
-		/// <param name="MouseX"></param>
-		/// <param name="MouseY"></param>
-		/// <returns>Handle index. -1 if no handle under the mouse.</returns>
-		int HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const;
-
-		/// <summary>
-		/// Checks if the mouse point is inside a box.
-		/// </summary>
-		/// <param name="MouseX"></param>
-		/// <param name="MouseY"></param>
-		/// <param name="X"></param>
-		/// <param name="Y"></param>
-		/// <param name="Width"></param>
-		/// <param name="Height"></param>
-		/// <returns>True/False.</returns>
-		bool MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const;
-
-		/// <summary>
-		/// Draws selection info around a control.
-		/// </summary>
-		/// <param name="Control">GUIControl.</param>
-		void DrawSelectedControl(GUIControl *control);
-
-		/// <summary>
-		/// Draws a selection handle.
-		/// </summary>
-		/// <param name="X">Position.</param>
-		/// <param name="Y"></param>
-		/// <param name="Width">Size.</param>
-		/// <param name="Height"></param>
-		void DrawSelectionHandle(int xPos, int yPos, int width, int height) const;
-
-		/// <summary>
-		/// Calculates new position/size of a control given a handle movement.
-		/// </summary>
-		/// <param name="MouseX">Mouse.</param>
-		/// <param name="MouseY"></param>
-		/// <param name="X">Position.</param>
-		/// <param name="Y"></param>
-		/// <param name="Width">Size.</param>
-		/// <param name="Height"></param>
-		void CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height);
-
-		/// <summary>
-		/// Generates a new control name based on the type.
-		/// </summary>
-		/// <param name="strControlType">Control Type.</param>
-		/// <returns></returns>
-		std::string GenerateControlName(std::string controlType) const;
-
-		/// <summary>
-		/// Calculates the nearest snap position (if snap is on).
-		/// </summary>
-		/// <param name="Position">Position.</param>
-		/// <returns></returns>
-		int ProcessSnapCoord(int position) const;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void UpdatePropertyPage(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="editorEvent"></param>
-		void UpdateGridSize(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="editorEvent"></param>
-		void AddNewControl(GUIEvent &editorEvent);
-
 	private:
 
 		/// <summary>
@@ -245,6 +134,124 @@ namespace RTEGUI {
 		int m_WorkspacePosY = 60;
 		int m_WorkspaceWidth = 640;
 		int m_WorkspaceHeight = 480;
+
+#pragma region Creation
+		/// <summary>
+		/// Create all the editor's GUI elements and makes it ready for use.
+		/// </summary>
+		void CreateEditorLayout();
+#pragma endregion
+
+		/// <summary>
+		/// Updates the list of Active top level ControlBoxs found in the editor.
+		/// </summary>
+		void UpdateActiveBoxList();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void PopulateActiveBoxList() const;
+
+		/// <summary>
+		/// Checks if a control is under the mouse point.
+		/// </summary>
+		/// <param name="Parent"></param>
+		/// <param name="MouseX"></param>
+		/// <param name="MouseY"></param>
+		/// <returns>GUIControl. NULL if no control under the mouse.</returns>
+		GUIControl *ControlUnderMouse(GUIControl *parent, int mousePosX, int mousePosY);
+
+		/// <summary>
+		/// Checks if a control's handle is under the mouse point.
+		/// </summary>
+		/// <param name="Control"></param>
+		/// <param name="MouseX"></param>
+		/// <param name="MouseY"></param>
+		/// <returns>Handle index. -1 if no handle under the mouse.</returns>
+		int HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const;
+
+		/// <summary>
+		/// Checks if the mouse point is inside a box.
+		/// </summary>
+		/// <param name="MouseX"></param>
+		/// <param name="MouseY"></param>
+		/// <param name="X"></param>
+		/// <param name="Y"></param>
+		/// <param name="Width"></param>
+		/// <param name="Height"></param>
+		/// <returns>True/False.</returns>
+		bool MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const;
+
+		/// <summary>
+		/// Calculates new position/size of a control given a handle movement.
+		/// </summary>
+		/// <param name="MouseX">Mouse.</param>
+		/// <param name="MouseY"></param>
+		/// <param name="X">Position.</param>
+		/// <param name="Y"></param>
+		/// <param name="Width">Size.</param>
+		/// <param name="Height"></param>
+		void CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height);
+
+		/// <summary>
+		/// Calculates the nearest snap position (if snap is on).
+		/// </summary>
+		/// <param name="Position">Position.</param>
+		/// <returns></returns>
+		int ProcessSnapCoord(int position) const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdatePropertyPage(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="editorEvent"></param>
+		void UpdateGridSize(GUIEvent &editorEvent);
+
+#pragma region GUI Element Creation
+		/// <summary>
+		/// Create a new GUI element in the workspace.
+		/// </summary>
+		/// <param name="editorEvent">The editor event (button press) to create the element from.</param>
+		void AddNewControl(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// Generates a name for a new GUI element based on the element type.
+		/// </summary>
+		/// <param name="strControlType">Control Type.</param>
+		/// <returns></returns>
+		std::string GenerateControlName(std::string controlType) const;
+#pragma endregion
+
+#pragma region Input Handling
+		/// <summary>
+		/// Process the mouse input of the editor.
+		/// </summary>
+		void ProcessMouseInput();
+
+		/// <summary>
+		/// Process the keyboard input of the editor.
+		/// </summary>
+		void ProcessKeyboardInput();
+#pragma endregion
+
+#pragma region Drawing
+		/// <summary>
+		/// Draws the selection box around the selected control.
+		/// </summary>
+		/// <param name="Control">GUI element to draw selection box around.</param>
+		void DrawSelectionBox(GUIControl *control);
+
+		/// <summary>
+		/// Draws a selection box resize handle.
+		/// </summary>
+		/// <param name="X">X position of drawn box.</param>
+		/// <param name="Y">Y position of drawn box.</param>
+		void DrawSelectionResizeBox(int xPos, int yPos) const;
+#pragma endregion
 
 		// Disallow the use of some implicit methods.
 		GUIEditorApp(const GUIEditorApp &reference) = delete;

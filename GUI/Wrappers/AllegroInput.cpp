@@ -84,26 +84,14 @@ void AllegroInput::Update() {
 	m_LastFrameMouseY = mouse_y;
 
 	// Update the mouse button events
-	if (m_OverrideInput) {
-		int player = m_Player;
-		if (player < 0 || player >= 4) { player = 0; }
+	m_MouseButtonsEvents[0] = mouse_b & AMBLEFT ? (m_MouseButtonsStates[0] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[0] == Down ? Released : None);
+	m_MouseButtonsEvents[1] = mouse_b & AMBMIDDLE ? (m_MouseButtonsStates[1] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[1] == Down ? Released : None);
+	m_MouseButtonsEvents[2] = mouse_b & AMBRIGHT ? (m_MouseButtonsStates[2] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[2] == Down ? Released : None);
 
-		m_NetworkMouseButtonsEvents[player][0] = m_NetworkMouseButtonsStates[player][0] == Down ? (m_PrevNetworkMouseButtonsStates[player][0] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][0] == Down ? Released : None);
-		m_NetworkMouseButtonsEvents[player][1] = m_NetworkMouseButtonsStates[player][1] == Down ? (m_PrevNetworkMouseButtonsStates[player][1] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][1] == Down ? Released : None);
-		m_NetworkMouseButtonsEvents[player][2] = m_NetworkMouseButtonsStates[player][2] == Down ? (m_PrevNetworkMouseButtonsStates[player][2] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][2] == Down ? Released : None);
+	m_MouseButtonsStates[0] = mouse_b & AMBLEFT ? Down : Up;
+	m_MouseButtonsStates[1] = mouse_b & AMBMIDDLE ? Down : Up;
+	m_MouseButtonsStates[2] = mouse_b & AMBRIGHT ? Down : Up;
 
-		m_PrevNetworkMouseButtonsStates[player][0] = m_NetworkMouseButtonsEvents[player][0];
-		m_PrevNetworkMouseButtonsStates[player][1] = m_NetworkMouseButtonsEvents[player][1];
-		m_PrevNetworkMouseButtonsStates[player][2] = m_NetworkMouseButtonsEvents[player][2];
-	} else {
-		m_MouseButtonsEvents[0] = mouse_b & AMBLEFT ? (m_MouseButtonsStates[0] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[0] == Down ? Released : None);
-		m_MouseButtonsEvents[1] = mouse_b & AMBMIDDLE ? (m_MouseButtonsStates[1] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[1] == Down ? Released : None);
-		m_MouseButtonsEvents[2] = mouse_b & AMBRIGHT ? (m_MouseButtonsStates[2] == Up ? Pushed : Repeat) : (m_MouseButtonsStates[2] == Down ? Released : None);
-
-		m_MouseButtonsStates[0] = mouse_b & AMBLEFT ? Down : Up;
-		m_MouseButtonsStates[1] = mouse_b & AMBMIDDLE ? Down : Up;
-		m_MouseButtonsStates[2] = mouse_b & AMBRIGHT ? Down : Up;
-	}
 	m_MouseX = mouse_x;
 	m_MouseY = mouse_y;
 }
