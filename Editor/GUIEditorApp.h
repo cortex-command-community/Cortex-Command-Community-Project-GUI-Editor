@@ -118,7 +118,7 @@ namespace RTEGUI {
 		std::unique_ptr<GUIControlManager> m_ControlManager = nullptr;
 		std::unique_ptr<GUIControlManager> m_EditorManager = nullptr;
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage = nullptr;
-		std::unique_ptr<GUIListBox> m_ActiveCollectionBoxList = nullptr;
+		std::unique_ptr<GUIListBox> m_CollectionBoxList = nullptr;
 		std::unique_ptr<GUIListBox> m_ControlsInActiveCollectionBoxList = nullptr;
 		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr;
 		std::unique_ptr<GUICollectionBox> m_LeftColumn = nullptr;
@@ -151,22 +151,22 @@ namespace RTEGUI {
 		/// <summary>
 		/// Updates the list of Active top level ControlBoxs found in the editor.
 		/// </summary>
-		void UpdateActiveBoxList();
+		void UpdateCollectionBoxList();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		void AddItemToActiveCollectionBoxList(GUIControl *control, const std::string &indent) const;
+		void AddItemToCollectionBoxList(GUIControl *control, const std::string &indent) const;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		void PopulateActiveCollectionBoxList() const;
+		void PopulateCollectionBoxList() const;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		void PopulateControlsInActiveCollectionBoxList(GUICollectionBox *collectionBox) const;
+		void PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const;
 
 		/// <summary>
 		/// Checks if a control is under the mouse point.
