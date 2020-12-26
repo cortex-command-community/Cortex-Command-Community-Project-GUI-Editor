@@ -562,11 +562,14 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIEditorApp::ProcessKeyboardInput() {
-		std::array<unsigned char, 256> keyboardBuffer;
-		m_Input->GetKeyboard(keyboardBuffer.data());
+		// Handle keyboard input directly from Allegro instead of through AllegroInput to make life easier.
+		for (int i = 0; i < KEY_MAX; ++i) {
+			m_KeyStates.at(i) = key[i];
+		}
+		int pressed = -1;
 
 		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
-			if (keyboardBuffer.at(GUIInput::Key_Delete) == GUIInput::Pushed) {
+			if (m_KeyStates.at(KEY_DEL) == pressed) {
 				m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
 				m_SelectionInfo.Control = nullptr;
 				m_SelectionInfo.GrabbedControl = false;
@@ -575,16 +578,16 @@ namespace RTEGUI {
 			} else {
 				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
 
-				if (keyboardBuffer.at(GUIInput::Key_UpArrow) == GUIInput::Pushed) {
+				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - m_GridSize);
 					m_UnsavedChanges = true;
-				} else if (keyboardBuffer.at(GUIInput::Key_DownArrow) == GUIInput::Pushed) {
+				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + m_GridSize);
 					m_UnsavedChanges = true;
-				} else if (keyboardBuffer.at(GUIInput::Key_LeftArrow) == GUIInput::Pushed) {
+				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - m_GridSize, selectedElement->GetYPos());
 					m_UnsavedChanges = true;
-				} else if (keyboardBuffer.at(GUIInput::Key_RightArrow) == GUIInput::Pushed) {
+				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + m_GridSize, selectedElement->GetYPos());
 					m_UnsavedChanges = true;
 				}
@@ -592,10 +595,12 @@ namespace RTEGUI {
 		}
 
 		// Escape key - Undo any grab
-		if (keyboardBuffer.at(GUIInput::Key_Escape) == GUIInput::Pushed) {
+		if (m_KeyStates.at(KEY_ESC) == pressed) {
 			m_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 		}
+
+		m_PrevKeyStates = m_KeyStates;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

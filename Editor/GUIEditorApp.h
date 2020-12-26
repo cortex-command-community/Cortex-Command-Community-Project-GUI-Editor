@@ -123,6 +123,10 @@ namespace RTEGUI {
 		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr;
 		std::unique_ptr<GUICollectionBox> m_LeftColumn = nullptr;
 		std::unique_ptr<GUICollectionBox> m_RightColumn = nullptr;
+
+		std::array<int, KEY_MAX> m_KeyStates;
+		std::array<int, KEY_MAX> m_PrevKeyStates;
+
 		GUIControl *m_RootControl = nullptr;
 		Selection m_SelectionInfo;
 		std::string m_Filename = "";
