@@ -569,6 +569,7 @@ namespace RTEGUI {
 
 		bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
 		bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
+		bool modAlt = m_KeyStates.at(KEY_ALT) == pressed;
 
 		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
 			if (m_KeyStates.at(KEY_DEL) == pressed) {
@@ -611,6 +612,8 @@ namespace RTEGUI {
 				OnLoadButton(modShift ? true : false);
 			}
 		}
+
+		if (modAlt && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
 
 		m_PrevKeyStates = m_KeyStates;
 	}
