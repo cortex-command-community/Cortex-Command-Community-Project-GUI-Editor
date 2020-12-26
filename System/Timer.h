@@ -11,12 +11,8 @@ namespace RTE {
 	public:
 		Timer() = default;
 		void Reset() { return; }
-		void SetRealTimeLimitMS(double newTimeLimit) { return; }
-		void SetRealTimeLimitS(double newTimeLimit) { return; }
 		double GetElapsedRealTimeMS() const { return 0; }
 		double GetElapsedRealTimeS() const { return 0; }
-		bool IsPastRealTimeLimit() { return true; }
-		double GetElapsedSimTimeMS() const { return 0; }
 	};
 }
 #endif

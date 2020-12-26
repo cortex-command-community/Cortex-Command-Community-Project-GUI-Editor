@@ -565,6 +565,9 @@ namespace RTEGUI {
 		}
 		int pressed = -1;
 
+		bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
+		bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
+
 		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
 			if (m_KeyStates.at(KEY_DEL) == pressed) {
 				m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
@@ -575,7 +578,7 @@ namespace RTEGUI {
 			} else {
 				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
 
-				int nudgeSize = (m_KeyStates.at(KEY_LSHIFT) == pressed || m_PrevKeyStates.at(KEY_RSHIFT) == pressed) ? 1 : m_GridSize;
+				int nudgeSize = modShift ? 1 : m_GridSize;
 
 				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
 					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - nudgeSize);
@@ -599,11 +602,11 @@ namespace RTEGUI {
 			m_PropertyPage->ClearValues();
 		}
 
-		if (m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed) {
+		if (modCtrl) {
 			if (m_KeyStates.at(KEY_S) == pressed) {
-				OnSaveButton((m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed) ? true : false);
+				OnSaveButton(modShift ? true : false);
 			} else if (m_KeyStates.at(KEY_O) == pressed) {
-				OnLoadButton((m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed) ? true : false);
+				OnLoadButton(modShift ? true : false);
 			}
 		}
 
