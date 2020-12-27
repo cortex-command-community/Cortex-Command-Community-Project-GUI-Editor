@@ -1,5 +1,5 @@
-#ifndef _GUIEDITORLIB_
-#define _GUIEDITORLIB_
+#ifndef _RTEGUIEDITORUTIL_
+#define _RTEGUIEDITORUTIL_
 
 // Forward declaration for HWND
 struct HWND__;
@@ -10,7 +10,7 @@ namespace RTEGUI {
 	/// <summary>
 	/// GUI Editor Library class with static functions to handle Windows calls.
 	/// </summary>
-	class GUIEditorUtil {
+	class EditorUtil {
 
 	public:
 

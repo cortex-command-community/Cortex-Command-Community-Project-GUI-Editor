@@ -1,4 +1,4 @@
-#include "GUIEditorUtil.h"
+#include "EditorUtil.h"
 
 #include <Windows.h>
 #include <commdlg.h>
@@ -8,7 +8,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorUtil::QuitMessageBox(const std::string &message, const HWND &windowHandle) {
+	int EditorUtil::QuitMessageBox(const std::string &message, const HWND &windowHandle) {
 		int result = MessageBox(windowHandle, message.c_str(), "Cortex Command GUI Editor", MB_YESNOCANCEL);
 
 		if (result == IDNO) { return -1; }
@@ -18,7 +18,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorUtil::DisplayLoadGUIFile(std::string *filename, const HWND &windowHandle) {
+	bool EditorUtil::DisplayLoadGUIFile(std::string *filename, const HWND &windowHandle) {
 		OPENFILENAMEA dialogBox;
 		std::string filenameToLoad(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 
@@ -52,7 +52,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorUtil::DisplaySaveGUIFile(std::string *filename, const HWND &windowHandle) {
+	bool EditorUtil::DisplaySaveGUIFile(std::string *filename, const HWND &windowHandle) {
 		OPENFILENAMEA dialogBox;
 		std::string filenameToSave(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 

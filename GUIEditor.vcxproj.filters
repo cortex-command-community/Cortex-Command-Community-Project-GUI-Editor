@@ -18,24 +18,12 @@
     <Filter Include="GUI\Wrappers">
       <UniqueIdentifier>{1b25b727-3fa0-45de-83e8-a280cc37a265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\RTECompatibility">
+      <UniqueIdentifier>{3c58d7d0-cdfc-429c-8180-7560dc38947f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Editor\GUIEditorApp.cpp">
-      <Filter>Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="System\ContentFile.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Reader.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTEError.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Writer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUIButton.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -129,37 +117,28 @@
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\GUIEditorUtil.cpp">
+    <ClCompile Include="System\RTECompatibility\ContentFile.cpp">
+      <Filter>System\RTECompatibility</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RTECompatibility\Reader.cpp">
+      <Filter>System\RTECompatibility</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RTECompatibility\RTEError.cpp">
+      <Filter>System\RTECompatibility</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RTECompatibility\Writer.cpp">
+      <Filter>System\RTECompatibility</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorApp.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorUtil.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Editor\GUIEditorApp.h">
-      <Filter>Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="System\ContentFile.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Reader.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTEError.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Serializable.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Timer.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Vector.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Writer.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUI.h">
       <Filter>GUI</Filter>
@@ -260,11 +239,35 @@
     <ClInclude Include="System\Singleton.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\GUIEditorUtil.h">
-      <Filter>Editor</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\GUIInterface.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\ContentFile.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\Reader.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\RTEError.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\Serializable.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\Timer.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\Vector.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RTECompatibility\Writer.h">
+      <Filter>System\RTECompatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorApp.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorUtil.h">
+      <Filter>Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
-#ifndef _RTEINCLUDES_
-#define _RTEINCLUDES_
+#ifndef _RTEGUIINCLUDES_
+#define _RTEGUIINCLUDES_
 
 // Disable a bunch of unneeded crap in WinAPI (on top of WIN32_LEAN_AND_MEAN)
 #ifdef _WIN32

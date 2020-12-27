@@ -1,7 +1,6 @@
-#include "GUIEditorApp.h"
-#include "GUIEditorUtil.h"
+#include "EditorApp.h"
+#include "EditorUtil.h"
 #include "ContentFile.h"
-#include "allegro.h"
 #include "winalleg.h"
 
 using namespace RTEGUI;
@@ -21,6 +20,7 @@ int main(int argc, char **argv) {
 		}
 		g_GUIEditor.DrawEditor();
 	}
+	g_GUIEditor.DestroyBackBuffers();
 	ContentFile::FreeAllLoaded();
 
 	std::exit(EXIT_SUCCESS);

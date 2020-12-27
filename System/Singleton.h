@@ -1,9 +1,7 @@
-#ifndef _RTESINGLETON_
-#define _RTESINGLETON_
+#ifndef _RTEGUISINGLETON_
+#define _RTEGUISINGLETON_
 
-#include "RTEError.h"
-
-namespace RTE {
+namespace RTEGUI {
 
 	template <typename Type>
 
@@ -30,7 +28,7 @@ namespace RTE {
 		static Type & Instance() {
 			if (!s_Instance) {
 				try { s_Instance = new Type(); }
-				catch (std::bad_alloc &catchResult) { RTEAbort("Failed to instantiate Singleton because: " + std::string(catchResult.what())); }
+				catch (std::bad_alloc &catchResult) { abort(); }
 			}
 			return *s_Instance;
 		}
@@ -40,7 +38,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a Singleton object.
 		/// </summary>
-		Singleton() { RTEAssert(!s_Instance, "Trying to create a second instance of a Singleton!"); }
+		Singleton() { assert(!s_Instance); }
 
 	private:
 

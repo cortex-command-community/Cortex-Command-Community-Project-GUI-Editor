@@ -1,17 +1,16 @@
-#include "GUIEditorApp.h"
-#include "GUIEditorUtil.h"
+#include "EditorApp.h"
+#include "EditorUtil.h"
 #include "GUIButton.h"
 #include "GUICheckbox.h"
 #include "GUILabel.h"
 #include "GUITextBox.h"
-#include "allegro.h"
 #include "winalleg.h"
 
 namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorApp::Initialize() {
+	bool EditorApp::Initialize() {
 		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);
 		set_window_title("Cortex Command GUI Editor");
@@ -24,6 +23,9 @@ namespace RTEGUI {
 		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
 		m_BackBuffer = create_bitmap(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 		clear_to_color(m_BackBuffer, 0);
+
+		m_ZoomBuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+		clear_to_color(m_ZoomBuffer, 0);
 
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
 		m_Input = std::make_unique<AllegroInput>(-1);
@@ -43,7 +45,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::CreateEditorLayout() {
+	void EditorApp::CreateEditorLayout() {
 		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorManager->AddControl("EditorBase", "COLLECTIONBOX", nullptr, 0, 0, m_ResX, m_ResY)));
 		m_EditorBase->SetDrawBackground(true);
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
@@ -142,7 +144,14 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::SelectActiveControlInList() const {
+	void EditorApp::DestroyBackBuffers() {
+		destroy_bitmap(m_BackBuffer);
+		destroy_bitmap(m_ZoomBuffer);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorApp::SelectActiveControlInList() const {
 		if (m_SelectionInfo.Control == nullptr) {
 			m_CollectionBoxList->SetSelectedIndex(-1);
 			return;
@@ -160,7 +169,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::AddItemToCollectionBoxList(GUIControl *control, const std::string &indent) const {
+	void EditorApp::AddItemToCollectionBoxList(GUIControl *control, const std::string &indent) const {
 		m_CollectionBoxList->AddItem(indent + control->GetName());
 		for (GUIControl *childControl : *control->GetChildren()) {
 			if ((control = dynamic_cast<GUICollectionBox *>(childControl))) {
@@ -171,7 +180,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::PopulateCollectionBoxList() const {
+	void EditorApp::PopulateCollectionBoxList() const {
 		m_CollectionBoxList->ClearList();
 		GUICollectionBox *collectionBox = nullptr;
 
@@ -192,7 +201,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
+	void EditorApp::PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
 		m_ControlsInActiveCollectionBoxList->ClearList();
 
 		std::vector<GUIControl *> controls = *collectionBox->GetChildren();
@@ -210,7 +219,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIEditorApp::ControlUnderMouse(GUIControl *parent, int mousePosX, int mousePosY) {
+	GUIControl * EditorApp::ControlUnderMouse(GUIControl *parent, int mousePosX, int mousePosY) {
 		assert(parent);
 
 		// Clicked on the parent?
@@ -246,7 +255,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorApp::HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const {
+	int EditorApp::HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const {
 		int xPos;
 		int yPos;
 		int width;
@@ -279,13 +288,13 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorApp::MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const {
+	bool EditorApp::MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const {
 		return (mousePosX >= xPos && mousePosX <= xPos + width && mousePosY >= yPos && mousePosY <= yPos + height) ? true : false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height) {
+	void EditorApp::CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height) {
 		int controlPosX;
 		int controlPosY;
 		int controlWidth;
@@ -353,7 +362,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIEditorApp::ProcessSnapCoord(int position) const {
+	int EditorApp::ProcessSnapCoord(int position) const {
 		if (m_SnapToGrid) {
 			float unsnappedPosition = std::round(static_cast<float>(position) / static_cast<float>(m_GridSize));
 			position = static_cast<int>(unsnappedPosition) * m_GridSize;
@@ -363,7 +372,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::AddNewControl(GUIEvent &editorEvent) {
+	void EditorApp::AddNewControl(GUIEvent &editorEvent) {
 		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
 		GUIControl *parent = m_RootControl;
 
@@ -384,7 +393,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIEditorApp::GenerateControlName(std::string controlType) const {
+	std::string EditorApp::GenerateControlName(std::string controlType) const {
 		for (int i = 1; i < 1000; i++) {
 			std::string controlName = controlType;
 			std::transform(controlName.begin(), controlName.end(), controlName.begin(), tolower);
@@ -407,7 +416,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateCollectionBoxList() {
+	void EditorApp::UpdateCollectionBoxList() {
 		const GUIListPanel::Item *item = m_CollectionBoxList->GetSelected();
 
 		if (item) {
@@ -433,7 +442,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateGridSize(GUIEvent &editorEvent) {
+	void EditorApp::UpdateGridSize(GUIEvent &editorEvent) {
 		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
 		if (newValue.empty()) { newValue = "1"; }
 
@@ -452,7 +461,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateControlProperties(GUIControl *control, bool setUnsavedChanges) {
+	void EditorApp::UpdateControlProperties(GUIControl *control, bool setUnsavedChanges) {
 		control->StoreProperties();
 
 		GUIProperties properties;
@@ -465,7 +474,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdatePropertyPage(GUIEvent &editorEvent) {
+	void EditorApp::UpdatePropertyPage(GUIEvent &editorEvent) {
 		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
 			// Update the focused control properties
 			GUIControl *control = m_SelectionInfo.Control;
@@ -481,7 +490,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIEditorApp::Update() {
+	bool EditorApp::Update() {
 		m_EditorManager->Update();
 		GUIEvent editorEvent;
 		while (m_EditorManager->GetEvent(&editorEvent)) {
@@ -526,7 +535,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::ProcessMouseInput() {
+	void EditorApp::ProcessMouseInput() {
 		std::array<int, 3> mouseButtons;
 		std::array<int, 3> mouseStates;
 		int mousePosX;
@@ -627,7 +636,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::ProcessKeyboardInput() {
+	void EditorApp::ProcessKeyboardInput() {
 		// Handle keyboard input directly from Allegro instead of through AllegroInput to make life easier.
 		for (int i = 0; i < KEY_MAX; ++i) {
 			m_KeyStates.at(i) = key[i];
@@ -687,8 +696,8 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::DrawSelectionBox(GUIControl *control) {
-		RTEAssert(control, "Trying to draw selection box for a null control!");
+	void EditorApp::DrawSelectionBox(GUIControl *control) {
+		assert(control);
 
 		int mousePosX;
 		int mousePosY;
@@ -729,7 +738,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::DrawSelectionResizeBox(int xPos, int yPos) const {
+	void EditorApp::DrawSelectionResizeBox(int xPos, int yPos) const {
 		int boxSize = (m_Zoom) ? 5 : 7;
 		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0x000000, true);
 		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0xFFFFFF, false);
@@ -737,7 +746,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::DrawEditor() {
+	void EditorApp::DrawEditor() {
 		if (m_WindowResized) {
 			acknowledge_resize();
 			m_WindowResized = false;
@@ -752,19 +761,17 @@ namespace RTEGUI {
 		m_EditorManager->DrawMouse();
 
 		if (m_Zoom) {
-			BITMAP *tempBackbuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			stretch_blit(m_BackBuffer, tempBackbuffer, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			blit(tempBackbuffer, m_BackBuffer, 0, 0, m_WorkspacePosX, m_WorkspacePosY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			destroy_bitmap(tempBackbuffer);
+			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_WorkspacePosX, m_WorkspacePosY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
 		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::OnLoadButton(bool addControls) {
+	void EditorApp::OnLoadButton(bool addControls) {
 		std::string newFilename;
-		if (GUIEditorUtil::DisplayLoadGUIFile(&newFilename, win_get_window())) {
+		if (EditorUtil::DisplayLoadGUIFile(&newFilename, win_get_window())) {
 			m_ControlManager->Load(newFilename, addControls);
 			m_Filename = newFilename;
 
@@ -787,10 +794,10 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::OnSaveButton(bool saveAsNewFile) {
+	void EditorApp::OnSaveButton(bool saveAsNewFile) {
 		if (saveAsNewFile || m_Filename.empty()) {
 			std::string newFilename;
-			if (GUIEditorUtil::DisplaySaveGUIFile(&newFilename, win_get_window())) { m_Filename = newFilename; }
+			if (EditorUtil::DisplaySaveGUIFile(&newFilename, win_get_window())) { m_Filename = newFilename; }
 		}
 		// Move the root object to top left corner before saving so it is displayed correctly in-game.
 		m_RootControl->Move(0, 0);
@@ -805,10 +812,10 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::OnQuitButton() {
+	void EditorApp::OnQuitButton() {
 		int quitResult = 1;
 		if (m_UnsavedChanges) {
-			quitResult = GUIEditorUtil::QuitMessageBox("Save changes made?", win_get_window());
+			quitResult = EditorUtil::QuitMessageBox("Save changes made?", win_get_window());
 			if (quitResult == 1) { OnSaveButton(); }
 		}
 		m_Quit = (quitResult != 0) ? true : false;
@@ -816,7 +823,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
+	void EditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
 		m_EditorBase->Resize(resizeInfo->new_w, resizeInfo->new_h);
 		m_LeftColumn->Resize(m_LeftColumn->GetWidth(), resizeInfo->new_h);
 		m_RightColumn->Resize(m_RightColumn->GetWidth(), resizeInfo->new_h);

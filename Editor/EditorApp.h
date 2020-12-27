@@ -1,5 +1,7 @@
-#ifndef _GUIEDITORAPP_
-#define _GUIEDITORAPP_
+#ifndef _RTEGUIEDITORAPP_
+#define _RTEGUIEDITORAPP_
+
+#include "allegro.h"
 
 #include "GUI.h"
 #include "GUIPropertyPage.h"
@@ -10,7 +12,7 @@
 
 #include "Singleton.h"
 
-#define g_GUIEditor GUIEditorApp::Instance()
+#define g_GUIEditor EditorApp::Instance()
 
 using namespace RTE;
 
@@ -19,21 +21,28 @@ namespace RTEGUI {
 	/// <summary>
 	/// GUI Editor Application class that handles the main editor app.
 	/// </summary>
-	class GUIEditorApp : public Singleton<GUIEditorApp> {
+	class EditorApp : public Singleton<EditorApp> {
 
 	public:
 
 #pragma region Creation
 		/// <summary>
-		/// Constructor method used to instantiate a GUIEditorApp object in system memory.
+		/// Constructor method used to instantiate a EditorApp object in system memory.
 		/// </summary>
-		GUIEditorApp() = default;
+		EditorApp() = default;
 
 		/// <summary>
 		/// Initializes the editor app.
 		/// </summary>
 		/// <returns>False if initialization failed.</returns>
 		bool Initialize();
+#pragma endregion
+
+#pragma region Destruction
+		/// <summary>
+		/// Frees any memory used by the editor's backbuffers, the rest will be handled by the default destructor.
+		/// </summary>
+		void DestroyBackBuffers();
 #pragma endregion
 
 #pragma region Concrete Methods
@@ -113,6 +122,7 @@ namespace RTEGUI {
 		int m_ResX = 1280;
 		int m_ResY = 600;
 		BITMAP *m_BackBuffer = nullptr;
+		BITMAP *m_ZoomBuffer = nullptr;
 		std::unique_ptr<AllegroScreen> m_Screen = nullptr;
 		std::unique_ptr<AllegroInput> m_Input = nullptr;
 		std::unique_ptr<GUIControlManager> m_ControlManager = nullptr;
@@ -285,8 +295,8 @@ namespace RTEGUI {
 #pragma endregion
 
 		// Disallow the use of some implicit methods.
-		GUIEditorApp(const GUIEditorApp &reference) = delete;
-		GUIEditorApp &operator=(const GUIEditorApp &rhs) = delete;
+		EditorApp(const EditorApp &reference) = delete;
+		EditorApp &operator=(const EditorApp &rhs) = delete;
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
