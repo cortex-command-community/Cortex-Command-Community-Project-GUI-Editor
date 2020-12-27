@@ -155,6 +155,8 @@ namespace RTEGUI {
 		}
 		m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
 		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(m_GridSize));
+
+		m_EditorBase->SetFocus();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +167,7 @@ namespace RTEGUI {
 			GUIControl *control = m_SelectionInfo.Control;
 			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
 			m_UnsavedChanges = true;
+			m_EditorBase->SetFocus();
 		}
 		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
 			// The properties are dirty and need to be updated
@@ -208,6 +211,7 @@ namespace RTEGUI {
 
 			m_ControlsInActiveCollectionBoxList->ClearList();
 		}
+		m_EditorBase->SetFocus();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
