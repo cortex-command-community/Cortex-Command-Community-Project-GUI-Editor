@@ -149,11 +149,6 @@ namespace RTEGUI {
 #pragma endregion
 
 		/// <summary>
-		/// Updates the list of Active top level ControlBoxs found in the editor.
-		/// </summary>
-		void UpdateCollectionBoxList();
-
-		/// <summary>
 		/// 
 		/// </summary>
 		void AddItemToCollectionBoxList(GUIControl *control, const std::string &indent) const;
@@ -221,23 +216,6 @@ namespace RTEGUI {
 		/// <returns></returns>
 		int ProcessSnapCoord(int position) const;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		void UpdatePropertyPage(GUIEvent &editorEvent);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="control"></param>
-		void UpdateControlProperties(GUIControl *control, bool setUnsavedChanges = true);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="editorEvent"></param>
-		void UpdateGridSize(GUIEvent &editorEvent);
-
 #pragma region GUI Element Creation
 		/// <summary>
 		/// Create a new GUI element in the workspace.
@@ -251,6 +229,32 @@ namespace RTEGUI {
 		/// <param name="strControlType">Control Type.</param>
 		/// <returns></returns>
 		std::string GenerateControlName(std::string controlType) const;
+#pragma endregion
+
+#pragma region Updates
+		/// <summary>
+		/// Updates the list of active top and sub level CollectionBoxes found in the workspace.
+		/// </summary>
+		void UpdateCollectionBoxList();
+
+		/// <summary>
+		/// Updates the snap grid size.
+		/// </summary>
+		/// <param name="editorEvent">The editor event to get update info from.</param>
+		void UpdateGridSize(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// Updates the properties of an element in the workspace.
+		/// </summary>
+		/// <param name="control">The element to update properties for.</param>
+		/// <param name="setUnsavedChanges">Whether the editor should ask to save changes before quitting.</param>
+		void UpdateControlProperties(GUIControl *control, bool setUnsavedChanges = true);
+
+		/// <summary>
+		/// Updates the property page in the left column with all the properties of the currently selected element.
+		/// </summary>
+		/// <param name="editorEvent">The editor event to get update info from.</param>
+		void UpdatePropertyPage(GUIEvent &editorEvent);
 #pragma endregion
 
 #pragma region Input Handling
@@ -287,12 +291,27 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#pragma region Allegro Callback Handling
 	/// <summary>
-	/// Callback functions for handling events in Allegro.
+	/// Window title bar quit button handling.
 	/// </summary>
 	static void QuitHandler() { g_GUIEditor.OnQuitButton(); }
+
+	/// <summary>
+	/// Window resize handling.
+	/// </summary>
+	/// <param name="resizeInfo"></param>
 	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
+
+	/// <summary>
+	/// Window lose focus handling. Used to fix key buffer not clearing when the main window loses focus, making keys pressed before the focus loss "stuck" between updates.
+	/// </summary>
 	static void SwitchOutHandler() { remove_keyboard(); }
+
+	/// <summary>
+	/// Window gain focus handling. Used to fix key buffer not clearing when the main window loses focus, making keys pressed before the focus loss "stuck" between updates.
+	/// </summary>
 	static void SwitchInHandler() { install_keyboard(); }
+#pragma endregion
 }
 #endif

@@ -177,6 +177,7 @@
     <ClInclude Include="GUI\GUIEvent.h" />
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
+    <ClInclude Include="GUI\GUIInterface.h" />
     <ClInclude Include="GUI\GUILabel.h" />
     <ClInclude Include="GUI\GUIListBox.h" />
     <ClInclude Include="GUI\GUIListPanel.h" />
@@ -197,7 +198,6 @@
     <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
-    <ClInclude Include="GUI\Wrappers\Interface.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="System\ContentFile.h" />
     <ClInclude Include="System\Reader.h" />

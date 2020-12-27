@@ -260,11 +260,11 @@
     <ClInclude Include="System\Singleton.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Wrappers\Interface.h">
-      <Filter>GUI\Wrappers</Filter>
-    </ClInclude>
     <ClInclude Include="Editor\GUIEditorUtil.h">
       <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIInterface.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

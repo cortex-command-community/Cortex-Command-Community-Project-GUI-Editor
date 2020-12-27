@@ -142,80 +142,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIEditorApp::UpdateGridSize(GUIEvent &editorEvent) {
-		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
-		if (newValue.empty()) { newValue = "1"; }
-
-		bool validEntry = true;
-		for (const char &stringChar : newValue) {
-			if (!std::isdigit(stringChar)) {
-				validEntry = false;
-				break;
-			}
-		}
-		m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
-		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(m_GridSize));
-
-		m_EditorBase->SetFocus();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::UpdatePropertyPage(GUIEvent &editorEvent) {
-		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
-			// Update the focused control properties
-			GUIControl *control = m_SelectionInfo.Control;
-			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
-			m_UnsavedChanges = true;
-			m_EditorBase->SetFocus();
-		}
-		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
-			// The properties are dirty and need to be updated
-			m_UnsavedChanges = true;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::UpdateControlProperties(GUIControl *control, bool setUnsavedChanges) {
-		control->StoreProperties();
-
-		GUIProperties properties;
-		properties.Update(control->GetProperties(), true);
-		control->GetPanel()->BuildProperties(&properties);
-		m_PropertyPage->SetPropertyValues(&properties);
-
-		if (setUnsavedChanges) { m_UnsavedChanges = true; }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIEditorApp::UpdateCollectionBoxList() {
-		const GUIListPanel::Item *item = m_CollectionBoxList->GetSelected();
-
-		if (item) {
-			// Try to find the box of that name, and select it
-			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name.substr(item->m_Name.find_first_not_of('\t'), std::string::npos));
-			if (boxControl) {
-				m_SelectionInfo.GrabbedControl = false;
-				m_SelectionInfo.GrabbedHandle = false;
-				m_SelectionInfo.Control = boxControl;
-
-				PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(boxControl));
-			}
-		} else {
-			// Deselection if clicked on no list item
-			m_SelectionInfo.GrabbedControl = false;
-			m_SelectionInfo.GrabbedHandle = false;
-			m_SelectionInfo.Control = nullptr;
-
-			m_ControlsInActiveCollectionBoxList->ClearList();
-		}
-		m_EditorBase->SetFocus();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIEditorApp::SelectActiveControlInList() const {
 		if (m_SelectionInfo.Control == nullptr) {
 			m_CollectionBoxList->SetSelectedIndex(-1);
@@ -477,6 +403,80 @@ namespace RTEGUI {
 			}
 		}
 		return controlType;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdateCollectionBoxList() {
+		const GUIListPanel::Item *item = m_CollectionBoxList->GetSelected();
+
+		if (item) {
+			// Try to find the box of that name, and select it
+			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name.substr(item->m_Name.find_first_not_of('\t'), std::string::npos));
+			if (boxControl) {
+				m_SelectionInfo.GrabbedControl = false;
+				m_SelectionInfo.GrabbedHandle = false;
+				m_SelectionInfo.Control = boxControl;
+
+				PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(boxControl));
+			}
+		} else {
+			// Deselection if clicked on no list item
+			m_SelectionInfo.GrabbedControl = false;
+			m_SelectionInfo.GrabbedHandle = false;
+			m_SelectionInfo.Control = nullptr;
+
+			m_ControlsInActiveCollectionBoxList->ClearList();
+		}
+		m_EditorBase->SetFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdateGridSize(GUIEvent &editorEvent) {
+		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		if (newValue.empty()) { newValue = "1"; }
+
+		bool validEntry = true;
+		for (const char &stringChar : newValue) {
+			if (!std::isdigit(stringChar)) {
+				validEntry = false;
+				break;
+			}
+		}
+		m_GridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : m_GridSize;
+		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(m_GridSize));
+
+		m_EditorBase->SetFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdateControlProperties(GUIControl *control, bool setUnsavedChanges) {
+		control->StoreProperties();
+
+		GUIProperties properties;
+		properties.Update(control->GetProperties(), true);
+		control->GetPanel()->BuildProperties(&properties);
+		m_PropertyPage->SetPropertyValues(&properties);
+
+		if (setUnsavedChanges) { m_UnsavedChanges = true; }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIEditorApp::UpdatePropertyPage(GUIEvent &editorEvent) {
+		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
+			// Update the focused control properties
+			GUIControl *control = m_SelectionInfo.Control;
+			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
+			m_UnsavedChanges = true;
+			m_EditorBase->SetFocus();
+		}
+		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
+			// The properties are dirty and need to be updated
+			m_UnsavedChanges = true;
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

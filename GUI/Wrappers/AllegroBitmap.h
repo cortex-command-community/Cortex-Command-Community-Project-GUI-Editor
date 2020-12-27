@@ -10,7 +10,7 @@
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
-#include "Interface.h"
+#include "GUIInterface.h"
 #include "ContentFile.h"
 #include "allegro.h"
 #include "winalleg.h"
