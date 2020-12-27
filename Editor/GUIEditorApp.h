@@ -169,6 +169,11 @@ namespace RTEGUI {
 		void PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		void SelectActiveControlInList() const;
+
+		/// <summary>
 		/// Checks if a control is under the mouse point.
 		/// </summary>
 		/// <param name="Parent"></param>

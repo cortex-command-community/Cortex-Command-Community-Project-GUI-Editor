@@ -216,6 +216,24 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIEditorApp::SelectActiveControlInList() const {
+		if (m_SelectionInfo.Control == nullptr) {
+			m_CollectionBoxList->SetSelectedIndex(-1);
+			return;
+		}
+		// Check if this is selected in the editor, and if so, select it in the list too
+		if (m_SelectionInfo.Control->GetID() == "COLLECTIONBOX") {
+			for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
+				if (listEntry->m_Name == m_SelectionInfo.Control->GetName()) {
+					m_CollectionBoxList->SetSelectedIndex(listEntry->m_ID);
+				}
+			}
+			if (!m_SelectionInfo.Control->GetChildren()->empty()) { PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_SelectionInfo.Control)); }
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void GUIEditorApp::AddItemToCollectionBoxList(GUIControl *control, const std::string &indent) const {
 		m_CollectionBoxList->AddItem(indent + control->GetName());
 		for (GUIControl *childControl : *control->GetChildren()) {
@@ -241,11 +259,6 @@ namespace RTEGUI {
 					if ((collectionBox = dynamic_cast<GUICollectionBox *>(childControl))) {
 						AddItemToCollectionBoxList(collectionBox, "\t");
 					}
-				}
-				// Check if this is selected in the editor, and if so, select it in the list too
-				if (m_SelectionInfo.Control == collectionBox) {
-					m_CollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1);
-					PopulateCollectionBoxChildrenList(collectionBox);
 				}
 			}
 		}
@@ -593,6 +606,8 @@ namespace RTEGUI {
 				m_SelectionInfo.ClickY = mousePosY;
 
 				UpdateControlProperties(m_SelectionInfo.Control, false);
+
+				SelectActiveControlInList();
 			} else if (control == m_RootControl) {
 				// Unselect control
 				m_SelectionInfo.GrabbedControl = false;
@@ -600,6 +615,7 @@ namespace RTEGUI {
 				m_SelectionInfo.Control = nullptr;
 
 				m_PropertyPage->ClearValues();
+				SelectActiveControlInList();
 			}
 		}
 	}
