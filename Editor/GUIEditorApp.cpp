@@ -269,8 +269,13 @@ namespace RTEGUI {
 	void GUIEditorApp::PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
 		m_ControlsInActiveCollectionBoxList->ClearList();
 
+		std::vector<GUIControl *> controls = *collectionBox->GetChildren();
+		if (controls.empty()) {
+			return;
+		}
+
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
-		for (GUIControl *control : *collectionBox->GetChildren()) {
+		for (GUIControl *control : controls) {
 			m_ControlsInActiveCollectionBoxList->AddItem(control->GetName());
 			// Check if this is selected in the editor, and if so, select it in the list too
 			if (collectionBox == m_SelectionInfo.Control) { m_ControlsInActiveCollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1); }
