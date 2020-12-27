@@ -192,7 +192,7 @@ namespace RTEGUI {
 
 		if (item) {
 			// Try to find the box of that name, and select it
-			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name);
+			GUIControl *boxControl = m_ControlManager->GetControl(item->m_Name.substr(item->m_Name.find_first_not_of('\t'), std::string::npos));
 			if (boxControl) {
 				m_SelectionInfo.GrabbedControl = false;
 				m_SelectionInfo.GrabbedHandle = false;
