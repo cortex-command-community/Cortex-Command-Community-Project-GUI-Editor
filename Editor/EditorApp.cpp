@@ -86,13 +86,17 @@ namespace RTEGUI {
 					currentSelection.GrabControl(clickedControl, mousePosX, mousePosY);
 
 					m_EditorManager->UpdateControlProperties(currentSelection.GetControl());
-					m_EditorManager->SelectActiveControlInList(currentSelection.GetControl());
-
+					if (currentSelection.GetControl()->GetID() == "COLLECTIONBOX") {
+						m_EditorManager->SelectActiveControlInParentList(currentSelection.GetControl());
+					} else {
+						m_EditorManager->SelectActiveControlInChildrenList(currentSelection.GetControl());
+					}
 					// Remove focus from the currently focused editor manager element between selection changes so the currently selected property page line doesn't persist between selection changes
 					m_EditorManager->RemoveFocus();
 				} else if (clickedControl == m_EditorManager->GetRootControl()) {
 					// Unselect control if the workspace was clicked
 					m_EditorManager->ClearCurrentSelection();
+					m_EditorManager->SelectActiveControlInParentList(m_EditorManager->GetRootControl());
 				}
 			}
 		}
@@ -127,7 +131,7 @@ namespace RTEGUI {
 
 		if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
 			if (m_KeyStates.at(KEY_DEL) == pressed) {
-				m_EditorManager->RemoveControl(currentSelection.GetControl()->GetName());
+				m_EditorManager->RemoveControl(currentSelection.GetControl());
 			} else {
 				bool selectionNudged = false;
 				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
@@ -172,9 +176,9 @@ namespace RTEGUI {
 					if (controlName == "PropertyPage") {
 						m_UnsavedChanges = m_EditorManager->UpdatePropertyPage(editorEvent);
 					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
-						m_EditorManager->UpdateCollectionBoxList();
+						m_EditorManager->SelectActiveControlFromParentList();
 					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
-						//m_EditorManager->UpdateControlsInCollectionBoxList();
+						m_EditorManager->SelectActiveControlFromChildrenList();
 					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Enter) {
 						m_EditorManager->UpdateSnapGridSize(editorEvent);
 					} else if (controlName == "SnapCheckBox") {
@@ -246,7 +250,7 @@ namespace RTEGUI {
 			m_EditorManager->SetRootControl(newRootControl);
 			m_UnsavedChanges = false;
 
-			m_EditorManager->PopulateCollectionBoxList();
+			m_EditorManager->UpdateCollectionBoxList();
 		}
 	}
 

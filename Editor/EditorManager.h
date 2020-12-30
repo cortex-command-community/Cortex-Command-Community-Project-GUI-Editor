@@ -136,23 +136,6 @@ namespace RTEGUI {
 		void RemoveFocus() const { m_EditorControlManager->GetManager()->SetFocus(nullptr); }
 #pragma endregion
 
-#pragma region Control Lists Handling
-		/// <summary>
-		/// 
-		/// </summary>
-		void PopulateCollectionBoxList() const;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void SelectActiveControlInList(GUIControl *control) const;
-#pragma endregion
-
 #pragma region GUI Element Creation
 		/// <summary>
 		/// Create a new GUI element in the workspace.
@@ -165,7 +148,7 @@ namespace RTEGUI {
 		/// 
 		/// </summary>
 		/// <param name="controlToRemove"></param>
-		void RemoveControl(const std::string &controlToRemove) const;
+		void RemoveControl(GUIControl *controlToRemove) const;
 
 		/// <summary>
 		/// Generates a name for a new GUI element based on the element type.
@@ -173,6 +156,40 @@ namespace RTEGUI {
 		/// <param name="strControlType">Control Type.</param>
 		/// <returns>String with the new element name.</returns>
 		std::string GenerateControlName(std::string controlType) const;
+#pragma endregion
+
+#pragma region Control Lists Handling
+		/// <summary>
+		/// 
+		/// </summary>
+		void SelectActiveControlFromParentList() const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void SelectActiveControlFromChildrenList() const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="control"></param>
+		void SelectActiveControlInParentList(GUIControl *control) const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void SelectActiveControlInChildrenList(GUIControl *control) const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdateCollectionBoxList() const;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="collectionBox"></param>
+		void UpdateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const;
 #pragma endregion
 
 #pragma region Mouse Detection
@@ -215,11 +232,6 @@ namespace RTEGUI {
 #pragma endregion
 
 #pragma region Updates
-		/// <summary>
-		/// Updates the list of active top and sub level CollectionBoxes found in the workspace.
-		/// </summary>
-		void UpdateCollectionBoxList() const;
-
 		/// <summary>
 		/// Updates the snap grid size.
 		/// </summary>

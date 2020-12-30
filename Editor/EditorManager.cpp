@@ -25,7 +25,7 @@ namespace RTEGUI {
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
 		m_EditorBase->SetDrawType(GUICollectionBox::Color);
 
-		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_EditorBase.get(), 300, 10, 0, 20));
+		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_EditorBase.get(), 300, 10, 100, 20));
 		frameTimeLabel->SetText("Frame Time: 0");
 
 		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 290, screen->GetBitmap()->GetHeight())));
@@ -126,66 +126,17 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::SetFrameTimeLabelText(int64_t frameTime) const {
-		dynamic_cast<GUILabel *>(m_EditorControlManager->GetControl("FrameTimer"))->SetText("Frame Time: " + std::to_string(frameTime));
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void EditorManager::PopulateCollectionBoxList() const {
-		m_CollectionBoxList->ClearList();
-		m_CollectionBoxList->AddItem(m_RootControl->GetName());
-
-		// Lambda expression to recursively add lower-level CollectionBoxes belonging to the higher-level CollectionBoxes
-		std::function<void(GUICollectionBox *, const std::string &)> recursiveAddItem = [&recursiveAddItem, this](GUICollectionBox *control, const std::string &indent) {
-			m_CollectionBoxList->AddItem(indent + control->GetName());
-			for (GUIControl *childControl : *control->GetChildren()) {
-				if ((control = dynamic_cast<GUICollectionBox *>(childControl))) { recursiveAddItem(control, indent + "\t"); }
-			}
-		};
-
-		GUICollectionBox *collectionBox = nullptr;
-		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
-			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void EditorManager::PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
-		m_ControlsInCollectionBoxList->ClearList();
-
-		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
-		for (GUIControl *control : *collectionBox->GetChildren()) {
-			if (control->GetID() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
-			// Check if this is selected in the editor, and if so, select it in the list too
-			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1); }
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void EditorManager::SelectActiveControlInList(GUIControl *control) const {
-		// Check if this is selected in the editor, and if so, select it in the list too
-		if (control->GetID() == "COLLECTIONBOX") {
-			for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
-				if (listEntry->m_Name == control->GetName()) { m_CollectionBoxList->SetSelectedIndex(listEntry->m_ID); }
-			}
-			if (!control->GetChildren()->empty()) { PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control)); }
-		} else {
-			for (const GUIListBox::Item *listEntry : *m_ControlsInCollectionBoxList->GetItemList()) {
-				if (listEntry->m_Name == control->GetName()) {
-					for (const GUIListBox::Item *parentListEntry : *m_CollectionBoxList->GetItemList()) {
-						if (parentListEntry->m_Name == listEntry->m_Name) { m_CollectionBoxList->SetSelectedIndex(parentListEntry->m_ID); }
-					}
-					m_ControlsInCollectionBoxList->SetSelectedIndex(listEntry->m_ID);
-				}
-			}
-		}
+		dynamic_cast<GUILabel *>(m_EditorControlManager->GetControl("FrameTimer"))->SetText("Frame Time: " + std::to_string(frameTime) + "ms");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool EditorManager::AddNewControl(GUIEvent &editorEvent) {
+		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->GetID() != "COLLECTIONBOX") {
+			s_SelectionInfo.ClearSelection();
+			m_PropertyPage->ClearValues();
+		}
+
 		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
 		GUIControl *parent = m_RootControl;
 
@@ -199,18 +150,24 @@ namespace RTEGUI {
 			m_WorkspaceManager->GetControl(name)->SetEnabled(false);
 		}
 
-		PopulateCollectionBoxList();
-		PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(parent));
+		UpdateCollectionBoxList();
+		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(parent));
 
 		return true;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::RemoveControl(const std::string &controlToRemove) const {
-		m_WorkspaceManager->RemoveControl(controlToRemove, true);
-		ClearCurrentSelection();
-		PopulateCollectionBoxList();
+	void EditorManager::RemoveControl(GUIControl *controlToRemove) const {
+		m_WorkspaceManager->RemoveControl(controlToRemove->GetName(), true);
+		if (controlToRemove->GetID() == "COLLECTIONBOX") {
+			ClearCurrentSelection();
+			UpdateCollectionBoxList();
+		} else {
+			s_SelectionInfo.ClearSelection();
+			m_PropertyPage->ClearValues();
+			UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(controlToRemove->GetParent()));
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +191,119 @@ namespace RTEGUI {
 			}
 		}
 		return controlType;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SelectActiveControlFromParentList() const {
+		const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected();
+
+		if (selectedItem) {
+			// Try to find the box of that name, and select it
+			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
+			if (control) {
+				// If the selected item is the root control don't grab it but proceed to populate the children list from it
+				if (selectedItem->m_Name == m_RootControl->GetName()) {
+					s_SelectionInfo.ClearSelection();
+					m_PropertyPage->ClearValues();
+				} else {
+					s_SelectionInfo.ReleaseAnyGrabs();
+					s_SelectionInfo.SetControl(control);
+				}
+				UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
+				m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
+			}
+		} else {
+			// Deselection if clicked on no list item
+			ClearCurrentSelection();
+			// When nothing is selected populate the children list with the root control's children to show any "loose" controls
+			UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_RootControl));
+			m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
+		}
+		RemoveFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SelectActiveControlFromChildrenList() const {
+		const GUIListPanel::Item *selectedItem = m_ControlsInCollectionBoxList->GetSelected();
+		if (selectedItem) {
+			// Try to find the control of that name, and select it
+			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
+			if (control) {
+				s_SelectionInfo.ReleaseAnyGrabs();
+				s_SelectionInfo.SetControl(control);
+			}
+		} else {
+			// Deselection if clicked on no list item
+			s_SelectionInfo.ClearSelection();
+			m_PropertyPage->ClearValues();
+		}
+		RemoveFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SelectActiveControlInParentList(GUIControl *control) const {
+		// Check if this is selected in the editor and select it in the list too
+		for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
+			if (listEntry->m_Name.substr(listEntry->m_Name.find_first_not_of('\t'), std::string::npos) == control->GetName()) {
+				m_CollectionBoxList->SetSelectedIndex(listEntry->m_ID);
+				break;
+			}
+		}
+		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
+		m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SelectActiveControlInChildrenList(GUIControl *control) const {
+		// Check if this is selected in the editor and select it's parent in the parent list and then select it in the children list
+		SelectActiveControlInParentList(control->GetParent());
+		for (const GUIListBox::Item *listEntry : *m_ControlsInCollectionBoxList->GetItemList()) {
+			if (listEntry->m_Name == control->GetName()) {
+				m_ControlsInCollectionBoxList->SetSelectedIndex(listEntry->m_ID);
+				break;
+			}
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::UpdateCollectionBoxList() const {
+		m_CollectionBoxList->ClearList();
+		m_CollectionBoxList->AddItem(m_RootControl->GetName());
+
+		// Lambda expression to recursively add lower-level CollectionBoxes belonging to the higher-level CollectionBoxes
+		std::function<void(GUICollectionBox *, const std::string &)> recursiveAddItem = [&recursiveAddItem, this](GUICollectionBox *control, const std::string &indent) {
+			m_CollectionBoxList->AddItem(indent + control->GetName());
+			for (GUIControl *childControl : *control->GetChildren()) {
+				if ((control = dynamic_cast<GUICollectionBox *>(childControl))) { recursiveAddItem(control, indent + "\t"); }
+			}
+		};
+
+		GUICollectionBox *collectionBox = nullptr;
+		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::UpdateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
+		m_ControlsInCollectionBoxList->ClearList();
+
+		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
+		for (GUIControl *control : *collectionBox->GetChildren()) {
+			if (control->GetID() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
+			// Check if this is selected in the editor, and if so, select it in the list too
+			//if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1); }
+			if (collectionBox == s_SelectionInfo.GetControl()) {
+				m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
+				break;
+			}
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,31 +373,8 @@ namespace RTEGUI {
 		m_PropertyPage->ClearValues();
 		m_CollectionBoxList->SetSelectedIndex(-1);
 		m_ControlsInCollectionBoxList->ClearList();
-		//PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_RootControl));
 
 		// Clear focused control of the manager itself so it doesn't persist between selection changes (e.g property page line remains selected after clearing or changing selection)
-		RemoveFocus();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void EditorManager::UpdateCollectionBoxList() const {
-		const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected();
-
-		// If the selected item is the root control treat it as if no item was selected
-		if (selectedItem && selectedItem->m_Name != m_RootControl->GetName()) {
-			// Try to find the box of that name, and select it
-			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
-			if (control) {
-				s_SelectionInfo.ReleaseAnyGrabs();
-				s_SelectionInfo.SetControl(control);
-
-				PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
-			}
-		} else {
-			// Deselection if clicked on no list item
-			ClearCurrentSelection();
-		}
 		RemoveFocus();
 	}
 
