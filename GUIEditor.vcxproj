@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Editor\EditorApp.cpp" />
+    <ClCompile Include="Editor\EditorManager.cpp" />
     <ClCompile Include="Editor\EditorSelection.cpp" />
     <ClCompile Include="Editor\EditorUtil.cpp" />
     <ClCompile Include="GUI\GUIButton.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\EditorApp.h" />
+    <ClInclude Include="Editor\EditorManager.h" />
     <ClInclude Include="Editor\EditorSelection.h" />
     <ClInclude Include="Editor\EditorUtil.h" />
     <ClInclude Include="GUI\GUI.h" />

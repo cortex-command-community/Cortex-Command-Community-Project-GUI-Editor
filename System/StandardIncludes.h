@@ -52,6 +52,7 @@
 #include <sstream>
 #include <fstream>
 #include <istream>
+#include <functional>
 #include <cmath>
 #include <cassert>
 #include <limits>

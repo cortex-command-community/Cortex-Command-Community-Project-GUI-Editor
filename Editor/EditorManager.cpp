@@ -1,0 +1,383 @@
+#include "EditorManager.h"
+#include "GUIButton.h"
+#include "GUICheckbox.h"
+#include "GUILabel.h"
+#include "GUITextBox.h"
+
+#include "allegro.h"
+
+namespace RTEGUI {
+
+	EditorSelection EditorManager::s_SelectionInfo;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::Initialize(GUIScreen *screen, GUIInput *input, const std::string &skinDir, const std::string &skinFilename) {
+		m_EditorControlManager = std::make_unique<GUIControlManager>();
+		m_EditorControlManager->Create(screen, input, skinDir, skinFilename);
+		m_EditorControlManager->EnableMouse();
+
+		m_WorkspaceManager = std::make_unique<GUIControlManager>();
+		m_WorkspaceManager->Create(screen, input, skinDir, skinFilename);
+
+		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorBase", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), screen->GetBitmap()->GetHeight())));
+		m_EditorBase->SetDrawBackground(true);
+		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
+		m_EditorBase->SetDrawType(GUICollectionBox::Color);
+
+		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_EditorBase.get(), 300, 10, 0, 20));
+		frameTimeLabel->SetText("Frame Time: 0");
+
+		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 290, screen->GetBitmap()->GetHeight())));
+		m_LeftColumn->SetDrawBackground(true);
+		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
+		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
+
+		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 270, 55));
+		filePanel->SetDrawType(GUICollectionBox::Panel);
+
+		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("LoadButton", "BUTTON", filePanel, 10, 5, 80, 20));
+		toolboxButton->SetText("Load");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("AddButton", "BUTTON", filePanel, 10, 30, 80, 20));
+		toolboxButton->SetText("Add File");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveButton", "BUTTON", filePanel, 95, 5, 80, 20));
+		toolboxButton->SetText("Save");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", filePanel, 95, 30, 80, 20));
+		toolboxButton->SetText("Save As");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", filePanel, 180, 5, 80, 20));
+		toolboxButton->SetText("Quit");
+
+		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), filePanel->GetRelXPos(), filePanel->GetRelYPos() + 65, 270, 155));
+		editorControls->SetDrawType(GUICollectionBox::Panel);
+
+		GUICollectionBox *elementPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("NewElementPanel", "COLLECTIONBOX", editorControls, 5, 25, 260, 105));
+		elementPanel->SetDrawType(GUICollectionBox::Panel);
+		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelXPos() + 5, elementPanel->GetRelYPos() - 20, 100, 20));
+		newElementLabel->SetText("Add New Element :");
+
+		GUIButton *elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_COLLECTIONBOX", "BUTTON", elementPanel, 5, 5, 80, 20));
+		elementButton->SetText("CollectionBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_LISTBOX", "BUTTON", elementPanel, 5, 30, 80, 20));
+		elementButton->SetText("ListBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_BUTTON", "BUTTON", elementPanel, 5, 55, 80, 20));
+		elementButton->SetText("Button");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_COMBOBOX", "BUTTON", elementPanel, 5, 80, 80, 20));
+		elementButton->SetText("ComboBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_LABEL", "BUTTON", elementPanel, 90, 5, 80, 20));
+		elementButton->SetText("Label");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_CHECKBOX", "BUTTON", elementPanel, 90, 30, 80, 20));
+		elementButton->SetText("CheckBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_TEXTBOX", "BUTTON", elementPanel, 90, 55, 80, 20));
+		elementButton->SetText("TextBox");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_RADIOBUTTON", "BUTTON", elementPanel, 90, 80, 80, 20));
+		elementButton->SetText("RadioButton");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_SCROLLBAR", "BUTTON", elementPanel, 175, 5, 80, 20));
+		elementButton->SetText("ScrollBar");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_SLIDER", "BUTTON", elementPanel, 175, 30, 80, 20));
+		elementButton->SetText("Slider");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_PROGRESSBAR", "BUTTON", elementPanel, 175, 55, 80, 20));
+		elementButton->SetText("ProgressBar");
+		elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_TAB", "BUTTON", elementPanel, 175, 80, 80, 20));
+		elementButton->SetText("Tab");
+
+		GUILabel *gridSizeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("GridSizeLabel", "LABEL", editorControls, 10, 135, 90, 15));
+		gridSizeLabel->SetText("Grid/Nudge Size :");
+		GUITextBox *gridSizeTextbox = dynamic_cast<GUITextBox *>(m_EditorControlManager->AddControl("GridSizeTextBox", "TEXTBOX", editorControls, gridSizeLabel->GetRelXPos() + 90, gridSizeLabel->GetRelYPos(), 30, 15));
+		gridSizeTextbox->SetText(std::to_string(EditorSelection::s_SnapGridSize));
+
+		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("SnapCheckBox", "CHECKBOX", editorControls, gridSizeLabel->GetRelXPos() + 130, gridSizeLabel->GetRelYPos(), 75, 15));
+		snapCheckbox->SetText("Snap to Grid");
+		snapCheckbox->SetCheck(GUICheckbox::Checked);
+
+		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 85, snapCheckbox->GetRelYPos(), 75, 15));
+		zoomCheckBox->SetText("Zoom");
+		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
+
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorControlManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 360)));
+
+		m_RightColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("RightColumn", "COLLECTIONBOX", nullptr, 990, 0, 290, screen->GetBitmap()->GetHeight())));
+		m_RightColumn->SetDrawBackground(true);
+		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
+		m_RightColumn->SetDrawType(GUICollectionBox::Color);
+
+		m_CollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("CollectionBoxList", "LISTBOX", m_RightColumn.get(), 15, 5, 270, 230)));
+		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", m_RightColumn.get(), 15, m_CollectionBoxList->GetRelYPos() + 240, 270, 350)));
+
+		// Create the workspace area showing the editing box
+		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
+		workspace->SetDrawBackground(true);
+		workspace->SetDrawColor(makecol(64, 64, 64));
+		workspace->SetDrawType(GUICollectionBox::Color);
+
+		// Create the root CollectionBox for the edited document and add it to the CollectionBox list
+		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_WorkspaceManager->AddControl("root", "COLLECTIONBOX", nullptr, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
+		rootBox->SetDrawBackground(false);
+		m_RootControl = rootBox;
+		m_CollectionBoxList->AddItem(m_RootControl->GetName());
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::DisableZoomCheckbox() const {
+		m_EditorControlManager->GetControl("ZoomCheckBox")->SetEnabled(false);
+		m_EditorControlManager->GetControl("ZoomCheckBox")->SetVisible(false);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SetFrameTimeLabelText(int64_t frameTime) const {
+		dynamic_cast<GUILabel *>(m_EditorControlManager->GetControl("FrameTimer"))->SetText("Frame Time: " + std::to_string(frameTime));
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::PopulateCollectionBoxList() const {
+		m_CollectionBoxList->ClearList();
+		m_CollectionBoxList->AddItem(m_RootControl->GetName());
+
+		// Lambda expression to recursively add lower-level CollectionBoxes belonging to the higher-level CollectionBoxes
+		std::function<void(GUICollectionBox *, const std::string &)> recursiveAddItem = [&recursiveAddItem, this](GUICollectionBox *control, const std::string &indent) {
+			m_CollectionBoxList->AddItem(indent + control->GetName());
+			for (GUIControl *childControl : *control->GetChildren()) {
+				if ((control = dynamic_cast<GUICollectionBox *>(childControl))) { recursiveAddItem(control, indent + "\t"); }
+			}
+		};
+
+		GUICollectionBox *collectionBox = nullptr;
+		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::PopulateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
+		m_ControlsInCollectionBoxList->ClearList();
+
+		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
+		for (GUIControl *control : *collectionBox->GetChildren()) {
+			if (control->GetID() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
+			// Check if this is selected in the editor, and if so, select it in the list too
+			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1); }
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::SelectActiveControlInList(GUIControl *control) const {
+		// Check if this is selected in the editor, and if so, select it in the list too
+		if (control->GetID() == "COLLECTIONBOX") {
+			for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
+				if (listEntry->m_Name == control->GetName()) { m_CollectionBoxList->SetSelectedIndex(listEntry->m_ID); }
+			}
+			if (!control->GetChildren()->empty()) { PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control)); }
+		} else {
+			for (const GUIListBox::Item *listEntry : *m_ControlsInCollectionBoxList->GetItemList()) {
+				if (listEntry->m_Name == control->GetName()) {
+					for (const GUIListBox::Item *parentListEntry : *m_CollectionBoxList->GetItemList()) {
+						if (parentListEntry->m_Name == listEntry->m_Name) { m_CollectionBoxList->SetSelectedIndex(parentListEntry->m_ID); }
+					}
+					m_ControlsInCollectionBoxList->SetSelectedIndex(listEntry->m_ID);
+				}
+			}
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool EditorManager::AddNewControl(GUIEvent &editorEvent) {
+		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
+		GUIControl *parent = m_RootControl;
+
+		// If the focused control is a container set it as parent so controls are added to it
+		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->IsContainer()) { parent = s_SelectionInfo.GetControl(); }
+
+		std::string name = GenerateControlName(controlClass);
+
+		if (parent) {
+			m_WorkspaceManager->AddControl(name, controlClass, parent, 0, 0, -1, -1);
+			m_WorkspaceManager->GetControl(name)->SetEnabled(false);
+		}
+
+		PopulateCollectionBoxList();
+		PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(parent));
+
+		return true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::RemoveControl(const std::string &controlToRemove) const {
+		m_WorkspaceManager->RemoveControl(controlToRemove, true);
+		ClearCurrentSelection();
+		PopulateCollectionBoxList();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	std::string EditorManager::GenerateControlName(std::string controlType) const {
+		for (int i = 1; i < 1000; i++) {
+			std::string controlName = controlType;
+			std::transform(controlName.begin(), controlName.end(), controlName.begin(), tolower);
+			controlName.append(std::to_string(i));
+
+			// Check if this name exists
+			bool found = false;
+			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+				if (control->GetName() == controlName) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return controlName;
+			}
+		}
+		return controlType;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool EditorManager::MouseInsideBox(int mousePosX, int mousePosY, int boxPosX, int boxPosY, int boxWidth, int boxHeight) const {
+		return (mousePosX >= boxPosX && mousePosX <= boxPosX + boxWidth && mousePosY >= boxPosY && mousePosY <= boxPosY + boxHeight) ? true : false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	GUIControl * EditorManager::ControlUnderMouse(GUIControl *control, int mousePosX, int mousePosY) {
+		int controlPosX;
+		int controlPosY;
+		int controlWidth;
+		int controlHeight;
+		control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+		if (!MouseInsideBox(mousePosX, mousePosY, controlPosX, controlPosY, controlWidth, controlHeight)) {
+			return nullptr;
+		}
+
+		// Check children. Check in reverse because top most visible control is last in the list.
+		for (std::vector<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
+			GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
+			if (childControl) {
+				return childControl;
+			}
+		}
+		return control;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	int EditorManager::HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const {
+		int controlPosX;
+		int controlPosY;
+		int controlWidth;
+		int controlHeight;
+		control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+
+		int regionSize = 6;
+		int handle = 0;
+
+		for (int i = 0; i < 3; i++) {
+			if (MouseInsideBox(mousePosX, mousePosY, controlPosX - regionSize, controlPosY + i * (controlHeight / 2) - regionSize, regionSize * 2, regionSize * 2)) {
+				return handle;
+			}
+			handle++;
+
+			if (i != 1 && MouseInsideBox(mousePosX, mousePosY, controlPosX + controlWidth / 2 - regionSize, controlPosY + i * (controlHeight / 2) - regionSize, regionSize * 2, regionSize * 2)) {
+				return handle;
+			}
+			handle++;
+
+			if (MouseInsideBox(mousePosX, mousePosY, controlPosX + controlWidth - regionSize, controlPosY + i * (controlHeight / 2) - regionSize, regionSize * 2, regionSize * 2)) {
+				return handle;
+			}
+			handle++;
+		}
+		// Not over any handle
+		return -1;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::ClearCurrentSelection() const {
+		s_SelectionInfo.ClearSelection();
+		m_PropertyPage->ClearValues();
+		m_CollectionBoxList->SetSelectedIndex(-1);
+		m_ControlsInCollectionBoxList->ClearList();
+		//PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_RootControl));
+
+		// Clear focused control of the manager itself so it doesn't persist between selection changes (e.g property page line remains selected after clearing or changing selection)
+		RemoveFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::UpdateCollectionBoxList() const {
+		const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected();
+
+		// If the selected item is the root control treat it as if no item was selected
+		if (selectedItem && selectedItem->m_Name != m_RootControl->GetName()) {
+			// Try to find the box of that name, and select it
+			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
+			if (control) {
+				s_SelectionInfo.ReleaseAnyGrabs();
+				s_SelectionInfo.SetControl(control);
+
+				PopulateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
+			}
+		} else {
+			// Deselection if clicked on no list item
+			ClearCurrentSelection();
+		}
+		RemoveFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::UpdateSnapGridSize(GUIEvent &editorEvent) const {
+		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		if (newValue.empty()) { newValue = "1"; }
+
+		bool validEntry = true;
+		for (const char &stringChar : newValue) {
+			if (!std::isdigit(stringChar)) {
+				validEntry = false;
+				break;
+			}
+		}
+		EditorSelection::s_SnapGridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : EditorSelection::s_SnapGridSize;
+		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(EditorSelection::s_SnapGridSize));
+
+		RemoveFocus();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool EditorManager::UpdateControlProperties(GUIControl *control) const {
+		control->StoreProperties();
+
+		GUIProperties properties;
+		properties.Update(control->GetProperties(), true);
+		control->GetPanel()->BuildProperties(&properties);
+		m_PropertyPage->SetPropertyValues(&properties);
+
+		return true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool EditorManager::UpdatePropertyPage(GUIEvent &editorEvent) const {
+		bool result = false;
+		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
+			// Update the focused control properties
+			GUIControl *control = s_SelectionInfo.GetControl();
+			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
+			result = true;
+			RemoveFocus();
+		}
+		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
+			// The properties are dirty and need to be updated
+			result = true;
+		}
+		return result;
+	}
+}
