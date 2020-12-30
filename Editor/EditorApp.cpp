@@ -1,16 +1,16 @@
 #include "EditorApp.h"
 #include "EditorUtil.h"
-#include "GUIButton.h"
 #include "GUICheckbox.h"
-#include "GUILabel.h"
 #include "GUITextBox.h"
 #include "winalleg.h"
 
 namespace RTEGUI {
 
+	int64_t EditorApp::s_FrameTime = 0;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorApp::Initialize() {
+	void EditorApp::Initialize() {
 		set_color_depth(32);
 		set_color_conversion(COLORCONV_MOST);
 		set_window_title("Cortex Command GUI Editor");
@@ -24,73 +24,28 @@ namespace RTEGUI {
 		m_BackBuffer = create_bitmap(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 		clear_to_color(m_BackBuffer, 0);
 
-		m_ZoomBuffer = create_bitmap(m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-		clear_to_color(m_ZoomBuffer, 0);
-
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
 		m_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
-
-		return true;
-	}
-
+		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");
 
 		// Only allow workspace zoom if the screen resolution is FHD or above, smaller resolutions can't fully display it
+		if (m_BackBuffer->w < 1920 && m_BackBuffer->h < 1080) {
+			m_EditorManager->DisableZoomCheckbox();
+		} else {
+			m_ZoomBuffer = create_bitmap(m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
+			clear_to_color(m_ZoomBuffer, 0);
 		}
 
+		//show_os_cursor(MOUSE_CURSOR_ARROW);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::DestroyBackBuffers() {
 		destroy_bitmap(m_BackBuffer);
-		destroy_bitmap(m_ZoomBuffer);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool EditorApp::Update() {
-		m_EditorManager->Update();
-		GUIEvent editorEvent;
-		while (m_EditorManager->GetEvent(&editorEvent)) {
-			switch (editorEvent.GetType()) {
-				case GUIEvent::Command:
-					if (editorEvent.GetControl()->GetName() == "QuitButton") {
-						OnQuitButton();
-					} else if (editorEvent.GetControl()->GetName() == "LoadButton") {
-						OnLoadButton();
-					} else if (editorEvent.GetControl()->GetName() == "AddButton") {
-						OnLoadButton(true);
-					} else if (editorEvent.GetControl()->GetName() == "SaveButton") {
-						OnSaveButton();
-					} else if (editorEvent.GetControl()->GetName() == "SaveAsButton") {
-						OnSaveButton(true);
-					} else if (editorEvent.GetControl()->GetName().substr(0, 2).compare("C_") == 0) {
-						AddNewControl(editorEvent);
-					}
-					break;
-				case GUIEvent::Notification:
-					if (editorEvent.GetControl()->GetName() == "ActiveCollectionBoxes" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
-						UpdateCollectionBoxList();
-					} else if (editorEvent.GetControl()->GetName() == "PropertyPage") {
-						UpdatePropertyPage(editorEvent);
-					} else if (editorEvent.GetControl()->GetName() == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Enter) {
-						UpdateGridSize(editorEvent);
-					} else if (editorEvent.GetControl()->GetName() == "SnapCheckBox") {
-						m_SnapToGrid = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
-					} else if (editorEvent.GetControl()->GetName() == "ZoomCheckBox") {
-						m_Zoom = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
-					}
-					break;
-				default:
-					break;
-			}
-		}
-		ProcessMouseInput();
-		ProcessKeyboardInput();
-
-		return !m_Quit;
+		if (m_ZoomBuffer) { destroy_bitmap(m_ZoomBuffer); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,9 +211,52 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	bool EditorApp::UpdateEditor() {
+		m_EditorManager->GetControlManager()->Update();
+		GUIEvent editorEvent;
+		while (m_EditorManager->GetControlManager()->GetEvent(&editorEvent)) {
+			std::string controlName = editorEvent.GetControl()->GetName();
+			switch (editorEvent.GetType()) {
+				case GUIEvent::Command:
+					if (controlName == "QuitButton") {
+						OnQuitButton();
+					} else if (controlName == "LoadButton") {
+						OnLoadButton();
+					} else if (controlName == "AddButton") {
+						OnLoadButton(true);
+					} else if (controlName == "SaveButton") {
+						OnSaveButton();
+					} else if (controlName == "SaveAsButton") {
+						OnSaveButton(true);
+					} else if (controlName.substr(0, 2).compare("C_") == 0) {
+						m_UnsavedChanges = m_EditorManager->AddNewControl(editorEvent);
+					}
+					break;
+				case GUIEvent::Notification:
+					if (controlName == "PropertyPage") {
+						m_UnsavedChanges = m_EditorManager->UpdatePropertyPage(editorEvent);
+					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
+						m_EditorManager->UpdateCollectionBoxList();
+					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
+						//m_EditorManager->UpdateControlsInCollectionBoxList();
+					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Enter) {
+						m_EditorManager->UpdateSnapGridSize(editorEvent);
+					} else if (controlName == "SnapCheckBox") {
+						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::Checked;
+					} else if (controlName == "ZoomCheckBox") {
+						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
+					}
+					break;
+				default:
+					break;
+			}
 		}
+		ProcessMouseInput();
+		ProcessKeyboardInput();
 
+		m_EditorManager->SetFrameTimeLabelText(s_FrameTime);
 
+		return !m_Quit;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,16 +268,16 @@ namespace RTEGUI {
 		}
 		clear_to_color(m_BackBuffer, 0);
 
-		m_EditorBase->Draw(m_Screen.get());
-		m_ControlManager->Draw();
-		if (m_SelectionInfo.Control) { DrawSelectionBox(m_SelectionInfo.Control); }
-		m_LeftColumn->Draw(m_Screen.get());
-		m_RightColumn->Draw(m_Screen.get());
-		m_EditorManager->DrawMouse();
+		m_EditorManager->GetEditorBase()->Draw(m_Screen.get());
+		m_EditorManager->GetWorkspaceManager()->Draw();
+		m_EditorManager->GetCurrentSelection().DrawSelectionBox(m_Screen.get(), m_Input.get());
+		m_EditorManager->GetLeftColumn()->Draw(m_Screen.get());
+		m_EditorManager->GetRightColumn()->Draw(m_Screen.get());
+		m_EditorManager->GetControlManager()->DrawMouse();
 
-		if (m_Zoom) {
-			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight, 0, 0, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
-			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_WorkspacePosX, m_WorkspacePosY - 30, m_WorkspaceWidth * 2, m_WorkspaceHeight * 2);
+		if (m_ZoomWorkspace) {
+			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth(), m_EditorManager->GetWorkspaceHeight(), 0, 0, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
+			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY() - 30, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 	}
@@ -287,42 +285,49 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::OnLoadButton(bool addControls) {
+		if (m_UnsavedChanges) {
+			int result = EditorUtil::DisplayDialogBox("Save changes made?", win_get_window());
+			if (result == 0) {
+				return;
+			} else if (result == 1) {
+				OnSaveButton();
+			}
+		}
 		std::string newFilename;
-		if (EditorUtil::DisplayLoadGUIFile(&newFilename, win_get_window())) {
-			m_ControlManager->Load(newFilename, addControls);
-			m_Filename = newFilename;
+		if (EditorUtil::DisplayLoadFileDialogBox(newFilename, win_get_window())) {
+			m_EditorManager->GetWorkspaceManager()->Load(newFilename, addControls);
+			m_ActiveFileName = newFilename;
 
-			GUIControl *newRootControl = m_ControlManager->GetControlList()->front();
-			m_RootControl = newRootControl;
-			newRootControl->Move(m_WorkspacePosX, m_WorkspacePosY);
+			GUIControl *newRootControl = m_EditorManager->GetWorkspaceManager()->GetControlList()->front();
+			newRootControl->Move(m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY());
 			newRootControl->StoreProperties();
 
 			GUIProperties newRootControlProps;
 			newRootControlProps.Update(newRootControl->GetProperties(), true);
 			newRootControl->GetPanel()->BuildProperties(&newRootControlProps);
 
-			m_SelectionInfo.ClearSelection();
-			m_PropertyPage->ClearValues();
+			m_EditorManager->ClearCurrentSelection();
+			m_EditorManager->SetRootControl(newRootControl);
 			m_UnsavedChanges = false;
 
-			PopulateCollectionBoxList();
+			m_EditorManager->PopulateCollectionBoxList();
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::OnSaveButton(bool saveAsNewFile) {
-		if (saveAsNewFile || m_Filename.empty()) {
+		if (saveAsNewFile || m_ActiveFileName.empty()) {
 			std::string newFilename;
-			if (EditorUtil::DisplaySaveGUIFile(&newFilename, win_get_window())) { m_Filename = newFilename; }
+			if (EditorUtil::DisplaySaveFileDialogBox(newFilename, win_get_window())) { m_ActiveFileName = newFilename; }
 		}
 		// Move the root object to top left corner before saving so it is displayed correctly in-game.
-		m_RootControl->Move(0, 0);
+		m_EditorManager->GetRootControl()->Move(0, 0);
 
-		m_ControlManager->Save(m_Filename);
+		m_EditorManager->GetWorkspaceManager()->Save(m_ActiveFileName);
 
 		// Move the root object back to the workspace position in the editor
-		m_RootControl->Move(m_WorkspacePosX, m_WorkspacePosY);
+		m_EditorManager->GetRootControl()->Move(m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY());
 
 		m_UnsavedChanges = false;
 	}
@@ -332,7 +337,7 @@ namespace RTEGUI {
 	void EditorApp::OnQuitButton() {
 		int quitResult = 1;
 		if (m_UnsavedChanges) {
-			quitResult = EditorUtil::QuitMessageBox("Save changes made?", win_get_window());
+			quitResult = EditorUtil::DisplayDialogBox("Save changes made?", win_get_window());
 			if (quitResult == 1) { OnSaveButton(); }
 		}
 		m_Quit = (quitResult != 0) ? true : false;
@@ -341,11 +346,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
-		m_EditorBase->Resize(resizeInfo->new_w, resizeInfo->new_h);
-		m_LeftColumn->Resize(m_LeftColumn->GetWidth(), resizeInfo->new_h);
-		m_RightColumn->Resize(m_RightColumn->GetWidth(), resizeInfo->new_h);
-		m_RightColumn->Move(resizeInfo->new_w - m_RightColumn->GetWidth(), 0);
-		m_ControlsInActiveCollectionBoxList->Resize(m_CollectionBoxList->GetWidth(), resizeInfo->new_h - m_ControlsInActiveCollectionBoxList->GetRelYPos() - 5);
+		m_EditorManager->GetRightColumn()->Move(resizeInfo->new_w - m_EditorManager->GetRightColumn()->GetWidth(), 0);
 		m_WindowResized = true;
 	}
 }

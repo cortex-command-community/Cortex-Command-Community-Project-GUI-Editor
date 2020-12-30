@@ -12,13 +12,16 @@ using namespace RTEGUI;
 /// </summary>
 int main(int argc, char **argv) {
 	allegro_init();
-	if (!g_GUIEditor.Initialize()) { std::exit(EXIT_FAILURE); }
+	g_GUIEditor.Initialize();
 
+	std::chrono::steady_clock::time_point frameTimeStart;
 	while (true) {
-		if (!g_GUIEditor.Update()) {
+		if (!g_GUIEditor.UpdateEditor()) {
 			break;
 		}
+		frameTimeStart = std::chrono::high_resolution_clock::now();
 		g_GUIEditor.DrawEditor();
+		EditorApp::s_FrameTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameTimeStart).count();
 	}
 	g_GUIEditor.DestroyBackBuffers();
 	ContentFile::FreeAllLoaded();

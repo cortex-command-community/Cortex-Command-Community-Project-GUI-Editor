@@ -1,14 +1,11 @@
 #ifndef _RTEGUIEDITORAPP_
 #define _RTEGUIEDITORAPP_
 
-#include "allegro.h"
-
-#include "GUI.h"
-#include "GUIPropertyPage.h"
-#include "GUICollectionBox.h"
-#include "GUIListBox.h"
+#include "EditorManager.h"
 #include "AllegroScreen.h"
 #include "AllegroInput.h"
+
+#include "allegro.h"
 
 #include "Singleton.h"
 
@@ -25,6 +22,8 @@ namespace RTEGUI {
 
 	public:
 
+		static int64_t s_FrameTime; //!< Duration between frames in milliseconds.
+
 #pragma region Creation
 		/// <summary>
 		/// Constructor method used to instantiate a EditorApp object in system memory.
@@ -34,8 +33,7 @@ namespace RTEGUI {
 		/// <summary>
 		/// Initializes the editor app.
 		/// </summary>
-		/// <returns>False if initialization failed.</returns>
-		bool Initialize();
+		void Initialize();
 #pragma endregion
 
 #pragma region Destruction
@@ -45,12 +43,24 @@ namespace RTEGUI {
 		void DestroyBackBuffers();
 #pragma endregion
 
+#pragma region Input Handling
+		/// <summary>
+		/// Process the mouse input of the editor.
+		/// </summary>
+		void ProcessMouseInput();
+
+		/// <summary>
+		/// Process the keyboard input of the editor.
+		/// </summary>
+		void ProcessKeyboardInput();
+#pragma endregion
+
 #pragma region Concrete Methods
 		/// <summary>
 		/// Updates the editor app.
 		/// </summary>
 		/// <returns>False if the editor has quit.</returns>
-		bool Update();
+		bool UpdateEditor();
 
 		/// <summary>
 		/// Draws the editor to the screen.
@@ -86,39 +96,24 @@ namespace RTEGUI {
 
 	private:
 
+		std::unique_ptr<AllegroScreen> m_Screen = nullptr; //!< GUI backbuffer.
+		std::unique_ptr<AllegroInput> m_Input = nullptr; //!< Input wrapper for Allegro.
+		std::unique_ptr<EditorManager> m_EditorManager = nullptr; //!< The editor manager that handles all the editor GUI and workspace.
 
-		bool m_Quit = false;
-		bool m_WindowResized = false;
+		std::array<int, KEY_MAX> m_KeyStates; //!< The states of the keyboard keys in this update.
+		std::array<int, KEY_MAX> m_PrevKeyStates; //!< The states of the keyboard keys in the previous update.
 
-		int m_ResX = 1280;
-		int m_ResY = 600;
-		BITMAP *m_BackBuffer = nullptr;
-		BITMAP *m_ZoomBuffer = nullptr;
-		std::unique_ptr<AllegroScreen> m_Screen = nullptr;
-		std::unique_ptr<AllegroInput> m_Input = nullptr;
+		bool m_Quit = false; //!< Used for quitting logic.
+		bool m_WindowResized = false; //!< Indicates the process window dimensions were changed.
 
-		std::array<int, KEY_MAX> m_KeyStates;
-		std::array<int, KEY_MAX> m_PrevKeyStates;
+		int m_ResX = 1280; //!< The initial width of the process window.
+		int m_ResY = 600; //!< The initial height of the process window.
+		BITMAP *m_BackBuffer = nullptr; //!< Main backbuffer used for drawing the editor.
+		BITMAP *m_ZoomBuffer = nullptr; //!< Backbuffer used for drawing the zoomed workspace.
 
-		GUIControl *m_RootControl = nullptr;
-		Selection m_SelectionInfo;
-		std::string m_Filename = "";
-
-		// Editor setup
-		bool m_UnsavedChanges = false;
-		bool m_Zoom = false;
-
-#pragma region Input Handling
-		/// <summary>
-		/// Process the mouse input of the editor.
-		/// </summary>
-		void ProcessMouseInput();
-
-		/// <summary>
-		/// Process the keyboard input of the editor.
-		/// </summary>
-		void ProcessKeyboardInput();
-#pragma endregion
+		std::string m_ActiveFileName = ""; //!< The file name the editor is currently editing. If working from a blank workspace, will be assigned once the file is saved.
+		bool m_UnsavedChanges = false; //!< Indicates there are unsaved changes made to the current file.
+		bool m_ZoomWorkspace = false; //!< Indicates the workspace should be drawn zoomed in at the drawing stage.
 
 		// Disallow the use of some implicit methods.
 		EditorApp(const EditorApp &reference) = delete;
