@@ -294,74 +294,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorApp::CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height) {
-		int controlPosX;
-		int controlPosY;
-		int controlWidth;
-		int controlHeight;
-		m_SelectionInfo.Control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
-		GUIControl *parent = m_SelectionInfo.Control->GetParent();
-
-		int minSize = 5;
-
-		int parentPosX;
-		int parentPosY;
-		int parentWidth;
-		int parentHeight;
-		parent->GetControlRect(&parentPosX, &parentPosY, &parentWidth, &parentHeight);
-
-		// Left Move/Resize
-		if (m_SelectionInfo.HandleIndex == 0 || m_SelectionInfo.HandleIndex == 3 || m_SelectionInfo.HandleIndex == 6) {
-			int diff = mousePosX - m_SelectionInfo.GrabX;
-			if (controlPosX + diff < parentPosX) { diff = parentPosX - controlPosX; }
-			if (controlWidth - diff < minSize) { diff = controlWidth - minSize; }
-
-			diff = ProcessSnapCoord(diff);
-
-			controlPosX += diff;
-			controlWidth -= diff;
-		}
-		// Top Move/Resize
-		if (m_SelectionInfo.HandleIndex == 0 || m_SelectionInfo.HandleIndex == 1 || m_SelectionInfo.HandleIndex == 2) {
-			int diff = mousePosY - m_SelectionInfo.GrabY;
-			if (controlPosY + diff < parentPosY) { diff = parentPosY - controlPosY; }
-			if (controlHeight - diff < minSize) { diff = controlHeight - minSize; }
-
-			diff = ProcessSnapCoord(diff);
-
-			controlPosY += diff;
-			controlHeight -= diff;
-		}
-		// Right Resize
-		if (m_SelectionInfo.HandleIndex == 2 || m_SelectionInfo.HandleIndex == 5 || m_SelectionInfo.HandleIndex == 8) {
-			int diff = mousePosX - m_SelectionInfo.GrabX;
-			if (controlPosX + controlWidth + diff > parentPosX + parentWidth) { diff = (parentPosX + parentWidth) - (controlPosX + controlWidth); }
-
-			diff = ProcessSnapCoord(diff);
-
-			controlWidth += diff;
-		}
-		// Bottom Resize
-		if (m_SelectionInfo.HandleIndex == 6 || m_SelectionInfo.HandleIndex == 7 || m_SelectionInfo.HandleIndex == 8) {
-			int diff = mousePosY - m_SelectionInfo.GrabY;
-			if (controlPosY + controlHeight + diff > parentPosY + parentHeight) { diff = (parentPosY + parentHeight) - (controlPosY + controlHeight); }
-
-			diff = ProcessSnapCoord(diff);
-
-			controlHeight += diff;
-		}
-
-		controlWidth = std::max(controlWidth, minSize);
-		controlHeight = std::max(controlHeight, minSize);
-
-		*xPos = controlPosX;
-		*yPos = controlPosY;
-		*width = controlWidth;
-		*height = controlHeight;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	int EditorApp::ProcessSnapCoord(int position) const {
 		if (m_SnapToGrid) {
 			float unsnappedPosition = std::round(static_cast<float>(position) / static_cast<float>(m_GridSize));
@@ -696,52 +628,9 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorApp::DrawSelectionBox(GUIControl *control) {
-		assert(control);
-
-		int mousePosX;
-		int mousePosY;
-		m_Input->GetMousePosition(&mousePosX, &mousePosY);
-
-		int controlPosX;
-		int controlPosY;
-		int controlWidth;
-		int controlHeight;
-		control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
-
-		// If we've grabbed the control, draw the selection lines where the mouse is
-		if (m_SelectionInfo.GrabbedControl && m_SelectionInfo.TriggerGrab) {
-			controlPosX = mousePosX + m_SelectionInfo.GrabX;
-			controlPosY = mousePosY + m_SelectionInfo.GrabY;
-
-			controlPosX = ProcessSnapCoord(controlPosX);
-			controlPosY = ProcessSnapCoord(controlPosY);
 		}
 
-		// Grabbed handles
-		if (m_SelectionInfo.GrabbedHandle && m_SelectionInfo.TriggerGrab) { CalculateHandleResize(mousePosX, mousePosY, &controlPosX, &controlPosY, &controlWidth, &controlHeight); }
 
-		GUIRect rect;
-		SetRect(&rect, controlPosX - 6, controlPosY - 6, controlPosX + controlWidth + 6, controlPosY + controlHeight + 6);
-		m_Screen->GetBitmap()->SetClipRect(&rect);
-
-		m_Screen->GetBitmap()->DrawRectangle(controlPosX, controlPosY, controlWidth, controlHeight, 0xFFCCCCCC, false);
-
-		// Draw the handles
-		for (int i = 0; i < 3; i++) {
-			DrawSelectionResizeBox(controlPosX, controlPosY + i * (controlHeight / 2));
-			if (i != 1) { DrawSelectionResizeBox(controlPosX + controlWidth / 2, controlPosY + i * (controlHeight / 2)); }
-			DrawSelectionResizeBox(controlPosX + controlWidth, controlPosY + i * (controlHeight / 2));
-		}
-		m_Screen->GetBitmap()->SetClipRect(nullptr);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void EditorApp::DrawSelectionResizeBox(int xPos, int yPos) const {
-		int boxSize = (m_Zoom) ? 5 : 7;
-		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0x000000, true);
-		m_Screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0xFFFFFF, false);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

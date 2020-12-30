@@ -135,6 +135,9 @@
     <ClCompile Include="Editor\EditorUtil.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\EditorSelection.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -267,6 +270,9 @@
       <Filter>Editor</Filter>
     </ClInclude>
     <ClInclude Include="Editor\EditorUtil.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorSelection.h">
       <Filter>Editor</Filter>
     </ClInclude>
   </ItemGroup>

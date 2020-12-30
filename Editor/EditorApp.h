@@ -86,35 +86,6 @@ namespace RTEGUI {
 
 	private:
 
-		/// <summary>
-		/// GUI element selection structure.
-		/// </summary>
-		struct Selection {
-			bool GrabbedControl = false;
-			bool GrabbedHandle = false;
-			bool TriggerGrab = false;
-
-			GUIControl *Control = nullptr;
-			int HandleIndex = 0;
-
-			int GrabX = 0;
-			int GrabY = 0;
-			int	ClickX = 0;
-			int ClickY = 0;
-
-			/// <summary>
-			/// Clears selection info.
-			/// </summary>
-			void ClearSelection() {
-				GrabbedControl = false;
-				GrabbedHandle = false;
-				TriggerGrab = false;
-				Control = nullptr;
-				HandleIndex = 0;
-				GrabX = 0;
-				GrabY = 0;
-			}
-		};
 
 		bool m_Quit = false;
 		bool m_WindowResized = false;
@@ -143,9 +114,7 @@ namespace RTEGUI {
 
 		// Editor setup
 		bool m_UnsavedChanges = false;
-		bool m_SnapToGrid = true;
 		bool m_Zoom = false;
-		int	m_GridSize = 5;
 		int m_WorkspacePosX = 320;
 		int m_WorkspacePosY = 60;
 		int m_WorkspaceWidth = 640;
@@ -208,23 +177,6 @@ namespace RTEGUI {
 		/// <returns>True/False.</returns>
 		bool MouseInsideBox(int mousePosX, int mousePosY, int xPos, int yPos, int width, int height) const;
 
-		/// <summary>
-		/// Calculates new position/size of a control given a handle movement.
-		/// </summary>
-		/// <param name="MouseX">Mouse.</param>
-		/// <param name="MouseY"></param>
-		/// <param name="X">Position.</param>
-		/// <param name="Y"></param>
-		/// <param name="Width">Size.</param>
-		/// <param name="Height"></param>
-		void CalculateHandleResize(int mousePosX, int mousePosY, int *xPos, int *yPos, int *width, int *height);
-
-		/// <summary>
-		/// Calculates the nearest snap position (if snap is on).
-		/// </summary>
-		/// <param name="Position">Position.</param>
-		/// <returns></returns>
-		int ProcessSnapCoord(int position) const;
 
 #pragma region GUI Element Creation
 		/// <summary>
@@ -277,21 +229,6 @@ namespace RTEGUI {
 		/// Process the keyboard input of the editor.
 		/// </summary>
 		void ProcessKeyboardInput();
-#pragma endregion
-
-#pragma region Drawing
-		/// <summary>
-		/// Draws the selection box around the selected control.
-		/// </summary>
-		/// <param name="Control">GUI element to draw selection box around.</param>
-		void DrawSelectionBox(GUIControl *control);
-
-		/// <summary>
-		/// Draws a selection box resize handle.
-		/// </summary>
-		/// <param name="X">X position of drawn box.</param>
-		/// <param name="Y">Y position of drawn box.</param>
-		void DrawSelectionResizeBox(int xPos, int yPos) const;
 #pragma endregion
 
 		// Disallow the use of some implicit methods.
