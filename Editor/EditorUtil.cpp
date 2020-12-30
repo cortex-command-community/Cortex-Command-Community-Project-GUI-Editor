@@ -8,25 +8,24 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int EditorUtil::QuitMessageBox(const std::string &message, const HWND &windowHandle) {
+	int EditorUtil::DisplayDialogBox(const std::string &message, const HWND &windowHandle) {
 		int result = MessageBox(windowHandle, message.c_str(), "Cortex Command GUI Editor", MB_YESNOCANCEL);
 
 		if (result == IDNO) { return -1; }
 		if (result == IDYES) { return 1; }
-		return 0; // Cancel
+		return 0;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorUtil::DisplayLoadGUIFile(std::string *filename, const HWND &windowHandle) {
+	bool EditorUtil::DisplayLoadFileDialogBox(std::string &filename, const HWND &windowHandle) {
 		OPENFILENAMEA dialogBox;
 		std::string filenameToLoad(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 
 		std::string currentDir(MAX_PATH, '\0');
 		currentDir = std::filesystem::current_path().string();
 
-		// Initialize OPENFILENAME
-		ZeroMemory(&dialogBox, sizeof(OPENFILENAME));
+		ZeroMemory(&dialogBox, sizeof(OPENFILENAME)); // Initialize OPENFILENAME
 		dialogBox.lStructSize = sizeof(OPENFILENAME);
 		dialogBox.hInstance = nullptr;
 		dialogBox.hwndOwner = windowHandle;
@@ -42,7 +41,7 @@ namespace RTEGUI {
 		dialogBox.lpstrDefExt = "ini";
 
 		if (GetOpenFileName(&dialogBox)) {
-			*filename = std::string(filenameToLoad.data());
+			filename = std::string(filenameToLoad.data());
 			std::filesystem::current_path(currentDir);
 			return true;
 		}
@@ -52,15 +51,14 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorUtil::DisplaySaveGUIFile(std::string *filename, const HWND &windowHandle) {
+	bool EditorUtil::DisplaySaveFileDialogBox(std::string &filename, const HWND &windowHandle) {
 		OPENFILENAMEA dialogBox;
 		std::string filenameToSave(MAX_PATH, '\0'); // Make sure the string is initialized with the correct size and filled with null characters.
 
 		std::string currentDir(MAX_PATH, '\0');
 		currentDir = std::filesystem::current_path().string();
 
-		// Initialize OPENFILENAME
-		ZeroMemory(&dialogBox, sizeof(OPENFILENAME));
+		ZeroMemory(&dialogBox, sizeof(OPENFILENAME)); // Initialize OPENFILENAME
 		dialogBox.lStructSize = sizeof(OPENFILENAME);
 		dialogBox.hInstance = nullptr;
 		dialogBox.hwndOwner = windowHandle;
@@ -85,7 +83,7 @@ namespace RTEGUI {
 					return false;
 				}
 			}
-			*filename = filenameToSave;
+			filename = filenameToSave;
 			std::filesystem::current_path(currentDir);
 			return true;
 		}
