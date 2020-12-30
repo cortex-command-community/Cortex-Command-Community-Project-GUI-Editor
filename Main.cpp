@@ -20,6 +20,7 @@ int main(int argc, char **argv) {
 			break;
 		}
 		frameTimeStart = std::chrono::high_resolution_clock::now();
+		vsync();
 		g_GUIEditor.DrawEditor();
 		EditorApp::s_FrameTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameTimeStart).count();
 	}
