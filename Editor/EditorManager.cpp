@@ -136,19 +136,15 @@ namespace RTEGUI {
 			s_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 		}
-
 		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
+		std::string controlName = GenerateControlName(controlClass);
+
 		GUIControl *parent = m_RootControl;
 
 		// If the focused control is a container set it as parent so controls are added to it
 		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->IsContainer()) { parent = s_SelectionInfo.GetControl(); }
 
-		std::string name = GenerateControlName(controlClass);
-
-		if (parent) {
-			m_WorkspaceManager->AddControl(name, controlClass, parent, 0, 0, -1, -1);
-			m_WorkspaceManager->GetControl(name)->SetEnabled(false);
-		}
+		if (parent) { m_WorkspaceManager->AddControl(controlName, controlClass, parent, 0, 0, -1, -1); }
 
 		UpdateCollectionBoxList();
 		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(parent));
