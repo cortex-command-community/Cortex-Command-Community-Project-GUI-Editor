@@ -58,93 +58,42 @@ namespace RTEGUI {
 		m_Input->GetMouseButtons(mouseButtons.data(), mouseStates.data());
 		m_Input->GetMousePosition(&mousePosX, &mousePosY);
 
-		// If click released
+		EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
+
+		// Trigger the grab only if we grabbed the control/handle and moved it far enough from the starting spot, this prevents accidental small movements when grabbing/releasing.
+		currentSelection.CheckMovementAndSetTriggerGrab(mousePosX, mousePosY);
+
 		if (mouseButtons.at(0) == GUIInput::Released) {
-			// Move the control after a grab
-			if (m_SelectionInfo.GrabbedControl && m_SelectionInfo.TriggerGrab && m_SelectionInfo.Control) {
-				// TODO: Check if not moved to another parent
-				int destX = ProcessSnapCoord(mousePosX + m_SelectionInfo.GrabX);
-				int destY = ProcessSnapCoord(mousePosY + m_SelectionInfo.GrabY);
-				m_SelectionInfo.Control->Move(destX, destY);
-
-				m_UnsavedChanges = true;
+			if (currentSelection.GetControl()) {
+				// Move the control after a grab
+				if (currentSelection.ControlGrabbedAndTriggered()) { m_UnsavedChanges = currentSelection.MoveSelection(mousePosX, mousePosY); }
+				// Resize/Move control after a grab
+				if (currentSelection.HandleGrabbedAndTriggered()) { m_UnsavedChanges = currentSelection.ResizeSelection(mousePosX, mousePosY); }
+				// Update properties
+				if (m_UnsavedChanges && !m_EditorManager->ControlUnderMouse(m_EditorManager->GetPropertyPage(), mousePosX, mousePosY)) { m_EditorManager->UpdateControlProperties(currentSelection.GetControl()); }
 			}
-
-			// Resize/Move control after a grab
-			if (m_SelectionInfo.GrabbedHandle && m_SelectionInfo.TriggerGrab && m_SelectionInfo.Control) {
-				int xPos;
-				int yPos;
-				int width;
-				int height;
-				CalculateHandleResize(mousePosX, mousePosY, &xPos, &yPos, &width, &height);
-
-				m_SelectionInfo.Control->Move(xPos, yPos);
-				m_SelectionInfo.Control->Resize(width, height);
-
-				m_UnsavedChanges = true;
+			currentSelection.ReleaseAnyGrabs();
+		} else if (mouseButtons.at(0) == GUIInput::Pushed) {
+			// Check for grabbing handles
+			if (currentSelection.GetControl() && !currentSelection.IsGrabbingControl()) {
+				int handleIndex = m_EditorManager->HandleUnderMouse(currentSelection.GetControl(), mousePosX, mousePosY);
+				if (handleIndex != -1) { currentSelection.GrabHandle(handleIndex, mousePosX, mousePosY); }
 			}
+			// Check if mouse clicked on a control
+			if (!currentSelection.IsGrabbingControl() && !currentSelection.IsGrabbingHandle()) {
+				GUIControl *clickedControl = m_EditorManager->ControlUnderMouse(m_EditorManager->GetRootControl(), mousePosX, mousePosY);
+				if (clickedControl && clickedControl != m_EditorManager->GetRootControl()) {
+					currentSelection.GrabControl(clickedControl, mousePosX, mousePosY);
 
-			// Update properties
-			if (!ControlUnderMouse(m_PropertyPage.get(), mousePosX, mousePosY) && m_SelectionInfo.Control) { UpdateControlProperties(m_SelectionInfo.Control); }
+					m_EditorManager->UpdateControlProperties(currentSelection.GetControl());
+					m_EditorManager->SelectActiveControlInList(currentSelection.GetControl());
 
-			m_SelectionInfo.GrabbedControl = false;
-			m_SelectionInfo.GrabbedHandle = false;
-			m_SelectionInfo.TriggerGrab = false;
-		}
-
-
-		// Check for grabbing handles
-		if (!m_SelectionInfo.GrabbedControl && m_SelectionInfo.Control && mouseButtons.at(0) == GUIInput::Pushed) {
-			int HandleIndex = HandleUnderMouse(m_SelectionInfo.Control, mousePosX, mousePosY);
-			if (HandleIndex != -1) {
-				m_SelectionInfo.GrabbedControl = false;
-				m_SelectionInfo.GrabbedHandle = true;
-				m_SelectionInfo.HandleIndex = HandleIndex;
-
-				m_SelectionInfo.GrabX = mousePosX;
-				m_SelectionInfo.GrabY = mousePosY;
-				m_SelectionInfo.ClickX = mousePosX;
-				m_SelectionInfo.ClickY = mousePosY;
-			}
-		}
-
-		// If we've grabbed a control or handle, and we've moved far enough from the starting spot, trigger the grab
-		// This prevents quickly selecting a control and slightly moving a couple pixels before releasing
-		if ((m_SelectionInfo.GrabbedControl || m_SelectionInfo.GrabbedHandle) && !m_SelectionInfo.TriggerGrab) {
-			int moveDist = 4;
-			if (std::fabs(m_SelectionInfo.ClickX - mousePosX) >= moveDist || std::fabs(m_SelectionInfo.ClickY - mousePosY) >= moveDist) { m_SelectionInfo.TriggerGrab = true; }
-		}
-
-		// Check if mouse clicked on a control
-		if (!m_SelectionInfo.GrabbedControl && !m_SelectionInfo.GrabbedHandle && mouseButtons.at(0) == GUIInput::Pushed) {
-			GUIControl *control = ControlUnderMouse(m_RootControl, mousePosX, mousePosY);
-			if (control && control != m_RootControl) {
-				int xPos;
-				int yPos;
-				int width;
-				int height;
-				control->GetControlRect(&xPos, &yPos, &width, &height);
-
-				m_SelectionInfo.GrabbedControl = true;
-				m_SelectionInfo.GrabbedHandle = false;
-				m_SelectionInfo.Control = control;
-
-				m_SelectionInfo.GrabX = xPos - mousePosX;
-				m_SelectionInfo.GrabY = yPos - mousePosY;
-				m_SelectionInfo.ClickX = mousePosX;
-				m_SelectionInfo.ClickY = mousePosY;
-
-				UpdateControlProperties(m_SelectionInfo.Control, false);
-
-				SelectActiveControlInList();
-			} else if (control == m_RootControl) {
-				// Unselect control
-				m_SelectionInfo.GrabbedControl = false;
-				m_SelectionInfo.GrabbedHandle = false;
-				m_SelectionInfo.Control = nullptr;
-
-				m_PropertyPage->ClearValues();
-				SelectActiveControlInList();
+					// Remove focus from the currently focused editor manager element between selection changes so the currently selected property page line doesn't persist between selection changes
+					m_EditorManager->RemoveFocus();
+				} else if (clickedControl == m_EditorManager->GetRootControl()) {
+					// Unselect control if the workspace was clicked
+					m_EditorManager->ClearCurrentSelection();
+				}
 			}
 		}
 	}
@@ -160,41 +109,11 @@ namespace RTEGUI {
 
 		bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
 		bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
-		bool modAlt = m_KeyStates.at(KEY_ALT) == pressed;
 
-		if (!m_PropertyPage->HasTextFocus() && m_SelectionInfo.Control) {
-			if (m_KeyStates.at(KEY_DEL) == pressed) {
-				m_ControlManager->RemoveControl(m_SelectionInfo.Control->GetName(), true);
-				m_SelectionInfo.Control = nullptr;
-				m_SelectionInfo.GrabbedControl = false;
-				m_SelectionInfo.GrabbedHandle = false;
-				m_PropertyPage->ClearValues();
-			} else {
-				const GUIPanel *selectedElement = dynamic_cast<GUIPanel *>(m_SelectionInfo.Control);
-
-				int nudgeSize = modShift ? 1 : m_GridSize;
-
-				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() - nudgeSize);
-					UpdateControlProperties(m_SelectionInfo.Control);
-				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos(), selectedElement->GetYPos() + nudgeSize);
-					UpdateControlProperties(m_SelectionInfo.Control);
-				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos() - nudgeSize, selectedElement->GetYPos());
-					UpdateControlProperties(m_SelectionInfo.Control);
-				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
-					m_SelectionInfo.Control->Move(selectedElement->GetXPos() + nudgeSize, selectedElement->GetYPos());
-					UpdateControlProperties(m_SelectionInfo.Control);
-				}
-			}
-		}
+		if (m_KeyStates.at(KEY_ALT) && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
 
 		// Escape key - Undo any grab
-		if (m_KeyStates.at(KEY_ESC) == pressed) {
-			m_SelectionInfo.ClearSelection();
-			m_PropertyPage->ClearValues();
-		}
+		if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
 
 		if (modCtrl) {
 			if (m_KeyStates.at(KEY_S) == pressed) {
@@ -204,8 +123,25 @@ namespace RTEGUI {
 			}
 		}
 
-		if (modAlt && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
+		const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
 
+		if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
+			if (m_KeyStates.at(KEY_DEL) == pressed) {
+				m_EditorManager->RemoveControl(currentSelection.GetControl()->GetName());
+			} else {
+				bool selectionNudged = false;
+				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
+					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeUp, modShift);
+				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
+					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeDown, modShift);
+				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
+					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeLeft, modShift);
+				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
+					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeRight, modShift);
+				}
+				if (selectionNudged) { m_UnsavedChanges = m_EditorManager->UpdateControlProperties(currentSelection.GetControl()); }
+			}
+		}
 		m_PrevKeyStates = m_KeyStates;
 	}
 
