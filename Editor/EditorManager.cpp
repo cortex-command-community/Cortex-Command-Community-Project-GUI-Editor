@@ -294,11 +294,7 @@ namespace RTEGUI {
 		for (GUIControl *control : *collectionBox->GetChildren()) {
 			if (control->GetID() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
 			// Check if this is selected in the editor, and if so, select it in the list too
-			//if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(m_CollectionBoxList->GetItemList()->size() - 1); }
-			if (collectionBox == s_SelectionInfo.GetControl()) {
-				m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
-				break;
-			}
+			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(-1); }
 		}
 	}
 
