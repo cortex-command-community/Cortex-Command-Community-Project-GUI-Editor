@@ -21,7 +21,10 @@ namespace RTEGUI {
 		set_display_switch_callback(SWITCH_IN, SwitchInHandler);
 
 		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
-		m_BackBuffer = create_bitmap(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+		int desktopResX;
+		int desktopResY;
+		get_desktop_resolution(&desktopResX, &desktopResY);
+		m_BackBuffer = create_bitmap(desktopResX, desktopResY);
 		clear_to_color(m_BackBuffer, 0);
 
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
