@@ -136,6 +136,7 @@ namespace RTEGUI {
 		rootCollectionBox->SetDrawBackground(false);
 		m_RootControl = rootCollectionBox;
 		m_CollectionBoxList->AddItem(m_RootControl->GetName());
+		m_CollectionBoxList->SetSelectedIndex(0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,14 +230,12 @@ namespace RTEGUI {
 					s_SelectionInfo.SetControl(control);
 				}
 				UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
-				m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
 			}
 		} else {
 			// Deselection if clicked on no list item
 			ClearCurrentSelection();
 			// When nothing is selected populate the children list with the root control's children to show any "loose" controls
 			UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_RootControl));
-			m_ControlsInCollectionBoxList->SetSelectedIndex(-1);
 		}
 		RemoveFocus();
 	}
@@ -290,6 +289,9 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::UpdateCollectionBoxList() const {
+		// Store the last collection box that was selected before the update so it can be selected if it still exists, if no selection then select root
+		std::string lastSelection = (m_CollectionBoxList->GetSelectedIndex() != -1) ? m_CollectionBoxList->GetSelected()->m_Name : "";
+
 		m_CollectionBoxList->ClearList();
 		m_CollectionBoxList->AddItem(m_RootControl->GetName());
 
@@ -304,6 +306,14 @@ namespace RTEGUI {
 		GUICollectionBox *collectionBox = nullptr;
 		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
+		}
+
+		for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
+			if (listEntry->m_Name == lastSelection) {
+				m_CollectionBoxList->SetSelectedIndex(listEntry->m_ID);
+				break;
+			}
+			m_CollectionBoxList->SetSelectedIndex(0);
 		}
 	}
 
@@ -385,7 +395,7 @@ namespace RTEGUI {
 	void EditorManager::ClearCurrentSelection() const {
 		s_SelectionInfo.ClearSelection();
 		m_PropertyPage->ClearValues();
-		m_CollectionBoxList->SetSelectedIndex(-1);
+		m_CollectionBoxList->SetSelectedIndex(0);
 		m_ControlsInCollectionBoxList->ClearList();
 
 		// Clear focused control of the manager itself so it doesn't persist between selection changes (e.g property page line remains selected after clearing or changing selection)
