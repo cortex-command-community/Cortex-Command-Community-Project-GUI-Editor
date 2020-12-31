@@ -1,6 +1,7 @@
 #include "EditorUtil.h"
 
 #include <Windows.h>
+#include <mmsystem.h>
 #include <commdlg.h>
 #include <direct.h>
 
@@ -9,6 +10,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	int EditorUtil::DisplayDialogBox(const std::string &message, const HWND &windowHandle) {
+		PlaySound("SystemExclamation", nullptr, SND_ASYNC);
 		int result = MessageBox(windowHandle, message.c_str(), "Cortex Command GUI Editor", MB_YESNOCANCEL);
 
 		if (result == IDNO) { return -1; }
