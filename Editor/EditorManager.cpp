@@ -36,15 +36,17 @@ namespace RTEGUI {
 		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 270, 55));
 		filePanel->SetDrawType(GUICollectionBox::Panel);
 
-		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("LoadButton", "BUTTON", filePanel, 10, 5, 80, 20));
+		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("NewButton", "BUTTON", filePanel, 6, 5, 61, 20));
+		toolboxButton->SetText("New");
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("LoadButton", "BUTTON", filePanel, 71, 5, 62, 20));
 		toolboxButton->SetText("Load");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("AddButton", "BUTTON", filePanel, 10, 30, 80, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("AddButton", "BUTTON", filePanel, 71, 30, 62, 20));
 		toolboxButton->SetText("Add File");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveButton", "BUTTON", filePanel, 95, 5, 80, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveButton", "BUTTON", filePanel, 137, 5, 62, 20));
 		toolboxButton->SetText("Save");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", filePanel, 95, 30, 80, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", filePanel, 137, 30, 62, 20));
 		toolboxButton->SetText("Save As");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", filePanel, 180, 5, 80, 20));
+		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", filePanel, 203, 5, 61, 20));
 		toolboxButton->SetText("Quit");
 
 		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), filePanel->GetRelXPos(), filePanel->GetRelYPos() + 65, 270, 155));
@@ -109,10 +111,15 @@ namespace RTEGUI {
 		workspace->SetDrawColor(makecol(64, 64, 64));
 		workspace->SetDrawType(GUICollectionBox::Color);
 
-		// Create the root CollectionBox for the edited document and add it to the CollectionBox list
-		GUICollectionBox *rootBox = dynamic_cast<GUICollectionBox *>(m_WorkspaceManager->AddControl("root", "COLLECTIONBOX", nullptr, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
-		rootBox->SetDrawBackground(false);
-		m_RootControl = rootBox;
+		CreateRootControl();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::CreateRootControl() {
+		GUICollectionBox *rootCollectionBox = dynamic_cast<GUICollectionBox *>(m_WorkspaceManager->AddControl("root", "COLLECTIONBOX", nullptr, m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
+		rootCollectionBox->SetDrawBackground(false);
+		m_RootControl = rootCollectionBox;
 		m_CollectionBoxList->AddItem(m_RootControl->GetName());
 	}
 

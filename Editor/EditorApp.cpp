@@ -158,8 +158,8 @@ namespace RTEGUI {
 			std::string controlName = editorEvent.GetControl()->GetName();
 			switch (editorEvent.GetType()) {
 				case GUIEvent::Command:
-					if (controlName == "QuitButton") {
-						OnQuitButton();
+					if (controlName == "NewButton") {
+						OnNewButton();
 					} else if (controlName == "LoadButton") {
 						OnLoadButton();
 					} else if (controlName == "AddButton") {
@@ -168,6 +168,8 @@ namespace RTEGUI {
 						OnSaveButton();
 					} else if (controlName == "SaveAsButton") {
 						OnSaveButton(true);
+					} else if (controlName == "QuitButton") {
+						OnQuitButton();
 					} else if (controlName.substr(0, 2).compare("C_") == 0) {
 						m_UnsavedChanges = m_EditorManager->AddNewControl(editorEvent);
 					}
@@ -220,6 +222,24 @@ namespace RTEGUI {
 			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY() - 30, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorApp::OnNewButton() {
+		if (m_UnsavedChanges) {
+			int result = EditorUtil::DisplayDialogBox("Save changes made?", win_get_window());
+			if (result == 0) {
+				return;
+			} else if (result == 1) {
+				OnSaveButton();
+			}
+		}
+		m_ActiveFileName.clear();
+		m_EditorManager->GetWorkspaceManager()->Clear();
+		m_EditorManager->CreateRootControl();
+		m_EditorManager->UpdateCollectionBoxList();
+		m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetRootControl()));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

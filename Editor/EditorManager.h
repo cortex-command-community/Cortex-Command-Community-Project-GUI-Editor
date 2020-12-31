@@ -36,6 +36,11 @@ namespace RTEGUI {
 		/// <param name="skinDir">The directory containing the skin file to load.</param>
 		/// <param name="skinFilename">The file name of the skin file to load.</param>
 		void Initialize(GUIScreen *screen, GUIInput *input, const std::string &skinDir, const std::string &skinFilename);
+
+		/// <summary>
+		/// Creates the root CollectionBox for the edited document and adds it to the CollectionBox list.
+		/// </summary>
+		void CreateRootControl();
 #pragma endregion
 
 #pragma region Getters and Setters

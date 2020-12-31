@@ -70,19 +70,24 @@ namespace RTEGUI {
 
 #pragma region File Panel Button Handling
 		/// <summary>
-		/// Called when the load button has been pushed.
+		/// Called when the "New" button has been pressed.
+		/// </summary>
+		void OnNewButton();
+
+		/// <summary>
+		/// Called when the "Load" or "Add File" button has been pressed.
 		/// </summary>
 		/// <param name="addControls">Whether to add controls as opposed to wiping out the current layout.</param>
 		void OnLoadButton(bool addControls = false);
 
 		/// <summary>
-		/// Called when the save button has been pushed.
+		/// Called when the "Save" or "Save As" button has been pressed.
 		/// </summary>
 		/// <param name="saveAsNewFile">Whether to save to a new file or not.</param>
 		void OnSaveButton(bool saveAsNewFile = false);
 
 		/// <summary>
-		/// Called when the quit button has been pushed.
+		/// Called when the "Quit" button has been pressed.
 		/// </summary>
 		void OnQuitButton();
 #pragma endregion
