@@ -113,10 +113,12 @@ namespace RTEGUI {
 		GUILabel *collectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("CollectionBoxListLabel", "LABEL", listsPanel, 10, 5, 100, 20));
 		collectionBoxListLabel->SetText("Active Containers :");
 		m_CollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("CollectionBoxList", "LISTBOX", listsPanel, 5, collectionBoxListLabel->GetHeight() + 5, 260, 230)));
+		m_CollectionBoxList->SetMouseScrolling(true);
 
 		GUILabel *controlsInCollectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxListLabel", "LABEL", listsPanel, 10, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 110, 20));
 		controlsInCollectionBoxListLabel->SetText("Container Elements :");
 		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", listsPanel, 5, controlsInCollectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetRelYPos() + 235, 260, 305)));
+		m_ControlsInCollectionBoxList->SetMouseScrolling(true);
 
 		// Create the workspace area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));

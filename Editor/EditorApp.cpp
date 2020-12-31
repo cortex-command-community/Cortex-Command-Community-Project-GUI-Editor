@@ -100,6 +100,15 @@ namespace RTEGUI {
 				}
 			}
 		}
+
+		if (mouse_z != 0) {
+			if (m_EditorManager->GetControlManager()->GetControlUnderPoint(mousePosX, mousePosY, m_EditorManager->GetControlManager()->GetControl("CollectionBoxList"))) {
+				dynamic_cast<GUIListPanel *>(m_EditorManager->GetControlManager()->GetControl("CollectionBoxList"))->OnMouseWheelChange(mousePosX, mousePosY, 0, mouse_z);
+			} else if (m_EditorManager->GetControlManager()->GetControlUnderPoint(mousePosX, mousePosY, m_EditorManager->GetControlManager()->GetControl("ControlsInCollectionBoxList"))) {
+				dynamic_cast<GUIListPanel *>(m_EditorManager->GetControlManager()->GetControl("ControlsInCollectionBoxList"))->OnMouseWheelChange(mousePosX, mousePosY, 0, mouse_z);
+			}
+			position_mouse_z(0);
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
