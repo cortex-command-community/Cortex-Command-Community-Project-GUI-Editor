@@ -95,15 +95,28 @@ namespace RTEGUI {
 		zoomCheckBox->SetText("Zoom");
 		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
 
-		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorControlManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), editorControls->GetRelXPos(), editorControls->GetRelYPos() + 165, 270, 360)));
+		GUICollectionBox *propertyPagePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("PropertyPagePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, editorControls->GetYPos() + editorControls->GetHeight() + 10, 270, 360));
+		propertyPagePanel->SetDrawType(GUICollectionBox::Panel);
+
+		GUILabel *propertyPageLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("PropertyPageLabel", "LABEL", propertyPagePanel, 10, 5, 110, 20));
+		propertyPageLabel->SetText("Element Properties :");
+		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorControlManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), 10, 260, 260, 330)));
 
 		m_RightColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("RightColumn", "COLLECTIONBOX", nullptr, 990, 0, 290, screen->GetBitmap()->GetHeight())));
 		m_RightColumn->SetDrawBackground(true);
 		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
 		m_RightColumn->SetDrawType(GUICollectionBox::Color);
 
-		m_CollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("CollectionBoxList", "LISTBOX", m_RightColumn.get(), 15, 5, 270, 230)));
-		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", m_RightColumn.get(), 15, m_CollectionBoxList->GetRelYPos() + 240, 270, 350)));
+		GUICollectionBox *listsPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ControlListsPanel", "COLLECTIONBOX", m_RightColumn.get(), 15, 5, m_RightColumn->GetWidth() - 20, 590));
+		listsPanel->SetDrawType(GUICollectionBox::Panel);
+
+		GUILabel *collectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("CollectionBoxListLabel", "LABEL", listsPanel, 10, 5, 100, 20));
+		collectionBoxListLabel->SetText("Active Containers :");
+		m_CollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("CollectionBoxList", "LISTBOX", listsPanel, 5, collectionBoxListLabel->GetHeight() + 5, 260, 230)));
+
+		GUILabel *controlsInCollectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxListLabel", "LABEL", listsPanel, 10, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 110, 20));
+		controlsInCollectionBoxListLabel->SetText("Container Elements :");
+		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", listsPanel, 5, controlsInCollectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetRelYPos() + 235, 260, 305)));
 
 		// Create the workspace area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
