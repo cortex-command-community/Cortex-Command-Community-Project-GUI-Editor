@@ -118,55 +118,65 @@ namespace RTEGUI {
 
 	void EditorApp::ProcessKeyboardInput() {
 		// Handle keyboard input directly from Allegro instead of through AllegroInput to make life easier.
+		int emptyStates = 0;
 		for (int i = 0; i < KEY_MAX; ++i) {
+			if (key[i] == 0) { ++emptyStates; }
 			m_KeyStates.at(i) = key[i];
 		}
-		int pressed = -1;
+		// Skip processing if no keyboard input
+		if (emptyStates < KEY_MAX) {
+			int pressed = -1;
 
-		bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
-		bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
+			bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
+			bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
 
-		if (m_KeyStates.at(KEY_ALT) && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
+			if (m_KeyStates.at(KEY_ALT) && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
 
-		// Escape key - Undo any grab
-		if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
-
-		if (modCtrl) {
-			if (m_KeyStates.at(KEY_S) == pressed) {
-				OnSaveButton(modShift ? true : false);
-			} else if (m_KeyStates.at(KEY_O) == pressed) {
-				OnLoadButton(modShift ? true : false);
+			if (m_EditorManager->GetPropertyPage()->HasTextFocus() && (m_KeyStates.at(KEY_ENTER) == pressed || m_KeyStates.at(KEY_ENTER_PAD) == pressed)) {
+				//m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl());
+				m_UnsavedChanges = m_EditorManager->UpdatePropertyPage();
 			}
 
-			if (m_KeyStates.at(KEY_1) == pressed) {
-				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBlue.ini");
-			} else if (m_KeyStates.at(KEY_2) == pressed) {
-				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGreen.ini");
-			} else if (m_KeyStates.at(KEY_3) == pressed) {
-				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBrown.ini");
-			} else if (m_KeyStates.at(KEY_4) == pressed) {
-				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGray.ini");
+			// Escape key - Undo any grab
+			if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
+
+			if (modCtrl) {
+				if (m_KeyStates.at(KEY_S) == pressed) {
+					OnSaveButton(modShift ? true : false);
+				} else if (m_KeyStates.at(KEY_O) == pressed) {
+					OnLoadButton(modShift ? true : false);
+				}
+
+				if (m_KeyStates.at(KEY_1) == pressed) {
+					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBlue.ini");
+				} else if (m_KeyStates.at(KEY_2) == pressed) {
+					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGreen.ini");
+				} else if (m_KeyStates.at(KEY_3) == pressed) {
+					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBrown.ini");
+				} else if (m_KeyStates.at(KEY_4) == pressed) {
+					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGray.ini");
+				}
 			}
-		}
 
-		const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
+			const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
 
-		if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
-			if (m_KeyStates.at(KEY_DEL) == pressed) {
-				m_EditorManager->RemoveControl(currentSelection.GetControl());
-			} else {
-				bool selectionNudged = false;
-				if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
-					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeUp, modShift);
-				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
-					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeDown, modShift);
+			if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
+				if (m_KeyStates.at(KEY_DEL) == pressed) {
+					m_EditorManager->RemoveControl(currentSelection.GetControl());
+				} else {
+					bool selectionNudged = false;
+					if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
+						selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeUp, modShift);
+					} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
+						selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeDown, modShift);
+					}
+					if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
+						selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeLeft, modShift);
+					} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
+						selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeRight, modShift);
+					}
+					if (selectionNudged) { m_UnsavedChanges = m_EditorManager->UpdateControlProperties(currentSelection.GetControl()); }
 				}
-				if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
-					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeLeft, modShift);
-				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
-					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeRight, modShift);
-				}
-				if (selectionNudged) { m_UnsavedChanges = m_EditorManager->UpdateControlProperties(currentSelection.GetControl()); }
 			}
 		}
 		m_PrevKeyStates = m_KeyStates;
