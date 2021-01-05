@@ -269,6 +269,7 @@ namespace RTEGUI {
 			}
 		}
 		m_ActiveFileName.clear();
+		m_EditorManager->ClearCurrentSelection();
 		m_EditorManager->GetWorkspaceManager()->Clear();
 		m_EditorManager->CreateRootControl();
 		m_EditorManager->UpdateCollectionBoxList();
