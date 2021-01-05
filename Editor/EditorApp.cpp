@@ -160,7 +160,8 @@ namespace RTEGUI {
 					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeUp, modShift);
 				} else if (m_KeyStates.at(KEY_DOWN) == pressed && m_PrevKeyStates.at(KEY_DOWN) != pressed) {
 					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeDown, modShift);
-				} else if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
+				}
+				if (m_KeyStates.at(KEY_LEFT) == pressed && m_PrevKeyStates.at(KEY_LEFT) != pressed) {
 					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeLeft, modShift);
 				} else if (m_KeyStates.at(KEY_RIGHT) == pressed && m_PrevKeyStates.at(KEY_RIGHT) != pressed) {
 					selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeRight, modShift);
