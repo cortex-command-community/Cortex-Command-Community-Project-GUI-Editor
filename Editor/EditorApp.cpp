@@ -31,7 +31,7 @@ namespace RTEGUI {
 		m_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
-		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");
+		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "SkinClassic.ini");
 
 		// Only allow workspace zoom if the screen resolution is FHD or above, smaller resolutions can't fully display it
 		if (m_BackBuffer->w < 1920 && m_BackBuffer->h < 1080) {
@@ -136,6 +136,16 @@ namespace RTEGUI {
 				OnSaveButton(modShift ? true : false);
 			} else if (m_KeyStates.at(KEY_O) == pressed) {
 				OnLoadButton(modShift ? true : false);
+			}
+
+			if (m_KeyStates.at(KEY_1) == pressed) {
+				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBlue.ini");
+			} else if (m_KeyStates.at(KEY_2) == pressed) {
+				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGreen.ini");
+			} else if (m_KeyStates.at(KEY_3) == pressed) {
+				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBrown.ini");
+			} else if (m_KeyStates.at(KEY_4) == pressed) {
+				m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGray.ini");
 			}
 		}
 
