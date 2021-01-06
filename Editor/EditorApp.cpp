@@ -55,10 +55,9 @@ namespace RTEGUI {
 
 	void EditorApp::ProcessMouseInput() {
 		std::array<int, 3> mouseButtons;
-		std::array<int, 3> mouseStates;
 		int mousePosX;
 		int mousePosY;
-		m_Input->GetMouseButtons(mouseButtons.data(), mouseStates.data());
+		m_Input->GetMouseButtons(mouseButtons.data(), nullptr);
 		m_Input->GetMousePosition(&mousePosX, &mousePosY);
 
 		EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
@@ -132,11 +131,6 @@ namespace RTEGUI {
 
 			if (m_KeyStates.at(KEY_ALT) && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
 
-			if (m_EditorManager->GetPropertyPage()->HasTextFocus() && (m_KeyStates.at(KEY_ENTER) == pressed || m_KeyStates.at(KEY_ENTER_PAD) == pressed)) {
-				//m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl());
-				m_UnsavedChanges = m_EditorManager->UpdatePropertyPage();
-			}
-
 			// Escape key - Undo any grab
 			if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
 
@@ -208,8 +202,8 @@ namespace RTEGUI {
 					}
 					break;
 				case GUIEvent::Notification:
-					if (controlName == "PropertyPage") {
-						m_UnsavedChanges = m_EditorManager->UpdatePropertyPage(editorEvent);
+					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIPropertyPage::Enter) {
+						m_UnsavedChanges = m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl(), true);
 					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
 						m_EditorManager->SelectActiveControlFromParentList();
 					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {

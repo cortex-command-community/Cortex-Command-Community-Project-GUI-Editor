@@ -246,14 +246,9 @@ namespace RTEGUI {
 		/// <summary>
 		/// Updates the properties of an element in the workspace.
 		/// </summary>
-		/// <param name="control">The element to update properties for.</param>
-		bool UpdateControlProperties(GUIControl *control) const;
-
-		/// <summary>
-		/// Updates the property page in the left column with all the properties of the currently selected element.
-		/// </summary>
-		/// <param name="editorEvent">The editor event to get update info from.</param>
-		bool UpdatePropertyPage(GUIEvent &editorEvent) const;
+		/// <param name"control">The control to update properties for.</param>
+		/// <param name="manualEdit">Whether this update was triggered by manually editing values in the property page and pressing Enter.</param>
+		bool UpdateControlProperties(GUIControl *control, bool manualEdit = false) const;
 #pragma endregion
 
 	private:

@@ -423,32 +423,22 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorManager::UpdateControlProperties(GUIControl *control) const {
-		control->StoreProperties();
-
-		GUIProperties properties;
-		properties.Update(control->GetProperties(), true);
-		control->GetPanel()->BuildProperties(&properties);
-		m_PropertyPage->SetPropertyValues(&properties);
-
-		return true;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool EditorManager::UpdatePropertyPage(GUIEvent &editorEvent) const {
+	bool EditorManager::UpdateControlProperties(GUIControl *control, bool manualEdit) const {
 		bool result = false;
-		if (editorEvent.GetMsg() == GUIPropertyPage::Enter) {
-			// Update the focused control properties
-			GUIControl *control = s_SelectionInfo.GetControl();
-			if (control) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
-			result = true;
-			RemoveFocus();
+		if (control) {
+			if (manualEdit) {
+				control->ApplyProperties(m_PropertyPage->GetPropertyValues());
+				result = true;
+			} else {
+				//control->StoreProperties();
+				GUIProperties properties;
+				properties.Update(control->GetProperties(), true);
+				control->GetPanel()->BuildProperties(&properties);
+				m_PropertyPage->SetPropertyValues(&properties);
+				result = true;
+			}
 		}
-		if (editorEvent.GetMsg() == GUIPropertyPage::Changed) {
-			// The properties are dirty and need to be updated
-			result = true;
-		}
+		RemoveFocus();
 		return result;
 	}
 }
