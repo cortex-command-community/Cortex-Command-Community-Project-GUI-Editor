@@ -143,11 +143,21 @@ namespace RTEGUI {
 
 #pragma region GUI Element Creation
 		/// <summary>
+		/// Stores the properties of the currently selected GUI element in the workspace for later recreation.
+		/// </summary>
+		void StoreCurrentSelectionCopyInfo() const;
+
+		/// <summary>
 		/// Create a new GUI element in the workspace.
 		/// </summary>
 		/// <param name="editorEvent">The editor event (button press) to create the element from.</param>
 		/// <retruns>True to set unsaved changes state.</returns>
 		bool AddNewControl(GUIEvent &editorEvent);
+
+		/// <summary>
+		/// Create a new GUI element in the workspace from stored copy info.
+		/// </summary>
+		void AddNewControlFromStoredCopyInfo() const;
 
 		/// <summary>
 		/// 
@@ -253,7 +263,22 @@ namespace RTEGUI {
 
 	private:
 
+		/// <summary>
+		/// Struct containing property information for creating an identical GUI element in the workspace. Used for copy-pasting.
+		/// </summary>
+		struct EditorSelectionCopyInfo {
+			std::string Name = "";
+			std::string Class = "";
+			int PosX = 0;
+			int PosY = 0;
+			int Width = 0;
+			int Height = 0;
+			GUIControl *Parent = nullptr;
+			GUIProperties *Properties = nullptr;
+		};
+
 		static EditorSelection s_SelectionInfo; //!< EditorSelection instance that contains the information of the currently selected element in the workspace.
+		static EditorSelectionCopyInfo s_SelectionCopyInfo; //!< A copy of an existing GUIControl. Used for copy-pasting.
 
 		std::unique_ptr<GUIControlManager> m_EditorControlManager = nullptr; //!< The GUIControlManager that handles this EditorManager.
 		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr; //!< The lowest level collection box containing the workspace.

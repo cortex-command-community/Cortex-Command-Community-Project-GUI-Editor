@@ -9,6 +9,7 @@
 namespace RTEGUI {
 
 	EditorSelection EditorManager::s_SelectionInfo;
+	EditorManager::EditorSelectionCopyInfo EditorManager::s_SelectionCopyInfo;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -154,6 +155,24 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void EditorManager::StoreCurrentSelectionCopyInfo() const {
+		GUIControl *selectedControl = s_SelectionInfo.GetControl();
+		if (selectedControl) {
+			s_SelectionCopyInfo = {
+				selectedControl->GetName(),
+				selectedControl->GetID(),
+				selectedControl->GetPanel()->GetRelXPos(),
+				selectedControl->GetPanel()->GetRelYPos(),
+				selectedControl->GetPanel()->GetWidth(),
+				selectedControl->GetPanel()->GetHeight(),
+				selectedControl->GetParent(),
+				selectedControl->GetProperties()
+			};
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	bool EditorManager::AddNewControl(GUIEvent &editorEvent) {
 		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->GetID() != "COLLECTIONBOX") {
 			s_SelectionInfo.ClearSelection();
@@ -173,6 +192,55 @@ namespace RTEGUI {
 		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(parent));
 
 		return true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::AddNewControlFromStoredCopyInfo() const {
+		if (s_SelectionCopyInfo.Class.empty()) {
+			return;
+		}
+		std::string newControlName;
+		for (int i = 1; i < 1000; ++i) {
+			newControlName = s_SelectionCopyInfo.Name + " - copy " + std::to_string(i);
+			// Check if this name exists
+			bool found = false;
+			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+				if (control->GetName() == newControlName) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				break;
+			}
+		}
+		int offset = 10;
+
+		GUIControl *createdControl = nullptr;
+		createdControl = m_WorkspaceManager->AddControl(newControlName, s_SelectionCopyInfo.Class, s_SelectionCopyInfo.Parent, s_SelectionCopyInfo.PosX + offset, s_SelectionCopyInfo.PosY + offset, s_SelectionCopyInfo.Width, s_SelectionCopyInfo.Height);
+		s_SelectionCopyInfo.PosX += offset;
+		s_SelectionCopyInfo.PosY += offset;
+
+		GUIProperties properties;
+		createdControl->StoreProperties();
+		properties.Update(s_SelectionCopyInfo.Properties, true);
+		properties.SetValue("Name", newControlName);
+		createdControl->GetPanel()->BuildProperties(&properties);
+		createdControl->ApplyProperties(&properties);
+		m_PropertyPage->SetPropertyValues(&properties);
+
+		s_SelectionInfo.SetControl(createdControl);
+
+		UpdateCollectionBoxList();
+		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(createdControl->GetParent()));
+
+		if (createdControl->GetID() == "COLLECTIONBOX") {
+			SelectActiveControlInParentList(createdControl);
+		} else {
+			SelectActiveControlInChildrenList(createdControl);
+		}
+		RemoveFocus();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,7 +498,7 @@ namespace RTEGUI {
 				control->ApplyProperties(m_PropertyPage->GetPropertyValues());
 				result = true;
 			} else {
-				//control->StoreProperties();
+				control->StoreProperties();
 				GUIProperties properties;
 				properties.Update(control->GetProperties(), true);
 				control->GetPanel()->BuildProperties(&properties);

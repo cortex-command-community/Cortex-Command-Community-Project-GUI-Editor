@@ -134,7 +134,15 @@ namespace RTEGUI {
 			// Escape key - Undo any grab
 			if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
 
+			const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
+
 			if (modCtrl) {
+				if (m_KeyStates.at(KEY_C) == pressed && m_PrevKeyStates.at(KEY_C) != pressed) {
+					m_EditorManager->StoreCurrentSelectionCopyInfo();
+				} else if (m_KeyStates.at(KEY_V) == pressed && m_PrevKeyStates.at(KEY_V) != pressed) {
+					m_EditorManager->AddNewControlFromStoredCopyInfo();
+				}
+
 				if (m_KeyStates.at(KEY_S) == pressed) {
 					OnSaveButton(modShift ? true : false);
 				} else if (m_KeyStates.at(KEY_O) == pressed) {
@@ -151,8 +159,6 @@ namespace RTEGUI {
 					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGray.ini");
 				}
 			}
-
-			const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
 
 			if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
 				if (m_KeyStates.at(KEY_DEL) == pressed) {
