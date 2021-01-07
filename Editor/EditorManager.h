@@ -143,11 +143,6 @@ namespace RTEGUI {
 
 #pragma region GUI Element Creation
 		/// <summary>
-		/// Stores the properties of the currently selected GUI element in the workspace for later recreation.
-		/// </summary>
-		void StoreCurrentSelectionCopyInfo() const;
-
-		/// <summary>
 		/// Create a new GUI element in the workspace.
 		/// </summary>
 		/// <param name="editorEvent">The editor event (button press) to create the element from.</param>
@@ -244,6 +239,11 @@ namespace RTEGUI {
 		/// Clears the current selection, the selection in the CollectionBoxList and clears the ControlsInCollectionBoxList and property page.
 		/// </summary>
 		void ClearCurrentSelection() const;
+
+		/// <summary>
+		/// Stores the properties of the currently selected GUI element in the workspace for later recreation.
+		/// </summary>
+		void StoreCurrentSelectionCopyInfo() const;
 #pragma endregion
 
 #pragma region Updates

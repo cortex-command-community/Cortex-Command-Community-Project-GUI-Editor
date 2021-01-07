@@ -210,6 +210,8 @@ namespace RTEGUI {
 				case GUIEvent::Notification:
 					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIPropertyPage::Enter) {
 						m_UnsavedChanges = m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl(), true);
+						m_EditorManager->UpdateCollectionBoxList();
+						m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetCurrentSelection().GetControl()));
 					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
 						m_EditorManager->SelectActiveControlFromParentList();
 					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {

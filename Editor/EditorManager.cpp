@@ -155,24 +155,6 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::StoreCurrentSelectionCopyInfo() const {
-		GUIControl *selectedControl = s_SelectionInfo.GetControl();
-		if (selectedControl) {
-			s_SelectionCopyInfo = {
-				selectedControl->GetName(),
-				selectedControl->GetID(),
-				selectedControl->GetPanel()->GetRelXPos(),
-				selectedControl->GetPanel()->GetRelYPos(),
-				selectedControl->GetPanel()->GetWidth(),
-				selectedControl->GetPanel()->GetHeight(),
-				selectedControl->GetParent(),
-				selectedControl->GetProperties()
-			};
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool EditorManager::AddNewControl(GUIEvent &editorEvent) {
 		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->GetID() != "COLLECTIONBOX") {
 			s_SelectionInfo.ClearSelection();
@@ -298,6 +280,7 @@ namespace RTEGUI {
 					s_SelectionInfo.SetControl(control);
 				}
 				UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(control));
+				UpdateControlProperties(s_SelectionInfo.GetControl());
 			}
 		} else {
 			// Deselection if clicked on no list item
@@ -318,6 +301,7 @@ namespace RTEGUI {
 			if (control) {
 				s_SelectionInfo.ReleaseAnyGrabs();
 				s_SelectionInfo.SetControl(control);
+				UpdateControlProperties(s_SelectionInfo.GetControl());
 			}
 		} else {
 			// Deselection if clicked on no list item
@@ -388,6 +372,9 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::UpdateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const {
+		if (!collectionBox) {
+			return;
+		}
 		m_ControlsInCollectionBoxList->ClearList();
 
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
@@ -472,6 +459,24 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void EditorManager::StoreCurrentSelectionCopyInfo() const {
+		GUIControl *selectedControl = s_SelectionInfo.GetControl();
+		if (selectedControl) {
+			s_SelectionCopyInfo = {
+				selectedControl->GetName(),
+				selectedControl->GetID(),
+				selectedControl->GetPanel()->GetRelXPos(),
+				selectedControl->GetPanel()->GetRelYPos(),
+				selectedControl->GetPanel()->GetWidth(),
+				selectedControl->GetPanel()->GetHeight(),
+				selectedControl->GetParent(),
+				selectedControl->GetProperties()
+			};
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void EditorManager::UpdateSnapGridSize(GUIEvent &editorEvent) const {
 		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
 		if (newValue.empty()) { newValue = "1"; }
@@ -494,17 +499,13 @@ namespace RTEGUI {
 	bool EditorManager::UpdateControlProperties(GUIControl *control, bool manualEdit) const {
 		bool result = false;
 		if (control) {
-			if (manualEdit) {
-				control->ApplyProperties(m_PropertyPage->GetPropertyValues());
-				result = true;
-			} else {
-				control->StoreProperties();
-				GUIProperties properties;
-				properties.Update(control->GetProperties(), true);
-				control->GetPanel()->BuildProperties(&properties);
-				m_PropertyPage->SetPropertyValues(&properties);
-				result = true;
-			}
+			if (manualEdit) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
+			control->StoreProperties();
+			GUIProperties properties;
+			properties.Update(control->GetProperties(), true);
+			control->GetPanel()->BuildProperties(&properties);
+			m_PropertyPage->SetPropertyValues(&properties);
+			result = true;
 		}
 		RemoveFocus();
 		return result;
