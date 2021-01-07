@@ -212,6 +212,7 @@ namespace RTEGUI {
 						m_UnsavedChanges = m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl(), true);
 						m_EditorManager->UpdateCollectionBoxList();
 						m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetCurrentSelection().GetControl()));
+						m_EditorManager->RemoveFocus();
 					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
 						m_EditorManager->SelectActiveControlFromParentList();
 					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
@@ -220,8 +221,10 @@ namespace RTEGUI {
 						m_EditorManager->UpdateSnapGridSize(editorEvent);
 					} else if (controlName == "SnapCheckBox") {
 						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::Checked;
+						m_EditorManager->RemoveFocus();
 					} else if (controlName == "ZoomCheckBox") {
 						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
+						m_EditorManager->RemoveFocus();
 					}
 					break;
 				default:
@@ -231,7 +234,7 @@ namespace RTEGUI {
 		ProcessMouseInput();
 		ProcessKeyboardInput();
 
-		m_EditorManager->SetFrameTimeLabelText(s_FrameTime);
+		//m_EditorManager->SetFrameTimeLabelText(s_FrameTime);
 
 		return !m_Quit;
 	}

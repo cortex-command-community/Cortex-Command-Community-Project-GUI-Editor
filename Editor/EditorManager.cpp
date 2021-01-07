@@ -26,8 +26,8 @@ namespace RTEGUI {
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
 		m_EditorBase->SetDrawType(GUICollectionBox::Color);
 
-		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_EditorBase.get(), 300, 10, 100, 20));
-		frameTimeLabel->SetText("Frame Time: 0");
+		//GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_EditorBase.get(), 300, 10, 100, 20));
+		//frameTimeLabel->SetText("Frame Time: 0");
 
 		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 290, screen->GetBitmap()->GetHeight())));
 		m_LeftColumn->SetDrawBackground(true);
@@ -507,7 +507,6 @@ namespace RTEGUI {
 			m_PropertyPage->SetPropertyValues(&properties);
 			result = true;
 		}
-		RemoveFocus();
 		return result;
 	}
 }
