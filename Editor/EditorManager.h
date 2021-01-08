@@ -130,13 +130,13 @@ namespace RTEGUI {
 		void DisableZoomCheckbox() const;
 
 		/// <summary>
-		/// 
+		/// Sets the frame time label text.
 		/// </summary>
-		/// <param name="frameTime"></param>
+		/// <param name="frameTime">The new frame time value to set.</param>
 		void SetFrameTimeLabelText(int64_t frameTime) const;
 
 		/// <summary>
-		/// 
+		/// Removes focus from whatever element currently focused in the editor controls.
 		/// </summary>
 		void RemoveFocus() const { m_EditorControlManager->GetManager()->SetFocus(nullptr); }
 #pragma endregion
@@ -155,9 +155,9 @@ namespace RTEGUI {
 		void AddNewControlFromStoredCopyInfo() const;
 
 		/// <summary>
-		/// 
+		/// Remove a GUI element from the workspace.
 		/// </summary>
-		/// <param name="controlToRemove"></param>
+		/// <param name="controlToRemove">The element to remove.</param>
 		void RemoveControl(GUIControl *controlToRemove) const;
 
 		/// <summary>
@@ -170,35 +170,35 @@ namespace RTEGUI {
 
 #pragma region Control Lists Handling
 		/// <summary>
-		/// 
+		/// Find and set the selected entry from the parent list as the current active selection in the workspace.
 		/// </summary>
 		void SelectActiveControlFromParentList() const;
 
 		/// <summary>
-		/// 
+		/// Find and set the selected entry from the children list as the current active selection in the workspace.
 		/// </summary>
 		void SelectActiveControlFromChildrenList() const;
 
 		/// <summary>
-		/// 
+		/// Find and set the currently selected entry in the parent list to match the current active selection in the workspace.
 		/// </summary>
 		/// <param name="control"></param>
 		void SelectActiveControlInParentList(GUIControl *control) const;
 
 		/// <summary>
-		/// 
+		/// Find and set the currently selected entry in the children list to match the current active selection in the workspace.
 		/// </summary>
 		void SelectActiveControlInChildrenList(GUIControl *control) const;
 
 		/// <summary>
-		/// 
+		/// Update and populate the parent CollectionBoxes list.
 		/// </summary>
 		void UpdateCollectionBoxList() const;
 
 		/// <summary>
-		/// 
+		/// Update and populate the specified CollectionBox's children list.
 		/// </summary>
-		/// <param name="collectionBox"></param>
+		/// <param name="collectionBox">The CollectionBox to update children list for.</param>
 		void UpdateCollectionBoxChildrenList(GUICollectionBox *collectionBox) const;
 #pragma endregion
 

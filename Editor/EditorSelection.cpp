@@ -38,7 +38,7 @@ namespace RTEGUI {
 		bool result = m_GrabTriggered;
 		if ((m_GrabbingControl || m_GrabbingHandle) && !m_GrabTriggered) {
 			int moveDist = 4;
-			result = std::fabs(m_ClickX - movedDistX) >= moveDist || std::fabs(m_ClickY - movedDistY) >= moveDist;
+			result = std::abs(m_ClickX - movedDistX) >= moveDist || std::abs(m_ClickY - movedDistY) >= moveDist;
 		}
 		m_GrabTriggered = result;
 	}
