@@ -210,7 +210,7 @@ void GUIButton::BuildBitmap(void)
     const int contentMaxHeight = m_Height - m_BorderSizes->top - m_BorderSizes->bottom - (buttonContentPadding * 2) - 1;
 
     int centerY = m_Height / 2;
-    bool hasIcon = m_Icon->HasBitmap();
+    bool hasIcon = m_Icon->GetBitmap();
     bool hasText = !m_Text->GetText().empty();
 
     int iconYPos = 0;

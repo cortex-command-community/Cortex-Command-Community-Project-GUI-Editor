@@ -268,7 +268,7 @@ public:
     /// <summary>
     /// Gets whether or not this GUIButton has an icon with a Bitmap.
     /// </summary>
-    bool HasIcon() const { return m_Icon->HasBitmap(); }
+    bool HasIcon() const { return m_Icon->GetBitmap(); }
 
     /// <summary>
     /// Sets the icon for this GUIButton. Ownership is NOT transferred.

@@ -19,156 +19,161 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIBitmap object in system memory.
 		/// </summary>
-		GUIBitmap() {};
+		GUIBitmap() = default;
 #pragma endregion
 
 #pragma region Destruction
 		/// <summary>
 		/// Destructor method used to clean up a GUIBitmap object before deletion from system memory.
 		/// </summary>
-		virtual ~GUIBitmap() { Destroy(); }
+		virtual ~GUIBitmap() = default;
 
 		/// <summary>
-		///  Destroys and frees the bitmap.
+		/// Destroys and resets the GUIBitmap object.
 		/// </summary>
-		virtual void Destroy() {}
+		virtual void Destroy() = 0;
 #pragma endregion
 
 #pragma region Getters and Setters
 		/// <summary>
-		/// Returns the path to the datafile object this GUIBitmap uses.
+		/// Gets the path to the data file this GUIBitmap uses.
 		/// </summary>
-		/// <returns></returns>
-		virtual std::string GetDataPath() = 0;
-
-		/// <summary>
-		/// Indicates whether this GUI bitmap even contains loaded bitmap data.
-		/// </summary>
-		/// <returns>Whether this contains bitmap data or not.</returns>
-		virtual bool HasBitmap() = 0;
+		/// <returns>>Path to the data file this GUIBitmap uses.</returns>
+		virtual std::string GetDataPath() const = 0;
 
 		/// <summary>
 		/// Gets the underlying BITMAP of this GUIBitmap.
 		/// </summary>
 		/// <returns>The underlying BITMAP of this GUIBitmap.</returns>
-		virtual BITMAP * GetBitmap() = 0;
+		virtual BITMAP * GetBitmap() const = 0;
 
 		/// <summary>
-		/// Sets the underlying Bitmap for this GUIBitmap. Ownership is NOT transferred.
+		/// Sets the underlying BITMAP for this GUIBitmap.
 		/// </summary>
-		/// <param name="newBitmap">A pointer to the new Bitmap for this GUIBitmap.</param>
+		/// <param name="newBitmap">A pointer to the new BITMAP for this GUIBitmap.</param>
 		virtual void SetBitmap(BITMAP *newBitmap) = 0;
 
 		/// <summary>
-		/// Gets the Width of the bitmap.
+		/// Gets the width of the bitmap.
 		/// </summary>
-		virtual int GetWidth() { return 0; }
+		/// <returns>The width of the bitmap.</returns>
+		virtual int GetWidth() const = 0;
 
 		/// <summary>
-		/// Gets the Height of the bitmap.
+		/// Gets the height of the bitmap.
 		/// </summary>
-		virtual int GetHeight() { return 0; }
+		/// <returns>The height of the bitmap.</returns>
+		virtual int GetHeight() const = 0;
 
 		/// <summary>
-		/// Gets the number of bits per pixel color depth of this bitmap.
+		/// Gets the number of bits per pixel color depth of the bitmap.
 		/// </summary>
-		/// <returns>Color depth. 8, 16, 32.</returns>
-		virtual int GetColorDepth() { return 0; }
+		/// <returns>The color depth of the bitmap.</returns>
+		virtual int GetColorDepth() const = 0;
 
 		/// <summary>
-		/// Sets the color key of the bitmap.
+		/// Gets the color of a pixel at a specific point on the bitmap.
 		/// </summary>
-		/// <param name="Key">Color key.</param>
-		virtual void SetColorKey(unsigned long Key) {}
+		/// <param name="posX">X position on bitmap.</param>
+		/// <param name="posY">Y position on bitmap.</param>
+		/// <returns>The color of the pixel at the specified point.</returns>
+		virtual unsigned long GetPixel(int posX, int posY) const = 0;
 
 		/// <summary>
-		/// Sets the color key of the bitmap to the color of the pixel in the upper right corner of the bitmap.
+		/// Sets the color of a pixel at a specific point on the bitmap.
 		/// </summary>
-		/// <param name="Key">Color key.</param>
+		/// <param name="posX">X position on bitmap.</param>
+		/// <param name="posY">Y position on bitmap.</param>
+		/// <param name="pixelColor">The color to set the pixel to.</param>
+		virtual void SetPixel(int posX, int posY, unsigned long pixelColor) = 0;
+
+		/// <summary>
+		/// Sets the color key (mask color) of the bitmap to the color of the pixel in the upper right corner of the bitmap.
+		/// </summary>
 		virtual void SetColorKey() {}
 
 		/// <summary>
-		/// Gets the color of a pixel at a specific point.
+		/// Sets the color key (mask color) of the bitmap.
 		/// </summary>
-		virtual unsigned long GetPixel(int X, int Y) { return 0; }
+		/// <param name="colorKey">Color key (mask color).</param>
+		virtual void SetColorKey(unsigned long colorKey) {}
+#pragma endregion
 
-		/// <summary>
-		/// Sets the color of a pixel at a specific point.
-		/// </summary>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Color">Color of this pixel.</param>
-		virtual void SetPixel(int X, int Y, unsigned long Color) {}
-
+#pragma region Clipping
 		/// <summary>
 		/// Gets the clipping rectangle of the bitmap.
 		/// </summary>
-		/// <param name="Rect">Pointer to GUIRect struct to fill out.</param>
-		virtual void GetClipRect(GUIRect *Rect) {}
+		/// <param name="clippingRect">Pointer to a GUIRect to fill out.</param>
+		virtual void GetClipRect(GUIRect *clippingRect) const = 0;
 
 		/// <summary>
 		/// Sets the clipping rectangle of the bitmap.
 		/// </summary>
-		/// <param name="Rect">Rectangle pointer. 0 for no clipping.</param>
-		virtual void SetClipRect(GUIRect *Rect) {}
+		/// <param name="clippingRect">Pointer to a GUIRect to use as the clipping rectangle, or nullptr for no clipping.</param>
+		virtual void SetClipRect(GUIRect *clippingRect) = 0;
 
 		/// <summary>
 		/// Sets the clipping rectangle of the specified bitmap as the intersection of its current clipping rectangle and the rectangle described by the passed-in GUIRect. 
 		/// </summary>
-		/// <param name="Rect">Rectangle pointer.</param>
-		virtual void AddClipRect(GUIRect *Rect) {}
+		/// <param name="rect">Rectangle pointer.</param>
+		virtual void AddClipRect(GUIRect *rect) = 0;
 #pragma endregion
 
-#pragma region Pure Virtual Methods
+#pragma region Drawing
 		/// <summary>
 		/// Draw a section of this bitmap onto another bitmap
 		/// </summary>
-		/// <param name="pDestBitmap>Destination Bitmap.</param>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Rect">Size of bitmap we are drawing.</param>
-		virtual void Draw(GUIBitmap *pDestBitmap, int X, int Y, GUIRect *Rect) {}
+		/// <param name="destBitmap">Bitmap to draw onto.</param>
+		/// <param name="destX">Destination X position.</param>
+		/// <param name="destY">Destination Y position.</param>
+		/// <param name="srcPosAndSizeRect">Source bitmap position and size rectangle.</param>
+		virtual void Draw(GUIBitmap *destBitmap, int destX, int destY, GUIRect *srcPosAndSizeRect) = 0;
 
 		/// <summary>
 		/// Draw a section of this bitmap onto another bitmap ignoring color-keyed pixels.
 		/// </summary>
-		/// <param name="pDestBitmap>Destination Bitmap.</param>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Rect">Size of this bitmap.</param>
-		virtual void DrawTrans(GUIBitmap *pDestBitmap, int X, int Y, GUIRect *Rect) {}
+		/// <param name="destBitmap">Bitmap to draw onto.</param>
+		/// <param name="destX">Destination X position.</param>
+		/// <param name="destY">Destination Y position.</param>
+		/// <param name="srcPosAndSizeRect">Source bitmap position and size rectangle.</param>
+		virtual void DrawTrans(GUIBitmap *destBitmap, int destX, int destY, GUIRect *srcPosAndSizeRect) = 0;
 
 		/// <summary>
 		/// Draw this bitmap scaled onto another bitmap ignoring color-keyed pixels.
 		/// </summary>
-		/// <param name="pDestBitmap>Destination Bitmap.</param>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="width">Width of this bitmap.</param>
-		/// <param name="height">Height of this bitmap.</param>
-		virtual void DrawTransScaled(GUIBitmap *pDestBitmap, int X, int Y, int width, int height) {}
+		/// <param name="destBitmap">Bitmap to draw onto.</param>
+		/// <param name="destX">Destination X position.</param>
+		/// <param name="destY">Destination Y position.</param>
+		/// <param name="width">Target width of the bitmap.</param>
+		/// <param name="height">Target height of the bitmap.</param>
+		virtual void DrawTransScaled(GUIBitmap *destBitmap, int destX, int destY, int width, int height) = 0;
+#pragma endregion
 
+#pragma region Primitive Drawing
 		/// <summary>
-		/// Draws a line.
+		/// Draws a line on this bitmap.
 		/// </summary>
 		/// <param name="x1">Start position on X axis.</param>
 		/// <param name="y1">Start position on Y axis.</param>
 		/// <param name="x2">End position on X axis.</param>
 		/// <param name="y2">End position on Y axis.</param>
-		/// <param name="Color">Color to draw this line with.</param>
-		virtual void DrawLine(int x1, int y1, int x2, int y2, unsigned long Color) = 0;
+		/// <param name="color">Color to draw this line with.</param>
+		virtual void DrawLine(int x1, int y1, int x2, int y2, unsigned long color) = 0;
 
 		/// <summary>
-		/// Draws a rectangle.
+		/// Draws a rectangle on this bitmap.
 		/// </summary>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Width">Width of rectangle.</param>
-		/// <param name="Height">Height of rectangle.</param>
-		/// <param name="Color">Color to draw this rectangle with.</param>
-		/// <param name="Filled">Whether to fill the rectangle with the set color or not.</param>
-		virtual void DrawRectangle(int X, int Y, int Width, int Height, unsigned long Color, bool Filled) = 0;
+		/// <param name="posX">Position on X axis.</param>
+		/// <param name="posY">Position on Y axis.</param>
+		/// <param name="width">Width of rectangle.</param>
+		/// <param name="height">Height of rectangle.</param>
+		/// <param name="color">Color to draw this rectangle with.</param>
+		/// <param name="filled">Whether to fill the rectangle with the set color or not.</param>
+		virtual void DrawRectangle(int posX, int posY, int width, int height, unsigned long color, bool filled) = 0;
 #pragma endregion
+
+		// Disallow the use of some implicit methods.
+		GUIBitmap & operator=(const GUIBitmap &rhs) = delete;
 	};
 #pragma endregion
 
