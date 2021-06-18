@@ -184,73 +184,74 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIScreen object in system memory.
 		/// </summary>
-		GUIScreen() {}
+		GUIScreen() = default;
 
 		/// <summary>
 		/// Creates a bitmap from a file.
 		/// </summary>
-		/// <param name="Filename">Filename.</param>
-		/// <returns>Created bitmap.</returns>
-		virtual GUIBitmap * CreateBitmap(const std::string Filename) = 0;
+		/// <param name="fileName">File name to create bitmap from.</param>
+		/// <returns>Pointer to the created bitmap.</returns>
+		virtual GUIBitmap * CreateBitmap(const std::string &fileName) = 0;
 
 		/// <summary>
 		/// Creates an empty bitmap.
 		/// </summary>
-		/// <param name="Width">Width of bitmap.</param>
-		/// <param name="Height">Height of bitmap.</param>
-		/// <returns>Created bitmap.</returns>
-		virtual GUIBitmap * CreateBitmap(int Width, int Height) = 0;
+		/// <param name="width">Bitmap width.</param>
+		/// <param name="height">Bitmap height.</param>
+		/// <returns>Pointer to the created bitmap.</returns>
+		virtual GUIBitmap * CreateBitmap(int width, int height) = 0;
 #pragma endregion
 
 #pragma region Destruction
 		/// <summary>
 		/// Destructor method used to clean up a GUIScreen object in system memory.
 		/// </summary>
-		virtual ~GUIScreen() { Destroy(); }
+		virtual ~GUIScreen() = default;
 
 		/// <summary>
-		/// Destroy the screen.
+		/// Destroys and resets the GUIScreen object.
 		/// </summary>
-		virtual void Destroy() {}
+		virtual void Destroy() = 0;
 #pragma endregion
 
 #pragma region Getters
 		/// <summary>
-		/// Gets a bitmap representing the screen.
+		/// Gets the bitmap representing the screen.
 		/// </summary>
-		/// <returns>The bitmap representing the screen.</returns>
-		virtual GUIBitmap *GetBitmap() = 0;
+		/// <returns>Pointer to the bitmap representing the screen.</returns>
+		virtual GUIBitmap * GetBitmap() const = 0;
 #pragma endregion
 
 #pragma region Pure Virtual Methods
 		/// <summary>
 		/// Draws a bitmap onto the back buffer.
 		/// </summary>
-		/// <param name="Bitmap">Bitmap to draw.</param>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Rect">Source rectangle.</param>
-		virtual void DrawBitmap(GUIBitmap *Bitmap, int X, int Y, GUIRect *Rect) = 0;
+		/// <param name="guiBitmap">The bitmap to draw to this AllegroScreen.</param>
+		/// <param name="destX">Destination X position</param>
+		/// <param name="destY">Destination Y position</param>
+		/// <param name="srcPosAndSizeRect">Source bitmap position and size rectangle.</param>
+		virtual void DrawBitmap(GUIBitmap *guiBitmap, int destX, int destY, GUIRect *srcPosAndSizeRect) = 0;
 
 		/// <summary>
-		/// Draws a bitmap onto the back buffer using the color key.
+		/// Draws a bitmap onto the back buffer ignoring color-keyed pixels.
 		/// </summary>
-		/// <param name="Bitmap">Bitmap to draw.</param>
-		/// <param name="X">Position on X axis.</param>
-		/// <param name="Y">Position on Y axis.</param>
-		/// <param name="Rect">Source rectangle.</param>
-		virtual void DrawBitmapTrans(GUIBitmap *Bitmap, int X, int Y, GUIRect *Rect) = 0;
+		/// <param name="guiBitmap">The bitmap to draw to this AllegroScreen.</param>
+		/// <param name="destX">Destination X position</param>
+		/// <param name="destY">Destination Y position</param>
+		/// <param name="srcPosAndSizeRect">Source bitmap position and size rectangle.</param>
+		virtual void DrawBitmapTrans(GUIBitmap *guiBitmap, int destX, int destY, GUIRect *srcPosAndSizeRect) = 0;
 
 		/// <summary>
-		/// Converts an 8bit palette index to a valid pixel format. Primarily used for development in windowed mode.
+		/// Converts an 8bit palette index to a valid pixel format color.
 		/// </summary>
 		/// <param name="color">Color value in any bit depth. Will be converted to the format specified.</param>
-		/// <param name="targetDepth">
-		/// An optional target color depth that will determine what format the color should be converted to. 
-		/// If this is 0, then the current video color depth will be used as target.</param>
-		/// <returns>Converted color.</returns>
-		virtual unsigned long ConvertColor(unsigned long color, int targetDepth = 0) = 0;
+		/// <param name="targetColorDepth">An optional target color depth that will determine what format the color should be converted to. If this is 0, then the current video color depth will be used as target.</param>
+		/// <returns>The converted color.</returns>
+		virtual unsigned long ConvertColor(unsigned long color, int targetColorDepth = 0) = 0;
 #pragma endregion
+
+		// Disallow the use of some implicit methods.
+		GUIScreen & operator=(const GUIScreen &rhs) = delete;
 	};
 #pragma endregion
 }
