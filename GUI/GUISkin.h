@@ -61,7 +61,7 @@ public:
 // Description:     Loads a skin for a directory
 // Arguments:       Skin directory and the file within to use
 
-    bool Load(const std::string Directory, const std::string Filename = "skin.ini");
+	bool Load(const std::string &directory, const std::string &fileName = "skin.ini");
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -160,10 +160,10 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Builds a bitmap from a standard skin property section.
 // Arguments:       Destination bitmap, Section name, Position, Size. Whether to draw the
-//                  background and frame.
+//                  background and frame, a GUIRect to be filled in with the border sizes of the four sides of the built standard rect.
 
     void BuildStandardRect(GUIBitmap *Dest, const std::string Section, int X, int Y,
-                           int Width, int Height, bool buildBG = true, bool buildFrame = true);
+                           int Width, int Height, bool buildBG = true, bool buildFrame = true, GUIRect *borderSizes = nullptr);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -117,9 +117,9 @@ public:
 // Method:          Update
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Updates the GUI every frame
-// Arguments:       None.
+// Arguments:       Whether keyboard events should be ignored or not. Used to avoid conflicts when custom keyboard handling for GUI elements is preset.
 
-    void Update();
+    void Update(bool ignoreKeyboardEvents = false);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -135,10 +135,10 @@ public:
 // Method:          Draw
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Draws the GUI to the back buffer.
-// Arguments:       The GUIScreen to draw to, overriding teh one passed in on constuction
+// Arguments:       The GUIScreen to draw to, overriding the one passed in on constuction
 
     void Draw(GUIScreen *pScreen);
-
+	
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawMouse
@@ -295,19 +295,14 @@ public:
 //                  to the existing layout.
 // Returns:         True if sucessful.
 
-    bool Load(const std::string Filename, bool keepOld = false);
+    bool Load(const std::string &Filename, bool keepOld = false);
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Load
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Loads the layout from a Reader class.
-// Arguments:       Reader object
-//                  Whether to NOT clear out the manager, but just add the controls loaded
-//                  to the existing layout.
-// Returns:         True if sucessful.
-
-    bool Load(Reader *R, bool keepOld = false);
+	/// <summary>
+	/// Gets the GUIScreen that this GUIControlManager is drawing itself to.
+	/// </summary>
+	/// <returns>Pointer to the GUIScreen that this GUIControlManager is drawing itself to.</returns>
+	GUIScreen * GetScreen() const { return m_Screen; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -315,8 +310,8 @@ public:
 
 private:
 
-    GUIScreen        *m_Screen;
-    GUIInput        *m_Input;
+    GUIScreen        *m_Screen; // Not owned.
+    GUIInput        *m_Input; // Not owned.
     GUISkin            *m_Skin;
     GUIManager        *m_GUIManager;
 
