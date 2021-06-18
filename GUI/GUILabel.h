@@ -10,6 +10,9 @@
 //                  jackal@shplorb.com
 //                  www.shplorb.com/~jackal
 
+#ifdef GUI_STANDALONE
+#include "Timer.h"
+#endif
 
 namespace RTE
 {
