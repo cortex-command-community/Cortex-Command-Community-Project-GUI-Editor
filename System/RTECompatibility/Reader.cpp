@@ -279,18 +279,13 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	std::string Reader::TrimString(std::string &stringToTrim) {
-		if (stringToTrim.empty()) {
+		if (stringToTrim.empty() || stringToTrim.length() == 1) {
 			return "";
 		}
-		int start = stringToTrim.find_first_not_of(' ');
-		int end = stringToTrim.find_last_not_of(' ');
+		size_t start = stringToTrim.find_first_not_of(' ');
+		size_t end = stringToTrim.find_last_not_of(' ');
 
-		if (start > end) {
-			return "";
-		} else if (start == 0 && end == stringToTrim.size() - 1) {
-			return stringToTrim;
-		}
-		return stringToTrim.substr(start, (end - start) + 1);
+		return stringToTrim.substr(start, (end - start + 1));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
