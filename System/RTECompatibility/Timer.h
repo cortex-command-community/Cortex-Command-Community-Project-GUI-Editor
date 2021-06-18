@@ -13,6 +13,10 @@ namespace RTE {
 		void Reset() { return; }
 		double GetElapsedRealTimeMS() const { return 0; }
 		double GetElapsedRealTimeS() const { return 0; }
+		double GetRealTimeLimitMS() const { return 0; }
+		void SetRealTimeLimitMS(double newTimeLimit) {}
+		bool IsPastRealTimeLimit() const { return false; }
+		double RealTimeLimitProgress() const { return 0; }
 	};
 }
 #endif
