@@ -100,7 +100,7 @@ void GUILabel::Create(GUIProperties *Props)
     // Get the values
     Props->GetValue("Text", &m_Text);
 
-    string alignString;
+	std::string alignString;
     Props->GetValue("HAlignment", &alignString);
     if (stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
@@ -132,7 +132,7 @@ void GUILabel::ChangeSkin(GUISkin *Skin)
     GUIControl::ChangeSkin(Skin);
 
     // Load the font
-    string Filename;
+	std::string Filename;
 
     m_Skin->GetValue("Label", "Font", &Filename);
     m_Font = m_Skin->GetFont(Filename);
@@ -424,7 +424,7 @@ void GUILabel::ApplyProperties(GUIProperties *Props)
 
     m_Properties.GetValue("Text", &m_Text);
 
-    string alignString;
+	std::string alignString;
     m_Properties.GetValue("HAlignment", &alignString);
     if (stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;

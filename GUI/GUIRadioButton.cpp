@@ -121,7 +121,7 @@ void GUIRadioButton::ChangeSkin(GUISkin *Skin)
 
 void GUIRadioButton::BuildBitmap(void)
 {
-    string Filename;
+	std::string Filename;
     unsigned long ColorIndex = 0;
     int Values[4];
 
@@ -206,8 +206,8 @@ void GUIRadioButton::Draw(GUIScreen *Screen)
     // Draw the text
     
     // Add a space to make a gap between checkbox & text
-    string Text;
-    string space = " ";
+	std::string Text;
+	std::string space = " ";
     Text = space.append(m_Text);
 
     if (m_Font) {
@@ -370,8 +370,8 @@ void GUIRadioButton::SetCheck(bool Check)
         
     // Go through all my RadioButton siblings and uncheck them        
     if (m_ControlParent) {
-        vector<GUIControl *>::iterator it;
-        vector<GUIControl *> *Children = m_ControlParent->GetChildren();
+		std::vector<GUIControl *>::iterator it;
+		std::vector<GUIControl *> *Children = m_ControlParent->GetChildren();
         
         for(it = Children->begin(); it != Children->end(); it++) {
             GUIControl *C = *it;
@@ -409,7 +409,7 @@ bool GUIRadioButton::GetCheck(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUIRadioButton::SetText(const string Text)
+void GUIRadioButton::SetText(const std::string Text)
 {
     m_Text = Text;
 }
@@ -420,7 +420,7 @@ void GUIRadioButton::SetText(const string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-string GUIRadioButton::GetText(void)
+std::string GUIRadioButton::GetText(void)
 {
     return m_Text;
 }

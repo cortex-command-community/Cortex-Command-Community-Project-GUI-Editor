@@ -143,7 +143,7 @@ void GUIComboBox::Create(GUIProperties *Props)
     Props->GetValue("Dropheight", &m_DropHeight);
     m_DropHeight = std::max(m_DropHeight, 20);
 
-    string Val;
+	std::string Val;
     Props->GetValue("DropDownStyle", &Val);
     if (stricmp(Val.c_str(), "DropDownList") == 0)
         m_DropDownStyle = DropDownList;
@@ -421,7 +421,7 @@ void GUIComboBox::EndUpdate(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Add an item to the list.
 
-void GUIComboBox::AddItem(string Name, string ExtraText, GUIBitmap *pBitmap, const Entity *pEntity)
+void GUIComboBox::AddItem(std::string Name, std::string ExtraText, GUIBitmap *pBitmap, const Entity *pEntity)
 {
     m_ListPanel->AddItem(Name, ExtraText, pBitmap, pEntity);
 }
@@ -695,7 +695,7 @@ bool GUIComboBox::GetEnabled(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets text (only if style is DropDown).
 
-string GUIComboBox::GetText(void)
+std::string GUIComboBox::GetText(void)
 {
     if (m_DropDownStyle != DropDown)
         return "";
@@ -712,7 +712,7 @@ string GUIComboBox::GetText(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets text (only if style is DropDown).
 
-void GUIComboBox::SetText(const string Text)
+void GUIComboBox::SetText(const std::string Text)
 {
     if (m_DropDownStyle == DropDown && m_TextPanel)        
         m_TextPanel->SetText(Text);
@@ -731,7 +731,7 @@ void GUIComboBox::ApplyProperties(GUIProperties *Props)
     m_Properties.GetValue("Dropheight", &m_DropHeight);
     m_DropHeight = std::max(m_DropHeight, 20);
 
-    string Val;
+	std::string Val;
     m_Properties.GetValue("DropDownStyle", &Val);
     if (stricmp(Val.c_str(), "DropDownList") == 0)
         m_DropDownStyle = DropDownList;
@@ -782,7 +782,7 @@ void GUIComboBoxButton::ChangeSkin(GUISkin *Skin)
     Skin->BuildStandardRect(m_DrawBitmap, "ComboBox_ButtonDown", 0, m_Height, m_Width, m_Height);    
 
     // Draw the arrow
-    string Filename;
+	std::string Filename;
     Skin->GetValue("ComboBox_Arrow", "Filename", &Filename);
     GUIBitmap *Arrow = Skin->CreateBitmap(Filename);
     if (!Arrow)

@@ -104,7 +104,7 @@ void GUITextPanel::Create(int X, int Y, int Width, int Height)
 void GUITextPanel::ChangeSkin(GUISkin *Skin)
 {
     // Load the font
-    string Filename;
+    std::string Filename;
     Skin->GetValue("TextBox", "Font", &Filename);
     m_Font = Skin->GetFont(Filename);
     Skin->GetValue("TextBox", "FontColor", &m_FontColor);
@@ -152,7 +152,7 @@ void GUITextPanel::Draw(GUIScreen *Screen)
     // Setup the clipping
     Screen->GetBitmap()->SetClipRect(GetRect());
     
-    string Text = m_Text.substr(m_StartIndex);
+	std::string Text = m_Text.substr(m_StartIndex);
 
     // Draw the text    
     m_Font->SetColor(m_FontColor);
@@ -312,7 +312,7 @@ void GUITextPanel::OnKeyPress(int KeyCode, int Modifier) {
 	// ModKey-V (Paste)
 	if (asciiChar == 'v' && ModKey) {
 		RemoveSelectionText();
-		string Text = "";
+		std::string Text = "";
 		GUIUtil::GetClipboardText(&Text);
 		m_Text.insert(m_CursorIndex, Text);
 		m_CursorIndex += Text.size();
@@ -381,7 +381,7 @@ void GUITextPanel::OnMouseDown(int X, int Y, int Buttons, int Modifier)
     int OldIndex = m_CursorIndex;
 
     // Set the cursor
-    string Text = m_Text.substr(m_StartIndex, m_Text.size()-m_StartIndex);
+	std::string Text = m_Text.substr(m_StartIndex, m_Text.size()-m_StartIndex);
     m_CursorIndex = m_Text.size();
 
     if (!(Modifier & MODI_SHIFT))
@@ -417,7 +417,7 @@ void GUITextPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier)
         return;
     
     // Select from the mouse down point to where the mouse is currently
-    string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
+	std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
     int TX = m_X;
     for(int i=0; i<Text.size(); i++)
     {
@@ -481,7 +481,7 @@ void GUITextPanel::UpdateText(bool Typing, bool DoIncrement)
     m_StartIndex = std::max(m_StartIndex, 0);
     
     // If the cursor is greater than the length of text panel, adjust the start index
-    string Sub = m_Text.substr(m_StartIndex,m_CursorIndex-m_StartIndex);
+	std::string Sub = m_Text.substr(m_StartIndex,m_CursorIndex-m_StartIndex);
     while(m_Font->CalculateWidth(Sub) > m_Width-Spacer*2 && DoIncrement) {
         m_StartIndex += Increment;
         Sub = m_Text.substr(m_StartIndex,m_CursorIndex-m_StartIndex);
@@ -628,7 +628,7 @@ void GUITextPanel::SetCursorPos(int cursorPos)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the selection text.
 
-string GUITextPanel::GetSelectionText(void)
+std::string GUITextPanel::GetSelectionText(void)
 {
     if (!m_GotSelection)
         return "";

@@ -193,8 +193,8 @@ std::vector<GUIControl *> *GUIControl::GetChildren(void)
 
 bool GUIControl::Save(Writer *W)
 {
-    string OutString = "";
-    string Name;
+	std::string OutString = "";
+	std::string Name;
 
     // Get the control to store its properties
     StoreProperties();
@@ -278,7 +278,7 @@ void GUIControl::GetControlRect(int *X, int *Y, int *Width, int *Height)
 int GUIControl::GetAnchor(void)
 {
     int Anchor = 0;
-    string Value[4];
+	std::string Value[4];
 
     int Count = m_Properties.GetValue("Anchor", Value, 4);
 
@@ -459,7 +459,7 @@ bool GUIControl::IsContainer(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Removes a child based on name.
 
-void GUIControl::RemoveChild(const string Name)
+void GUIControl::RemoveChild(const std::string Name)
 {
     // Note: We do NOT free the children because they are still linked in through their
     // panels.
@@ -467,7 +467,7 @@ void GUIControl::RemoveChild(const string Name)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-    vector<GUIControl *>::iterator it;
+	std::vector<GUIControl *>::iterator it;
 
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;
@@ -494,7 +494,7 @@ void GUIControl::RemoveChildren(void)
     // This will cause a small memory leak, but this is only designed for the GUI Editor
     // and is a bit of a hack
 
-    vector<GUIControl *>::iterator it;
+	std::vector<GUIControl *>::iterator it;
 
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;

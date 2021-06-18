@@ -202,7 +202,7 @@ void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsi
 
 void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Text, int HAlign, int VAlign, int MaxWidth, unsigned long Shadow)
 {
-    string TextLine = Text;
+	std::string TextLine = Text;
     int lineStartPos = 0;
     int lineEndPos = 0;
     int lineWidth = 0;
@@ -220,7 +220,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
         // Find the next newline, if any
         lineEndPos = Text.find('\n', lineStartPos);
         // Grab the whole line
-        TextLine = Text.substr(lineStartPos, (lineEndPos == string::npos ? Text.size() : lineEndPos) - lineStartPos);
+        TextLine = Text.substr(lineStartPos, (lineEndPos == std::string::npos ? Text.size() : lineEndPos) - lineStartPos);
         // Figure its width, in pixels
         lineWidth = CalculateWidth(TextLine);
 
@@ -233,7 +233,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
                 // Find last space 
                 lastSpacePos = Text.rfind(' ', lineEndPos - 1);
                 // if there was no space encountered before hitting beginning, then jsut leave the too long line as is and let it exceed the max width
-                if (lastSpacePos == string::npos || lastSpacePos <= lineStartPos)
+                if (lastSpacePos == std::string::npos || lastSpacePos <= lineStartPos)
                 {
                     lineEndPos = Text.size();
                     break;
@@ -255,7 +255,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
         }
         // Advance the line start to the next line, or to the end of the text if there are no more lines
         else
-            lineStartPos = lineEndPos == string::npos ? Text.size() : (lineEndPos + 1);
+            lineStartPos = lineEndPos == std::string::npos ? Text.size() : (lineEndPos + 1);
 
         // If the line is scrolled above the bitmap top, then don't try to draw anyhting
         if ((yLine + m_FontHeight) >= 0)
@@ -469,7 +469,7 @@ void GUIFont::CacheColor(unsigned long Color)
 
 GUIFont::FontColor *GUIFont::GetFontColor(unsigned long Color)
 {
-    vector<FontColor>::iterator it;
+	std::vector<FontColor>::iterator it;
     FontColor *F = 0;
     for(it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {
         F = &(*it);
@@ -531,7 +531,7 @@ void GUIFont::Destroy(void)
     }
 
     // Go through the color cache and destory the bitmaps
-    vector<FontColor>::iterator it;
+	std::vector<FontColor>::iterator it;
     FontColor *FC = 0;
     for(it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {
         FC = &(*it);

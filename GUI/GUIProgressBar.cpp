@@ -168,7 +168,7 @@ void GUIProgressBar::BuildBitmap(void)
     m_Skin->BuildStandardRect(m_DrawBitmap, "ProgressBar_Base", 0, 0, m_Width, m_Height);    
 
     // Build the indicator
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue("ProgressBar_Indicator", "Filename", &Filename);
     GUIBitmap *Src = m_Skin->CreateBitmap(Filename);
     if (!Src)

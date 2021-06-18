@@ -94,7 +94,7 @@ void GUICheckbox::Create(GUIProperties *Props)
 
     // Grab the check value
     m_Check = Unchecked;
-    string value;
+	std::string value;
     Props->GetValue("Checked", &value);
     if (stricmp(value.c_str(), "Checked") == 0)
         m_Check = Checked;
@@ -136,7 +136,7 @@ void GUICheckbox::ChangeSkin(GUISkin *Skin)
 
 void GUICheckbox::BuildBitmap(void)
 {
-    string Filename;
+	std::string Filename;
     unsigned long ColorIndex = 0;
     int Values[4];
 
@@ -217,8 +217,8 @@ void GUICheckbox::Draw(GUIScreen *Screen)
     }
 
     // Draw the text
-    string Text;
-    string space = " ";
+	std::string Text;
+	std::string space = " ";
     Text = space.append(m_Text);
 
     if (m_Font) {
@@ -375,7 +375,7 @@ void GUICheckbox::StoreProperties(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the text.
 
-void GUICheckbox::SetText(const string Text)
+void GUICheckbox::SetText(const std::string Text)
 {
     m_Text = Text;
 }
@@ -386,7 +386,7 @@ void GUICheckbox::SetText(const string Text)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the text.
 
-string GUICheckbox::GetText(void)
+std::string GUICheckbox::GetText(void)
 {
     return m_Text;
 }
@@ -424,7 +424,7 @@ void GUICheckbox::ApplyProperties(GUIProperties *Props)
     GUIControl::ApplyProperties(Props);
 
     m_Check = Unchecked;
-    string value;
+	std::string value;
     m_Properties.GetValue("Checked", &value);
     if (stricmp(value.c_str(), "Checked") == 0)
         m_Check = Checked;

@@ -134,7 +134,7 @@ void GUIListPanel::Create(int X, int Y, int Width, int Height)
 void GUIListPanel::Destroy(void)
 {
     // Destroy the items
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
 
     for(it = m_Items.begin(); it != m_Items.end(); it++) {
         Item *I = *it;
@@ -189,7 +189,7 @@ void GUIListPanel::Destroy(void)
 void GUIListPanel::ClearList(void)
 {
     // Destroy the items
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
 
     for(it = m_Items.begin(); it != m_Items.end(); it++)
     {
@@ -215,7 +215,7 @@ void GUIListPanel::ClearList(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Add an item to the list.
 
-void GUIListPanel::AddItem(string Name, string rightText, GUIBitmap *pBitmap, const Entity *pEntity, const int extraIndex)
+void GUIListPanel::AddItem(std::string Name, std::string rightText, GUIBitmap *pBitmap, const Entity *pEntity, const int extraIndex)
 {
     Item *I = new Item;
     I->m_Name = Name;
@@ -305,7 +305,7 @@ void GUIListPanel::BuildBitmap(bool UpdateBase, bool UpdateText)
     
 
     if (UpdateBase) {
-        string Filename;
+		std::string Filename;
 
         m_Skin->GetValue("Listbox", "SelectedColorIndex", &m_SelectedColorIndex);
         m_SelectedColorIndex = m_Skin->ConvertColor(m_SelectedColorIndex, m_BaseBitmap->GetColorDepth());
@@ -349,7 +349,7 @@ void GUIListPanel::BuildBitmap(bool UpdateBase, bool UpdateText)
 void GUIListPanel::BuildDrawBitmap(void)
 {    
     // Draw the items
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
     int Count = 0;
     int Height = m_Height;
     if (m_HorzScroll->_GetVisible())
@@ -544,7 +544,7 @@ void GUIListPanel::OnMouseWheelChange(int x, int y, int modifier, int mouseWheel
 
 void GUIListPanel::SelectItem(int X, int Y, int Modifier)
 {
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
     bool Shift = Modifier & MODI_SHIFT;
     bool Ctrl = Modifier & MODI_CTRL;
 
@@ -632,7 +632,7 @@ void GUIListPanel::SelectItem(int X, int Y, int Modifier)
                         m_LastSelected = Count;
                     } else {
                         // Select a list of items
-                        vector<Item *>::iterator sel;
+						std::vector<Item *>::iterator sel;
                         int Num = 0;
                         for(sel = m_Items.begin(); sel != m_Items.end(); sel++, Num++) {
                             if (m_LastSelected <= Count) {
@@ -1039,7 +1039,7 @@ void GUIListPanel::OnKeyPress(int KeyCode, int Modifier)
 
     
     // Clear all the items
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
     for(it = m_Items.begin(); it != m_Items.end(); it++) {
         Item *I = *it;
         I->m_Selected = false;
@@ -1280,7 +1280,7 @@ GUIListPanel::Item * GUIListPanel::GetItem(int X, int Y)
         y -= m_VertScroll->GetValue();
     int Count = 0;
     int stackHeight = 0;
-    for(vector<Item *>::iterator it = m_Items.begin(); it != m_Items.end(); it++, Count++)
+    for(std::vector<Item *>::iterator it = m_Items.begin(); it != m_Items.end(); it++, Count++)
     {        
         Item *pItem = *it;
 
@@ -1354,7 +1354,7 @@ int GUIListPanel::GetStackHeight(Item *pItem)
 {
     int height = 0;
 
-    for (vector<Item *>::iterator iitr = m_Items.begin(); iitr != m_Items.end(); ++iitr)
+    for (std::vector<Item *>::iterator iitr = m_Items.begin(); iitr != m_Items.end(); ++iitr)
     {
         if ((*iitr) == pItem)
             break;
@@ -1405,7 +1405,7 @@ int GUIListPanel::GetSelectedIndex(void)
 void GUIListPanel::SetSelectedIndex(int Index)
 {
     // Clear the old selection
-    vector<Item *>::iterator it;
+	std::vector<Item *>::iterator it;
     for(it = m_Items.begin(); it != m_Items.end(); it++) {
         Item *I = *it;
         I->m_Selected = false;
@@ -1443,7 +1443,7 @@ void GUIListPanel::DeleteItem(int Index)
         // If this item was selected, remove it from the selection list
         if (I->m_Selected) {
             // Find the item
-            vector<Item *>::iterator it;
+			std::vector<Item *>::iterator it;
             for(it = m_SelectedList.begin(); it != m_SelectedList.end(); it++)
             {
                 if (I->m_ID == (*it)->m_ID)
@@ -1459,7 +1459,7 @@ void GUIListPanel::DeleteItem(int Index)
         m_Items.erase(m_Items.begin() + Index);
 
         // Reset the id's
-        vector<Item *>::iterator it;
+		std::vector<Item *>::iterator it;
         int Count = 0;
         for(it = m_Items.begin(); it != m_Items.end(); it++) {
             Item *I = *it;

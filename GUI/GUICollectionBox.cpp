@@ -98,7 +98,7 @@ void GUICollectionBox::Create(GUIProperties *Props)
 
     // Get the values
     Props->GetValue("DrawBackground", &m_DrawBackground);
-    string v;
+	std::string v;
     Props->GetValue("DrawType", &v);
     if (stricmp(v.c_str(), "Color") == 0)
         m_DrawType = Color;
@@ -253,7 +253,7 @@ void GUICollectionBox::Move(int X, int Y)
     m_Y = Y;
 
     // Go through all my children moving them
-    vector<GUIControl *>::iterator it;
+	std::vector<GUIControl *>::iterator it;
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;
         int CX, CY, CW, CH;
@@ -278,7 +278,7 @@ void GUICollectionBox::Resize(int Width, int Height)
     m_Height = Height;
 
     // Go through all my children moving them
-    vector<GUIControl *>::iterator it;
+	std::vector<GUIControl *>::iterator it;
     for(it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
         GUIControl *C = *it;
         int CX, CY, CW, CH;
@@ -399,7 +399,7 @@ void GUICollectionBox::ApplyProperties(GUIProperties *Props)
 
     // Get the values
     m_Properties.GetValue("DrawBackground", &m_DrawBackground);
-    string v;
+	std::string v;
     m_Properties.GetValue("DrawType", &v);
     if (stricmp(v.c_str(), "Color") == 0)
         m_DrawType = Color;

@@ -101,14 +101,14 @@ void GUISlider::Create(GUIProperties *Props)
 
 
     // Get the values
-    string ori;
+	std::string ori;
     Props->GetValue("Orientation", &ori);
     if (stricmp(ori.c_str(), "horizontal") == 0)
         m_Orientation = Horizontal;
     else if (stricmp(ori.c_str(), "vertical") == 0)
         m_Orientation = Vertical;
 
-    string tick;
+	std::string tick;
     Props->GetValue("TickDirection", &tick);
     if (stricmp(tick.c_str(), "TopLeft") == 0)
         m_TickDirection = TopLeft;
@@ -185,14 +185,14 @@ void GUISlider::BuildBitmap(void)
         m_KnobImage = 0;
     }
 
-    string Section;
+	std::string Section;
     if (m_Orientation == Horizontal)
         Section = "Slider_Horz";
     else
         Section = "Slider_Vert";
 
     // Load the source image
-    string Filename;
+	std::string Filename;
     m_Skin->GetValue(Section, "Filename", &Filename);
     GUIBitmap *SrcImage = m_Skin->CreateBitmap(Filename);
     if (!SrcImage)
@@ -202,7 +202,7 @@ void GUISlider::BuildBitmap(void)
     BuildLine(Section, SrcImage);
 
     // Load the indicator image
-    string Side;
+	std::string Side;
     if (m_TickDirection == TopLeft)
         Side = "TopLeftSlider";
     else
@@ -233,7 +233,7 @@ void GUISlider::BuildBitmap(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Builds the background line for the slider
 
-void GUISlider::BuildLine(const string Section, GUIBitmap *SrcImage)
+void GUISlider::BuildLine(const std::string Section, GUIBitmap *SrcImage)
 {
     int Values[4];
     GUIRect Rect;
@@ -684,14 +684,14 @@ void GUISlider::ApplyProperties(GUIProperties *Props)
     GUIControl::ApplyProperties(Props);
 
     // Get the values
-    string ori;
+	std::string ori;
     m_Properties.GetValue("Orientation", &ori);
     if (stricmp(ori.c_str(), "horizontal") == 0)
         m_Orientation = Horizontal;
     else if (stricmp(ori.c_str(), "vertical") == 0)
         m_Orientation = Vertical;
 
-    string tick;
+	std::string tick;
     m_Properties.GetValue("TickDirection", &tick);
     if (stricmp(tick.c_str(), "TopLeft") == 0)
         m_TickDirection = TopLeft;

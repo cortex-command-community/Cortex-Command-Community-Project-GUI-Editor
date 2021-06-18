@@ -89,7 +89,7 @@ void GUITextBox::Create(GUIProperties *Props)
     m_Height = std::max(m_Height, m_MinHeight);
 
     // Alignment values - these don't affect anyhting as of yet
-    string alignString;
+	std::string alignString;
     Props->GetValue("HAlignment", &alignString);
     if (stricmp(alignString.c_str(), "left") == 0)
         m_HAlignment = GUIFont::Left;
