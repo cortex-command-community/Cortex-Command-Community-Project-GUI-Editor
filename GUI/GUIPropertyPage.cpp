@@ -227,22 +227,6 @@ void GUIPropertyPage::BuildBitmap(void)
 
     m_Skin->GetValue("PropertyPage", "LineColor", &m_LineColor);
     m_LineColor = m_Skin->ConvertColor(m_LineColor, m_DrawBitmap->GetColorDepth());
-
-/*    // Create the button image
-    m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Up", 0, 0, m_Width, m_Height);
-    m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Over", 0, m_Height, m_Width, m_Height);
-    m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Down", 0, m_Height*2, m_Width, m_Height);    
-
-    // Draw the text
-//    int y = m_Height/2-m_Font->CalculateHeight(m_Text)+2;
-    int y = (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1;
-
-    m_Font->SetColor(m_FontColor);
-    m_Font->SetKerning(m_FontKerning);
-
-    m_Font->DrawAligned(m_DrawBitmap, m_Width/2, y, m_Text, GUIFont::Centre, GUIFont::Top, m_Width, m_FontShadow);
-    m_Font->DrawAligned(m_DrawBitmap, m_Width/2, m_Height+y, m_Text, GUIFont::Centre, GUIFont::Top, m_Width, m_FontShadow);
-    m_Font->DrawAligned(m_DrawBitmap, m_Width/2+1, m_Height*2+y+1, m_Text, GUIFont::Centre, GUIFont::Top, m_Width, m_FontShadow);*/
 }
 
 
@@ -311,20 +295,6 @@ void GUIPropertyPage::OnMouseDown(int X, int Y, int Buttons, int Modifier)
 
 void GUIPropertyPage::OnMouseUp(int X, int Y, int Buttons, int Modifier)
 {
-    /*if (PointInside(X, Y))
-        AddEvent(GUIEvent::Notification, Clicked, Buttons);
-
-    if (!IsCaptured())
-        return;
-
-    m_Pushed = false;
-    ReleaseMouse();
-
-    // If the mouse is over the button, add the command to the event queue
-    if (PointInside(X, Y))
-        AddEvent(GUIEvent::Command, 0, 0);
-
-    AddEvent(GUIEvent::Notification, UnPushed, 0);*/
 }
 
 
@@ -359,19 +329,6 @@ void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier)
 {
     if (!(Buttons & MOUSE_LEFT) || !IsCaptured())
         return;
-
-    // If the mouse goes outside of the button, un-push the button
-    /*if (!PointInside(X, Y)) {
-        if (m_Pushed) {
-            AddEvent(GUIEvent::Notification, UnPushed, 0);
-            m_Pushed = false;
-        }
-    } else {
-        if (!m_Pushed) {
-            AddEvent(GUIEvent::Notification, Pushed, 0);
-            m_Pushed = true;
-        }
-    }*/
 }
 
 

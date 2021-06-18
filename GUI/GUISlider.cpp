@@ -328,20 +328,7 @@ void GUISlider::OnMouseDown(int X, int Y, int Buttons, int Modifier)
     // Only do stuff here on a left mouse click
     if (!(Buttons & MOUSE_LEFT))
         return;
-/*
-    // Grabbed the slider?
-    if (m_Orientation == Horizontal) {
-        if (X > m_X+m_KnobPosition-3 && X < m_X+m_KnobPosition+m_KnobSize+3) {
-            m_KnobGrabbed = true;
-            m_KnobGrabPos = X - (m_X+m_KnobPosition);
-        }
-    } else {
-        if (Y > m_Y+m_KnobPosition-3 && Y < m_Y+m_KnobPosition+m_KnobSize+3) {
-            m_KnobGrabbed = true;
-            m_KnobGrabPos = Y - (m_Y+m_KnobPosition);
-        }
-    }
-*/
+
     if (m_Orientation == Horizontal) {
         if (X > m_X + m_EndThickness && X < m_X + m_Width - m_EndThickness) {
             m_KnobGrabbed = true;
@@ -467,44 +454,6 @@ void GUISlider::OnMouseWheelChange(int x, int y, int modifier, int mouseWheelCha
 	}
 }
 
-/*
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetValue
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets a property value.
-
-void GUISlider::SetValue(const std::string Name, const std::string Value)
-{
-    GUIControl::SetValue(Name, Value);
-
-    m_Properties.GetValue("Minimum", &m_Minimum);
-    m_Properties.GetValue("Maximum", &m_Maximum);
-    m_Properties.GetValue("Value", &m_Value);
-
-    // Clamp the value
-    m_Value = std::max(m_Value, m_Minimum);
-    m_Value = std::min(m_Value, m_Maximum);
-
-    // Re-Calculate the knob info
-    CalculateKnob();
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetValue
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets a property value.
-
-void GUISlider::GetValue(const std::string Name, std::string *Value)
-{
-    // Update our variables into the properties
-    m_Properties.SetValue("Minimum", m_Minimum);
-    m_Properties.SetValue("Maximum", m_Maximum);
-    m_Properties.SetValue("Value", m_Value);
-
-    GUIControl::GetValue(Name, Value);
-}*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetPanel

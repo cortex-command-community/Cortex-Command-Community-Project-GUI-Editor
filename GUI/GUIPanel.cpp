@@ -114,15 +114,7 @@ void GUIPanel::AddChild(GUIPanel *child, bool convertToAbsolutePos)
             child->m_X += m_X;
             child->m_Y += m_Y;
         }
-/* This is BS.. clipping is done when drawing instead
-        // A child panel cannot go outside of the boundaries of the parents rectangle
-        // So we must clip the child's rectangle if that happens
-        if (child->m_X + child->m_Width > m_X + m_Width)
-            child->m_Width -= (child->m_X + child->m_Width) - (m_X + m_Width);
 
-        if (child->m_Y + child->m_Height > m_Y + m_Height)
-            child->m_Height -= (child->m_Y + child->m_Height) - (m_Y + m_Height);
-*/
         // Make sure the rectangle is valid
         child->m_Width = std::max(child->m_Width, 0);
         child->m_Height = std::max(child->m_Height, 0);

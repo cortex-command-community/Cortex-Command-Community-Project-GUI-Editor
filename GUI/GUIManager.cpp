@@ -428,47 +428,6 @@ int GUIManager::GetPanelID(void)
     return m_UniqueIDCount++;
 }
 
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CreateTimer
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Creates the timer.
-
-bool GUIManager::CreateTimer(void)
-{
-    LARGE_INTEGER        TicksPerSec;
-
-    // Get the ticks per second
-    QueryPerformanceFrequency(&TicksPerSec);
-
-    m_TicksPerSecond = TicksPerSec.QuadPart;
-    m_LastElapsedTime = 0;
-
-    // Reset the timer
-    LARGE_INTEGER        Time;
-    QueryPerformanceCounter(&Time);
-    m_TimeStarted = Time.QuadPart;
-
-    return true;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetCurrentTime
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the current time since the timer was created.
-
-float GUIManager::m_pTimer->GetElapsedSimTimeMS(void)
-{
-    LARGE_INTEGER    Time;
-
-    QueryPerformanceCounter(&Time);
-
-    double Elapsed = (double)(Time.QuadPart - m_TimeStarted) / (double)m_TicksPerSecond;
-
-    return (float)Elapsed;
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          MouseInRect

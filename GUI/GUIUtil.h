@@ -23,14 +23,6 @@ namespace RTE {
 		static char * TrimString(char *String);
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="dst"></param>
-		/// <param name="src"></param>
-		/// <returns></returns>
-		static char * SafeOverlappingStrCpy(char* dst, char* src);
-
-		/// <summary>
 		/// Gets the text from the clipboard.
 		/// </summary>
 		/// <param name="text">Pointer to string receiving the text.</param>

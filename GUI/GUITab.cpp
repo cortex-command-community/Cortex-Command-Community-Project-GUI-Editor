@@ -285,19 +285,6 @@ void GUITab::OnMouseLeave(int X, int Y, int Buttons, int Modifier)
     m_Mouseover = false;
 }
 
-/*
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseMove
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse moves (over the panel, or when captured).
-
-void GUITab::OnMouseMove(int X, int Y, int Buttons, int Modifier)
-{
-    if (PointInside(X, Y))
-        SendSignal(MouseMove, Buttons);
-    }
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetPanel
