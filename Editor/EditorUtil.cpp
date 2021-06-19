@@ -77,8 +77,7 @@ namespace RTEGUI {
 
 		if (GetSaveFileName(&dialogBox)) {
 			// Check if the file exists
-			FILE *file = fopen(filenameToSave.c_str(), "rt");
-			if (file) {
+			if (FILE *file = fopen(filenameToSave.c_str(), "rt")) {
 				fclose(file);
 				if (MessageBox(windowHandle, "File Exists\nOverwrite it?", "Confirmation", MB_YESNO) == IDNO) {
 					std::filesystem::current_path(currentDir);

@@ -25,6 +25,13 @@ namespace RTEGUI {
 		/// </summary>
 		enum struct NudgeDirection { NudgeUp, NudgeDown, NudgeLeft, NudgeRight };
 
+#pragma region Creation
+		/// <summary>
+		/// Constructor method used to instantiate a EditorSelection object in system memory.
+		/// </summary>
+		EditorSelection() = default;
+#pragma endregion
+
 #pragma region Getters and Setters
 		/// <summary>
 		/// Gets the GUI element that is currently selected by this.
@@ -141,14 +148,14 @@ namespace RTEGUI {
 		/// Draws the selection box around the selected GUI element.
 		/// </summary>
 		/// <param name="Control">GUI element to draw selection box around.</param>
-		void DrawSelectionBox(GUIScreen *screen, GUIInput *input);
+		void DrawSelectionBox(GUIScreen *screen, const GUIInput *input);
 
 		/// <summary>
 		/// Draws a selection box resize handle.
 		/// </summary>
 		/// <param name="X">X position of drawn box.</param>
 		/// <param name="Y">Y position of drawn box.</param>
-		void DrawSelectionBoxHandle(GUIScreen *screen, int xPos, int yPos) const;
+		void DrawSelectionBoxHandle(const GUIScreen *screen, int xPos, int yPos) const;
 #pragma endregion
 
 	private:
@@ -166,6 +173,9 @@ namespace RTEGUI {
 		int	m_ClickX = 0; //!< The X position of the mouse when a control or a handle was clicked on and grabbed. Used for mouse movement check to trigger the grab.
 		int m_ClickY = 0; //!< The Y position of the mouse when a control or a handle was clicked on and grabbed. Used for mouse movement check to trigger the grab.
 
+		// Disallow the use of some implicit methods.
+		EditorSelection(const EditorSelection &reference) = delete;
+		EditorSelection &operator=(const EditorSelection &rhs) = delete;
 	};
 }
 #endif

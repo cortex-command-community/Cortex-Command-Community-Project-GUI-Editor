@@ -183,7 +183,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorSelection::DrawSelectionBox(GUIScreen *screen, GUIInput *input) {
+	void EditorSelection::DrawSelectionBox(GUIScreen *screen, const GUIInput *input) {
 		if (!m_Control) {
 			return;
 		}
@@ -224,7 +224,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorSelection::DrawSelectionBoxHandle(GUIScreen *screen, int xPos, int yPos) const {
+	void EditorSelection::DrawSelectionBoxHandle(const GUIScreen *screen, int xPos, int yPos) const {
 		int boxSize = 5;
 		screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0x000000, true);
 		screen->GetBitmap()->DrawRectangle(xPos - boxSize / 2, yPos - boxSize / 2, boxSize, boxSize, 0xFFFFFF, false);

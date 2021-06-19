@@ -10,7 +10,7 @@ using namespace RTEGUI;
 /// <summary>
 /// Entry point for the GUI editor app.
 /// </summary>
-int main(int argc, char **argv) {
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	allegro_init();
 	g_GUIEditor.Initialize();
 
@@ -29,7 +29,3 @@ int main(int argc, char **argv) {
 
 	std::exit(EXIT_SUCCESS);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) { return main(__argc, __argv); }

@@ -40,8 +40,6 @@ namespace RTEGUI {
 			m_ZoomBuffer = create_bitmap(m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 			clear_to_color(m_ZoomBuffer, 0);
 		}
-
-		//show_os_cursor(MOUSE_CURSOR_ARROW);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

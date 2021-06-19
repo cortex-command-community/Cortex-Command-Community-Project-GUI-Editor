@@ -123,7 +123,7 @@ namespace RTEGUI {
 		int GetWorkspaceHeight() const { return m_WorkspaceHeight; }
 #pragma endregion
 
-#pragma region 
+#pragma region Misc
 		/// <summary>
 		/// Disables and hides the workspace zoom checkbox.
 		/// </summary>
