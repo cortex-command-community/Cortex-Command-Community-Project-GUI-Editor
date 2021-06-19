@@ -1,5 +1,5 @@
-#include "AllegroInput.h"
 #include "GUI.h"
+#include "AllegroInput.h"
 #include "Timer.h"
 
 #ifndef GUI_STANDALONE
@@ -20,13 +20,13 @@ namespace RTE {
 		AdjustMouseMovementSpeedToGraphicsDriver(g_FrameMan.GetGraphicsDriver());
 #endif
 
-		m_Timer = std::make_unique<Timer>();
+		m_KeyTimer = std::make_unique<Timer>();
 		m_CursorAccelTimer = std::make_unique<Timer>();
 
 		memset(m_KeyboardBuffer, 0, sizeof(uint8_t) * GUIInput::Constants::KEYBOARD_BUFFER_SIZE);
 		memset(m_ScanCodeState, 0, sizeof(uint8_t) * GUIInput::Constants::KEYBOARD_BUFFER_SIZE);
 
-		m_KeyboardTimes.fill(-1);
+		m_KeyHoldDuration.fill(-1);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,31 +47,31 @@ namespace RTE {
 
 	void AllegroInput::ConvertKeyEvent(int allegroKey, int guilibKey, float elapsedS) {
 		if (key[allegroKey]) {
-			if (m_KeyboardTimes[guilibKey] < 0) {
+			if (m_KeyHoldDuration.at(guilibKey) < 0) {
 				m_KeyboardBuffer[guilibKey] = Pushed;
-				m_KeyboardTimes[guilibKey] = 0;
-			} else if (m_KeyboardTimes[guilibKey] < m_KeyRepeatDelay) {
+				m_KeyHoldDuration.at(guilibKey) = 0;
+			} else if (m_KeyHoldDuration.at(guilibKey) < m_KeyRepeatDelay) {
 				m_KeyboardBuffer[guilibKey] = None;
 			} else {
 				m_KeyboardBuffer[guilibKey] = Repeat;
-				m_KeyboardTimes[guilibKey] = 0;
+				m_KeyHoldDuration.at(guilibKey) = 0;
 			}
-			m_KeyboardTimes[guilibKey] += elapsedS;
+			m_KeyHoldDuration.at(guilibKey) += elapsedS;
 		} else {
-			if (m_KeyboardTimes[guilibKey] >= 0) {
+			if (m_KeyHoldDuration.at(guilibKey) >= 0) {
 				m_KeyboardBuffer[guilibKey] = Released;
 			} else {
 				m_KeyboardBuffer[guilibKey] = None;
 			}
-			m_KeyboardTimes[guilibKey] = -1;
+			m_KeyHoldDuration.at(guilibKey) = -1;
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void AllegroInput::Update() {
-		float keyElapsedTime = static_cast<float>(m_Timer->GetElapsedRealTimeS());
-		m_Timer->Reset();
+		float keyElapsedTime = static_cast<float>(m_KeyTimer->GetElapsedRealTimeS());
+		m_KeyTimer->Reset();
 
 		UpdateKeyboardInput(keyElapsedTime);
 		UpdateMouseInput();
