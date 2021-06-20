@@ -34,23 +34,7 @@ namespace RTEGUI {
 		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
 		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
 
-		GUICollectionBox *filePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("FilePanel", "COLLECTIONBOX", m_LeftColumn.get(), 5, 5, 270, 55));
-		filePanel->SetDrawType(GUICollectionBox::Panel);
-
-		GUIButton *toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("NewButton", "BUTTON", filePanel, 6, 5, 61, 20));
-		toolboxButton->SetText("New");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("LoadButton", "BUTTON", filePanel, 71, 5, 62, 20));
-		toolboxButton->SetText("Load");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("AddButton", "BUTTON", filePanel, 71, 30, 62, 20));
-		toolboxButton->SetText("Add File");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveButton", "BUTTON", filePanel, 137, 5, 62, 20));
-		toolboxButton->SetText("Save");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", filePanel, 137, 30, 62, 20));
-		toolboxButton->SetText("Save As");
-		toolboxButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", filePanel, 203, 5, 61, 20));
-		toolboxButton->SetText("Quit");
-
-		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), filePanel->GetRelXPos(), filePanel->GetRelYPos() + 65, 270, 155));
+		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, 30, 270, 155));
 		editorControls->SetDrawType(GUICollectionBox::Panel);
 
 		GUICollectionBox *elementPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("NewElementPanel", "COLLECTIONBOX", editorControls, 5, 25, 260, 105));
@@ -126,6 +110,27 @@ namespace RTEGUI {
 		workspace->SetDrawBackground(true);
 		workspace->SetDrawColor(makecol(64, 64, 64));
 		workspace->SetDrawType(GUICollectionBox::Color);
+
+		m_ToolBar.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBar", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), 30)));
+		m_ToolBar->SetDrawBackground(false);
+
+		GUICollectionBox *toolBarStrip = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBarStrip", "COLLECTIONBOX", m_ToolBar.get(), 0, 0, m_ToolBar->GetWidth(), 30));
+		toolBarStrip->SetDrawBackground(true);
+		toolBarStrip->SetDrawColor(makecol(16, 16, 16));
+		toolBarStrip->SetDrawType(GUICollectionBox::Color);
+
+		GUIButton *toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("NewButton", "BUTTON", m_ToolBar.get(), 0, 0, 60, 20));
+		toolBarButton->SetText("New");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("LoadButton", "BUTTON", m_ToolBar.get(), 60, 0, 60, 20));
+		toolBarButton->SetText("Load");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("AddButton", "BUTTON", m_ToolBar.get(), 120, 0, 60, 20));
+		toolBarButton->SetText("Add File");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveButton", "BUTTON", m_ToolBar.get(), 180, 0, 60, 20));
+		toolBarButton->SetText("Save");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", m_ToolBar.get(), 240, 0, 60, 20));
+		toolBarButton->SetText("Save As");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", m_ToolBar.get(), 300, 0, 60, 20));
+		toolBarButton->SetText("Quit");
 
 		CreateRootControl();
 	}

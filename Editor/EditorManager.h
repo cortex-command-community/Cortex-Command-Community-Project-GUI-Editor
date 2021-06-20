@@ -69,6 +69,12 @@ namespace RTEGUI {
 		GUICollectionBox * GetEditorBase() const { return m_EditorBase.get(); }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		GUICollectionBox * GetToolBar() const { return m_ToolBar.get(); }
+
+		/// <summary>
 		/// Gets the left tool column collection box containing the editor controls and the property page.
 		/// </summary>
 		/// <returns>Pointer to the LeftColumn GUICollectionBox.</returns>
@@ -282,6 +288,7 @@ namespace RTEGUI {
 
 		std::unique_ptr<GUIControlManager> m_EditorControlManager = nullptr; //!< The GUIControlManager that handles this EditorManager.
 		std::unique_ptr<GUICollectionBox> m_EditorBase = nullptr; //!< The lowest level collection box containing the workspace.
+		std::unique_ptr<GUICollectionBox> m_ToolBar = nullptr;
 		std::unique_ptr<GUICollectionBox> m_LeftColumn = nullptr; //!< The left tool column collection box containing the editor controls and the property page.
 		std::unique_ptr<GUICollectionBox> m_RightColumn = nullptr; //!< The right tool column collection box containing the CollectionBox and child controls lists.
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage = nullptr; //!< Panel that displays and allows editing the properties of the currently selected element in the workspace.
