@@ -147,7 +147,9 @@ namespace RTEGUI {
 					OnLoadButton(modShift ? true : false);
 				}
 
-				if (m_KeyStates.at(KEY_1) == pressed) {
+				if (m_KeyStates.at(KEY_0) == pressed) {
+					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets", "EditorSkin.ini");
+				} else if (m_KeyStates.at(KEY_1) == pressed) {
 					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinBlue.ini");
 				} else if (m_KeyStates.at(KEY_2) == pressed) {
 					m_EditorManager->GetWorkspaceManager()->ChangeSkin("Assets/Workspace", "SkinGreen.ini");
