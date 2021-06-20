@@ -48,6 +48,8 @@ namespace RTE {
 			}
 			CloseClipboard();
 		}
+#elif __unix__
+		// TODO: Implement.
 #endif
 		return false;
 	}
@@ -75,6 +77,8 @@ namespace RTE {
 			CloseClipboard();
 			return true;
 		}
+#elif __unix__
+		// TODO: Implement.
 #endif
 		return false;
 	}

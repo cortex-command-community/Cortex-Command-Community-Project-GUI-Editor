@@ -11,11 +11,6 @@ namespace RTE {
 	public:
 
 		/// <summary>
-		/// Constructor method used to instantiate a GUIUtil object in system memory.
-		/// </summary>
-		GUIUtil() = default;
-
-		/// <summary>
 		/// Removes the preceding and ending spaces from a c type string.
 		/// </summary>
 		/// <param name="String">String to trim.</param>
