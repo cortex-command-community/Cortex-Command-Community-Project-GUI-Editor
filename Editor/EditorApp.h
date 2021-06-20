@@ -111,8 +111,8 @@ namespace RTEGUI {
 		bool m_Quit = false; //!< Used for quitting logic.
 		bool m_WindowResized = false; //!< Indicates the process window dimensions were changed.
 
-		int m_ResX = 1280; //!< The initial width of the process window.
-		int m_ResY = 600; //!< The initial height of the process window.
+		int m_ResX = 1240; //!< The initial width of the process window.
+		int m_ResY = 540; //!< The initial height of the process window.
 		BITMAP *m_BackBuffer = nullptr; //!< Main backbuffer used for drawing the editor.
 		BITMAP *m_ZoomBuffer = nullptr; //!< Backbuffer used for drawing the zoomed workspace.
 

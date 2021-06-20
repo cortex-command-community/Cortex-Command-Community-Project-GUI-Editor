@@ -299,8 +299,8 @@ namespace RTEGUI {
 
 		GUIControl *m_RootControl = nullptr; //!< The top level (root) Control of the workspace.
 
-		int m_WorkspacePosX = 320; //!< Horizontal position of the workspace in the editor window.
-		int m_WorkspacePosY = 60; //!< Vertical position of the workspace in the editor window.
+		int m_WorkspacePosX = 300; //!< Horizontal position of the workspace in the editor window.
+		int m_WorkspacePosY = 45; //!< Vertical position of the workspace in the editor window.
 		int m_WorkspaceWidth = 640; //!< Width of the workspace.
 		int m_WorkspaceHeight = 480; //!< Height of the workspace.
 

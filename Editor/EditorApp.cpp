@@ -232,7 +232,7 @@ namespace RTEGUI {
 		ProcessMouseInput();
 		ProcessKeyboardInput();
 
-		//m_EditorManager->SetFrameTimeLabelText(s_FrameTime);
+		m_EditorManager->SetFrameTimeLabelText(s_FrameTime);
 
 		return !m_Quit;
 	}
@@ -256,7 +256,7 @@ namespace RTEGUI {
 
 		if (m_ZoomWorkspace) {
 			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth(), m_EditorManager->GetWorkspaceHeight(), 0, 0, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
-			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY() - 30, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
+			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 		}
 		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 	}
