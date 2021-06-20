@@ -31,7 +31,7 @@ namespace RTEGUI {
 		m_Input = std::make_unique<AllegroInput>(-1);
 
 		// Initialize the UI
-		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "SkinClassic.ini");
+		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");
 
 		// Only allow workspace zoom if the screen resolution is FHD or above, smaller resolutions can't fully display it
 		if (m_BackBuffer->w < 1920 && m_BackBuffer->h < 1080) {
