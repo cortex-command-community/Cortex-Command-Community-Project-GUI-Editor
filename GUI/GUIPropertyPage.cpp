@@ -406,7 +406,7 @@ void GUIPropertyPage::SetPropertyValues(GUIProperties *Props)
     m_PageValues.Update(Props, true);
 
     // Sort
-    m_PageValues.Sort(true);
+    //m_PageValues.Sort(true);
 
 
     // Update the text panels
