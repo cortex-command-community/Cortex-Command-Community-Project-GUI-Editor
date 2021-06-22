@@ -1,38 +1,15 @@
 #ifndef _GUIPROPERTYPAGE_
 #define _GUIPROPERTYPAGE_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIPropertyPage.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIPropertyPage class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
 #include "GUITextPanel.h"
 #include "GUIScrollPanel.h"
 
+namespace RTE {
 
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIPropertyPage
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A property page control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   2/5/2004 GUIPropertyPage Created.
-
-class GUIPropertyPage :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A property page control class.
+/// </summary>
+class GUIPropertyPage : public GUIControl, public GUIPanel {
 
 public:
 
@@ -252,36 +229,22 @@ public:
 
     bool HasTextFocus();
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+    GUIBitmap *m_DrawBitmap;
+    unsigned long m_LineColor;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          BuildBitmap
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Create the property page bitmap to draw.
-// Arguments:       None.
+    GUIProperties m_PageValues;
+    std::vector<GUITextPanel *> m_TextPanelList;
+    GUIScrollPanel *m_VertScroll;
 
-    void BuildBitmap();
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Method:          BuildBitmap
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Description:     Create the property page bitmap to draw.
+	// Arguments:       None.
 
-
-// Members
-
-    GUIBitmap        *m_DrawBitmap;
-    
-    unsigned long            m_LineColor;
-
-    GUIProperties    m_PageValues;
-    std::vector<GUITextPanel *>        m_TextPanelList;
-    GUIScrollPanel    *m_VertScroll;
-
+	void BuildBitmap();
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIPROPERTYPAGE_
+};
+#endif

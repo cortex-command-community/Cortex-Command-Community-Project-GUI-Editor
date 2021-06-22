@@ -1,40 +1,14 @@
 #ifndef _GUITEXTBOX_
 #define _GUITEXTBOX_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUITextBox.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUITextBox class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
 #include "GUITextPanel.h"
 
+namespace RTE {
 
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUITextBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A TextBox control class.
-// Parent(s):       GUIControl, GUITextPanel.
-// Class history:   1/20/2004 GUITextBox Created.
-
-class GUITextBox :
-    public GUIControl,
-    public GUITextPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A TextBox control class.
+/// </summary>
+class GUITextBox : public GUIControl, public GUITextPanel {
 
 public:
 
@@ -164,20 +138,11 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    GUIBitmap        *m_DrawBitmap;
-    int              m_HAlignment;
-    int              m_VAlignment;
-
+    GUIBitmap *m_DrawBitmap;
+    int m_HAlignment;
+    int m_VAlignment;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUITEXTBOX_
+};
+#endif

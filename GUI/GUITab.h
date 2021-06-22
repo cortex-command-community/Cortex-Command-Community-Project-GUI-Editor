@@ -1,34 +1,12 @@
 #ifndef _GUITAB_
 #define _GUITAB_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUITab.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUITab class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUITab
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A tab control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   9/3/2006 GUITab Created.
-
-class GUITab :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A tab control class.
+/// </summary>
+class GUITab : public GUIControl, public GUIPanel {
 
 public:
 
@@ -222,12 +200,14 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+	GUIBitmap *m_Image;
+	GUIRect m_ImageRects[4];
+
+	bool m_Selected;
+	int m_Mouseover;
+	std::string m_Text;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap
@@ -236,20 +216,6 @@ private:
 // Arguments:       None.
 
     void BuildBitmap();
-
-
-// Members
-    
-    GUIBitmap        *m_Image;
-    GUIRect            m_ImageRects[4];
-
-    bool            m_Selected;
-    int                m_Mouseover;
-    std::string        m_Text;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUITAB_
+};
+#endif

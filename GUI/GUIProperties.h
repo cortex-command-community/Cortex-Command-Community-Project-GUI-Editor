@@ -1,35 +1,12 @@
 #ifndef _GUIPROPERTIES_
 #define _GUIPROPERTIES_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIProperties.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIProperties class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIProperties
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A class containing properties for controls and skins
-// Parent(s):       None.
-// Class history:   1/5/2004 GUIProperties Created.
-
+/// <summary>
+/// A class containing properties for controls and skins.
+/// </summary>
 class GUIProperties {
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
 
 public:
 
@@ -242,30 +219,17 @@ public:
 
     void Sort(bool Ascending);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    
     // Variable structure
     typedef struct {
-
-        std::string        m_Name;
-        std::string        m_Value;
-
+        std::string m_Name;
+        std::string m_Value;
     } PropVariable;
 
+    std::string m_Name;
 
-    std::string        m_Name;
-
-    std::vector<PropVariable *>    m_VariableList;
-
+    std::vector<PropVariable *> m_VariableList;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIPROPERTIES_
+};
+#endif

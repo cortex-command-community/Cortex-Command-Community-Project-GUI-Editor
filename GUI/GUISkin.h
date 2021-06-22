@@ -1,31 +1,12 @@
 #ifndef _GUISKIN_
 #define _GUISKIN_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUISkin.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUISkin class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUISkin
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Skin class used for the controls to get skin details 
-// Parent(s):       None.
-// Class history:   1/4/2004 GUISkin Created.
-
+/// <summary>
+/// Skin class used for the controls to get skin details.
+/// </summary>
 class GUISkin {
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
 
 public:
 
@@ -173,33 +154,23 @@ public:
     unsigned long ConvertColor(unsigned long color, int targetDepth = 0);
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+    std::string m_Directory;
+    GUIScreen *m_Screen;
+    GUIBitmap *m_MousePointers[3];
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          LoadMousePointer
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Loads a mouse pointer image & details
-// Arguments:       Section name.
+    std::vector<GUIProperties *> m_PropList;
+    std::vector<GUIBitmap *> m_ImageCache;
+    std::vector<GUIFont *> m_FontCache;
 
-    GUIBitmap * LoadMousePointer(const std::string &Section);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Method:          LoadMousePointer
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Description:     Loads a mouse pointer image & details
+	// Arguments:       Section name.
 
-
-// Variables
-    std::string        m_Directory;
-    GUIScreen        *m_Screen;    
-    GUIBitmap        *m_MousePointers[3];
-
-    std::vector<GUIProperties *>    m_PropList;
-    std::vector<GUIBitmap *>    m_ImageCache;
-    std::vector<GUIFont *>        m_FontCache;
+	GUIBitmap * LoadMousePointer(const std::string &Section);
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUISKIN_
+};
+#endif

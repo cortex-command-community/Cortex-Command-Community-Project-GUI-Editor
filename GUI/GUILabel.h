@@ -1,37 +1,16 @@
 #ifndef _GUILABEL_
 #define _GUILABEL_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUILabel.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUILabel class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
 #ifdef GUI_STANDALONE
 #include "Timer.h"
 #endif
 
-namespace RTE
-{
+namespace RTE {
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUILabel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A label control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/22/2004 GUILabel Created.
-
-class GUILabel :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A label control class.
+/// </summary>
+class GUILabel : public GUIControl, public GUIPanel {
 
 public:
 
@@ -299,23 +278,15 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    std::string        m_Text;
-    int                m_HAlignment;
-    int                m_VAlignment;
+    std::string m_Text;
+    int m_HAlignment;
+    int m_VAlignment;
     bool m_HorizontalOverflowScroll; //!< Note that horizontal overflow scrolling means text will always be on one line.
     bool m_VerticalOverflowScroll;
     OverflowScrollState m_OverflowScrollState;
     Timer m_OverflowScrollTimer;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUILABEL_
+};
+#endif

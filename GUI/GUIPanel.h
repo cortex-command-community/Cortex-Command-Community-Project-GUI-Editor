@@ -1,38 +1,15 @@
 #ifndef _GUIPANEL_
 #define _GUIPANEL_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIPanel.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIPanel class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
-namespace RTE
-{
-
-// Forward declarations
 class GUIPanel;
 class GUIManager;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A rectangle 'window' in the GUI that recieves mouse and keyboard events.
-// Parent(s):       None.
-// Class history:   12/27/2003 GUIPanel Created.
-
+/// <summary>
+/// A rectangle 'window' in the GUI that recieves mouse and keyboard events.
+/// </summary>
 class GUIPanel {
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
 
 public:
 
@@ -606,11 +583,24 @@ public:
 
     void BuildProperties(GUIProperties *Prop);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
 protected:
+
+	int m_X; // absolute coordinates
+	int m_Y;
+	int m_Width;
+	int m_Height;
+
+	bool m_Visible;
+	bool m_Enabled;
+	bool m_GotFocus;
+	bool m_Captured;
+	GUIManager *m_Manager;
+	GUIPanel *m_Parent;
+
+	GUIFont *m_Font;
+	unsigned long m_FontColor;
+	unsigned long m_FontShadow;
+	int m_FontKerning;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -666,45 +656,16 @@ protected:
 
     void _ApplyProperties(GUIProperties *Props);
 
+	private:
 
-// Members
+		std::vector<GUIPanel *> m_Children;
+		GUIRect m_Rect;
 
-    // These coordinates are absolute coordinates
-	int                        m_X;
-	int m_Y;
-	int                        m_Width;
-	int m_Height;
+		int m_ID;
+		bool m_ValidRegion;
+		int m_ZPos;
 
-    bool                    m_Visible;
-    bool                    m_Enabled;
-    bool                    m_GotFocus;
-    bool                    m_Captured;
-    GUIManager                *m_Manager;
-    GUIPanel                *m_Parent;
-
-    GUIFont                    *m_Font;
-    unsigned long                    m_FontColor;
-    unsigned long                    m_FontShadow;
-    int                     m_FontKerning;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
-private:
-    
-    std::vector<GUIPanel *>    m_Children;
-    GUIRect                    m_Rect;
-    
-    int                        m_ID;
-    bool                    m_ValidRegion;
-    int                        m_ZPos;
-
-    GUIPanel                *m_SignalTarget;
+		GUIPanel *m_SignalTarget;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIPANEL_
+};
+#endif

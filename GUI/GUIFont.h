@@ -1,31 +1,12 @@
 #ifndef _GUIFONT_
 #define _GUIFONT_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIFont.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIFont class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIFont
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A class to handle the drawing of text
-// Parent(s):       None.
-// Class history:   1/7/2004 GUIFont Created.
-
+/// <summary>
+/// A class to handle the drawing of text.
+/// </summary>
 class GUIFont {
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
 
 public:
 
@@ -194,31 +175,23 @@ public:
 
     void SetKerning(int newKerning = 1) { m_Kerning = newKerning; }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    GUIBitmap        *m_Font;
-    GUIScreen        *m_Screen;
-    std::vector<FontColor >    m_ColorCache;
+    GUIBitmap *m_Font;
+    GUIScreen *m_Screen;
+    std::vector<FontColor > m_ColorCache;
 
-    int                m_FontHeight;
-    unsigned long            m_MainColor;
-    unsigned long            m_CurrentColor;
-    GUIBitmap        *m_CurrentBitmap;
-    std::string        m_Name;
-    Character        m_Characters[256];
-    // The highest index of valid characters that was read in from the file
-    int                m_CharIndexCap;
+    int m_FontHeight;
+    unsigned long m_MainColor;
+    unsigned long m_CurrentColor;
+    GUIBitmap *m_CurrentBitmap;
+    std::string m_Name;
+    Character m_Characters[256];
 
-    int                m_Kerning;            // Spacing between characters
-    int                m_Leading;            // Spacing between lines
+    int m_CharIndexCap; // The highest index of valid characters that was read in from the file
+
+    int m_Kerning; // Spacing between characters
+    int m_Leading; // Spacing between lines
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIFONT_
+};
+#endif

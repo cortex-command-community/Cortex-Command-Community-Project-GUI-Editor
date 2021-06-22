@@ -1,34 +1,12 @@
 #ifndef _GUISLIDER_
 #define _GUISLIDER_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUISlider.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUISlider class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUISlider
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A slider control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUISlider Created.
-
-class GUISlider :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A slider control class.
+/// </summary>
+class GUISlider : public GUIControl, public GUIPanel {
 
 public:
 
@@ -302,11 +280,26 @@ public:
 	/// <param name="valueRes">The new value resolution</param>
 	void SetValueResolution(int valueRes);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
+
+	GUIBitmap *m_DrawBitmap;
+	GUIBitmap *m_KnobImage;
+
+	// Properties
+	int m_Orientation;
+	int m_TickDirection;
+	int m_Minimum;
+	int m_Maximum;
+	int m_Value;
+	int m_ValueResolution;
+
+	// Internal variables
+	int m_KnobPosition;
+	int m_KnobSize;
+	bool m_KnobGrabbed;
+	int m_KnobGrabPos;
+	int m_EndThickness;
+	int m_OldValue;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -334,32 +327,6 @@ private:
 // Arguments:       None.
 
     void CalculateKnob();
-
-
-// Members
-
-	GUIBitmap *m_DrawBitmap;
-	GUIBitmap *m_KnobImage;
-
-	// Properties
-	int m_Orientation;
-	int m_TickDirection;
-	int m_Minimum;
-	int m_Maximum;
-	int m_Value;
-	int m_ValueResolution;
-
-	// Internal variables
-	int m_KnobPosition;
-	int m_KnobSize;
-	bool m_KnobGrabbed;
-	int m_KnobGrabPos;
-	int m_EndThickness;
-	int m_OldValue;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUISLIDER_
+};
+#endif

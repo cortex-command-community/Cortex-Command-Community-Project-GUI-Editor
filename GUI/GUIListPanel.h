@@ -1,42 +1,18 @@
 #ifndef _GUILISTPANEL_
 #define _GUILISTPANEL_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIListPanel.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIListPanel class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
 #include "GUIScrollPanel.h"
 #include "GUIInterface.h"
 
 
-namespace RTE
-{
+namespace RTE {
 
 class Entity;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIListPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A listbox panel class used for controls requiring a listbox.
-// Parent(s):       Panel.
-// Class history:   1/9/2004 GUIListPanel Created.
-
-class GUIListPanel :
-    public GUIPanel
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A listbox panel class used for controls requiring a listbox.
+/// </summary>
+class GUIListPanel : public GUIPanel {
 
 public:
 
@@ -536,12 +512,7 @@ public:
 	/// <param name="newPadding">The new scrollbar padding, in pixels.</param>
 	void SetScrollBarPadding(int newPadding) { m_ScrollBarPadding = newPadding; AdjustScrollbars(); }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
-protected:
-
+	protected:
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap
@@ -549,14 +520,41 @@ protected:
 // Description:     Build the bitmap.
 // Arguments:       UpdateBase, UpdateText.
 
-    void BuildBitmap(bool UpdateBase, bool UpdateText);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
+	void BuildBitmap(bool UpdateBase, bool UpdateText);
 
 private:
 
+	GUISkin *m_Skin;
+	GUIBitmap *m_BaseBitmap;
+	GUIBitmap *m_DrawBitmap;
+	GUIBitmap *m_FrameBitmap;
+	unsigned long m_FontSelectColor;
+
+	bool m_UpdateLocked;
+
+	GUIScrollPanel *m_HorzScroll;
+	GUIScrollPanel *m_VertScroll;
+	bool m_HorzScrollEnabled;
+	bool m_VertScrollEnabled;
+	int m_ScrollBarThickness; //!< The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.
+	int m_ScrollBarPadding; //!< The padding around the scrollbars, in pixels. Used to better size and position scrollbars within panel bounds, allowing to not overdraw on panel borders.
+
+	bool m_CapturedHorz;
+	bool m_CapturedVert;
+	bool m_ExternalCapture;
+
+	int m_LargestWidth;
+	bool m_MultiSelect;
+	bool m_HotTracking;
+	int m_LastSelected;
+	bool m_LoopSelectionScroll; //!< Whether the list panel scrolls in a loop or not, while scrolling the selection list (as opposed to the scrollbar).
+	bool m_MouseScroll; //!< Whether the list panel enables scrolling with the mouse scroll wheel.
+
+	bool m_AlternateDrawMode; // This draws items differently, not with boxes etc.
+
+	std::vector<Item *> m_Items;
+	std::vector<Item *> m_SelectedList;
+	unsigned long m_SelectedColorIndex;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildDrawBitmap
@@ -597,46 +595,6 @@ private:
 	/// </summary>
 	/// <param name="MouseWheelChange">Amount and direction of scrolling. Positive to scroll up, negative to scroll down.</param>
 	void SelectionListScrolling(int mouseWheelChange);
-
-
-// Members    
-
-    GUISkin                *m_Skin;
-    GUIBitmap            *m_BaseBitmap;
-    GUIBitmap            *m_DrawBitmap;
-    GUIBitmap            *m_FrameBitmap;
-    unsigned long                m_FontSelectColor;
-
-    bool                m_UpdateLocked;
-
-    GUIScrollPanel        *m_HorzScroll;
-    GUIScrollPanel        *m_VertScroll;
-    bool                m_HorzScrollEnabled;
-    bool                m_VertScrollEnabled;
-	int m_ScrollBarThickness; //!< The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.
-	int m_ScrollBarPadding; //!< The padding around the scrollbars, in pixels. Used to better size and position scrollbars within panel bounds, allowing to not overdraw on panel borders.
-
-    bool                m_CapturedHorz;
-    bool                m_CapturedVert;
-    bool                m_ExternalCapture;
-
-    int                    m_LargestWidth;
-    bool                m_MultiSelect;
-    bool                m_HotTracking;
-    int                    m_LastSelected;
-	bool				m_LoopSelectionScroll; //!< Whether the list panel scrolls in a loop or not, while scrolling the selection list (as opposed to the scrollbar).
-	bool				m_MouseScroll; //!< Whether the list panel enables scrolling with the mouse scroll wheel.
-    
-    // This draws items differently, not with boxes etc.
-    bool                m_AlternateDrawMode;
-
-    std::vector<Item *>    m_Items;
-    std::vector<Item *>    m_SelectedList;
-    unsigned long                m_SelectedColorIndex;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUILISTPANEL_
+};
+#endif

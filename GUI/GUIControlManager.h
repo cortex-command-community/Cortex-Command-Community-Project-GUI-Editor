@@ -1,41 +1,16 @@
 #ifndef _GUICONTROLMANAGER_
 #define _GUICONTROLMANAGER_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIControlManager.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIControlManager class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
 #include "GUIWriter.h"
 #include "GUIReader.h"
 
+namespace RTE {
 
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIControlManager
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A class used to manage the the GUI as a whole and provide the 
-//                  interface between the GUI and the rest of the system.
-// Parent(s):       None.
-// Class history:   1/6/2004 GUIControlManager Created.
-
+/// <summary>
+/// A class used to manage the GUI as a whole and provide the interface between the GUI and the rest of the system.
+/// </summary>
 class GUIControlManager {
-
-friend class GUIControl;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+	friend class GUIControl;
 
 public:
 
@@ -138,7 +113,7 @@ public:
 // Arguments:       The GUIScreen to draw to, overriding the one passed in on construction
 
     void Draw(GUIScreen *pScreen);
-	
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          DrawMouse
@@ -302,28 +277,17 @@ public:
 	/// <returns>Pointer to the GUIScreen that this GUIControlManager is drawing itself to.</returns>
 	GUIScreen * GetScreen() const { return m_Screen; }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    GUIScreen        *m_Screen; // Not owned.
-    GUIInput        *m_Input; // Not owned.
-    GUISkin            *m_Skin;
-    GUIManager        *m_GUIManager;
+	GUIScreen *m_Screen; // Not owned.
+	GUIInput *m_Input; // Not owned.
+	GUISkin *m_Skin;
+	GUIManager *m_GUIManager;
 
-    std::vector<GUIControl *>    m_ControlList;
-    std::vector<GUIEvent *>        m_EventQueue;
+	std::vector<GUIControl *> m_ControlList;
+	std::vector<GUIEvent *> m_EventQueue;
 
-    int                m_CursorType;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
-protected:
-
+	int m_CursorType;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          AddEvent
@@ -331,12 +295,7 @@ protected:
 // Description:     Add a new event to the queue.
 // Arguments:       Event point.
 
-    void AddEvent(GUIEvent *Event);
-
+	void AddEvent(GUIEvent *Event);
 };
-
-
-}; // namespace RTE
-
-
+};
 #endif  //  _GUICONTROLMANAGER_

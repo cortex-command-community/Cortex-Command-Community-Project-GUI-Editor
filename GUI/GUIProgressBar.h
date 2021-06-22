@@ -1,34 +1,12 @@
 #ifndef _GUIPROGRESSBAR_
 #define _GUIPROGRESSBAR_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIProgressBar.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIProgressBar class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIProgressBar
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A progressbar control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUIProgressBar Created.
-
-class GUIProgressBar :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A progressbar control class.
+/// </summary>
+class GUIProgressBar : public GUIControl, public GUIPanel {
 
 public:
 
@@ -238,12 +216,15 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+    GUIBitmap *m_DrawBitmap;
+    GUIBitmap *m_IndicatorImage;
+
+    int m_Minimum;
+    int m_Maximum;
+    int m_Value;
+    int m_Spacing;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap
@@ -251,23 +232,7 @@ private:
 // Description:     Create the progressbar bitmap to draw.
 // Arguments:       None.
 
-    void BuildBitmap();
-
-
-// Members
-
-    GUIBitmap        *m_DrawBitmap;
-    GUIBitmap        *m_IndicatorImage;
-
-    int                m_Minimum;
-    int                m_Maximum;
-    int                m_Value;
-    int                m_Spacing;
-
+	void BuildBitmap();
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIPROGRESSBAR_
+};
+#endif

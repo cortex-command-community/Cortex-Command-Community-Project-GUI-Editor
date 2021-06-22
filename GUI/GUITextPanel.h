@@ -1,33 +1,12 @@
 #ifndef _GUITEXTPANEL_
 #define _GUITEXTPANEL_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUITextPanel.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUITextPanel class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUITextPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A text panel class.
-// Parent(s):       Panel.
-// Class history:   1/20/2004 GUITextPanel Created.
-
-class GUITextPanel :
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A text panel class.
+/// </summary>
+class GUITextPanel : public GUIPanel {
 
 public:
 
@@ -259,11 +238,40 @@ public:
 	/// <param name="maxLength">The maximum length of the text this text panel can contain.</param>
 	void SetMaxTextLength(int maxLength) { m_MaxTextLength = maxLength; }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
 
 private:
 
+	unsigned long m_FontSelectColor;
+
+	std::string m_Text;
+	std::string m_RightText; // Appears right-justified in the text field
+	bool m_Focus;
+	bool m_Locked;
+
+	// The distance from the side and top of the text box, to the side and top of the first line of text
+	int m_WidthMargin;
+	int m_HeightMargin;
+
+	// Cursor
+	int m_CursorX;
+	int m_CursorY;
+	int m_CursorIndex;
+	unsigned long m_CursorColor;
+	int m_CursorBlinkCount; // Hacky way to make cursor blink without a timer
+
+	int m_StartIndex;
+
+	// Selection
+	bool m_GotSelection;
+	int m_StartSelection;
+	int m_EndSelection;
+	unsigned long m_SelectedColorIndex;
+	int m_SelectionX;
+	int m_SelectionWidth;
+
+	int m_MaxTextLength; //!< The maximum length of the text this text panel can contain.
+	bool m_NumericOnly; //!< Whether this text panel only accepts numeric symbols.
+	int m_MaxNumericValue; //!< The maximum numeric value when in numeric only mode. 0 means no maximum value.
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          UpdateText
@@ -299,48 +307,6 @@ private:
     /// <param name="currentIndex">The index in the string to start looking from.</param>
     /// <returns>The index of the start of the previous contiguous group of letters or special characters in the given string, or the end of the string if there is none.</returns>
     int GetStartOfPreviousCharacterGroup(const std::string_view &stringToCheck, int currentIndex) const;
-
-
-// Members
-
-    // Font
-    unsigned long            m_FontSelectColor;
-
-    std::string        m_Text;
-    // Appears right-justified in the text field
-    std::string        m_RightText;
-    bool            m_Focus;
-    bool            m_Locked;
-    // The distance from the side and top of the text box, to the side and top of the first line of text
-    int            m_WidthMargin;
-    int            m_HeightMargin;
-
-    // Cursor
-	int                m_CursorX;
-	int m_CursorY;
-    int                m_CursorIndex;
-    unsigned long            m_CursorColor;
-    // Hacky way to make cursor blink without a timer
-    int                 m_CursorBlinkCount;
-
-    int                m_StartIndex;
-
-    // Selection
-    bool            m_GotSelection;
-    int                m_StartSelection;
-    int                m_EndSelection;
-    unsigned long            m_SelectedColorIndex;
-	int                m_SelectionX;
-	int m_SelectionWidth;
-
-	int m_MaxTextLength; //!< The maximum length of the text this text panel can contain.
-	bool m_NumericOnly; //!< Whether this text panel only accepts numeric symbols.
-	int m_MaxNumericValue; //!< The maximum numeric value when in numeric only mode. 0 means no maximum value.
-
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUITEXTPANEL_
+};
+#endif

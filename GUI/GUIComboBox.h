@@ -1,44 +1,17 @@
 #ifndef _GUICOMBOBOX_
 #define _GUICOMBOBOX_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIComboBox.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIComboBox class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Inclusions of header files
-
 #include "GUITextPanel.h"
 #include "GUIListPanel.h"
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Forward Declarations
+namespace RTE {
 
 class GUIComboBoxButton;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIComboBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A ComboBox control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/22/2004 GUIComboBox Created.
-
-class GUIComboBox :
-    public GUIControl,
-    public GUIPanel
-{
+/// <summary>
+/// A ComboBox control class.
+/// </summary>
+class GUIComboBox : public GUIControl, public GUIPanel {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Public member variable, method and friend function declarations
@@ -409,37 +382,25 @@ public:
 
     bool IsDropped() { return m_ListPanel->_GetVisible(); }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    GUIBitmap        *m_DrawBitmap;
-    int                m_OldSelection;
-    bool            m_CreatedList;
+    GUIBitmap *m_DrawBitmap;
+    int m_OldSelection;
+    bool m_CreatedList;
 
-    int                m_DropHeight;
-    int                m_DropDownStyle;
+    int m_DropHeight;
+    int m_DropDownStyle;
 
-    GUITextPanel    *m_TextPanel;
-    GUIListPanel    *m_ListPanel;
-    GUIComboBoxButton    *m_Button;
+    GUITextPanel *m_TextPanel;
+    GUIListPanel *m_ListPanel;
+    GUIComboBoxButton *m_Button;
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIComboBoxButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A ComboBoxButton control class.
-// Parent(s):       Panel.
-// Class history:   1/22/2004 GUIComboBoxButton Created.
-
-class GUIComboBoxButton : public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A ComboBoxButton control class.
+/// </summary>
+class GUIComboBoxButton : public GUIPanel {
 
 public:
 
@@ -521,18 +482,10 @@ public:
 
     void SetPushed(bool Pushed);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
-    GUIBitmap        *m_DrawBitmap;
-    bool            m_Pushed;
+    GUIBitmap *m_DrawBitmap;
+    bool m_Pushed;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUICOMBOBOX_
+};
+#endif

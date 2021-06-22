@@ -1,34 +1,12 @@
 #ifndef _GUIRADIOBUTTON_
 #define _GUIRADIOBUTTON_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIRadioButton.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIRadioButton class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIRadioButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A radiobutton control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/15/2004 GUIRadioButton Created.
-
-class GUIRadioButton :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A radiobutton control class.
+/// </summary>
+class GUIRadioButton : public GUIControl, public GUIPanel {
 
 public:
 
@@ -221,34 +199,22 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+    GUIBitmap *m_Image;
+    GUIRect m_ImageRects[4];
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          BuildBitmap
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Create the checkbox bitmap to draw.
-// Arguments:       None.
+    bool m_Checked;
+    int m_Mouseover;
+    std::string m_Text;
 
-    void BuildBitmap();
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Method:          BuildBitmap
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Description:     Create the checkbox bitmap to draw.
+	// Arguments:       None.
 
-
-// Members
-    
-    GUIBitmap        *m_Image;
-    GUIRect            m_ImageRects[4];
-
-    bool            m_Checked;
-    int                m_Mouseover;
-    std::string        m_Text;
+	void BuildBitmap();
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUICHECKBOX_
+};
+#endif

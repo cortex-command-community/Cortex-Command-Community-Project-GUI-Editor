@@ -1,34 +1,12 @@
 #ifndef _GUISCROLLPANEL_
 #define _GUISCROLLPANEL_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIScrollPanel.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIScrollPanel class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
+namespace RTE {
 
-
-namespace RTE
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIScrollPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A scrollbar panel class used for controls requiring a scrollbar.
-// Parent(s):       Panel.
-// Class history:   1/12/2004 GUIScrollPanel Created.
-
-class GUIScrollPanel :
-    public GUIPanel
-{
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A scrollbar panel class used for controls requiring a scrollbar.
+/// </summary>
+class GUIScrollPanel : public GUIPanel {
 
 public:
 
@@ -267,12 +245,7 @@ public:
 	/// <returns>The value resolution</returns>
 	int GetValueResolution() const;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
 protected:
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          LoadProps
@@ -300,12 +273,32 @@ protected:
 
     void BuildBitmap(bool UpdateSize, bool UpdateKnob);
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
 
+	GUISkin *m_Skin;
+	GUIBitmap *m_DrawBitmap[3];
+
+	// User attributes
+	int m_Orientation;
+	int m_Minimum;
+	int m_Maximum;
+	int m_Value;
+	int m_PageSize;
+	int m_SmallChange;
+
+	// Internal attributes
+	bool m_RebuildSize;
+	bool m_RebuildKnob;
+	int m_ButtonSize;
+	int m_MinimumKnobSize;
+	int m_KnobPosition;
+	int m_KnobLength;
+	bool m_ButtonPushed[2];
+	bool m_GrabbedKnob;
+	bool m_GrabbedBackg;
+	int m_GrabbedPos;
+	int m_GrabbedSide;
+	int m_ValueResolution; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildButton
@@ -350,38 +343,6 @@ private:
 // Arguments:       Delta movement.
 
     void AdjustValue(int Delta);
-
-
-// Members
-    
-    GUISkin                *m_Skin;
-    GUIBitmap            *m_DrawBitmap[3];
-    
-    // User attributes
-    int                    m_Orientation;
-    int                    m_Minimum;
-    int                    m_Maximum;
-    int                    m_Value;
-    int                    m_PageSize;
-    int                    m_SmallChange;
-
-    // Internal attributes
-    bool                m_RebuildSize;
-    bool                m_RebuildKnob;
-    int                    m_ButtonSize;
-    int                    m_MinimumKnobSize;
-    int                    m_KnobPosition;
-    int                    m_KnobLength;
-    bool                m_ButtonPushed[2];
-    bool                m_GrabbedKnob;
-    bool                m_GrabbedBackg;
-    int                    m_GrabbedPos;
-    int                    m_GrabbedSide;
-	int m_ValueResolution; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUILISTPANEL_
+};
+#endif

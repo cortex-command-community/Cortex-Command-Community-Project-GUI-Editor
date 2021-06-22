@@ -1,35 +1,14 @@
 #ifndef _GUIBUTTON_
 #define _GUIBUTTON_
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File:            GUIButton.h
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     GUIButton class
-// Project:         GUI Library
-// Author(s):       Jason Boettcher
-//                  jackal@shplorb.com
-//                  www.shplorb.com/~jackal
-
-
-namespace RTE
-{
+namespace RTE {
 
     class GUILabel;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Class:           GUIButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     A button control class.
-// Parent(s):       GUIControl, Panel.
-// Class history:   1/6/2004 GUIButton Created.
-
-class GUIButton :
-    public GUIControl,
-    public GUIPanel
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Public member variable, method and friend function declarations
+/// <summary>
+/// A button control class.
+/// </summary>
+class GUIButton : public GUIControl, public GUIPanel {
 
 public:
 
@@ -293,11 +272,15 @@ public:
 
     void ApplyProperties(GUIProperties *Props) override;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private member variable and method declarations
-
 private:
+
+	GUIBitmap *m_DrawBitmap;
+
+	bool m_Pushed;
+	bool m_Over;
+	std::unique_ptr<GUILabel> m_Text;
+	std::unique_ptr<GUIBitmap> m_Icon;
+	std::unique_ptr<GUIRect> m_BorderSizes;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -307,21 +290,6 @@ private:
 // Arguments:       None.
 
     void BuildBitmap();
-
-
-// Members
-
-    GUIBitmap *m_DrawBitmap;
-
-    bool            m_Pushed;
-    bool            m_Over;
-    std::unique_ptr<GUILabel> m_Text;
-    std::unique_ptr<GUIBitmap> m_Icon;
-    std::unique_ptr<GUIRect> m_BorderSizes;
 };
-
-
-}; // namespace RTE
-
-
-#endif  //  _GUIBUTTON_
+};
+#endif
