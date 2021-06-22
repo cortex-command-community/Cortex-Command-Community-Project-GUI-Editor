@@ -7,7 +7,7 @@ using namespace RTE;
 GUIPanel::GUIPanel(GUIManager *Manager) {
 	Clear();
 	m_Manager = Manager;
-	m_Font = 0;
+	m_Font = nullptr;
 	m_FontColor = 0;
 	m_FontShadow = 0;
 	m_FontKerning = 1;
@@ -32,15 +32,15 @@ void GUIPanel::Clear() {
 	m_Visible = true;
 	m_Enabled = true;
 
-	m_Parent = 0;
+	m_Parent = nullptr;
 	m_Children.clear();
 
-	m_Manager = 0;
+	m_Manager = nullptr;
 	m_ValidRegion = false;
 	m_SignalTarget = this;
 	m_ZPos = 0;
 
-	m_Font = 0;
+	m_Font = nullptr;
 	m_FontColor = 0;
 	m_FontShadow = 0;
 	m_FontKerning = 1;
@@ -60,7 +60,10 @@ void GUIPanel::Setup(GUIManager *manager, int ZPos) {
 	std::vector<GUIPanel *>::iterator it;
 	for (it = m_Children.begin(); it != m_Children.end(); it++) {
 		GUIPanel *P = *it;
-		if (P) { P->Setup(manager, Z++); }
+		if (P) {
+			Z++;
+			P->Setup(manager, Z);
+		}
 	}
 }
 
@@ -68,7 +71,7 @@ void GUIPanel::Setup(GUIManager *manager, int ZPos) {
 
 void GUIPanel::AddChild(GUIPanel *child, bool convertToAbsolutePos) {
 	if (child) {
-		// Convert the child's coordinates into absolute coords
+		// Convert the child's coordinates into absolute coordinates
 		if (convertToAbsolutePos) {
 			child->m_X += m_X;
 			child->m_Y += m_Y;
@@ -79,8 +82,8 @@ void GUIPanel::AddChild(GUIPanel *child, bool convertToAbsolutePos) {
 		child->m_Height = std::max(child->m_Height, 0);
 
 		int zPos = 0;
-		if (m_Children.size() > 0) {
-			GUIPanel *lastChild = m_Children.back();
+		if (!m_Children.empty()) {
+			const GUIPanel *lastChild = m_Children.back();
 			zPos = lastChild->GetZPos() + 1;
 		}
 
@@ -103,7 +106,7 @@ void GUIPanel::RemoveChild(const GUIPanel *pChild) {
 	// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack
 
 	for (std::vector<GUIPanel *>::iterator itr = m_Children.begin(); itr != m_Children.end(); itr++) {
-		GUIPanel *pPanel = *itr;
+		const GUIPanel *pPanel = *itr;
 		if (pPanel && pPanel == pChild) {
 			m_Children.erase(itr);
 			break;
@@ -133,7 +136,7 @@ void GUIPanel::Invalidate() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::IsValid() {
+bool GUIPanel::IsValid() const {
 	return m_ValidRegion;
 }
 
@@ -146,7 +149,7 @@ void GUIPanel::Draw(GUIScreen *Screen) {
 	// Calculate this panel's clipping region - set the clipping rect to be the intersection of what
 	// was already set by the parent, and the dimensions of this panel.
 	Screen->GetBitmap()->AddClipRect(GetRect());
-	// Now save this interseciton clipping rect so we can re-set it before each new child is drawn
+	// Now save this intersection clipping rect so we can re-set it before each new child is drawn
 	GUIRect thisClip;
 	Screen->GetBitmap()->GetClipRect(&thisClip);
 
@@ -163,7 +166,7 @@ void GUIPanel::Draw(GUIScreen *Screen) {
 	}
 
 	// Get rid of the clipping rect since the parent will re-set it if necessary
-	Screen->GetBitmap()->SetClipRect(0);
+	Screen->GetBitmap()->SetClipRect(nullptr);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,23 +235,23 @@ void GUIPanel::ReleaseMouse() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIPanel::BottomPanelUnderPoint(int x, int y) {
+GUIPanel * GUIPanel::BottomPanelUnderPoint(int x, int y) {
 	if (!PointInside(x, y)) {
-		return 0;
+		return nullptr;
 	}
 	// If this panel is invisible or disabled, this panel is ignored
 	if (!m_Visible || !m_Enabled) {
-		return 0;
+		return nullptr;
 	}
 
 	// Go through the children
-	GUIPanel *CurPanel = 0;
+	GUIPanel *CurPanel = nullptr;
 	std::vector<GUIPanel *>::iterator it;
 	for (it = m_Children.begin(); it != m_Children.end(); it++) {
 		GUIPanel *P = *it;
 		if (P) {
 			CurPanel = P->BottomPanelUnderPoint(x, y);
-			if (CurPanel != 0) {
+			if (CurPanel != nullptr) {
 				return CurPanel;
 			}
 		}
@@ -259,23 +262,23 @@ GUIPanel *GUIPanel::BottomPanelUnderPoint(int x, int y) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIPanel::TopPanelUnderPoint(int x, int y) {
+GUIPanel * GUIPanel::TopPanelUnderPoint(int x, int y) {
 	if (!PointInside(x, y)) {
-		return 0;
+		return nullptr;
 	}
 	// If this panel is invisible or disabled, this panel is ignored
 	if (!m_Visible || !m_Enabled) {
-		return 0;
+		return nullptr;
 	}
 
 	// Go through the children
-	GUIPanel *CurPanel = 0;
+	GUIPanel *CurPanel = nullptr;
 	std::vector<GUIPanel *>::reverse_iterator it;
 	for (it = m_Children.rbegin(); it != m_Children.rend(); it++) {
 		GUIPanel *P = *it;
 		if (P) {
 			CurPanel = P->TopPanelUnderPoint(x, y);
-			if (CurPanel != 0) {
+			if (CurPanel != nullptr) {
 				return CurPanel;
 			}
 		}
@@ -382,7 +385,7 @@ void GUIPanel::_SetVisible(bool Visible) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::_GetVisible() {
+bool GUIPanel::_GetVisible() const {
 	return m_Visible;
 }
 
@@ -394,25 +397,25 @@ void GUIPanel::_SetEnabled(bool Enabled) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::_GetEnabled() {
+bool GUIPanel::_GetEnabled() const {
 	return m_Enabled;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIPanel::GetWidth() {
+int GUIPanel::GetWidth() const {
 	return m_Width;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIPanel::GetHeight() {
+int GUIPanel::GetHeight() const {
 	return m_Height;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIRect *GUIPanel::GetRect() {
+GUIRect * GUIPanel::GetRect() {
 	SetRect(&m_Rect, m_X, m_Y, m_X + m_Width, m_Y + m_Height);
 
 	return &m_Rect;
@@ -420,7 +423,7 @@ GUIRect *GUIPanel::GetRect() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIPanel::GetRect(int *X, int *Y, int *Width, int *Height) {
+void GUIPanel::GetRect(int *X, int *Y, int *Width, int *Height) const {
 	if (X) { *X = m_X; }
 	if (Y) { *Y = m_Y; }
 	if (Width) { *Width = m_Width; }
@@ -429,7 +432,7 @@ void GUIPanel::GetRect(int *X, int *Y, int *Width, int *Height) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIPanel::GetPanelID() {
+int GUIPanel::GetPanelID() const {
 	return m_ID;
 }
 
@@ -447,7 +450,7 @@ void GUIPanel::SetFocus() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::HasFocus() {
+bool GUIPanel::HasFocus() const {
 	return m_GotFocus;
 }
 
@@ -459,13 +462,13 @@ void GUIPanel::SetCaptureState(bool Captured) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::IsCaptured() {
+bool GUIPanel::IsCaptured() const {
 	return m_Captured;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIPanel::IsEnabled() {
+bool GUIPanel::IsEnabled() const {
 	return m_Enabled;
 }
 
@@ -487,7 +490,7 @@ void GUIPanel::SetSignalTarget(GUIPanel *Target) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIPanel::GetParentPanel() {
+GUIPanel * GUIPanel::GetParentPanel() {
 	return m_Parent;
 }
 
@@ -499,7 +502,7 @@ void GUIPanel::SetZPos(int Z) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIPanel::GetZPos() {
+int GUIPanel::GetZPos() const {
 	return m_ZPos;
 }
 
@@ -527,7 +530,7 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type) {
 	std::vector<GUIPanel *>::iterator it;
 	int Count = 0;
 	for (it = m_Children.begin(); it != m_Children.end(); it++, Count++) {
-		GUIPanel *P = *it;
+		const GUIPanel *P = *it;
 		if (P && P->GetPanelID() == Child->GetPanelID()) {
 			Index = Count;
 			break;
@@ -550,6 +553,8 @@ void GUIPanel::_ChangeZ(GUIPanel *Child, int Type) {
 		case BottomMost:
 			m_Children.erase(m_Children.begin() + Index);
 			m_Children.insert(m_Children.begin(), Child);
+			break;
+		default:
 			break;
 	}
 
@@ -609,7 +614,7 @@ void GUIPanel::BuildProperties(GUIProperties *Prop) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUIPanel::WriteValue(const std::string Name, int Value) {
+std::string GUIPanel::WriteValue(const std::string &Name, int Value) {
 	char buf[32];
 
 	std::string OutString = Name;
@@ -624,7 +629,7 @@ std::string GUIPanel::WriteValue(const std::string Name, int Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUIPanel::WriteValue(const std::string Name, bool Value) {
+std::string GUIPanel::WriteValue(const std::string &Name, bool Value) {
 	std::string OutString = Name;
 	OutString += " = ";
 	OutString += (Value ? "True" : "False");

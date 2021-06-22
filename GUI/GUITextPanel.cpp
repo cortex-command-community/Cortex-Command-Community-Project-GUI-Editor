@@ -6,7 +6,7 @@ using namespace RTE;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUITextPanel::GUITextPanel(GUIManager *Manager) : GUIPanel(Manager) {
-	m_Font = 0;
+	m_Font = nullptr;
 	m_CursorX = m_CursorY = 0;
 	m_CursorIndex = 0;
 	m_CursorColor = 0;
@@ -31,7 +31,7 @@ GUITextPanel::GUITextPanel(GUIManager *Manager) : GUIPanel(Manager) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUITextPanel::GUITextPanel() : GUIPanel() {
-	m_Font = 0;
+	m_Font = nullptr;
 	m_Text = "";
 	m_CursorX = m_CursorY = 0;
 	m_CursorIndex = 0;
@@ -138,7 +138,7 @@ void GUITextPanel::Draw(GUIScreen *Screen) {
 	if (m_GotFocus && (m_CursorBlinkCount++ % 30 > 15)) { Screen->GetBitmap()->DrawRectangle(m_X + m_CursorX + 2, m_Y + hSpacer + m_CursorY + 2, 1, FontHeight - 3, m_CursorColor, true); }
 
 	// Restore normal clipping
-	Screen->GetBitmap()->SetClipRect(0);
+	Screen->GetBitmap()->SetClipRect(nullptr);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,10 +494,10 @@ int RTE::GUITextPanel::GetStartOfPreviousCharacterGroup(const std::string_view &
 	};
 
 	std::string_view::reverse_iterator currentIterator = stringToCheck.crbegin() + (m_Text.size() - currentIndex);
-	if (std::isspace(*(currentIterator))) { currentIterator = std::find_if_not(currentIterator, stringToCheck.crend(), isspace); }
+	if (std::isspace(*currentIterator)) { currentIterator = std::find_if_not(currentIterator, stringToCheck.crend(), isspace); }
 
 	if (currentIterator != stringToCheck.crend()) {
-		currentIterator = isNormalCharacter(*(currentIterator)) ?
+		currentIterator = isNormalCharacter(*currentIterator) ?
 			std::find_if(currentIterator, stringToCheck.crend(), isSpecialCharacterOrSpace) :
 			std::find_if(currentIterator, stringToCheck.crend(), isNormalCharacterOrSpace);
 	}
@@ -541,7 +541,7 @@ void GUITextPanel::SetCursorPos(int cursorPos) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUITextPanel::GetSelectionText() {
+std::string GUITextPanel::GetSelectionText() const {
 	if (!m_GotSelection) {
 		return "";
 	}
@@ -556,7 +556,7 @@ std::string GUITextPanel::GetSelectionText() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUITextPanel::SetText(const std::string Text) {
+void GUITextPanel::SetText(const std::string &Text) {
 	m_Text = Text;
 
 	// Clear the selection
@@ -574,7 +574,7 @@ void GUITextPanel::SetText(const std::string Text) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUITextPanel::SetRightText(const std::string rightText) {
+void GUITextPanel::SetRightText(const std::string &rightText) {
 	m_RightText = rightText;
 	SendSignal(Changed, 0);
 }
@@ -595,7 +595,7 @@ void GUITextPanel::SetSelection(int Start, int End) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUITextPanel::GetSelectionStart() {
+int GUITextPanel::GetSelectionStart() const {
 	// No selection?
 	if (!m_GotSelection) {
 		return -1;
@@ -606,7 +606,7 @@ int GUITextPanel::GetSelectionStart() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUITextPanel::GetSelectionEnd() {
+int GUITextPanel::GetSelectionEnd() const {
 	if (!m_GotSelection) {
 		return -1;
 	}
@@ -630,6 +630,6 @@ void GUITextPanel::SetLocked(bool Locked) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUITextPanel::GetLocked() {
+bool GUITextPanel::GetLocked() const {
 	return m_Locked;
 }

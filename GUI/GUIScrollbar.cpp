@@ -5,14 +5,14 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIScrollbar::GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIScrollPanel(Manager), GUIControl() {
+GUIScrollbar::GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIScrollPanel(Manager) {
 	m_ControlID = "SCROLLBAR";
 	m_ControlManager = ControlManager;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIScrollbar::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIScrollbar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -76,7 +76,7 @@ void GUIScrollbar::ChangeSkin(GUISkin *Skin) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIScrollbar::GetPanel() {
+GUIPanel * GUIScrollbar::GetPanel() {
 	return this;
 }
 

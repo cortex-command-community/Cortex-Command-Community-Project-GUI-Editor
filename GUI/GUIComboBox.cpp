@@ -5,10 +5,10 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIComboBox::GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUIComboBox::GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "COMBOBOX";
 	m_ControlManager = ControlManager;
-	m_DrawBitmap = 0;
+	m_DrawBitmap = nullptr;
 	m_OldSelection = 0;
 	m_CreatedList = false;
 	m_DropHeight = 80;
@@ -26,7 +26,7 @@ GUIComboBox::GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIComboBox::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIComboBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -128,21 +128,21 @@ void GUIComboBox::Destroy() {
 	if (m_ListPanel) {
 		m_ListPanel->Destroy();
 		delete m_ListPanel;
-		m_ListPanel = 0;
+		m_ListPanel = nullptr;
 	}
 	if (m_TextPanel) {
 		delete m_TextPanel;
-		m_TextPanel = 0;
+		m_TextPanel = nullptr;
 	}
 	if (m_Button) {
 		m_Button->Destroy();
 		delete m_Button;
-		m_Button = 0;
+		m_Button = nullptr;
 	}
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 }
 
@@ -191,17 +191,17 @@ void GUIComboBox::ChangeSkin(GUISkin *Skin) {
 
 void GUIComboBox::Draw(GUIScreen *Screen) {
 	// Draw the background
-	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, 0);
+	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
 	// If selected item has a bitmap AND no text to show, just show the bitmap as the selected thing
-	if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, 0); }
+	if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, nullptr); }
 
 	GUIPanel::Draw(Screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIComboBox::GetPanel() {
+GUIPanel * GUIComboBox::GetPanel() {
 	return this;
 }
 
@@ -276,7 +276,7 @@ void GUIComboBox::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
 
 			AddEvent(GUIEvent::Notification, Closed, 0);
 		} else if (Code == GUIListPanel::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
-			// Select on mouseup instead of down so we don't accidentally click stuff behind the disappearing listbox immediately after. Also only work if inside the actual list, and not its scrollbars.
+			// Select on mouse up instead of down so we don't accidentally click stuff behind the disappearing listbox immediately after. Also only work if inside the actual list, and not its scrollbars.
 			// Hide the list panel
 			m_ListPanel->_SetVisible(false);
 			m_ListPanel->ReleaseMouse();
@@ -297,8 +297,7 @@ void GUIComboBox::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
 
 		if (m_DropDownStyle == DropDownList) {
 			// Set the text to the item in the list panel
-			GUIListPanel::Item* Item = m_ListPanel->GetSelected();
-			if (Item) { m_TextPanel->SetText(Item->m_Name); }
+			if (const GUIListPanel::Item* Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
 		}
 	}
 }
@@ -317,7 +316,7 @@ void GUIComboBox::EndUpdate() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIComboBox::AddItem(std::string Name, std::string ExtraText, GUIBitmap *pBitmap, const Entity *pEntity) {
+void GUIComboBox::AddItem(const std::string &Name, const std::string &ExtraText, GUIBitmap *pBitmap, const Entity *pEntity) {
 	m_ListPanel->AddItem(Name, ExtraText, pBitmap, pEntity);
 }
 
@@ -370,7 +369,7 @@ void GUIComboBox::DeleteItem(int Index) {
 	m_ListPanel->DeleteItem(Index);
 
 	// Update the selection
-	GUIListPanel::Item *Item = m_ListPanel->GetSelected();
+	const GUIListPanel::Item *Item = m_ListPanel->GetSelected();
 	if (!Item) {
 		m_ListPanel->SetSelectedIndex(0);
 		Item = m_ListPanel->GetSelected();
@@ -402,8 +401,7 @@ void GUIComboBox::SetSelectedIndex(int Index) {
 	m_OldSelection = Index;
 
 	// Set the text to the item in the list panel
-	GUIListPanel::Item *Item = m_ListPanel->GetSelected();
-	if (Item) { m_TextPanel->SetText(Item->m_Name); }
+	if (const GUIListPanel::Item *Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -413,8 +411,7 @@ bool GUIComboBox::RollbackSelection() {
 	if (m_OldSelection >= 0 && m_OldSelection < m_ListPanel->GetItemList()->size() && m_OldSelection != m_ListPanel->GetSelectedIndex()) {
 		m_ListPanel->SetSelectedIndex(m_OldSelection);
 		// Set the text to the item in the list panel
-		GUIListPanel::Item *Item = m_ListPanel->GetSelected();
-		if (Item) {
+		if (const GUIListPanel::Item *Item = m_ListPanel->GetSelected()) {
 			m_TextPanel->SetText(Item->m_Name);
 			return true;
 		}
@@ -425,7 +422,7 @@ bool GUIComboBox::RollbackSelection() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIListPanel::Item *GUIComboBox::GetItem(int Index) {
+GUIListPanel::Item * GUIComboBox::GetItem(int Index) {
 	return m_ListPanel->GetItem(Index);
 }
 
@@ -455,12 +452,12 @@ void GUIComboBox::StoreProperties() {
 void GUIComboBox::SetDropDownStyle(int Style) {
 	if (Style == DropDown || Style == DropDownList) { m_DropDownStyle = Style; }
 
-	m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
+	m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIComboBox::GetDropDownStyle() {
+int GUIComboBox::GetDropDownStyle() const {
 	return m_DropDownStyle;
 }
 
@@ -504,7 +501,7 @@ std::string GUIComboBox::GetText() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIComboBox::SetText(const std::string Text) {
+void GUIComboBox::SetText(const std::string &Text) {
 	if (m_DropDownStyle == DropDown && m_TextPanel) { m_TextPanel->SetText(Text); }
 }
 
@@ -532,7 +529,7 @@ void GUIComboBox::ApplyProperties(GUIProperties *Props) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIComboBoxButton::GUIComboBoxButton(GUIManager *Manager) : GUIPanel(Manager) {
-	m_DrawBitmap = 0;
+	m_DrawBitmap = nullptr;
 	m_Pushed = false;
 }
 
@@ -623,6 +620,6 @@ void GUIComboBoxButton::Destroy() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 }

@@ -7,7 +7,7 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIButton::GUIButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUIButton::GUIButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "BUTTON";
 	m_DrawBitmap = nullptr;
 	m_ControlManager = ControlManager;
@@ -20,7 +20,7 @@ GUIButton::GUIButton(GUIManager *Manager, GUIControlManager *ControlManager) : G
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIButton::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -147,8 +147,7 @@ void GUIButton::BuildBitmap() {
 	//TODO consider getting rid of this line. Because of it GuiButton::SetFont does nothing, which is weird, but maybe there's a good reason for it. Test and investigate.
 	// Also, with the change of m_Text from a std::string to a GUILabel this seems maybe even sillier. SetFont should probably set the label's font
 	m_Font = m_Skin->GetFont(Filename);
-	if (m_Font)
-		m_Font->CacheColor(m_FontColor);
+	if (m_Font) { m_Font->CacheColor(m_FontColor); }
 
 	// Create the button image
 	GUIRect buttonBorders;
@@ -334,7 +333,7 @@ void GUIButton::OnKeyDown(int KeyCode, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIButton::GetPanel() {
+GUIPanel * GUIButton::GetPanel() {
 	return this;
 }
 

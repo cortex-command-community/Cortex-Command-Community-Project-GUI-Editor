@@ -60,7 +60,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    GUIScrollPanel(GUIManager *Manager);
+    explicit GUIScrollPanel(GUIManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ public:
 // Description:     Gets the minimum value for the scrollpanel
 // Arguments:       None.
 
-    int GetMinimum();
+    int GetMinimum() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ public:
 // Description:     Gets the maximum value for the scrollpanel
 // Arguments:       None.
 
-    int GetMaximum();
+    int GetMaximum() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +205,7 @@ public:
 // Description:     Gets the current value of the scrollpanel.
 // Arguments:       None.
 
-    int GetValue();
+    int GetValue() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ public:
 // Description:     Gets the size of the page.
 // Arguments:       None.
 
-    int GetPageSize();
+    int GetPageSize() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +241,7 @@ public:
 // Description:     Gets the orientation of the scrollpanel.
 // Arguments:       None.
 
-    int GetOrientation();
+    int GetOrientation() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ public:
 // Description:     Gets the small change value.
 // Arguments:       None.
 
-    int GetSmallChange();
+    int GetSmallChange() const;
 
 	/// <summary>
 	/// Gets the value resolution for this scroll panel.
@@ -289,13 +289,7 @@ protected:
 // Description:     Save values to a property class.
 // Arguments:       Properties.
 
-    void SaveProps(GUIProperties *Props);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
-protected:
+    void SaveProps(GUIProperties *Props) const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +313,7 @@ private:
 // Description:     Build a button.
 // Arguments:       ArrowName, Width, Height.
 
-    void BuildButton(const std::string ArrowName, int Y, int Width, int Height);
+    void BuildButton(const std::string &ArrowName, int Y, int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -337,7 +331,7 @@ private:
 // Description:     Build the knob.
 // Arguments:       None.
 
-    void BuildKnob(const std::string Section, int X, int Y, int Width, int Height);
+    void BuildKnob(const std::string &Section, int X, int Y, int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

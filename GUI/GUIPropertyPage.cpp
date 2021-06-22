@@ -5,12 +5,12 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPropertyPage::GUIPropertyPage(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUIPropertyPage::GUIPropertyPage(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "PROPERTYPAGE";
-	m_DrawBitmap = 0;
+	m_DrawBitmap = nullptr;
 	m_ControlManager = ControlManager;
-	m_Font = 0;
-	m_VertScroll = 0;
+	m_Font = nullptr;
+	m_VertScroll = nullptr;
 	m_FontColor = 0;
 	m_LineColor = 0;
 	m_PageValues.Clear();
@@ -19,7 +19,7 @@ GUIPropertyPage::GUIPropertyPage(GUIManager *Manager, GUIControlManager *Control
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIPropertyPage::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIPropertyPage::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -122,14 +122,14 @@ void GUIPropertyPage::Destroy() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Free the vertical scrollbar
 	if (m_VertScroll) {
 		m_VertScroll->Destroy();
 		delete m_VertScroll;
-		m_VertScroll = 0;
+		m_VertScroll = nullptr;
 	}
 }
 
@@ -139,9 +139,8 @@ void GUIPropertyPage::ChangeSkin(GUISkin *Skin) {
 	GUIControl::ChangeSkin(Skin);
 
 	// Change the skin of the text panels
-	for (int i = 0; i < m_TextPanelList.size(); i++) {
-		GUITextPanel *T = (GUITextPanel *)m_TextPanelList.at(i);
-		T->ChangeSkin(Skin);
+	for (GUITextPanel *textPanel : m_TextPanelList) {
+		textPanel->ChangeSkin(Skin);
 	}
 
 	// Build the control bitmap
@@ -155,7 +154,7 @@ void GUIPropertyPage::BuildBitmap() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Create a new bitmap.
@@ -184,7 +183,7 @@ void GUIPropertyPage::BuildBitmap() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPropertyPage::Draw(GUIScreen *Screen) {
-	if (m_DrawBitmap) { m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, 0); }
+	if (m_DrawBitmap) { m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr); }
 
 	// Check the font first
 	if (!m_Font) {
@@ -250,7 +249,7 @@ void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIPropertyPage::GetPanel() {
+GUIPanel * GUIPropertyPage::GetPanel() {
 	return this;
 }
 
@@ -294,13 +293,14 @@ void GUIPropertyPage::SetPropertyValues(GUIProperties *Props) {
 
 	// Update the text panels
 	for (int i = 0; i < m_TextPanelList.size(); i++) {
-		GUITextPanel *T = (GUITextPanel *)m_TextPanelList.at(i);
+		GUITextPanel *T = m_TextPanelList.at(i);
 		T->_SetVisible(false);
 		T->SetText("");
 
 		if (i < m_PageValues.GetCount()) {
 			T->_SetVisible(true);
-			std::string Name, Value;
+			std::string Name;
+			std::string Value;
 			if (m_PageValues.GetVariable(i, &Name, &Value)) { T->SetText(Value); }
 		}
 	}
@@ -308,7 +308,7 @@ void GUIPropertyPage::SetPropertyValues(GUIProperties *Props) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIProperties *GUIPropertyPage::GetPropertyValues() {
+GUIProperties * GUIPropertyPage::GetPropertyValues() {
 	return &m_PageValues;
 }
 
@@ -322,7 +322,7 @@ void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
 	// Is this a text panel?
 	std::vector<GUITextPanel *>::iterator it;
 	for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
-		GUITextPanel *T = *it;
+		const GUITextPanel *T = *it;
 
 		if (Source->GetPanelID() == T->GetPanelID()) {
 			TextSignal = true;
@@ -350,10 +350,11 @@ bool GUIPropertyPage::InvokeUpdate() {
 	bool Changed = false;
 
 	for (int i = 0; i < m_TextPanelList.size(); i++) {
-		GUITextPanel *T = (GUITextPanel *)m_TextPanelList.at(i);
+		const GUITextPanel *T = m_TextPanelList.at(i);
 
 		if (i < m_PageValues.GetCount()) {
-			std::string Name, Value;
+			std::string Name;
+			std::string Value;
 			if (m_PageValues.GetVariable(i, &Name, &Value)) {
 				if (T->GetText().compare(Value) != 0) { Changed = true; }
 				// Set the value
@@ -383,7 +384,7 @@ void GUIPropertyPage::ClearValues() {
 bool GUIPropertyPage::HasTextFocus() {
 	std::vector<GUITextPanel *>::iterator it;
 	for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
-		GUITextPanel *T = *it;
+		const GUITextPanel *T = *it;
 
 		// Visible & has focus??
 		if (T->_GetVisible() && T->HasFocus()) {

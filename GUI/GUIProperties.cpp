@@ -4,7 +4,7 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIProperties::GUIProperties(const std::string Name) {
+GUIProperties::GUIProperties(const std::string &Name) {
 	m_Name = Name;
 	m_VariableList.clear();
 }
@@ -39,7 +39,7 @@ void GUIProperties::Clear() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIProperties::AddVariable(const std::string Variable, const std::string Value) {
+void GUIProperties::AddVariable(const std::string &Variable, const std::string &Value) {
 	// If this property already exists, just update it
 	std::string Val;
 	if (GetValue(Variable, &Val)) {
@@ -57,7 +57,7 @@ void GUIProperties::AddVariable(const std::string Variable, const std::string Va
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIProperties::AddVariable(const std::string Variable, char *Value) {
+void GUIProperties::AddVariable(const std::string &Variable, char *Value) {
 	std::string Val = Value;
 
 	AddVariable(Variable, Val);
@@ -65,7 +65,7 @@ void GUIProperties::AddVariable(const std::string Variable, char *Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIProperties::AddVariable(const std::string Variable, int Value) {
+void GUIProperties::AddVariable(const std::string &Variable, int Value) {
 	char buf[32];
 	std::snprintf(buf, sizeof(buf), "%i", Value);
 	std::string Val(buf);
@@ -74,14 +74,14 @@ void GUIProperties::AddVariable(const std::string Variable, int Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIProperties::AddVariable(const std::string Variable, bool Value) {
+void GUIProperties::AddVariable(const std::string &Variable, bool Value) {
 	std::string Val = Value ? "True" : "False";
 	AddVariable(Variable, Val);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::SetValue(const std::string Variable, const std::string Value) {
+bool GUIProperties::SetValue(const std::string &Variable, const std::string &Value) {
 	// Find the property
 	std::vector <PropVariable *>::iterator it;
 
@@ -101,7 +101,7 @@ bool GUIProperties::SetValue(const std::string Variable, const std::string Value
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::SetValue(const std::string Variable, int Value) {
+bool GUIProperties::SetValue(const std::string &Variable, int Value) {
 	char buf[64];
 	std::snprintf(buf, sizeof(buf), "%i", Value);
 
@@ -116,7 +116,7 @@ void GUIProperties::Update(GUIProperties *Props, bool Add) {
 	std::vector <PropVariable *>::iterator it1;
 
 	for (it1 = Props->m_VariableList.begin(); it1 != Props->m_VariableList.end(); it1++) {
-		PropVariable *Src = *it1;
+		const PropVariable *Src = *it1;
 
 		// Set the variable
 		if (!SetValue(Src->m_Name, Src->m_Value) && Add) { AddVariable(Src->m_Name, Src->m_Value); }
@@ -125,12 +125,12 @@ void GUIProperties::Update(GUIProperties *Props, bool Add) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::GetValue(const std::string Variable, std::string *Value) {
+bool GUIProperties::GetValue(const std::string &Variable, std::string *Value) {
 	// Find the property
 	std::vector <PropVariable *>::iterator it;
 
 	for (it = m_VariableList.begin(); it != m_VariableList.end(); it++) {
-		PropVariable *p = *it;
+		const PropVariable *p = *it;
 
 		// Matching name?
 		if (stricmp(p->m_Name.c_str(), Variable.c_str()) == 0) {
@@ -145,7 +145,7 @@ bool GUIProperties::GetValue(const std::string Variable, std::string *Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProperties::GetValue(const std::string Variable, std::string *Array, int MaxArraySize) {
+int GUIProperties::GetValue(const std::string &Variable, std::string *Array, int MaxArraySize) {
 	assert(Array);
 
 	std::string Value;
@@ -177,7 +177,7 @@ int GUIProperties::GetValue(const std::string Variable, std::string *Array, int 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProperties::GetValue(const std::string Variable, int *Array, int MaxArraySize) {
+int GUIProperties::GetValue(const std::string &Variable, int *Array, int MaxArraySize) {
 	assert(Array);
 
 	std::string Value;
@@ -209,7 +209,7 @@ int GUIProperties::GetValue(const std::string Variable, int *Array, int MaxArray
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::GetValue(const std::string Variable, int *Value) {
+bool GUIProperties::GetValue(const std::string &Variable, int *Value) {
 	assert(Value);
 
 	std::string val;
@@ -226,7 +226,7 @@ bool GUIProperties::GetValue(const std::string Variable, int *Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::GetValue(const std::string Variable, unsigned long *Value) {
+bool GUIProperties::GetValue(const std::string &Variable, unsigned long *Value) {
 	assert(Value);
 
 	std::string val;
@@ -243,7 +243,7 @@ bool GUIProperties::GetValue(const std::string Variable, unsigned long *Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::GetValue(const std::string Variable, bool *Value) {
+bool GUIProperties::GetValue(const std::string &Variable, bool *Value) {
 	assert(Value);
 
 	std::string val;
@@ -264,7 +264,7 @@ bool GUIProperties::GetValue(const std::string Variable, bool *Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUIProperties::GetName() {
+std::string GUIProperties::GetName() const {
 	return m_Name;
 }
 
@@ -276,7 +276,7 @@ std::string GUIProperties::ToString() {
 	// Go through each value
 	std::vector <PropVariable *>::iterator it;
 	for (it = m_VariableList.begin(); it != m_VariableList.end(); it++) {
-		PropVariable *V = *it;
+		const PropVariable *V = *it;
 
 		OutString += V->m_Name;
 		OutString.append(" = ");
@@ -288,7 +288,7 @@ std::string GUIProperties::ToString() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProperties::GetCount() {
+int GUIProperties::GetCount() const {
 	return m_VariableList.size();
 }
 
@@ -300,7 +300,7 @@ bool GUIProperties::GetVariable(int Index, std::string *Name, std::string *Value
 		return false;
 	}
 
-	PropVariable *P = (PropVariable *)m_VariableList.at(Index);
+	const PropVariable *P = (PropVariable *)m_VariableList.at(Index);
 	if (Name) { *Name = P->m_Name; }
 	if (Value) { *Value = P->m_Value; }
 
@@ -309,12 +309,12 @@ bool GUIProperties::GetVariable(int Index, std::string *Name, std::string *Value
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIProperties::SetVariable(int Index, std::string Name, std::string Value) {
+bool GUIProperties::SetVariable(int Index, const std::string &Name, const std::string &Value) {
 	// Check for a bad index
 	if (Index < 0 || Index >= m_VariableList.size()) {
 		return false;
 	}
-	PropVariable *P = (PropVariable *)m_VariableList.at(Index);
+	PropVariable *P = m_VariableList.at(Index);
 	P->m_Name = Name;
 	P->m_Value = Value;
 
@@ -330,8 +330,8 @@ void GUIProperties::Sort(bool Ascending) {
 
 		for (int j = 0; j < m_VariableList.size() - 1 - i; j++) {
 
-			PropVariable *V = (PropVariable *)m_VariableList.at(j);
-			PropVariable *V2 = (PropVariable *)m_VariableList.at(j + 1);
+			PropVariable *V = m_VariableList.at(j);
+			PropVariable *V2 = m_VariableList.at(j + 1);
 
 			if ((V->m_Name.compare(V2->m_Name) > 0 && Ascending) || (V->m_Name.compare(V2->m_Name) < 0 && !Ascending)) {
 				// Swap em

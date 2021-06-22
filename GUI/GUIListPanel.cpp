@@ -8,10 +8,10 @@ using namespace RTE;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIListPanel::GUIListPanel(GUIManager *Manager) : GUIPanel(Manager) {
-	m_BaseBitmap = 0;
-	m_DrawBitmap = 0;
-	m_FrameBitmap = 0;
-	m_Font = 0;
+	m_BaseBitmap = nullptr;
+	m_DrawBitmap = nullptr;
+	m_FrameBitmap = nullptr;
+	m_Font = nullptr;
 	m_Items.clear();
 	m_SelectedList.clear();
 	m_UpdateLocked = false;
@@ -37,10 +37,10 @@ GUIListPanel::GUIListPanel(GUIManager *Manager) : GUIPanel(Manager) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIListPanel::GUIListPanel() : GUIPanel() {
-	m_BaseBitmap = 0;
-	m_DrawBitmap = 0;
-	m_FrameBitmap = 0;
-	m_Font = 0;
+	m_BaseBitmap = nullptr;
+	m_DrawBitmap = nullptr;
+	m_FrameBitmap = nullptr;
+	m_Font = nullptr;
 	m_Items.clear();
 	m_SelectedList.clear();
 	m_UpdateLocked = false;
@@ -111,35 +111,35 @@ void GUIListPanel::Destroy() {
 	if (m_HorzScroll) {
 		m_HorzScroll->Destroy();
 		delete m_HorzScroll;
-		m_HorzScroll = 0;
+		m_HorzScroll = nullptr;
 	}
 
 	// Destroy the vertical scroll panel
 	if (m_VertScroll) {
 		m_VertScroll->Destroy();
 		delete m_VertScroll;
-		m_VertScroll = 0;
+		m_VertScroll = nullptr;
 	}
 
 	// Destroy the drawing bitmap
 	if (m_FrameBitmap) {
 		m_FrameBitmap->Destroy();
 		delete m_FrameBitmap;
-		m_FrameBitmap = 0;
+		m_FrameBitmap = nullptr;
 	}
 
 	// Destroy the drawing bitmap
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Destroy the base bitmap
 	if (m_BaseBitmap) {
 		m_BaseBitmap->Destroy();
 		delete m_BaseBitmap;
-		m_BaseBitmap = 0;
+		m_BaseBitmap = nullptr;
 	}
 }
 
@@ -167,7 +167,7 @@ void GUIListPanel::ClearList() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIListPanel::AddItem(std::string Name, std::string rightText, GUIBitmap *pBitmap, const Entity *pEntity, const int extraIndex) {
+void GUIListPanel::AddItem(const std::string &Name, const std::string &rightText, GUIBitmap *pBitmap, const Entity *pEntity, const int extraIndex) {
 	Item *I = new Item;
 	I->m_Name = Name;
 	I->m_RightText = rightText;
@@ -223,17 +223,17 @@ void GUIListPanel::BuildBitmap(bool UpdateBase, bool UpdateText) {
 		if (m_FrameBitmap) {
 			m_FrameBitmap->Destroy();
 			delete m_FrameBitmap;
-			m_FrameBitmap = 0;
+			m_FrameBitmap = nullptr;
 		}
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();
 			delete m_DrawBitmap;
-			m_DrawBitmap = 0;
+			m_DrawBitmap = nullptr;
 		}
 		if (m_BaseBitmap) {
 			m_BaseBitmap->Destroy();
 			delete m_BaseBitmap;
-			m_BaseBitmap = 0;
+			m_BaseBitmap = nullptr;
 		}
 	}
 
@@ -271,12 +271,12 @@ void GUIListPanel::BuildBitmap(bool UpdateBase, bool UpdateText) {
 	}
 
 	if (UpdateText) {
-		m_BaseBitmap->Draw(m_DrawBitmap, 0, 0, 0);
+		m_BaseBitmap->Draw(m_DrawBitmap, 0, 0, nullptr);
 
 		// Draw the text onto the drawing bitmap
 		BuildDrawBitmap();
 
-		m_FrameBitmap->DrawTrans(m_DrawBitmap, 0, 0, 0);
+		m_FrameBitmap->DrawTrans(m_DrawBitmap, 0, 0, nullptr);
 	}
 }
 
@@ -306,7 +306,7 @@ void GUIListPanel::BuildDrawBitmap() {
 		Item *I = *it;
 
 		// Alternate drawing mode
-// TODO: REMOVE MORE H-CODING
+		// TODO: REMOVE MORE H-CODING
 		if (m_AlternateDrawMode) {
 			int rightTextWidth = I->m_RightText.empty() ? 0 : RIGHTTEXTWIDTH;//thirdWidth / 2;
 			int mainTextWidth = (thirdWidth * 2) - rightTextWidth;
@@ -395,7 +395,7 @@ void GUIListPanel::BuildDrawBitmap() {
 
 void GUIListPanel::Draw(GUIScreen *Screen) {
 	// Draw the base
-	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, 0);
+	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
 	// Draw any children
 	GUIPanel::Draw(Screen);
@@ -473,7 +473,7 @@ void GUIListPanel::SelectItem(int X, int Y, int Modifier) {
 	if (m_VertScroll->_GetVisible())
 		y -= m_VertScroll->GetValue();
 	int Count = 0;
-	int stackHeight = 0;
+	//int stackHeight = 0;
 	for (it = m_Items.begin(); it != m_Items.end(); it++, Count++) {
 		/*
 		stackHeight += GetItemHeight(*it);
@@ -546,7 +546,7 @@ void GUIListPanel::SelectItem(int X, int Y, int Modifier) {
 			}
 			break;
 		}
-		//        y += m_Font->GetFontHeight();
+		//y += m_Font->GetFontHeight();
 		y += GetItemHeight(I);
 
 		// End of viewable region
@@ -636,7 +636,7 @@ void GUIListPanel::ScrollToItem(Item *pItem) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIListPanel::ScrollToSelected() {
-	if (m_SelectedList.size() > 0) {
+	if (!m_SelectedList.empty()) {
 		ScrollToItem(*(m_SelectedList.begin()));
 		BuildBitmap(false, true);
 	}
@@ -681,7 +681,7 @@ void GUIListPanel::ScrollBarScrolling(int mouseWheelChange) {
 	if (mouseWheelChange < 0) {
 		newValue = m_VertScroll->GetValue() - (mouseWheelChange * avgItemHeight);
 		int maxValue = GetStackHeight(lastItem) + GetItemHeight(lastItem) - m_VertScroll->GetPageSize();
-		newValue = static_cast<int>(std::clamp(newValue, maxValue, 0));
+		newValue = std::clamp(newValue, maxValue, 0);
 	} else {
 		newValue = m_VertScroll->GetValue() - (mouseWheelChange * avgItemHeight);
 		if (newValue < 0) {
@@ -772,7 +772,7 @@ void GUIListPanel::AdjustScrollbars() {
 			m_VertScroll->_SetVisible(true);
 
 			// Setup the horizontal scrollbar again because this scrollbar just became visible
-			// (Or still is visible)        
+			// (Or still is visible)
 			Width = m_Width - 4 - m_VertScroll->GetWidth();
 			m_HorzScroll->_SetVisible(false);
 			if (m_LargestWidth > Width && m_HorzScrollEnabled) {
@@ -805,7 +805,7 @@ void GUIListPanel::OnKeyPress(int KeyCode, int Modifier) {
 	if (m_LastSelected < 0) {
 		return;
 	}
-	if (m_Items.size() == 0) {
+	if (m_Items.empty()) {
 		return;
 	}
 	switch (KeyCode) {
@@ -941,7 +941,7 @@ void GUIListPanel::SetMultiSelect(bool MultiSelect) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIListPanel::GetMultiSelect() {
+bool GUIListPanel::GetMultiSelect() const {
 	return m_MultiSelect;
 }
 
@@ -956,30 +956,30 @@ void GUIListPanel::SetHotTracking(bool HotTrack) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIListPanel::Item *GUIListPanel::GetSelected() {
+GUIListPanel::Item * GUIListPanel::GetSelected() {
 	// Nothing in the list
-	if (m_SelectedList.size() == 0) {
-		return 0;
+	if (m_SelectedList.empty()) {
+		return nullptr;
 	}
 	// Get the first item
-	return (Item *)m_SelectedList.at(0);
+	return m_SelectedList.at(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<GUIListPanel::Item *> *GUIListPanel::GetSelectionList() {
+std::vector<GUIListPanel::Item *> * GUIListPanel::GetSelectionList() {
 	return &m_SelectedList;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<GUIListPanel::Item *> *GUIListPanel::GetItemList() {
+std::vector<GUIListPanel::Item *> * GUIListPanel::GetItemList() {
 	return &m_Items;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIListPanel::Item *GUIListPanel::GetItem(int Index) {
+GUIListPanel::Item * GUIListPanel::GetItem(int Index) {
 	if (Index >= 0 && Index < m_Items.size()) {
 		return m_Items.at(Index);
 	}
@@ -1018,7 +1018,7 @@ int GUIListPanel::GetItemHeight(Item *pItem) {
 	int height = 0;
 
 	if (pItem && m_Font) {
-		// If the height has already been established earler, then re-use it
+		// If the height has already been established earlier, then re-use it
 		if (pItem->m_Height > 0) {
 			height = pItem->m_Height;
 		} else if (m_AlternateDrawMode && pItem->m_pBitmap) {
@@ -1067,11 +1067,11 @@ void GUIListPanel::SetItemValues(int Index, Item &item) {
 
 int GUIListPanel::GetSelectedIndex() {
 	// Nothing in the list
-	if (m_SelectedList.size() == 0) {
+	if (m_SelectedList.empty()) {
 		return -1;
 	}
 	// Get the first item
-	Item *I = (Item *)m_SelectedList.at(0);
+	const Item *I = m_SelectedList.at(0);
 
 	return I->m_ID;
 }
@@ -1107,7 +1107,7 @@ void GUIListPanel::SetSelectedIndex(int Index) {
 
 void GUIListPanel::DeleteItem(int Index) {
 	if (Index >= 0 && Index < m_Items.size()) {
-		Item *I = m_Items.at(Index);
+		const Item *I = m_Items.at(Index);
 
 		// If this item was selected, remove it from the selection list
 		if (I->m_Selected) {
@@ -1129,8 +1129,8 @@ void GUIListPanel::DeleteItem(int Index) {
 		std::vector<Item *>::iterator it;
 		int Count = 0;
 		for (it = m_Items.begin(); it != m_Items.end(); it++) {
-			Item *I = *it;
-			I->m_ID = Count++;
+			Item *item = *it;
+			item->m_ID = Count++;
 		}
 
 		// Adjust the scrollbars

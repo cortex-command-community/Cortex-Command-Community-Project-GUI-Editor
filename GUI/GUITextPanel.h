@@ -47,7 +47,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    GUITextPanel(GUIManager *Manager);
+    explicit GUITextPanel(GUIManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ public:
 // Description:     Sets the text in the textpanel.
 // Arguments:       Text.
 
-    void SetText(const std::string Text);
+    void SetText(const std::string &Text);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ public:
 // Description:     Sets the extra text which appears right-justified in the textpanel.
 // Arguments:       Text.
 
-    void SetRightText(const std::string rightText);
+    void SetRightText(const std::string &rightText);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ public:
 // Description:     Gets the text in the textpanel.
 // Arguments:       None.
 
-    std::string GetText() { return m_Text; }
+    std::string GetText() const { return m_Text; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ public:
 // Description:     Gets the extra text which appears right-justified in the textpanel.
 // Arguments:       None.
 
-    std::string GetRightText() { return m_RightText; }
+    std::string GetRightText() const { return m_RightText; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ public:
 // Arguments:       None.
 // Returns:         Index of the start of the selection. -1 if no selection
 
-    int GetSelectionStart();
+    int GetSelectionStart() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ public:
 // Arguments:       None.
 // Returns:         Index of the end of the selection. -1 if no selection
 
-    int GetSelectionEnd();
+    int GetSelectionEnd() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ public:
 // Description:     Gets the selection text.
 // Arguments:       None.
 
-    std::string GetSelectionText();
+    std::string GetSelectionText() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +239,7 @@ public:
 // Description:     Gets the locked state on the textbox.
 // Arguments:       None.
 
-    bool GetLocked();
+    bool GetLocked() const;
 
 	/// <summary>
 	/// Sets this text panel to accept numeric symbols only.
@@ -284,7 +284,7 @@ private:
 
     /// <summary>
     /// Gets the index of the start of the next contiguous group of letters or special characters in the given string, or the end of the string if there is none.
-    /// Generally used to deal with ctrl + arrows style behaviour.
+    /// Generally used to deal with ctrl + arrows style behavior.
     /// </summary>
     /// <param name="stringToCheck">A string_view of the string to look for the next word in.</param>
     /// <param name="currentIndex">The index in the string to start looking from.</param>
@@ -293,7 +293,7 @@ private:
 
     /// <summary>
     /// Gets the index of the start of the previous contiguous group of letters or special characters in the given string, or the end of the string if there is none.
-    /// Generally used to deal with ctrl + arrows style behaviour.
+    /// Generally used to deal with ctrl + arrows style behavior.
     /// </summary>
     /// <param name="stringToCheck">A string_view of the string to look for the next word in.</param>
     /// <param name="currentIndex">The index in the string to start looking from.</param>
@@ -316,7 +316,8 @@ private:
     int            m_HeightMargin;
 
     // Cursor
-    int                m_CursorX, m_CursorY;
+	int                m_CursorX;
+	int m_CursorY;
     int                m_CursorIndex;
     unsigned long            m_CursorColor;
     // Hacky way to make cursor blink without a timer
@@ -329,7 +330,8 @@ private:
     int                m_StartSelection;
     int                m_EndSelection;
     unsigned long            m_SelectedColorIndex;
-    int                m_SelectionX, m_SelectionWidth;
+	int                m_SelectionX;
+	int m_SelectionWidth;
 
 	int m_MaxTextLength; //!< The maximum length of the text this text panel can contain.
 	bool m_NumericOnly; //!< Whether this text panel only accepts numeric symbols.

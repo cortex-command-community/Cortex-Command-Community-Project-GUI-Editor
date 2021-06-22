@@ -39,7 +39,7 @@ public:
 //                  memory.
 // Arguments:       Input Interface
 
-    GUIManager(GUIInput *input);
+    explicit GUIManager(GUIInput *input);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ private:
 // Description:     Checks if the mouse point is inside a rectangle.
 // Arguments:       Rectangle, Mouse position.
 
-    bool MouseInRect(GUIRect *Rect, int X, int Y);
+    bool MouseInRect(const GUIRect *Rect, int X, int Y);
 
 
 // Members
@@ -195,7 +195,8 @@ private:
     // Input
     GUIInput                *m_Input;
     bool                    m_MouseEnabled;
-    int                     m_OldMouseX, m_OldMouseY;
+	int                     m_OldMouseX;
+	int m_OldMouseY;
 
     // Double click
     int                     m_DoubleClickTime;

@@ -6,8 +6,8 @@ using namespace RTE;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIScrollPanel::GUIScrollPanel(GUIManager *Manager) : GUIPanel(Manager) {
-	m_Skin = 0;
-	m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = 0;
+	m_Skin = nullptr;
+	m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
 	m_ButtonSize = 17;
 	m_MinimumKnobSize = 9;
 	m_SmallChange = 1;
@@ -22,8 +22,8 @@ GUIScrollPanel::GUIScrollPanel(GUIManager *Manager) : GUIPanel(Manager) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIScrollPanel::GUIScrollPanel() : GUIPanel() {
-	m_Skin = 0;
-	m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = 0;
+	m_Skin = nullptr;
+	m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
 	m_ButtonSize = 17;
 	m_MinimumKnobSize = 9;
 	m_SmallChange = 1;
@@ -113,19 +113,19 @@ void GUIScrollPanel::BuildBitmap(bool UpdateSize, bool UpdateKnob) {
 		if (m_DrawBitmap[ButtonStates]) {
 			m_DrawBitmap[ButtonStates]->Destroy();
 			delete m_DrawBitmap[ButtonStates];
-			m_DrawBitmap[ButtonStates] = 0;
+			m_DrawBitmap[ButtonStates] = nullptr;
 		}
 		if (m_DrawBitmap[Back]) {
 			m_DrawBitmap[Back]->Destroy();
 			delete m_DrawBitmap[Back];
-			m_DrawBitmap[Back] = 0;
+			m_DrawBitmap[Back] = nullptr;
 		}
 	}
 	if (UpdateKnob) {
 		if (m_DrawBitmap[KnobStates]) {
 			m_DrawBitmap[KnobStates]->Destroy();
 			delete m_DrawBitmap[KnobStates];
-			m_DrawBitmap[KnobStates] = 0;
+			m_DrawBitmap[KnobStates] = nullptr;
 		}
 	}
 
@@ -186,7 +186,7 @@ void GUIScrollPanel::BuildBitmap(bool UpdateSize, bool UpdateKnob) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIScrollPanel::BuildButton(const std::string ArrowName, int Y, int Width, int Height) {
+void GUIScrollPanel::BuildButton(const std::string &ArrowName, int Y, int Width, int Height) {
 	// Create the buttons
 	m_Skin->BuildStandardRect(m_DrawBitmap[ButtonStates], "ScrollButton_Up", 0, Y, Width, Height);
 
@@ -244,7 +244,7 @@ void GUIScrollPanel::BuildBackground() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIScrollPanel::BuildKnob(const std::string Section, int X, int Y, int Width, int Height) {
+void GUIScrollPanel::BuildKnob(const std::string &Section, int X, int Y, int Width, int Height) {
 	if (m_DrawBitmap[KnobStates]) { m_Skin->BuildStandardRect(m_DrawBitmap[KnobStates], Section, X, Y, Width, Height); }
 }
 
@@ -300,13 +300,13 @@ void GUIScrollPanel::SetOrientation(int Orientation) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetValue() {
+int GUIScrollPanel::GetValue() const {
 	return m_Value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetPageSize() {
+int GUIScrollPanel::GetPageSize() const {
 	return m_PageSize;
 }
 
@@ -569,11 +569,11 @@ void GUIScrollPanel::OnMouseHover(int X, int Y, int Buttons, int Modifier) {
 		} else if (m_GrabbedBackg) {
 			// Grabbed the background region
 			int p = Y - (m_Y + m_ButtonSize);
-			if (m_GrabbedSide == 0 && p < m_KnobPosition)
+			if (m_GrabbedSide == 0 && p < m_KnobPosition) {
 				AdjustValue(-m_PageSize);
-			else if (m_GrabbedSide == 1 && p >= m_KnobPosition)
+			} else if (m_GrabbedSide == 1 && p >= m_KnobPosition) {
 				AdjustValue(m_PageSize);
-
+			}
 			// Now if the knob is over the cursor, grab it instead
 			KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
 			if (Y >= KnobTop && Y <= KnobTop + m_KnobLength) {
@@ -600,13 +600,13 @@ void GUIScrollPanel::OnMouseHover(int X, int Y, int Buttons, int Modifier) {
 			// Ignore
 
 		} else if (m_GrabbedBackg) {
-			// Grabbed the background region            
+			// Grabbed the background region
 			int p = X - (m_X + m_ButtonSize);
-			if (m_GrabbedSide == 0 && p < m_KnobPosition)
+			if (m_GrabbedSide == 0 && p < m_KnobPosition) {
 				AdjustValue(-m_PageSize);
-			else if (m_GrabbedSide == 1 && p >= m_KnobPosition)
+			} else if (m_GrabbedSide == 1 && p >= m_KnobPosition) {
 				AdjustValue(m_PageSize);
-
+			}
 			// Now if the knob is over the cursor, grab it instead
 			KnobTop = m_X + m_ButtonSize + m_KnobPosition;
 			if (X >= KnobTop && X <= KnobTop + m_KnobLength) {
@@ -689,7 +689,7 @@ void GUIScrollPanel::AdjustValue(int Delta) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIScrollPanel::SaveProps(GUIProperties *Props) {
+void GUIScrollPanel::SaveProps(GUIProperties *Props) const {
 	assert(Props);
 
 	Props->AddVariable("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
@@ -702,25 +702,25 @@ void GUIScrollPanel::SaveProps(GUIProperties *Props) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetMinimum() {
+int GUIScrollPanel::GetMinimum() const {
 	return m_Minimum;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetMaximum() {
+int GUIScrollPanel::GetMaximum() const {
 	return m_Maximum;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetOrientation() {
+int GUIScrollPanel::GetOrientation() const {
 	return m_Orientation;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIScrollPanel::GetSmallChange() {
+int GUIScrollPanel::GetSmallChange() const {
 	return m_SmallChange;
 }
 

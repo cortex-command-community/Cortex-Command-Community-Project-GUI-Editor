@@ -64,7 +64,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ public:
 // Description:     Gets the text of the label.
 // Arguments:       None.
 
-    const std::string &GetText() const { return m_Text; }
+    const std::string & GetText() const { return m_Text; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ public:
 // Method:          SetHAlignment
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the horizontal alignment of the text of this label.
-// Arguments:       The desired alignement.
+// Arguments:       The desired alignment.
 
     void SetHAlignment(int HAlignment = GUIFont::Left) { m_HAlignment = HAlignment; }
 
@@ -217,7 +217,7 @@ public:
 // Method:          SetVAlignment
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets the vertical alignment of the text of this label.
-// Arguments:       The desired alignement.
+// Arguments:       The desired alignment.
 
     void SetVAlignment(int VAlignment = GUIFont::Top) { m_VAlignment = VAlignment; }
 
@@ -235,12 +235,12 @@ public:
 // Method:          GetVAlignment
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the vertical alignment of the text of this label.
-// Arguments:       The desired alignement.
+// Arguments:       The desired alignment.
 
     int GetVAlignment() const { return m_VAlignment; }
 
     /// <summary>
-    /// Gets whether or not this this GUILabel should scroll horizontally (right) when it overflows.
+    /// Gets whether or not this GUILabel should scroll horizontally (right) when it overflows.
     /// </summary>
     /// <returns>Whether or not this GUILabel should scroll horizontally when it overflows.</returns>
     bool GetHorizontalOverflowScroll() const { return m_HorizontalOverflowScroll; }
@@ -252,7 +252,7 @@ public:
     void SetHorizontalOverflowScroll(bool newOverflowScroll);
 
     /// <summary>
-    /// Gets whether or not this this GUILabel should scroll vertically (down) when it overflows.
+    /// Gets whether or not this GUILabel should scroll vertically (down) when it overflows.
     /// </summary>
     /// <returns>Whether or not this GUILabel should scroll vertically when it overflows.</returns>
     bool GetVerticalOverflowScroll() const { return m_VerticalOverflowScroll; }
@@ -276,9 +276,9 @@ public:
     bool OverflowScrollIsActivated() const { return OverflowScrollIsEnabled() && m_OverflowScrollState != OverflowScrollState::Deactivated; }
 
     /// <summary>
-    /// Sets whether or not horizontal/vertical scrolling should be happening. When it's deactivated, text will instantly go back to unscrolled.
+    /// Sets whether or not horizontal/vertical scrolling should be happening. When it's deactivated, text will instantly go back to un-scrolled.
     /// </summary>
-    /// <param name="activateScroll">Whether the overflow scrolling should activete (true) or deactivate (false).</param>
+    /// <param name="activateScroll">Whether the overflow scrolling should activate (true) or deactivate (false).</param>
     void ActivateDeactivateOverflowScroll(bool activateScroll);
 
 
@@ -304,7 +304,7 @@ public:
 // Private member variable and method declarations
 
 private:
-    
+
     std::string        m_Text;
     int                m_HAlignment;
     int                m_VAlignment;

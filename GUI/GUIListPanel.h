@@ -124,15 +124,15 @@ public:
 //                  a Bitmap object pointer alternatively pointing to a bitmap to display
 //                  in the list. Ownership IS transferred!
 //                  An Extra menu-specific index that this item may be associated with.
-//                  Object isntance associated with the item. Ownership is NOT TRANSFERRED!
+//                  Object instance associated with the item. Ownership is NOT TRANSFERRED!
 
-    void AddItem(std::string Name, std::string rightText = "", GUIBitmap *pBitmap = 0, const Entity *pEntity = 0, const int extraIndex = -1);
+    void AddItem(const std::string &Name, const std::string &rightText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = 0, const int extraIndex = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ClearList
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Clears the liost.
+// Description:     Clears the list.
 // Arguments:       None.
 
     void ClearList();
@@ -310,7 +310,7 @@ public:
 // Description:     Gets the multi-selection value.
 // Arguments:       None.
 
-    bool GetMultiSelect();
+    bool GetMultiSelect() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +328,7 @@ public:
 // Description:     Gets the selected (or first in the selected list) item.
 // Arguments:       None.
 
-    Item *GetSelected();
+    Item * GetSelected();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ public:
 // Description:     Gets the item list.
 // Arguments:       None.
 
-    std::vector<Item *> *GetItemList();
+    std::vector<Item *> * GetItemList();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -346,7 +346,7 @@ public:
 // Description:     Gets an item at the index.
 // Arguments:       Index.
 
-    Item *GetItem(int Index);
+    Item * GetItem(int Index);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -355,14 +355,14 @@ public:
 // Description:     Gets an item at a specific absolute screen coordinate, if any.
 // Arguments:       The absolute screen coordinates to get the item from.
 
-    Item *GetItem(int X, int Y);
+    Item * GetItem(int X, int Y);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetItemHeight
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the drawing height of the item passed in.
-// Arguments:       Pointer to the Item to get the height of. Ownership is NOT xferred!
+// Arguments:       Pointer to the Item to get the height of. Ownership is NOT transferred!
 
     int GetItemHeight(Item *pItem);
 
@@ -375,10 +375,10 @@ public:
 //                  If the second one is specified, the height of the first is returned.
 //                  If the third is specified, the sum of the first and second items' heights
 //                  is returned. If 0 is passed, the entire stack's height is returned.
-// Arguments:       Pointer to the Item to get the height up to. Ownership is NOT xferred!
-//                  If 0 is passed, the entire stack's height is returned. 
+// Arguments:       Pointer to the Item to get the height up to. Ownership is NOT transferred!
+//                  If 0 is passed, the entire stack's height is returned.
 
-    int GetStackHeight(Item *pItem = 0);
+    int GetStackHeight(Item *pItem = nullptr);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -435,7 +435,7 @@ public:
 // Description:     Gets the selection list.
 // Arguments:       None.
 
-    std::vector<Item *>    *GetSelectionList();
+    std::vector<Item *> * GetSelectionList();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

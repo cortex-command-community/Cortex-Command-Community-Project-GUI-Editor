@@ -5,14 +5,14 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIListBox::GUIListBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIListPanel(Manager), GUIControl() {
+GUIListBox::GUIListBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIListPanel(Manager) {
 	m_ControlID = "LISTBOX";
 	m_ControlManager = ControlManager;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIListBox::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIListBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -94,7 +94,7 @@ void GUIListBox::Resize(int Width, int Height) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIListBox::GetPanel() {
+GUIPanel * GUIListBox::GetPanel() {
 	return this;
 }
 

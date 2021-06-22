@@ -5,17 +5,17 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUITextBox::GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUITextPanel(Manager), GUIControl() {
+GUITextBox::GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(Manager) {
 	m_ControlID = "TEXTBOX";
 	m_ControlManager = ControlManager;
-	m_DrawBitmap = 0;
+	m_DrawBitmap = nullptr;
 	m_HAlignment = GUIFont::Left;
 	m_VAlignment = GUIFont::Top;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUITextBox::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUITextBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -56,7 +56,7 @@ void GUITextBox::Create(GUIProperties *Props) {
 	m_Width = std::max(m_Width, m_MinWidth);
 	m_Height = std::max(m_Height, m_MinHeight);
 
-	// Alignment values - these don't affect anyhting as of yet
+	// Alignment values - these don't affect anything as of yet
 	std::string alignString;
 	Props->GetValue("HAlignment", &alignString);
 	if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
@@ -76,7 +76,7 @@ void GUITextBox::Destroy() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 }
 
@@ -89,7 +89,7 @@ void GUITextBox::ChangeSkin(GUISkin *Skin) {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Create a new bitmap
@@ -106,14 +106,14 @@ void GUITextBox::ChangeSkin(GUISkin *Skin) {
 
 void GUITextBox::Draw(GUIScreen *Screen) {
 	// Draw the background
-	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, 0);
+	m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
 	GUITextPanel::Draw(Screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUITextBox::GetPanel() {
+GUIPanel * GUITextBox::GetPanel() {
 	return this;
 }
 

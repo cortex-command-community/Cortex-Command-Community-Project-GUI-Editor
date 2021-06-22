@@ -58,7 +58,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ public:
     /// Gets the text of this GUIButton's GUILabel.
     /// </summary>
     /// <returns>The text of this GUIButton's GUILabel.</returns>
-    const std::string &GetText() const;
+    const std::string & GetText() const;
 
     /// <summary>
     /// Sets the text of this GUIButton's GUILabel.

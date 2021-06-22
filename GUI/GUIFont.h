@@ -64,7 +64,7 @@ public:
 //                  memory.
 // Arguments:       None.
 
-    GUIFont(std::string Name);
+    explicit GUIFont(const std::string &Name);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ public:
 // Description:     Loads the font from an image file.
 // Arguments:       Screen class, Filename of image.
 
-    bool Load(GUIScreen *Screen, const std::string Filename);
+    bool Load(GUIScreen *Screen, const std::string &Filename);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ public:
 // Description:     Finds a font color structure from the cache.
 // Arguments:       Color.
 
-    FontColor *GetFontColor(unsigned long Color);
+    FontColor * GetFontColor(unsigned long Color);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ public:
 // Description:     Draws text to a bitmap.
 // Arguments:       Bitmap, Position, Text, Color, Drop-shadow, 0 = none.
 
-    void Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsigned long Shadow = 0);
+    void Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, unsigned long Shadow = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ public:
 // Description:     Draws text to a bitmap aligned.
 // Arguments:       Bitmap, Position, Text.
 
-    void DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Text, int HAlign, int VAlign = Top, int maxWidth = 0, unsigned long Shadow = 0);
+    void DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign = Top, int maxWidth = 0, unsigned long Shadow = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ public:
 // Description:     Calculates the width of a piece of text.
 // Arguments:       Text.
 
-    int CalculateWidth(const std::string Text);
+    int CalculateWidth(const std::string &Text);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ public:
 //                  max width.
 // Arguments:       Text, and the max width. If 0, no wrapping is done.
 
-    int CalculateHeight(const std::string Text, int MaxWidth = 0);
+    int CalculateHeight(const std::string &Text, int MaxWidth = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ public:
 // Description:     Gets the font height.
 // Arguments:       None.
 
-    int GetFontHeight();
+    int GetFontHeight() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ public:
 // Description:     Gets the name of the font
 // Arguments:       None.
 
-    std::string GetName();
+    std::string GetName() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ public:
 // Description:     Get the character kerning (spacing)
 // Arguments:       None.
 
-    int GetKerning();
+    int GetKerning() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

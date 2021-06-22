@@ -58,7 +58,7 @@ public:
         Key_Backspace   = 0x00000008,
         Key_Tab         = 0x00000009,
         Key_Enter       = 0x0000000D,
-        Key_Escape      = 0x0000001B,        
+        Key_Escape      = 0x0000001B,
         Key_LeftArrow   = 0x00000086,
         Key_RightArrow  = 0x00000087,
         Key_UpArrow     = 0x00000088,
@@ -70,17 +70,17 @@ public:
         Key_PageUp      = 0x00000099,
         Key_PageDown    = 0x0000009A
     } Keys;
-        
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIInput
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUIInput object in system
 //                  memory.
-// Arguments:       Whether the keyboard and joysticks also can control the mouse crsr.
+// Arguments:       Whether the keyboard and joysticks also can control the mouse cursor.
 
     GUIInput(int whichPlayer, bool keyJoyMouseCursor = false);
-   
+
     virtual ~GUIInput() { Destroy(); }
 
 
@@ -96,9 +96,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetMouseOffset
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the offset for the mouse input to be adjusted by. This shuold
+// Description:     Sets the offset for the mouse input to be adjusted by. This should
 //                  be used when the GUI is being drawn somewhere else on the screen than
-//                  the upper left corner. These values shuold be from the GUI to the upper
+//                  the upper left corner. These values should be from the GUI to the upper
 //                  left corner.
 // Arguments:       The new offset.
 
@@ -108,12 +108,12 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMouseOffset
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the offset for the mouse input to be adjusted by. This shuold
-//                  These values shuold be from the GUI to the upper of the screen.
+// Description:     Sets the offset for the mouse input to be adjusted by. This should
+//                  These values should be from the GUI to the upper of the screen.
 //                  left corner.
 // Arguments:       The new offset.
 
-    void GetMouseOffset(int &mouseOffsetX, int &mouseOffsetY) { mouseOffsetX = m_MouseOffsetX; mouseOffsetY = m_MouseOffsetY; }
+    void GetMouseOffset(int &mouseOffsetX, int &mouseOffsetY) const { mouseOffsetX = m_MouseOffsetX; mouseOffsetY = m_MouseOffsetY; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -129,15 +129,15 @@ public:
 // Method:          GetKeyboard
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Copies the keyboard buffer into an array. The keyboard buffer is
-//					ordered by ascii code and each entry contains a GUInput::Event enum 
+//					ordered by ascii code and each entry contains a GUInput::Event enum
 //					state.
 // Arguments:       Buffer array.
 
-    void GetKeyboard(unsigned char *Buffer);
-	
-	unsigned char GetAsciiState(unsigned char ascii);
-	
-	unsigned char GetScanCodeState(unsigned char scancode);
+    void GetKeyboard(unsigned char *Buffer) const;
+
+	unsigned char GetAsciiState(unsigned char ascii) const;
+
+	unsigned char GetScanCodeState(unsigned char scancode) const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ public:
 // Description:     Copies the mouse button states into an array
 // Arguments:       State array.
 
-    void GetMouseButtons(int *Events, int *States);
+    void GetMouseButtons(int *Events, int *States) const;
 
 
 	static void SetNetworkMouseButton(int whichPlayer, int state1, int state2, int state3);
@@ -171,14 +171,14 @@ public:
 // Description:     Gets the key modifiers.
 // Arguments:       None.
 
-    int GetModifier();
+    int GetModifier() const;
 
 
 	/// <summary>
 	/// This function returns how much the mouse scroll wheel has moved. Positive integer is scroll up, negative is scroll down.
 	/// </summary>
 	/// <returns>Mouse scroll wheel movement in integer value.</returns>
-	int GetMouseWheelChange() {
+	int GetMouseWheelChange() const {
 		return m_MouseWheelChange;
 	}
 
@@ -215,17 +215,21 @@ protected:
 
 	static bool			  m_OverrideInput;
 
-    int            m_MouseX, m_MouseY;
-	int            m_LastFrameMouseX, m_LastFrameMouseY;
+	int            m_MouseX;
+	int m_MouseY;
+	int            m_LastFrameMouseX;
+	int m_LastFrameMouseY;
 
-	static int			   m_NetworkMouseX[4], m_NetworkMouseY[4];
+	static int			   m_NetworkMouseX[4];
+	static int m_NetworkMouseY[4];
 
 	int				m_Player;
 
 	int				m_MouseWheelChange; //!< the amount and direction that the mouse wheel has moved.
 
     // These offset the mouse positions so that the cursor is shifted for all events
-    int            m_MouseOffsetX, m_MouseOffsetY;
+	int            m_MouseOffsetX;
+	int m_MouseOffsetY;
 
     int            m_Modifier;
 

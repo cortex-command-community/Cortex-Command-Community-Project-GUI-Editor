@@ -5,21 +5,21 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUICollectionBox::GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUICollectionBox::GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "COLLECTIONBOX";
-	m_Background = 0;
+	m_Background = nullptr;
 	m_ControlManager = ControlManager;
 	m_DrawBackground = true;
 	m_DrawType = Color;
 	m_DrawColor = 0;
-	m_DrawBitmap = 0;
+	m_DrawBitmap = nullptr;
 
 	m_IsContainer = true; // We are a container
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUICollectionBox::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUICollectionBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -157,7 +157,7 @@ void GUICollectionBox::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUICollectionBox::GetPanel() {
+GUIPanel * GUICollectionBox::GetPanel() {
 	return this;
 }
 
@@ -174,7 +174,10 @@ void GUICollectionBox::Move(int X, int Y) {
 	std::vector<GUIControl *>::iterator it;
 	for (it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
 		GUIControl *C = *it;
-		int CX, CY, CW, CH;
+		int CX;
+		int CY;
+		int CW;
+		int CH;
 		C->GetControlRect(&CX, &CY, &CW, &CH);
 
 		C->Move(CX + DX, CY + DY);
@@ -205,13 +208,10 @@ void GUICollectionBox::Resize(int Width, int Height) {
 		int H = CH;
 
 		// Attached to Right and/or Bottom edges
-		if ((Anchor & GUIControl::Anchor_Right) && !(Anchor & GUIControl::Anchor_Left))
-			DX = m_Width - (OldWidth - (CX - m_X)) + m_X;
-		if ((Anchor & GUIControl::Anchor_Bottom) && !(Anchor & GUIControl::Anchor_Top))
-			DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y;
+		if ((Anchor & GUIControl::Anchor_Right) && !(Anchor & GUIControl::Anchor_Left)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
+		if ((Anchor & GUIControl::Anchor_Bottom) && !(Anchor & GUIControl::Anchor_Top)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
 
-		if (DX != CX || DY != CY)
-			C->Move(DX, DY);
+		if (DX != CX || DY != CY) { C->Move(DX, DY); }
 
 		CX -= m_X;
 		CY -= m_Y;

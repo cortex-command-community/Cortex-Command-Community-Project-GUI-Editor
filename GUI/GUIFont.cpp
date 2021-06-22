@@ -4,9 +4,9 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIFont::GUIFont(std::string Name) {
-	m_Screen = 0;
-	m_Font = 0;
+GUIFont::GUIFont(const std::string &Name) {
+	m_Screen = nullptr;
+	m_Font = nullptr;
 	m_FontHeight = 0;
 	m_Name = Name;
 	m_Kerning = 0;
@@ -15,22 +15,23 @@ GUIFont::GUIFont(std::string Name) {
 
 	m_MainColor = 15; // Color index of the main font color
 	m_CurrentColor = m_MainColor;
-	m_CurrentBitmap = 0;
+	m_CurrentBitmap = nullptr;
 
 	m_CharIndexCap = 256;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIFont::Load(GUIScreen *Screen, const std::string Filename) {
+bool GUIFont::Load(GUIScreen *Screen, const std::string &Filename) {
 	assert(Screen);
 
 	m_Screen = Screen;
 
 	// Load the font image
 	m_Font = m_Screen->CreateBitmap(Filename);
-	if (!m_Font)
+	if (!m_Font) {
 		return false;
+	}
 	m_CurrentBitmap = m_Font;
 
 	// Clear the cache
@@ -44,7 +45,7 @@ bool GUIFont::Load(GUIScreen *Screen, const std::string Filename) {
 	unsigned long BackG = m_Font->GetPixel(m_Font->GetWidth() - 1, 0);
 	m_Font->SetColorKey(BackG);
 
-	// The red seperator MUST be on the Top-Left hand corner
+	// The red separator MUST be on the Top-Left hand corner
 	unsigned long Red = m_Font->GetPixel(0, 0);
 
 	// Find the separating gap of the font lines
@@ -68,8 +69,7 @@ bool GUIFont::Load(GUIScreen *Screen, const std::string Filename) {
 
 		// Find the next red pixel
 		int w = 0;
-		int n;
-		for (n = x; n < m_Font->GetWidth(); n++, w++) {
+		for (int n = x; n < m_Font->GetWidth(); n++, w++) {
 			if (m_Font->GetPixel(n, y) == Red) {
 				break;
 			}
@@ -107,9 +107,8 @@ bool GUIFont::Load(GUIScreen *Screen, const std::string Filename) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsigned long Shadow) {
+void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, unsigned long Shadow) {
 	unsigned char c;
-	int i;
 	GUIRect Rect;
 	GUIBitmap *Surf = m_CurrentBitmap;
 	int initX = X;
@@ -117,7 +116,7 @@ void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsi
 	assert(Surf);
 
 	// Make the shadow color
-	FontColor *FSC = 0;
+	FontColor *FSC = nullptr;
 	if (Shadow) {
 		FSC = GetFontColor(Shadow);
 		if (!FSC) {
@@ -127,7 +126,7 @@ void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsi
 	}
 
 	// Go through every character
-	for (i = 0; i < Text.length(); i++) {
+	for (int i = 0; i < Text.length(); i++) {
 		c = Text.at(i);
 
 		if (c == '\n') {
@@ -158,7 +157,7 @@ void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string Text, unsi
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Text, int HAlign, int VAlign, int MaxWidth, unsigned long Shadow) {
+void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign, int MaxWidth, unsigned long Shadow) {
 	std::string TextLine = Text;
 	int lineStartPos = 0;
 	int lineEndPos = 0;
@@ -183,16 +182,16 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
 
 		// See if it's too wide to fit within the maxWidth
 		if (MaxWidth > 0 && lineWidth > MaxWidth) {
-			// Find the last space that makes the line within the maxwidth
+			// Find the last space that makes the line within the max width
 			do {
-				// Find last space 
+				// Find last space
 				lastSpacePos = Text.rfind(' ', lineEndPos - 1);
-				// if there was no space encountered before hitting beginning, then jsut leave the too long line as is and let it exceed the max width
+				// if there was no space encountered before hitting beginning, then just leave the too long line as is and let it exceed the max width
 				if (lastSpacePos == std::string::npos || lastSpacePos <= lineStartPos) {
 					lineEndPos = Text.size();
 					break;
 				}
-				// Update the new end pos
+				// Update the new end position
 				lineEndPos = lastSpacePos;
 				// Get the new, shorter line
 				TextLine = Text.substr(lineStartPos, lineEndPos - lineStartPos);
@@ -200,7 +199,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
 				lineWidth = CalculateWidth(TextLine);
 			} while (lineWidth > MaxWidth);
 
-			// Update the new start pos for next line
+			// Update the new start position for next line
 			lineStartPos = lineEndPos + 1;
 			// Make sure it's not starting on a space
 			while (lineStartPos < Text.size() && Text.at(lineStartPos) == ' ') {
@@ -211,7 +210,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
 			lineStartPos = lineEndPos == std::string::npos ? Text.size() : (lineEndPos + 1);
 		}
 
-		// If the line is scrolled above the bitmap top, then don't try to draw anyhting
+		// If the line is scrolled above the bitmap top, then don't try to draw anything
 		if ((yLine + m_FontHeight) >= 0) {
 			switch (HAlign) {
 				// Left HAlignment: Where X is the starting point of the text
@@ -219,7 +218,7 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
 					Draw(Bitmap, X, yLine, TextLine, Shadow);
 					break;
 
-					// Centre HAlignment: Where X is the centre point of the text
+					// Center HAlignment: Where X is the center point of the text
 				case Centre:
 					Draw(Bitmap, X - lineWidth / 2, yLine, TextLine, Shadow);
 					break;
@@ -227,6 +226,8 @@ void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string Tex
 					// Right HAlignment: Where X is the end point of the text
 				case Right:
 					Draw(Bitmap, X - lineWidth, yLine, TextLine, Shadow);
+					break;
+				default:
 					break;
 			}
 		}
@@ -255,14 +256,13 @@ void GUIFont::SetColor(unsigned long Color) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIFont::CalculateWidth(const std::string Text) {
+int GUIFont::CalculateWidth(const std::string &Text) {
 	unsigned char c;
-	int i;
 	int Width = 0;
 	int WidestLine = 0;
 
 	// Go through every character
-	for (i = 0; i < Text.length(); i++) {
+	for (int i = 0; i < Text.length(); i++) {
 		c = Text.at(i);
 		// Reset line counting if newline encountered
 		if (c == '\n') {
@@ -289,27 +289,25 @@ int GUIFont::CalculateWidth(const std::string Text) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int GUIFont::CalculateWidth(const char Character) {
-	unsigned char c = Character;
-	if (c >= 32 && c < m_CharIndexCap) {
-		return m_Characters[c].m_Width + m_Kerning;
+	if (Character >= 32 && Character < m_CharIndexCap) {
+		return m_Characters[Character].m_Width + m_Kerning;
 	}
 	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIFont::CalculateHeight(const std::string Text, int MaxWidth) {
+int GUIFont::CalculateHeight(const std::string &Text, int MaxWidth) {
 	if (Text.empty()) {
 		return 0;
 	}
 	unsigned char c;
-	int i;
 	int Width = 0;
 	int Height = m_FontHeight;
 	int lastSpacePos = 0;
 
 	// Go through every character
-	for (i = 0; i < Text.length(); i++) {
+	for (int i = 0; i < Text.length(); i++) {
 		c = Text.at(i);
 
 		// Add the new line's height if newline encountered
@@ -325,7 +323,7 @@ int GUIFont::CalculateHeight(const std::string Text, int MaxWidth) {
 
 		Width += m_Characters[c].m_Width + m_Kerning;
 		if (MaxWidth > 0 && Width > MaxWidth) {
-			// Rewind to the last space, and do linebreak, but only if we've passed a space since last wrap
+			// Rewind to the last space, and do line break, but only if we've passed a space since last wrap
 			if (lastSpacePos > 0) {
 				i = lastSpacePos;
 				lastSpacePos = 0;
@@ -343,7 +341,7 @@ int GUIFont::CalculateHeight(const std::string Text, int MaxWidth) {
 
 void GUIFont::CacheColor(unsigned long Color) {
 	// Make sure we haven't already cached this color and it isn't a 0 color
-	if (GetFontColor(Color) != 0 || !Color) {
+	if (GetFontColor(Color) != nullptr || !Color) {
 		return;
 	}
 
@@ -358,7 +356,7 @@ void GUIFont::CacheColor(unsigned long Color) {
 	}
 
 	// Copy the bitmap
-	m_Font->Draw(FC.m_Bitmap, 0, 0, 0);
+	m_Font->Draw(FC.m_Bitmap, 0, 0, nullptr);
 
 	// Set the color key to be the same color as the Top-Right hand corner pixel
 	unsigned long BackG = FC.m_Bitmap->GetPixel(FC.m_Bitmap->GetWidth() - 1, 0);
@@ -377,9 +375,9 @@ void GUIFont::CacheColor(unsigned long Color) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIFont::FontColor *GUIFont::GetFontColor(unsigned long Color) {
+GUIFont::FontColor * GUIFont::GetFontColor(unsigned long Color) {
 	std::vector<FontColor>::iterator it;
-	FontColor *F = 0;
+	FontColor *F = nullptr;
 	for (it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {
 		F = &(*it);
 
@@ -389,24 +387,24 @@ GUIFont::FontColor *GUIFont::GetFontColor(unsigned long Color) {
 		}
 	}
 	// Not found
-	return 0;
+	return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIFont::GetFontHeight() {
+int GUIFont::GetFontHeight() const {
 	return m_FontHeight;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUIFont::GetName() {
+std::string GUIFont::GetName() const {
 	return m_Name;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIFont::GetKerning() {
+int GUIFont::GetKerning() const {
 	return m_Kerning;
 }
 
@@ -416,21 +414,18 @@ void GUIFont::Destroy() {
 	if (m_Font) {
 		m_Font->Destroy();
 		delete m_Font;
-		m_Font = 0;
+		m_Font = nullptr;
 	}
 
-	// Go through the color cache and destory the bitmaps
+	// Go through the color cache and destroy the bitmaps
 	std::vector<FontColor>::iterator it;
 	FontColor *FC = 0;
 	for (it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {
 		FC = &(*it);
-		if (FC) {
-			if (FC->m_Bitmap) {
-				FC->m_Bitmap->Destroy();
-				delete FC->m_Bitmap;
-			}
+		if (FC && FC->m_Bitmap) {
+			FC->m_Bitmap->Destroy();
+			delete FC->m_Bitmap;
 		}
 	}
-
 	m_ColorCache.clear();
 }

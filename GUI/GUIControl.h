@@ -64,7 +64,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position, Size
 
-    virtual void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1);
+    virtual void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ public:
 // Description:     Sets the control's tooltip string.
 // Arguments:       The new ToolTip for this.
 
-    void SetToolTip(std::string tip) { m_Properties.SetValue("ToolTip", tip); }
+    void SetToolTip(const std::string &tip) { m_Properties.SetValue("ToolTip", tip); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ public:
 // Description:     Returns a string representing the control's ID
 // Arguments:       None.
 
-    std::string GetID();
+    std::string GetID() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ public:
 // Description:     Gets the children lst
 // Arguments:       None.
 
-    std::vector<GUIControl *> *GetChildren();
+    std::vector<GUIControl *> * GetChildren();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +273,7 @@ public:
 // Description:     Gets the parent of this control.
 // Arguments:       None.
 
-    GUIControl *GetParent();
+    GUIControl * GetParent();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -282,7 +282,7 @@ public:
 // Description:     Gets the control properties.
 // Arguments:       None.
 
-    GUIProperties *GetProperties();
+    GUIProperties * GetProperties();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -5,9 +5,9 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "CHECKBOX";
-	m_Image = 0;
+	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Check = Unchecked;
 	m_Mouseover = false;
@@ -15,7 +15,7 @@ GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUICheckbox::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUICheckbox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -108,7 +108,7 @@ void GUICheckbox::BuildBitmap() {
 	m_FontColor = m_Skin->ConvertColor(m_FontColor, m_Image->GetColorDepth());
 	m_Font->CacheColor(m_FontColor);
 
-	// Set the colorkey
+	// Set the color key
 	m_Skin->GetValue("Checkbox", "ColorKeyIndex", &ColorIndex);
 	ColorIndex = m_Skin->ConvertColor(ColorIndex, m_Image->GetColorDepth());
 	m_Image->SetColorKey(ColorIndex);
@@ -127,7 +127,7 @@ void GUICheckbox::BuildBitmap() {
 	m_Skin->GetValue("Checkbox", "Check", Values, 4);
 	SetRect(&m_ImageRects[2], Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 
-	// Greyed check
+	// Grayed check
 	m_Skin->GetValue("Checkbox", "GreyCheck", Values, 4);
 	SetRect(&m_ImageRects[3], Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 }
@@ -143,7 +143,7 @@ void GUICheckbox::Draw(GUIScreen *Screen) {
 	Screen->GetBitmap()->SetClipRect(GetRect());
 
 	// Calculate the y position of the base
-	// Make it centred vertically
+	// Make it centered vertically
 	int YPos = m_Height / 2 - (m_ImageRects[0].bottom - m_ImageRects[0].top) / 2 + m_Y;
 
 	// Draw the base
@@ -155,14 +155,13 @@ void GUICheckbox::Draw(GUIScreen *Screen) {
 
 	// Draw the check
 	switch (m_Check) {
-		// Normal check
 		case Checked:
 			m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[2]);
 			break;
-
-			// Greyed check
 		case Greycheck:
 			m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[3]);
+			break;
+		default:
 			break;
 	}
 
@@ -176,7 +175,7 @@ void GUICheckbox::Draw(GUIScreen *Screen) {
 		m_Font->SetKerning(m_FontKerning);
 		m_Font->Draw(Screen->GetBitmap(), m_X + (m_ImageRects[0].right - m_ImageRects[0].left) + 2, m_Y + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
 	}
-	Screen->GetBitmap()->SetClipRect(0);
+	Screen->GetBitmap()->SetClipRect(nullptr);
 
 	GUIPanel::Draw(Screen);
 }
@@ -225,7 +224,7 @@ void GUICheckbox::OnMouseLeave(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUICheckbox::GetPanel() {
+GUIPanel * GUICheckbox::GetPanel() {
 	return this;
 }
 
@@ -268,13 +267,13 @@ void GUICheckbox::StoreProperties() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUICheckbox::SetText(const std::string Text) {
+void GUICheckbox::SetText(const std::string &Text) {
 	m_Text = Text;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUICheckbox::GetText() {
+std::string GUICheckbox::GetText() const {
 	return m_Text;
 }
 
@@ -286,7 +285,7 @@ void GUICheckbox::SetCheck(int Check) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUICheckbox::GetCheck() {
+int GUICheckbox::GetCheck() const {
 	return m_Check;
 }
 

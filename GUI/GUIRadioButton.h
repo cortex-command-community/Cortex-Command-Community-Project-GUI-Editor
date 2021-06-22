@@ -56,7 +56,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ public:
 // Description:     Gets the check state.
 // Arguments:       None.
 
-    bool GetCheck();
+    bool GetCheck() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +201,7 @@ public:
 // Description:     Sets the text.
 // Arguments:       Text.
 
-    void SetText(const std::string Text);
+    void SetText(const std::string &Text);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +210,7 @@ public:
 // Description:     Gets the text.
 // Arguments:       None.
 
-    std::string GetText();
+    std::string GetText() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

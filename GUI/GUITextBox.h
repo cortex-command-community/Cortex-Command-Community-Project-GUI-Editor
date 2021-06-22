@@ -62,7 +62,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ public:
 // Description:     Called when the control has been destroyed.
 // Arguments:       None.
 
-    void Destroy() override; 
+    void Destroy() override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ public:
 // Description:     Returns a string representing the control's ID
 // Arguments:       None.
 
-    static std::string GetControlID()    { return "TEXTBOX"; };
+    static std::string GetControlID() { return "TEXTBOX"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

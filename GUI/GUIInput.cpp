@@ -47,25 +47,25 @@ void GUIInput::Destroy() {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIInput::GetKeyboard(unsigned char *Buffer) {
+void GUIInput::GetKeyboard(unsigned char *Buffer) const {
 	if (Buffer) { memcpy(Buffer, m_KeyboardBuffer, sizeof(unsigned char) * KEYBOARD_BUFFER_SIZE); }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char GUIInput::GetAsciiState(unsigned char ascii) {
+unsigned char GUIInput::GetAsciiState(unsigned char ascii) const {
 	return m_KeyboardBuffer[ascii];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char GUIInput::GetScanCodeState(unsigned char scancode) {
+unsigned char GUIInput::GetScanCodeState(unsigned char scancode) const {
 	return m_ScanCodeState[scancode];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIInput::GetMouseButtons(int *Buttons, int *States) {
+void GUIInput::GetMouseButtons(int *Buttons, int *States) const {
 	if (!m_OverrideInput) {
 		if (Buttons) { memcpy(Buttons, m_MouseButtonsEvents, sizeof(int) * 3); }
 		if (States) { memcpy(States, m_MouseButtonsStates, sizeof(int) * 3); }
@@ -139,6 +139,6 @@ void GUIInput::Update() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIInput::GetModifier() {
+int GUIInput::GetModifier() const {
 	return m_Modifier;
 }

@@ -5,10 +5,10 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUISlider::GUISlider(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUISlider::GUISlider(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "SLIDER";
-	m_DrawBitmap = 0;
-	m_KnobImage = 0;
+	m_DrawBitmap = nullptr;
+	m_KnobImage = nullptr;
 	m_ControlManager = ControlManager;
 	m_Orientation = Horizontal;
 	m_TickDirection = BottomRight;
@@ -23,7 +23,7 @@ GUISlider::GUISlider(GUIManager *Manager, GUIControlManager *ControlManager) : G
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUISlider::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUISlider::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -102,14 +102,14 @@ void GUISlider::Destroy() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Destroy the knob image bitmap
 	if (m_KnobImage) {
 		m_KnobImage->Destroy();
 		delete m_KnobImage;
-		m_KnobImage = 0;
+		m_KnobImage = nullptr;
 	}
 }
 
@@ -129,12 +129,12 @@ void GUISlider::BuildBitmap() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 	if (m_KnobImage) {
 		m_KnobImage->Destroy();
 		delete m_KnobImage;
-		m_KnobImage = 0;
+		m_KnobImage = nullptr;
 	}
 
 	std::string Section;
@@ -184,7 +184,7 @@ void GUISlider::BuildBitmap() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUISlider::BuildLine(const std::string Section, GUIBitmap *SrcImage) {
+void GUISlider::BuildLine(const std::string &Section, GUIBitmap *SrcImage) {
 	int Values[4];
 	GUIRect Rect;
 
@@ -217,7 +217,8 @@ void GUISlider::BuildLine(const std::string Section, GUIBitmap *SrcImage) {
 	m_EndThickness = m_Orientation == Horizontal ? Values[2] : Values[3];
 
 	// Draw the end
-	int X = 0, Y = 0;
+	int X = 0;
+	int Y = 0;
 	m_Skin->GetValue(Section, "End", Values, 4);
 	SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 	if (m_Orientation == Horizontal) {
@@ -241,7 +242,7 @@ void GUISlider::Draw(GUIScreen *Screen) {
 	}
 
 	// Draw the base
-	Screen->DrawBitmap(m_DrawBitmap, m_X + X, m_Y + Y, 0);
+	Screen->DrawBitmap(m_DrawBitmap, m_X + X, m_Y + Y, nullptr);
 
 	// Draw the indicator
 	if (!m_KnobImage) {
@@ -255,9 +256,9 @@ void GUISlider::Draw(GUIScreen *Screen) {
 		Half = m_DrawBitmap->GetWidth() / 2;
 	}
 	if (m_Orientation == Horizontal) {
-		m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + m_KnobPosition, m_Y + Y + Half - m_KnobImage->GetHeight() / 2, 0);
+		m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + m_KnobPosition, m_Y + Y + Half - m_KnobImage->GetHeight() / 2, nullptr);
 	} else {
-		m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + X + Half - m_KnobImage->GetWidth() / 2, m_Y + m_KnobPosition, 0);
+		m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + X + Half - m_KnobImage->GetWidth() / 2, m_Y + m_KnobPosition, nullptr);
 	}
 	GUIPanel::Draw(Screen);
 }
@@ -392,7 +393,7 @@ void GUISlider::OnMouseWheelChange(int x, int y, int modifier, int mouseWheelCha
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUISlider::GetPanel() {
+GUIPanel * GUISlider::GetPanel() {
 	return this;
 }
 
@@ -447,7 +448,7 @@ void GUISlider::SetOrientation(int Orientation) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUISlider::GetOrientation() {
+int GUISlider::GetOrientation() const {
 	return m_Orientation;
 }
 
@@ -461,7 +462,7 @@ void GUISlider::SetTickDirection(int TickDir) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUISlider::GetTickDirection() {
+int GUISlider::GetTickDirection() const {
 	return m_TickDirection;
 }
 
@@ -479,7 +480,7 @@ void GUISlider::SetMinimum(int Minimum) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUISlider::GetMinimum() {
+int GUISlider::GetMinimum() const {
 	return m_Minimum;
 }
 
@@ -497,7 +498,7 @@ void GUISlider::SetMaximum(int Maximum) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUISlider::GetMaximum() {
+int GUISlider::GetMaximum() const {
 	return m_Maximum;
 }
 
@@ -516,7 +517,7 @@ void GUISlider::SetValue(int Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUISlider::GetValue() {
+int GUISlider::GetValue() const {
 	return m_Value;
 }
 

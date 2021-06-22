@@ -50,7 +50,7 @@ public:
         MODI_SHIFT = 0x01,
         MODI_CTRL = 0x02,
         MODI_ALT = 0x04,
-		MODI_COMMAND = 0x08		
+		MODI_COMMAND = 0x08
     } MouseModifiers;
 
     // Z Change
@@ -67,7 +67,7 @@ public:
 //                  memory.
 // Arguments:       Manager.
 
-    GUIPanel(GUIManager *Manager);
+    explicit GUIPanel(GUIManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ public:
 // Description:     Checks if the panel is valid
 // Arguments:       None.
 
-    bool IsValid();
+    bool IsValid() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -386,7 +386,7 @@ public:
 // Description:     Gets the visibility of the panel.
 // Arguments:       None.
 
-    bool _GetVisible();
+    bool _GetVisible() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ public:
 // Description:     Gets the enabled state of the panel.
 // Arguments:       None.
 
-    bool _GetEnabled();
+    bool _GetEnabled() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ public:
 // Description:     Gets the width of the panel.
 // Arguments:       None.
 
-    int GetWidth();
+    int GetWidth() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ public:
 // Description:     Gets the height of the panel.
 // Arguments:       None.
 
-    int    GetHeight();
+    int    GetHeight() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -468,7 +468,7 @@ public:
 // Description:     Gets the rectangle of the panel.
 // Arguments:       None.
 
-    GUIRect *GetRect();
+    GUIRect * GetRect();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -477,7 +477,7 @@ public:
 // Description:     Gets the rectangle of the panel.
 // Arguments:       X, Y, Width, Height
 
-    void GetRect(int *X, int *Y, int *Width, int *Height);
+    void GetRect(int *X, int *Y, int *Width, int *Height) const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -486,7 +486,7 @@ public:
 // Description:     Gets the parent of this panel.
 // Arguments:       None.
 
-    GUIPanel *GetParentPanel();
+    GUIPanel * GetParentPanel();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -495,7 +495,7 @@ public:
 // Description:     Gets the panel's ID.
 // Arguments:       None.
 
-    int GetPanelID();
+    int GetPanelID() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -513,7 +513,7 @@ public:
 // Description:     Gets the panel's captured state.
 // Arguments:       None.
 
-    bool IsCaptured();
+    bool IsCaptured() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -522,7 +522,7 @@ public:
 // Description:     Gets the panel's enabled state.
 // Arguments:       None.
 
-    bool IsEnabled();
+    bool IsEnabled() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -559,7 +559,7 @@ public:
 // Description:     Gets the focus value of the panel.
 // Arguments:       None.
 
-    bool HasFocus();
+    bool HasFocus() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -577,7 +577,7 @@ public:
 // Description:     Gets the Z index of the panel.
 // Arguments:       None.
 
-    int GetZPos();
+    int GetZPos() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -646,7 +646,7 @@ protected:
 // Description:     Writes a single value to string.
 // Arguments:       Value name, Value.
 
-    std::string WriteValue(const std::string Name, int Value);
+    std::string WriteValue(const std::string &Name, int Value);
 
     
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -655,7 +655,7 @@ protected:
 // Description:     Writes a single value to string.
 // Arguments:       Value name, Value.
 
-    std::string WriteValue(const std::string Name, bool Value);
+    std::string WriteValue(const std::string &Name, bool Value);
 
     
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -670,8 +670,10 @@ protected:
 // Members
 
     // These coordinates are absolute coordinates
-    int                        m_X, m_Y;
-    int                        m_Width, m_Height;
+	int                        m_X;
+	int m_Y;
+	int                        m_Width;
+	int m_Height;
 
     bool                    m_Visible;
     bool                    m_Enabled;
@@ -679,12 +681,6 @@ protected:
     bool                    m_Captured;
     GUIManager                *m_Manager;
     GUIPanel                *m_Parent;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Protected member variable and method declarations
-
-protected:
 
     GUIFont                    *m_Font;
     unsigned long                    m_FontColor;

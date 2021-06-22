@@ -5,10 +5,10 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUILabel::GUILabel(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUILabel::GUILabel(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "LABEL";
 	m_ControlManager = ControlManager;
-	m_Font = 0;
+	m_Font = nullptr;
 	m_FontColor = 0;
 	m_Text = "";
 	m_HAlignment = GUIFont::Left;
@@ -21,7 +21,7 @@ GUILabel::GUILabel(GUIManager *Manager, GUIControlManager *ControlManager) : GUI
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUILabel::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUILabel::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -215,7 +215,7 @@ void GUILabel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUILabel::GetPanel() {
+GUIPanel * GUILabel::GetPanel() {
 	return this;
 }
 

@@ -41,7 +41,7 @@ public:
 //                  system memory.
 // Arguments:       Name of section.
 
-    GUIProperties(const std::string Name);
+    explicit GUIProperties(const std::string &Name);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ public:
 // Description:     Adds a new variable to the properties
 // Arguments:       Variable, Value
 
-    void AddVariable(const std::string Variable, const std::string Value);
+    void AddVariable(const std::string &Variable, const std::string &Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ public:
 // Description:     Adds a new variable to the properties
 // Arguments:       Variable, Value
 
-    void AddVariable(const std::string Variable, char *Value);
+    void AddVariable(const std::string &Variable, char *Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ public:
 // Description:     Adds a new variable to the properties
 // Arguments:       Variable, Value
 
-    void AddVariable(const std::string Variable, int Value);
+    void AddVariable(const std::string &Variable, int Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ public:
 // Description:     Adds a new variable to the properties
 // Arguments:       Variable, Value
 
-    void AddVariable(const std::string Variable, bool Value);
+    void AddVariable(const std::string &Variable, bool Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,7 @@ public:
 // Arguments:       Variable, Value
 // Returns:         True if the variable was set. Otherwise false.
 
-    bool SetValue(const std::string Variable, const std::string Value);
+    bool SetValue(const std::string &Variable, const std::string &Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ public:
 // Arguments:       Variable, Value
 // Returns:         True if the variable was set. Otherwise false.
 
-    bool SetValue(const std::string Variable, int Value);
+    bool SetValue(const std::string &Variable, int Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ public:
 // Description:     Gets a string value
 // Arguments:       Variable, String pointer
 
-    bool GetValue(const std::string Variable, std::string *Value);
+    bool GetValue(const std::string &Variable, std::string *Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -152,9 +152,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets a string array of values
 // Arguments:       Variable, String array, max size of array
-// Returns:         Numbe of elements read
+// Returns:         Number of elements read
 
-    int GetValue(const std::string Variable, std::string *Array, int MaxArraySize);
+    int GetValue(const std::string &Variable, std::string *Array, int MaxArraySize);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ public:
 // Arguments:       Variable, Integer array, max size of array
 // Returns:         Number of elements read
 
-    int GetValue(const std::string Variable, int *Array, int MaxArraySize);
+    int GetValue(const std::string &Variable, int *Array, int MaxArraySize);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ public:
 // Description:     Gets a single interger
 // Arguments:       Variable, Integer pointer
 
-    bool GetValue(const std::string Variable, int *Value);
+    bool GetValue(const std::string &Variable, int *Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ public:
 // Description:     Gets a single unsigned interger
 // Arguments:       Variable, Unsigned Integer pointer
 
-    bool GetValue(const std::string Variable, unsigned long *Value);
+    bool GetValue(const std::string &Variable, unsigned long *Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ public:
 // Description:     Gets a boolean value
 // Arguments:       Variable, Boolean pointer
 
-    bool GetValue(const std::string Variable, bool *Value);
+    bool GetValue(const std::string &Variable, bool *Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the property name
 
-    std::string GetName();
+    std::string GetName() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the variable count in the properties
 
-    int GetCount();
+    int GetCount() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Sets a variable based on index
 
-    bool SetVariable(int Index, std::string Name, std::string Value);
+    bool SetVariable(int Index, const std::string &Name, const std::string &Value);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

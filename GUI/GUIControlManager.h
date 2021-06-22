@@ -73,7 +73,7 @@ public:
 // Description:     Creates the data for the control manager
 // Arguments:       Screen and Input Interfaces, Skin directory
 
-    bool Create(GUIScreen *Screen, GUIInput *Input, const std::string SkinDir, const std::string SkinFilename = "skin.ini");
+    bool Create(GUIScreen *Screen, GUIInput *Input, const std::string &SkinDir, const std::string &SkinFilename = "skin.ini");
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ public:
 // Description:     Changes the skin of the controls.
 // Arguments:       Skin directory.
 
-    void ChangeSkin(const std::string SkinDir, const std::string SkinFilename = "skin.ini");
+    void ChangeSkin(const std::string &SkinDir, const std::string &SkinFilename = "skin.ini");
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ public:
 // Method:          Draw
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Draws the GUI to the back buffer.
-// Arguments:       The GUIScreen to draw to, overriding the one passed in on constuction
+// Arguments:       The GUIScreen to draw to, overriding the one passed in on construction
 
     void Draw(GUIScreen *pScreen);
 	
@@ -177,7 +177,7 @@ public:
 // Arguments:       Name.
 // Returns:         The manager, ownership is NOT transferred!
 
-    GUIManager *GetManager() { return m_GUIManager; }
+    GUIManager * GetManager() { return m_GUIManager; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -187,9 +187,7 @@ public:
 // Arguments:       Name, Type, Position, Size, Parent.
 // Returns:         GUIControl class created. 0 if not created.
 
-    GUIControl *AddControl(const std::string Name, const std::string Type, 
-                           GUIControl *Parent, int X, int Y, 
-                           int Width, int Height);
+    GUIControl * AddControl(const std::string &Name, const std::string &Type, GUIControl *Parent, int X, int Y, int Width, int Height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +197,7 @@ public:
 // Arguments:       Properties.
 // Returns:         GUIControl class created. 0 if not created.
 
-    GUIControl *AddControl(GUIProperties *Property);
+    GUIControl * AddControl(GUIProperties *Property);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +207,7 @@ public:
 // Arguments:       Name.
 // Returns:         GUIControl class, or 0 if not found.
 
-    GUIControl *GetControl(const std::string& Name);
+    GUIControl * GetControl(const std::string &Name);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +217,7 @@ public:
 // Arguments:       None.
 // Returns:         vector<GUIControl *> Pointer.
 
-    std::vector<GUIControl *> *GetControlList();
+    std::vector<GUIControl *> * GetControlList();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +230,7 @@ public:
 //                  goes as far as it can.
 // Returns:			GUIControl. NULL if no control under the point
 
-    GUIControl *GetControlUnderPoint(int pointX, int pointY, GUIControl *pParent = 0, int depth = -1);
+    GUIControl * GetControlUnderPoint(int pointX, int pointY, GUIControl *pParent = nullptr, int depth = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +240,7 @@ public:
 // Arguments:       Name, RemoveFromParent.
 // Returns:         None.
 
-    void RemoveControl(const std::string Name, bool RemoveFromParent);
+    void RemoveControl(const std::string &Name, bool RemoveFromParent);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -271,9 +269,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Saves the layout to a file.
 // Arguments:       Filename.
-// Returns:         True if sucessful.
+// Returns:         True if successful.
 
-    bool Save(const std::string Filename);
+    bool Save(const std::string &Filename);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -281,7 +279,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Saves the layout to a Writer class.
 // Arguments:       Writer class.
-// Returns:         True if sucessful.
+// Returns:         True if successful.
 
     bool Save(GUIWriter *W);
 
@@ -293,7 +291,7 @@ public:
 // Arguments:       Filename.
 //                  Whether to NOT clear out the manager, but just add the controls loaded
 //                  to the existing layout.
-// Returns:         True if sucessful.
+// Returns:         True if successful.
 
     bool Load(const std::string &Filename, bool keepOld = false);
 

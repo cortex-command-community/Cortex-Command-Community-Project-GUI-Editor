@@ -5,12 +5,12 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUITab::GUITab(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUITab::GUITab(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "TAB";
-	m_Image = 0;
+	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Selected = false;
-	m_Font = 0;
+	m_Font = nullptr;
 	m_Mouseover = false;
 	m_FontColor = 0;
 	m_Text = "";
@@ -18,7 +18,7 @@ GUITab::GUITab(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPane
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUITab::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUITab::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -215,7 +215,7 @@ void GUITab::OnMouseLeave(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUITab::GetPanel() {
+GUIPanel * GUITab::GetPanel() {
 	return this;
 }
 
@@ -291,19 +291,19 @@ void GUITab::SetCheck(bool Check) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUITab::GetCheck() {
+bool GUITab::GetCheck() const {
 	return m_Selected;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUITab::SetText(const std::string Text) {
+void GUITab::SetText(const std::string &Text) {
 	m_Text = Text;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUITab::GetText() {
+std::string GUITab::GetText() const {
 	return m_Text;
 }
 

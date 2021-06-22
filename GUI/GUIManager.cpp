@@ -27,27 +27,27 @@ GUIManager::GUIManager(GUIInput *input) {
 
 GUIManager::~GUIManager() {
 	delete m_pTimer;
-	m_pTimer = 0;
+	m_pTimer = nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIManager::Clear() {
 	m_PanelList.clear();
-	m_CapturedPanel = 0;
-	m_MouseOverPanel = 0;
-	m_FocusPanel = 0;
+	m_CapturedPanel = nullptr;
+	m_MouseOverPanel = nullptr;
+	m_FocusPanel = nullptr;
 	m_MouseEnabled = true;
 	m_OldMouseX = m_OldMouseY = 0;
 	m_UniqueIDCount = 0;
 
 	m_HoverTrack = false;
-	m_HoverPanel = 0;
+	m_HoverPanel = nullptr;
 
 	// Double click times
-	m_LastMouseDown[0] = -99999.0f;
-	m_LastMouseDown[1] = -99999.0f;
-	m_LastMouseDown[2] = -99999.0f;
+	m_LastMouseDown[0] = -99999.0F;
+	m_LastMouseDown[1] = -99999.0F;
+	m_LastMouseDown[2] = -99999.0F;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,8 +57,8 @@ void GUIManager::AddPanel(GUIPanel *panel) {
 		int Z = 0;
 
 		// Get the last panel in the list
-		if (m_PanelList.size() > 0) {
-			GUIPanel *p = (GUIPanel *)m_PanelList.at(m_PanelList.size() - 1);
+		if (!m_PanelList.empty()) {
+			const GUIPanel *p = m_PanelList.at(m_PanelList.size() - 1);
 			Z = p->GetZPos() + 1;
 		}
 
@@ -77,9 +77,12 @@ void GUIManager::Update(bool ignoreKeyboardEvents) {
 
 	// Mouse Events
 	int i;
-	int MouseX = 0, MouseY = 0;
-	int DeltaX, DeltaY;
-	int MouseButtons[3], MouseStates[3];
+	int MouseX = 0;
+	int MouseY = 0;
+	int DeltaX;
+	int DeltaY;
+	int MouseButtons[3];
+	int MouseStates[3];
 	int MouseWheelChange = 0;
 	int Released = GUIPanel::MOUSE_NONE;
 	int Pushed = GUIPanel::MOUSE_NONE;
@@ -236,6 +239,8 @@ void GUIManager::Update(bool ignoreKeyboardEvents) {
 				case GUIInput::Repeat:
 					m_FocusPanel->OnKeyPress(i, Mod);
 					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -273,12 +278,12 @@ void GUIManager::CaptureMouse(GUIPanel *Panel) {
 void GUIManager::ReleaseMouse() {
 	if (m_CapturedPanel) { m_CapturedPanel->SetCaptureState(false); }
 
-	m_CapturedPanel = 0;
+	m_CapturedPanel = nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIManager::FindBottomPanel(int X, int Y) {
+GUIPanel * GUIManager::FindBottomPanel(int X, int Y) {
 	std::vector<GUIPanel *>::iterator it;
 
 	for (it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
@@ -291,12 +296,12 @@ GUIPanel *GUIManager::FindBottomPanel(int X, int Y) {
 		}
 	}
 	// No panel found
-	return 0;
+	return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIManager::FindTopPanel(int X, int Y) {
+GUIPanel * GUIManager::FindTopPanel(int X, int Y) {
 	std::vector<GUIPanel *>::reverse_iterator it;
 
 	for (it = m_PanelList.rbegin(); it != m_PanelList.rend(); it++) {
@@ -309,7 +314,7 @@ GUIPanel *GUIManager::FindTopPanel(int X, int Y) {
 		}
 	}
 	// No panel found
-	return 0;
+	return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,7 +325,7 @@ int GUIManager::GetPanelID() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIManager::MouseInRect(GUIRect *Rect, int X, int Y) {
+bool GUIManager::MouseInRect(const GUIRect *Rect, int X, int Y) {
 	if (!Rect) {
 		return false;
 	}
@@ -336,7 +341,7 @@ void GUIManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay) {
 	assert(Pan);
 	m_HoverTrack = Enabled;
 	m_HoverPanel = Pan;
-	if (m_HoverTrack) { m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay / 1000.0f); }
+	if (m_HoverTrack) { m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay / 1000.0F); }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

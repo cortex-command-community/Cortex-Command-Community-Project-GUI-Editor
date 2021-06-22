@@ -66,7 +66,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ public:
 // Description:     Gets the orientation of the slider.
 // Arguments:       None.
 
-    int GetOrientation();
+    int GetOrientation() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -221,13 +221,13 @@ public:
 // Description:     Gets the direction of the ticks.
 // Arguments:       None.
 
-    int GetTickDirection();
+    int GetTickDirection() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetMinimum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the minimun value.
+// Description:     Sets the minimum value.
 // Arguments:       Minimum.
 
     void SetMinimum(int Minimum);
@@ -236,16 +236,16 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMinimum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the minimun value.
+// Description:     Gets the minimum value.
 // Arguments:       None.
 
-    int GetMinimum();
+    int GetMinimum() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          SetMaximum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the maximun value.
+// Description:     Sets the maximum value.
 // Arguments:       Maximum.
 
     void SetMaximum(int Maximum);
@@ -254,10 +254,10 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMaximum
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the maximun value.
+// Description:     Gets the maximum value.
 // Arguments:       None.
 
-    int GetMaximum();
+    int GetMaximum() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ public:
 // Description:     Gets the value.
 // Arguments:       None.
 
-    int GetValue();
+    int GetValue() const;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +324,7 @@ private:
 // Description:     Builds the background line for the slider
 // Arguments:       Section, SrcImage.
 
-    void BuildLine(const std::string Section, GUIBitmap *SrcImage);
+    void BuildLine(const std::string &Section, GUIBitmap *SrcImage);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

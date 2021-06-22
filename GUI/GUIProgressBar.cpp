@@ -5,10 +5,10 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIProgressBar::GUIProgressBar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUIProgressBar::GUIProgressBar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "PROGRESSBAR";
-	m_DrawBitmap = 0;
-	m_IndicatorImage = 0;
+	m_DrawBitmap = nullptr;
+	m_IndicatorImage = nullptr;
 	m_ControlManager = ControlManager;
 	m_Spacing = 0;
 	m_Value = 0;
@@ -18,7 +18,7 @@ GUIProgressBar::GUIProgressBar(GUIManager *Manager, GUIControlManager *ControlMa
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIProgressBar::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIProgressBar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -79,14 +79,14 @@ void GUIProgressBar::Destroy() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 
 	// Destroy the indicator bitmap
 	if (m_IndicatorImage) {
 		m_IndicatorImage->Destroy();
 		delete m_IndicatorImage;
-		m_IndicatorImage = 0;
+		m_IndicatorImage = nullptr;
 	}
 }
 
@@ -106,12 +106,12 @@ void GUIProgressBar::BuildBitmap() {
 	if (m_DrawBitmap) {
 		m_DrawBitmap->Destroy();
 		delete m_DrawBitmap;
-		m_DrawBitmap = 0;
+		m_DrawBitmap = nullptr;
 	}
 	if (m_IndicatorImage) {
 		m_IndicatorImage->Destroy();
 		delete m_IndicatorImage;
-		m_IndicatorImage = 0;
+		m_IndicatorImage = nullptr;
 	}
 
 	// Create a new bitmap.
@@ -162,7 +162,7 @@ void GUIProgressBar::BuildBitmap() {
 
 void GUIProgressBar::Draw(GUIScreen *Screen) {
 	// Draw the base
-	Screen->DrawBitmap(m_DrawBitmap, m_X, m_Y, 0);
+	Screen->DrawBitmap(m_DrawBitmap, m_X, m_Y, nullptr);
 
 	// Draw the indicators
 	if (!m_IndicatorImage) {
@@ -185,11 +185,11 @@ void GUIProgressBar::Draw(GUIScreen *Screen) {
 	int x = m_X + 2;
 	int Limit = (int)ceil(Count);
 	for (int i = 0; i < Limit; i++) {
-		m_IndicatorImage->Draw(Screen->GetBitmap(), x, m_Y + 2, 0);
+		m_IndicatorImage->Draw(Screen->GetBitmap(), x, m_Y + 2, nullptr);
 		x += m_IndicatorImage->GetWidth() + m_Spacing;
 	}
 
-	Screen->GetBitmap()->SetClipRect(0);
+	Screen->GetBitmap()->SetClipRect(nullptr);
 
 	GUIPanel::Draw(Screen);
 }
@@ -213,7 +213,7 @@ void GUIProgressBar::OnMouseMove(int X, int Y, int Buttons, int Modifier) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIProgressBar::GetPanel() {
+GUIPanel * GUIProgressBar::GetPanel() {
 	return this;
 }
 
@@ -266,7 +266,7 @@ void GUIProgressBar::SetValue(int Value) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProgressBar::GetValue() {
+int GUIProgressBar::GetValue() const {
 	return m_Value;
 }
 
@@ -278,7 +278,7 @@ void GUIProgressBar::SetMinimum(int Minimum) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProgressBar::GetMinimum() {
+int GUIProgressBar::GetMinimum() const {
 	return m_Minimum;
 }
 
@@ -290,7 +290,7 @@ void GUIProgressBar::SetMaximum(int Maximum) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GUIProgressBar::GetMaximum() {
+int GUIProgressBar::GetMaximum() const {
 	return m_Maximum;
 }
 

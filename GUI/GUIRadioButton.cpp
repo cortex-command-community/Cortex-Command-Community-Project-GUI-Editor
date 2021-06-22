@@ -5,9 +5,9 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIRadioButton::GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIPanel(Manager), GUIControl() {
+GUIRadioButton::GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 	m_ControlID = "RADIOBUTTON";
-	m_Image = 0;
+	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Checked = false;
 	m_Font = 0;
@@ -18,7 +18,7 @@ GUIRadioButton::GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlMa
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIRadioButton::Create(const std::string Name, int X, int Y, int Width, int Height) {
+void GUIRadioButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 	GUIControl::Create(Name, X, Y, Width, Height);
 
 	// Minimum size of the control
@@ -167,7 +167,7 @@ void GUIRadioButton::Draw(GUIScreen *Screen) {
 		m_Font->SetKerning(m_FontKerning);
 		m_Font->Draw(Screen->GetBitmap(), m_X + (m_ImageRects[0].right - m_ImageRects[0].left), m_Y + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
 	}
-	Screen->GetBitmap()->SetClipRect(0);
+	Screen->GetBitmap()->SetClipRect(nullptr);
 
 	GUIPanel::Draw(Screen);
 }
@@ -209,7 +209,7 @@ void GUIRadioButton::OnMouseLeave(int X, int Y, int Buttons, int Modifier) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIPanel *GUIRadioButton::GetPanel() {
+GUIPanel * GUIRadioButton::GetPanel() {
 	return this;
 }
 
@@ -287,19 +287,19 @@ void GUIRadioButton::SetCheck(bool Check) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIRadioButton::GetCheck() {
+bool GUIRadioButton::GetCheck() const {
 	return m_Checked;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIRadioButton::SetText(const std::string Text) {
+void GUIRadioButton::SetText(const std::string &Text) {
 	m_Text = Text;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string GUIRadioButton::GetText() {
+std::string GUIRadioButton::GetText() const {
 	return m_Text;
 }
 
