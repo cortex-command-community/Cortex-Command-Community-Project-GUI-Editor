@@ -12,7 +12,7 @@
 // Inclusions of header files
 
 #include "GUI.h"
-#include "Reader.h"
+#include "GUIReader.h"
 
 using namespace RTE;
 
@@ -72,7 +72,7 @@ bool GUISkin::Load(const std::string &directory, const std::string &fileName) {
 
 	m_Directory = directory;
 
-	RTE::Reader skinFile;
+	GUIReader skinFile;
 	if (skinFile.Create((m_Directory + "/" + fileName).c_str()) == -1) {
 		return false;
 	}

@@ -14,8 +14,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // Inclusions of header files
 
-#include "Writer.h"
-#include "Reader.h"
+#include "GUIWriter.h"
+#include "GUIReader.h"
 
 
 namespace RTE
@@ -283,7 +283,7 @@ public:
 // Arguments:       Writer class.
 // Returns:         True if sucessful.
 
-    bool Save(Writer *W);
+    bool Save(GUIWriter *W);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

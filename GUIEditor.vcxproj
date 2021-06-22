@@ -144,6 +144,7 @@
     <ClCompile Include="GUI\GUIProperties.cpp" />
     <ClCompile Include="GUI\GUIPropertyPage.cpp" />
     <ClCompile Include="GUI\GUIRadioButton.cpp" />
+    <ClCompile Include="GUI\GUIReader.cpp" />
     <ClCompile Include="GUI\GUIScrollbar.cpp" />
     <ClCompile Include="GUI\GUIScrollPanel.cpp" />
     <ClCompile Include="GUI\GUISkin.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="GUI\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUITextPanel.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
+    <ClCompile Include="GUI\GUIWriter.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
@@ -191,6 +193,7 @@
     <ClInclude Include="GUI\GUIProperties.h" />
     <ClInclude Include="GUI\GUIPropertyPage.h" />
     <ClInclude Include="GUI\GUIRadioButton.h" />
+    <ClInclude Include="GUI\GUIReader.h" />
     <ClInclude Include="GUI\GUIScrollbar.h" />
     <ClInclude Include="GUI\GUIScrollPanel.h" />
     <ClInclude Include="GUI\GUISkin.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="GUI\GUITextBox.h" />
     <ClInclude Include="GUI\GUITextPanel.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
+    <ClInclude Include="GUI\GUIWriter.h" />
     <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />

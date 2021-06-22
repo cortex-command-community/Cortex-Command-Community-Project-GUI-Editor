@@ -141,6 +141,12 @@
     <ClCompile Include="Editor\EditorSelection.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\GUIReader.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIWriter.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -280,6 +286,12 @@
     </ClInclude>
     <ClInclude Include="Editor\EditorSelection.h">
       <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIReader.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIWriter.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

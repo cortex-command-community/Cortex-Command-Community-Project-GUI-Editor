@@ -482,7 +482,7 @@ void GUIControlManager::SetCursor(int CursorType)
 
 bool GUIControlManager::Save(const std::string Filename)
 {
-    Writer W;
+    GUIWriter W;
     if (W.Create((char *)Filename.c_str()) != 0)
         return false;
 
@@ -499,7 +499,7 @@ bool GUIControlManager::Save(const std::string Filename)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Saves the layout to a Writer class.
 
-bool GUIControlManager::Save(Writer *W)
+bool GUIControlManager::Save(GUIWriter *W)
 {
     assert(W);
 
@@ -525,7 +525,7 @@ bool GUIControlManager::Save(Writer *W)
 // Returns:         True if sucessful.
 
 bool GUIControlManager::Load(const std::string &Filename, bool keepOld) {
-	Reader reader;
+	GUIReader reader;
 	if (reader.Create(Filename.c_str()) != 0) {
 		return false;
 	}

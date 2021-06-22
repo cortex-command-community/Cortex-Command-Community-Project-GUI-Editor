@@ -191,7 +191,7 @@ std::vector<GUIControl *> *GUIControl::GetChildren(void)
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Saves the control properties.
 
-bool GUIControl::Save(Writer *W)
+bool GUIControl::Save(GUIWriter *W)
 {
 	std::string OutString = "";
 	std::string Name;
