@@ -22,6 +22,8 @@ namespace RTE {
 		m_FileName = m_FilePath.substr(slashPos + 1);
 		m_FolderPath = m_FilePath.substr(0, slashPos + 1);
 
+		if (createDir && !std::filesystem::exists(std::filesystem::current_path().generic_string() + m_FolderPath)) { std::filesystem::create_directory(std::filesystem::current_path().generic_string() + m_FolderPath); }
+
 		m_Stream = std::make_unique<std::ofstream>(fileName, append ? (std::ios::out | std::ios::app | std::ios::ate) : (std::ios::out | std::ios::trunc));
 
 		if (!m_Stream->good()) {

@@ -1,17 +1,13 @@
 #include "Reader.h"
-#include "RTEError.h"
 
 namespace RTE {
-
-	const std::string Reader::c_ClassName = "Reader";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void Reader::Clear() {
-		m_Stream = 0;
+		m_Stream = nullptr;
 		m_FilePath.clear();
 		m_CurrentLine = 1;
-		m_StreamStack.clear();
 		m_PreviousIndent = 0;
 		m_IndentDifference = 0;
 		m_ObjectEndings = 0;
@@ -24,66 +20,27 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int Reader::Create(const char *fileName, bool overwrites, bool failOK) {
-		m_FilePath = fileName;
+	int Reader::Create(const std::string &fileName, bool overwrites) {
+		m_FilePath = std::filesystem::path(fileName).generic_string();
 
 		if (m_FilePath.empty()) {
 			return -1;
 		}
-		// Extract just the filename
-		int lastSlashPos = m_FilePath.find_last_of('/');
-		if (lastSlashPos == std::string::npos) { lastSlashPos = m_FilePath.find_last_of('\\'); }
-		m_FileName = m_FilePath.substr(lastSlashPos + 1);
-
-		// Find the first slash so we can get the module name
-		int firstSlashPos = m_FilePath.find_first_of('/');
-		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
-
-		m_Stream = new std::ifstream(fileName);
-		if (!failOK) { RTEAssert(m_Stream->good(), "Failed to open data file \'" + std::string(fileName) + "\'!"); }
+		// Extract the file name and module name from the path
+		m_FileName = m_FilePath.substr(m_FilePath.find_last_of("/\\") + 1);
 
 		m_OverwriteExisting = overwrites;
 
+		m_Stream = std::make_unique<std::ifstream>(fileName);
 		return m_Stream->good() ? 0 : -1;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void Reader::Destroy() {
-		delete m_Stream;
-		// Delete all the streams in the stream stack
-		for (const StreamInfo &streamInfo : m_StreamStack) {
-			delete streamInfo.Stream;
-		}
-		Clear();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void Reader::ReadLine(char *locString, int size) {
-		DiscardEmptySpace();
-
-		char temp;
-		char peek = m_Stream->peek();
-		int i = 0;
-
-		for (i = 0; i < size - 1 && peek != '\n' && peek != '\r' && peek != '\t'; ++i) {
-			temp = m_Stream->get();
-			// Check for line comment "//"
-			if (peek == '/' && m_Stream->peek() == '/') {
-				m_Stream->putback(temp);
-				break;
-			}
-			if (m_Stream->eof()) {
-				EndIncludeFile();
-				break;
-			}
-			if (!m_Stream->good()) { ReportError("Stream failed for some reason"); }
-
-			locString[i] = temp;
-			peek = m_Stream->peek();
-		}
-		locString[i] = '\0';
+	std::string Reader::WholeFileAsString() const {
+		std::stringstream stringStream;
+		stringStream << m_Stream->rdbuf();
+		return stringStream.str();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +50,10 @@ namespace RTE {
 
 		std::string retString;
 		char temp;
-		char peek = m_Stream->peek();
+		char peek = static_cast<char>(m_Stream->peek());
 
 		while (peek != '\n' && peek != '\r' && peek != '\t') {
-			temp = m_Stream->get();
+			temp = static_cast<char>(m_Stream->get());
 
 			// Check for line comment "//"
 			if (peek == '/' && m_Stream->peek() == '/') {
@@ -108,46 +65,9 @@ namespace RTE {
 			if (!m_Stream->good()) { ReportError("Stream failed for some reason"); }
 
 			retString.append(1, temp);
-			peek = m_Stream->peek();
+			peek = static_cast<char>(m_Stream->peek());
 		}
-		return retString;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	std::string Reader::ReadTo(char terminator, bool discardTerminator) {
-		std::string retString;
-		char temp;
-		char peek = m_Stream->peek();
-
-		while (peek != terminator) {
-			temp = m_Stream->get();
-
-			if (m_Stream->eof()) { break; }
-			if (!m_Stream->good()) { ReportError("Stream failed for some reason"); }
-
-			retString.append(1, temp);
-			peek = m_Stream->peek();
-		}
-		// Discard the terminator if instructed to
-		if (discardTerminator && peek == terminator) { m_Stream->get(); }
-		return retString;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool Reader::NextProperty() {
-		if (!DiscardEmptySpace() || m_EndOfStreams) {
-			return false;
-		}
-		// If there are fewer tabs on the last line eaten this time,
-		// that means there are no more properties to read on this object
-		if (m_ObjectEndings < -m_IndentDifference) {
-			m_ObjectEndings++;
-			return false;
-		}
-		m_ObjectEndings = 0;
-		return true;
+		return TrimString(retString);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +80,7 @@ namespace RTE {
 		char peek;
 
 		while (true) {
-			peek = m_Stream->peek();
+			peek = static_cast<char>(m_Stream->peek());
 			if (peek == '=') {
 				m_Stream->ignore(1);
 				break;
@@ -168,7 +88,7 @@ namespace RTE {
 			if (peek == '\n' || peek == '\r' || peek == '\t') {
 				ReportError("Property name wasn't followed by a value");
 			}
-			temp = m_Stream->get();
+			temp = static_cast<char>(m_Stream->get());
 			if (m_Stream->eof()) {
 				EndIncludeFile();
 				break;
@@ -178,7 +98,7 @@ namespace RTE {
 		}
 		// Trim the string of whitespace
 		retString = TrimString(retString);
-		
+
 		// If the property name turns out to be the special IncludeFile,and we're not skipping include files then open that file and read the first property from it instead.
 		if (retString == "IncludeFile") {
 			if (m_SkipIncludes) {
@@ -200,21 +120,47 @@ namespace RTE {
 
 	std::string Reader::ReadPropValue() {
 		std::string fullLine = ReadLine();
-		int begin = fullLine.find_first_of('=');
-		std::string subStr = (begin == std::string::npos) ? fullLine : fullLine.substr(begin + 1);
-		return TrimString(subStr);
+		size_t valuePos = fullLine.find_first_of('=');
+		std::string propValue = (valuePos == std::string::npos) ? fullLine : fullLine.substr(valuePos + 1);
+		return TrimString(propValue);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool Reader::NextProperty() {
+		if (!DiscardEmptySpace() || m_EndOfStreams) {
+			return false;
+		}
+		// If there are fewer tabs on the last line eaten this time, that means there are no more properties to read on this object.
+		if (m_ObjectEndings < -m_IndentDifference) {
+			m_ObjectEndings++;
+			return false;
+		}
+		m_ObjectEndings = 0;
+		return true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	std::string Reader::TrimString(const std::string &stringToTrim) const {
+		if (stringToTrim.empty()) {
+			return "";
+		}
+		size_t start = stringToTrim.find_first_not_of(' ');
+		size_t end = stringToTrim.find_last_not_of(' ');
+
+		return stringToTrim.substr(start, (end - start + 1));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool Reader::DiscardEmptySpace() {
 		char peek;
-		unsigned short indent = 0;
+		int indent = 0;
 		bool discardedLine = false;
-		char report[512];
 
 		while (true) {
-			peek = m_Stream->peek();
+			peek = static_cast<char>(m_Stream->peek());
 
 			// If we have hit the end and don't have any files to resume, then quit and indicate that
 			if (m_Stream->eof()) {
@@ -240,7 +186,7 @@ namespace RTE {
 
 			// Comment line?
 			} else if (m_Stream->peek() == '/') {
-				char temp = m_Stream->get();
+				char temp = static_cast<char>(m_Stream->get());
 				char temp2;
 
 				// Confirm that it's a comment line, if so discard it and continue
@@ -249,7 +195,7 @@ namespace RTE {
 				// Block comment
 				} else if (m_Stream->peek() == '*') {
 					// Find the matching "*/"
-					while (!((temp2 = m_Stream->get()) == '*' && m_Stream->peek() == '/') && !m_Stream->eof()) {
+					while (!((temp2 = static_cast<char>(m_Stream->get())) == '*' && m_Stream->peek() == '/') && !m_Stream->eof()) {
 						// Count the lines within the comment though
 						if (temp2 == '\n') { ++m_CurrentLine; }
 					}
@@ -261,7 +207,7 @@ namespace RTE {
 					m_Stream->putback(temp);
 					break;
 				}
-			} else { 
+			} else {
 				break;
 			}
 		}
@@ -278,44 +224,33 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string Reader::TrimString(std::string &stringToTrim) {
-		if (stringToTrim.empty() || stringToTrim.length() == 1) {
-			return "";
+	void Reader::ReportError(const std::string &errorDesc) const {
+		/*
+		if (!m_CanFail) {
+			RTEAbort(errorDesc + "\nError happened in " + m_FilePath + " at line " + std::to_string(m_CurrentLine) + "!");
 		}
-		size_t start = stringToTrim.find_first_not_of(' ');
-		size_t end = stringToTrim.find_last_not_of(' ');
-
-		return stringToTrim.substr(start, (end - start + 1));
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void Reader::ReportError(std::string errorDesc) {
-		char error[1024];
-		std::snprintf(error, sizeof(error), "%s Error happened in %s at line %i!", errorDesc.c_str(), m_FilePath.c_str(), m_CurrentLine);
-		RTEAbort(error);
+		*/
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool Reader::StartIncludeFile() {
+		// Get the file path from the current stream before pushing it into the StreamStack, otherwise we can't open a new stream after releasing it because we can't read.
+		std::string includeFilePath = std::filesystem::path(ReadPropValue()).generic_string();
+
 		// Push the current stream onto the StreamStack for future retrieval when the new include file has run out of data.
-		m_StreamStack.push_back(StreamInfo(m_Stream, m_FilePath, m_CurrentLine, m_PreviousIndent));
+		m_StreamStack.push(StreamInfo(m_Stream.release(), m_FilePath, m_CurrentLine, m_PreviousIndent));
 
-		// Get the file path from the stream
-		m_FilePath = ReadPropValue();
-		m_Stream = new std::ifstream(m_FilePath.c_str());
-		if (m_Stream->fail()) {
+		m_FilePath = includeFilePath;
+		m_Stream = std::make_unique<std::ifstream>(m_FilePath);
+
+		if (m_Stream->fail() || !std::filesystem::exists(includeFilePath)) {
 			// Backpedal and set up to read the next property in the old stream
-			delete m_Stream;
-			m_Stream = m_StreamStack.back().Stream;
-			m_FilePath = m_StreamStack.back().FilePath;
-			m_CurrentLine = m_StreamStack.back().CurrentLine;
-			m_PreviousIndent = m_StreamStack.back().PreviousIndent;
-			m_StreamStack.pop_back();
-
-			ReportError("Failed to open included data file");
-
+			m_Stream.reset(m_StreamStack.top().Stream); // Destructs the current m_Stream and takes back ownership and management of the raw StreamInfo std::ifstream pointer.
+			m_FilePath = m_StreamStack.top().FilePath;
+			m_CurrentLine = m_StreamStack.top().CurrentLine;
+			m_PreviousIndent = m_StreamStack.top().PreviousIndent;
+			m_StreamStack.pop();
 			DiscardEmptySpace();
 			return false;
 		}
@@ -325,14 +260,9 @@ namespace RTE {
 		// This is set to 0, because locally in the included file, all properties start at that count
 		m_PreviousIndent = 0;
 
-		// Extract just the filename
-		int firstSlashPos = m_FilePath.find_first_of('/');
-		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
-		m_FileName = m_FilePath.substr(firstSlashPos + 1);
+		m_FileName = m_FilePath.substr(m_FilePath.find_first_of("/\\") + 1);
 
-		// Discard any fluff in the beginning of the new file
 		DiscardEmptySpace();
-		// indicate success
 		return true;
 	}
 
@@ -343,22 +273,19 @@ namespace RTE {
 			m_EndOfStreams = true;
 			return false;
 		}
+
 		// Replace the current included stream with the parent one
-		delete m_Stream;
-		m_Stream = m_StreamStack.back().Stream;
-		m_FilePath = m_StreamStack.back().FilePath;
-		m_CurrentLine = m_StreamStack.back().CurrentLine;
-		// Observe it's being added, not just replaced. This is to keep proper track when exiting out of a file
-		m_PreviousIndent += m_StreamStack.back().PreviousIndent;
-		m_StreamStack.pop_back();
+		m_Stream.reset(m_StreamStack.top().Stream);
+		m_FilePath = m_StreamStack.top().FilePath;
+		m_CurrentLine = m_StreamStack.top().CurrentLine;
 
-		// Extract just the filename
-		int firstSlashPos = m_FilePath.find_first_of('/');
-		if (firstSlashPos == std::string::npos) { firstSlashPos = m_FilePath.find_first_of('\\'); }
+		// Observe it's being added, not just replaced. This is to keep proper track when exiting out of a file.
+		m_PreviousIndent += m_StreamStack.top().PreviousIndent;
 
-		m_FileName = m_FilePath.substr(firstSlashPos + 1);
+		m_StreamStack.pop();
 
-		// Set up the resumed file for reading again
+		m_FileName = m_FilePath.substr(m_FilePath.find_first_of("/\\") + 1);
+
 		DiscardEmptySpace();
 		return true;
 	}

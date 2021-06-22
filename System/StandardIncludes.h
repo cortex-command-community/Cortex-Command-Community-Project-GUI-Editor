@@ -48,6 +48,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <deque>
+#include <stack>
 #include <iostream>
 #include <sstream>
 #include <fstream>
