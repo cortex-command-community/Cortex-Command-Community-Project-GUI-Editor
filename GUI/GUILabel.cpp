@@ -229,7 +229,7 @@ void GUILabel::Draw(GUIBitmap *Bitmap, bool overwiteFontColorAndKerning) {
                     yPos -= modifyYPos ? (textFullHeight - m_Height) : 0;
                     break;
                 default:
-                    RTEAbort("Invalid GUILabel overflow scroll state " + static_cast<int>(m_OverflowScrollState));
+                    GUIAbort("Invalid GUILabel overflow scroll state " + static_cast<int>(m_OverflowScrollState));
                     break;
             }
         }

@@ -1,6 +1,14 @@
 #ifndef _GUI_
 #define _GUI_
 
+#ifndef GUI_STANDALONE
+#define GUIAssert(expression, description) RTEAssert(expression, description)
+#define GUIAbort(description) RTEAbort(description)
+#else
+#define GUIAssert(expression, description) assert(expression)
+#define GUIAbort(description) abort()
+#endif
+
 #pragma region Rectangle Structure
 /// <summary>
 /// The GUIRect structure defines a rectangle by the coordinates of its upper-left and lower-right corners.

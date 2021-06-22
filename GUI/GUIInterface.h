@@ -121,7 +121,7 @@ namespace RTE {
 
 #pragma region Drawing
 		/// <summary>
-		/// Draw a section of this bitmap onto another bitmap
+		/// Draw a section of this bitmap onto another bitmap.
 		/// </summary>
 		/// <param name="destBitmap">Bitmap to draw onto.</param>
 		/// <param name="destX">Destination X position.</param>
@@ -179,7 +179,7 @@ namespace RTE {
 
 #pragma region GUIScreen
 	/// <summary>
-	/// An interface class inherited by the different types of graphics methods
+	/// An interface class inherited by the different types of graphics methods.
 	/// </summary>
 	class GUIScreen {
 
@@ -209,7 +209,7 @@ namespace RTE {
 
 #pragma region Destruction
 		/// <summary>
-		/// Destructor method used to clean up a GUIScreen object in system memory.
+		/// Destructor method used to clean up a GUIScreen object before deletion from system memory.
 		/// </summary>
 		virtual ~GUIScreen() = default;
 
