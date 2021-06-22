@@ -40,6 +40,10 @@ namespace RTEGUI {
 			m_ZoomBuffer = create_bitmap(m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 			clear_to_color(m_ZoomBuffer, 0);
 		}
+
+		install_mouse();
+		select_mouse_cursor(MOUSE_CURSOR_ARROW);
+		show_mouse(screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,6 +228,7 @@ namespace RTEGUI {
 						m_EditorManager->RemoveFocus();
 					} else if (controlName == "ZoomCheckBox") {
 						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
+						show_mouse(m_ZoomWorkspace ? nullptr : screen);
 						m_EditorManager->RemoveFocus();
 					}
 					break;
@@ -244,6 +249,7 @@ namespace RTEGUI {
 	void EditorApp::DrawEditor() {
 		if (m_WindowResized) {
 			acknowledge_resize();
+			show_mouse(m_ZoomWorkspace ? nullptr : screen);
 			m_WindowResized = false;
 		}
 		clear_to_color(m_BackBuffer, 0);
@@ -254,9 +260,10 @@ namespace RTEGUI {
 		m_EditorManager->GetLeftColumn()->Draw(m_Screen.get());
 		m_EditorManager->GetRightColumn()->Draw(m_Screen.get());
 		m_EditorManager->GetToolBar()->Draw(m_Screen.get());
-		m_EditorManager->GetControlManager()->DrawMouse();
 
 		if (m_ZoomWorkspace) {
+			m_EditorManager->GetControlManager()->DrawMouse();
+
 			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth(), m_EditorManager->GetWorkspaceHeight(), 0, 0, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 		}
