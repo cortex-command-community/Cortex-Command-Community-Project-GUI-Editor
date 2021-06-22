@@ -4,424 +4,395 @@ using namespace RTE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIControlManager::GUIControlManager()
-{
-    m_Screen = 0;
-    m_Input = 0;
-    m_Skin = 0;
-    m_GUIManager = 0;
-    m_ControlList.clear();
-    m_EventQueue.clear();
+GUIControlManager::GUIControlManager() {
+	m_Screen = 0;
+	m_Input = 0;
+	m_Skin = 0;
+	m_GUIManager = 0;
+	m_ControlList.clear();
+	m_EventQueue.clear();
 
-    m_CursorType = Pointer;
+	m_CursorType = Pointer;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GUIControlManager::Create(GUIScreen *Screen, GUIInput *Input, const std::string SkinDir, const std::string SkinFilename)
-{
-    assert(Screen && Input);
-    
-    m_Screen = Screen;
-    m_Input = Input;
+bool GUIControlManager::Create(GUIScreen *Screen, GUIInput *Input, const std::string SkinDir, const std::string SkinFilename) {
+	assert(Screen && Input);
 
-    // Create the skin
-    m_Skin = new GUISkin(Screen);
-    if (!m_Skin)
-        return false;
+	m_Screen = Screen;
+	m_Input = Input;
 
-    // Load the skin
-    if (!m_Skin->Load(SkinDir, SkinFilename)) {
-        delete m_Skin;
-        m_Skin = 0;
-        return false;
-    }
+	// Create the skin
+	m_Skin = new GUISkin(Screen);
+	if (!m_Skin) {
+		return false;
+	}
 
-    // Create the GUI manager
-    m_GUIManager = new GUIManager(Input);
-    if (!m_GUIManager)
-        return false;
+	// Load the skin
+	if (!m_Skin->Load(SkinDir, SkinFilename)) {
+		delete m_Skin;
+		m_Skin = 0;
+		return false;
+	}
 
-    return true;
+	// Create the GUI manager
+	m_GUIManager = new GUIManager(Input);
+	if (!m_GUIManager) {
+		return false;
+	}
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIControlManager::Destroy(void)
-{
-    // Free the skin
-    if (m_Skin) {
-        m_Skin->Destroy();
-        delete m_Skin;
-        m_Skin = 0;
-    }
-    
-    // Destroy the controls & event queue
-    Clear();
+void GUIControlManager::Destroy() {
+	// Free the skin
+	if (m_Skin) {
+		m_Skin->Destroy();
+		delete m_Skin;
+		m_Skin = 0;
+	}
 
-    // Free the GUI manager
-    if (m_GUIManager) {
-        delete m_GUIManager;
-        m_GUIManager = 0;
-    }
+	// Destroy the controls & event queue
+	Clear();
+
+	// Free the GUI manager
+	if (m_GUIManager) {
+		delete m_GUIManager;
+		m_GUIManager = 0;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIControlManager::Clear(void)
-{
+void GUIControlManager::Clear() {
 	std::vector<GUIControl *>::iterator it;
 
-    // Destroy every control
-    for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-        GUIControl *C = *it;
+	// Destroy every control
+	for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+		GUIControl *C = *it;
 
-        C->Destroy();
-        delete C;
-    }
+		C->Destroy();
+		delete C;
+	}
 
-    m_ControlList.clear();
+	m_ControlList.clear();
 
-    m_GUIManager->Clear();
+	m_GUIManager->Clear();
 
-    // Destroy the event queue
+	// Destroy the event queue
 	std::vector<GUIEvent *>::iterator ite;
-    for(ite = m_EventQueue.begin(); ite != m_EventQueue.end(); ite++) {
-        GUIEvent *E = *ite;
-        if (E)
-            delete E;
-    }
-
-    m_EventQueue.clear();
+	for (ite = m_EventQueue.begin(); ite != m_EventQueue.end(); ite++) {
+		GUIEvent *E = *ite;
+		if (E) { delete E; }
+	}
+	m_EventQueue.clear();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIControlManager::ChangeSkin(const std::string SkinDir, const std::string SkinFilename)
-{
+void GUIControlManager::ChangeSkin(const std::string SkinDir, const std::string SkinFilename) {
 	std::vector<GUIControl *>::iterator it;
 
-    m_Skin->Destroy();
-    m_Skin->Load(SkinDir, SkinFilename);
+	m_Skin->Destroy();
+	m_Skin->Load(SkinDir, SkinFilename);
 
-    // Go through every control and change its skin
-    for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-        GUIControl *C = *it;
+	// Go through every control and change its skin
+	for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+		GUIControl *C = *it;
 
-        C->ChangeSkin(m_Skin);
-    }
+		C->ChangeSkin(m_Skin);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIControl *GUIControlManager::AddControl(const std::string Name, const std::string Type,
-                                          GUIControl *Parent,
-                                          int X, int Y, 
-                                          int Width, int Height)
-{
-    // Skip if we already have a control of this name
-    if (GetControl(Name))
-        return 0;
+GUIControl *GUIControlManager::AddControl(const std::string Name, const std::string Type, GUIControl *Parent, int X, int Y, int Width, int Height) {
+	// Skip if we already have a control of this name
+	if (GetControl(Name)) {
+		return 0;
+	}
 
-    // Create the control
-    GUIControl *Control = GUIControlFactory::CreateControl(m_GUIManager, this, Type);
-    if (!Control)
-        return 0;
+	// Create the control
+	GUIControl *Control = GUIControlFactory::CreateControl(m_GUIManager, this, Type);
+	if (!Control) {
+		return 0;
+	}
 
-    Control->Create(Name, X, Y, Width, Height);
-    Control->ChangeSkin(m_Skin);
+	Control->Create(Name, X, Y, Width, Height);
+	Control->ChangeSkin(m_Skin);
 
-    GUIPanel *Pan = 0;
-    if (Parent) {
-        Pan = Parent->GetPanel();
-        Parent->AddChild(Control);
-    }
-    if (Pan)
-        Pan->AddChild(Control->GetPanel());
-    else
-        m_GUIManager->AddPanel(Control->GetPanel());
+	GUIPanel *Pan = 0;
+	if (Parent) {
+		Pan = Parent->GetPanel();
+		Parent->AddChild(Control);
+	}
+	if (Pan) {
+		Pan->AddChild(Control->GetPanel());
+	} else {
+		m_GUIManager->AddPanel(Control->GetPanel());
+	}
+	// Add the control to the list
+	m_ControlList.push_back(Control);
 
-    // Add the control to the list
-    m_ControlList.push_back(Control);
+	// Ready
+	Control->Activate();
 
-    // Ready
-    Control->Activate();
-
-    return Control;
+	return Control;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIControl *GUIControlManager::AddControl(GUIProperties *Property)
-{
-    assert(Property);
+GUIControl *GUIControlManager::AddControl(GUIProperties *Property) {
+	assert(Property);
 
-    // Get the control type and name
+	// Get the control type and name
 	std::string Type;
-    Property->GetValue("ControlType", &Type);
+	Property->GetValue("ControlType", &Type);
 	std::string Name;
-    Property->GetValue("Name", &Name);
+	Property->GetValue("Name", &Name);
 
-    // Skip if we already have a control of this name
-    if (GetControl(Name))
-        return 0;
+	// Skip if we already have a control of this name
+	if (GetControl(Name)) {
+		return 0;
+	}
+	// Create the control
+	GUIControl *Control = GUIControlFactory::CreateControl(m_GUIManager, this, Type);
+	if (!Control) {
+		return 0;
+	}
 
-    // Create the control
-    GUIControl *Control = GUIControlFactory::CreateControl(m_GUIManager, this, Type);
-    if (!Control)
-        return 0;
+	Control->Create(Property);
+	Control->ChangeSkin(m_Skin);
 
-    Control->Create(Property);
-    Control->ChangeSkin(m_Skin);
-
-    // Get the parent control
+	// Get the parent control
 	std::string Parent;
-    Property->GetValue("Parent", &Parent);
-    
-    GUIControl *Par = GetControl(Parent);
-    GUIPanel *Pan = 0;
-    if (Par && Parent.compare("None") != 0) {
-        Pan = Par->GetPanel();
-        Par->AddChild(Control);
-    }
+	Property->GetValue("Parent", &Parent);
 
-    if (Pan)
-        Pan->AddChild(Control->GetPanel());
-    else
-        m_GUIManager->AddPanel(Control->GetPanel());
+	GUIControl *Par = GetControl(Parent);
+	GUIPanel *Pan = 0;
+	if (Par && Parent.compare("None") != 0) {
+		Pan = Par->GetPanel();
+		Par->AddChild(Control);
+	}
 
-    // Add the control to the list
-    m_ControlList.push_back(Control);
+	if (Pan) {
+		Pan->AddChild(Control->GetPanel());
+	} else {
+		m_GUIManager->AddPanel(Control->GetPanel());
+	}
 
-    // Ready
-    Control->Activate();
+	// Add the control to the list
+	m_ControlList.push_back(Control);
 
-    return Control;
+	// Ready
+	Control->Activate();
+
+	return Control;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIControl *GUIControlManager::GetControl(const std::string& Name)
-{
-    std::vector<GUIControl *>::iterator it;
+GUIControl *GUIControlManager::GetControl(const std::string& Name) {
+	std::vector<GUIControl *>::iterator it;
 
-    for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-        GUIControl *C = *it;
-        if (C->GetName().compare(Name) == 0)
-            return C;
-    }
+	for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+		GUIControl *C = *it;
+		if (C->GetName().compare(Name) == 0) {
+			return C;
+		}
+	}
 
-    // Not found
-    return 0;
+	// Not found
+	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<GUIControl *> *GUIControlManager::GetControlList(void)
-{
-    return &m_ControlList;
+std::vector<GUIControl *> *GUIControlManager::GetControlList() {
+	return &m_ControlList;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *pParent, int depth)
-{
-    // Default to the root object if no parent specified
-    if (!pParent)
-        pParent = m_ControlList.front();
-    if (!pParent)
-        return 0;
+GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *pParent, int depth) {
+	// Default to the root object if no parent specified
+	if (!pParent) { pParent = m_ControlList.front(); }
+	if (!pParent) {
+		return 0;
+	}
 
-    // Clicked on the parent?
-    int X, Y, Width, Height;
-    pParent->GetControlRect(&X, &Y, &Width, &Height);
+	// Clicked on the parent?
+	int X, Y, Width, Height;
+	pParent->GetControlRect(&X, &Y, &Width, &Height);
 
-    if (pointX < X || pointX > X+Width)
-        return NULL;
+	if (pointX < X || pointX > X + Width) {
+		return NULL;
+	}
 
-    if (pointY < Y || pointY > Y+Height)
-        return NULL;
+	if (pointY < Y || pointY > Y + Height) {
+		return NULL;
+	}
 
-    // Check children
+	// Check children
 	std::vector<GUIControl *> *List = pParent->GetChildren();
 	std::vector<GUIControl *>::reverse_iterator it;
 
-    assert(List);
+	assert(List);
 
-    // Control the depth. If negative, it'll go forever
-    if (depth != 0)
-    {
-        for (it = List->rbegin(); it != List->rend(); it++)
-        {
-            // Only check visible controls
-            if ((*it)->GetVisible())
-            {
-                GUIControl *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
-                if (C)
-                    return C;
-            }
-        }
-    }
+	// Control the depth. If negative, it'll go forever
+	if (depth != 0) {
+		for (it = List->rbegin(); it != List->rend(); it++) {
+			// Only check visible controls
+			if ((*it)->GetVisible()) {
+				GUIControl *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
+				if (C) {
+					return C;
+				}
+			}
+		}
+	}
 
-    // If not asked to search for the root object, return the parent if point is on it
-    return pParent == m_ControlList.front() ? 0 : pParent;
+	// If not asked to search for the root object, return the parent if point is on it
+	return pParent == m_ControlList.front() ? 0 : pParent;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GUIControlManager::RemoveControl(const std::string Name, bool RemoveFromParent)
-{
-    // NOTE: We can't simply remove it because some controls need to remove extra panels
-    //         And it's silly to add 'remove' to every control to remove their extra panels
-    //         (IE, Combobox).
-    //         Signals and stuff are also linked in
-    //
-    //         So we just remove the controls from the list and not from memory
-
-
-    std::vector<GUIControl *>::iterator it;
-
-    for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-        GUIControl *C = *it;
-        if (C->GetName().compare(Name) == 0) {
-
-            // Just remove it from the list
-            C->SetVisible(false);
-            m_ControlList.erase(it);
-
-            // Remove all my children
-            C->RemoveChildren();
-
-            // Remove me from my parent
-            if (C->GetParent() && RemoveFromParent)
-                C->GetParent()->RemoveChild(Name);
-
-            break;
-        }
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::Update(bool ignoreKeyboardEvents)
-{
-    // Clear the event queue
-    m_EventQueue.clear();
-
-    // Process the manager
-    m_GUIManager->Update(ignoreKeyboardEvents);
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::Draw(void)
-{
-    m_GUIManager->Draw(m_Screen);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::Draw(GUIScreen *pScreen)
-{
-    m_GUIManager->Draw(pScreen);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::DrawMouse(void)
-{
-    int MouseX, MouseY;
-    m_Input->GetMousePosition(&MouseX, &MouseY);
-
-    switch(m_CursorType) {
-        // Pointer
-        case Pointer:
-            m_Skin->DrawMouse(0, MouseX, MouseY);
-            break;
-
-        // Text
-        case Text:
-            m_Skin->DrawMouse(1, MouseX, MouseY);
-            break;
-
-        // Horizontal Resize
-        case HorSize:
-            m_Skin->DrawMouse(2, MouseX, MouseY);
-            break;
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool GUIControlManager::GetEvent(GUIEvent *Event)
-{
-    if (Event && !m_EventQueue.empty()) {
-
-        // Copy the event
-        *Event = *m_EventQueue.back();
-        
-        // Free the event
-        GUIEvent *ptr = m_EventQueue.at(m_EventQueue.size()-1);
-        if (ptr)
-            delete ptr;
-
-        m_EventQueue.pop_back();
-        return true;
-    }
-
-    // Empty queue OR null Event pointer
-    return false;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::AddEvent(GUIEvent *Event)
-{
-    // Add the event to the queue
-    if (Event)
-        m_EventQueue.push_back(Event);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GUIControlManager::SetCursor(int CursorType)
-{
-    m_CursorType = CursorType;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool GUIControlManager::Save(const std::string Filename)
-{
-    GUIWriter W;
-    if (W.Create((char *)Filename.c_str()) != 0)
-        return false;
-
-    bool Result = Save(&W);
-    
-    W.EndWrite();
-
-    return Result;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool GUIControlManager::Save(GUIWriter *W)
-{
-    assert(W);
-
-    // Go through each control
+void GUIControlManager::RemoveControl(const std::string Name, bool RemoveFromParent) {
+	// NOTE: We can't simply remove it because some controls need to remove extra panels and it's silly to add 'remove' to every control to remove their extra panels (ie. Combobox).
+	// Signals and stuff are also linked in so we just remove the controls from the list and not from memory.
 	std::vector<GUIControl *>::iterator it;
 
-    for(it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-        GUIControl *C = *it;
-        C->Save(W);
-        // Separate controls by one line
-        W->NewLine();
-    }
+	for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+		GUIControl *C = *it;
+		if (C->GetName().compare(Name) == 0) {
 
-    return true;
+			// Just remove it from the list
+			C->SetVisible(false);
+			m_ControlList.erase(it);
+
+			// Remove all my children
+			C->RemoveChildren();
+
+			// Remove me from my parent
+			if (C->GetParent() && RemoveFromParent) { C->GetParent()->RemoveChild(Name); }
+
+			break;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::Update(bool ignoreKeyboardEvents) {
+	// Clear the event queue
+	m_EventQueue.clear();
+
+	// Process the manager
+	m_GUIManager->Update(ignoreKeyboardEvents);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::Draw() {
+	m_GUIManager->Draw(m_Screen);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::Draw(GUIScreen *pScreen) {
+	m_GUIManager->Draw(pScreen);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::DrawMouse() {
+	int MouseX, MouseY;
+	m_Input->GetMousePosition(&MouseX, &MouseY);
+
+	switch (m_CursorType) {
+		// Pointer
+		case Pointer:
+			m_Skin->DrawMouse(0, MouseX, MouseY);
+			break;
+
+			// Text
+		case Text:
+			m_Skin->DrawMouse(1, MouseX, MouseY);
+			break;
+
+			// Horizontal Resize
+		case HorSize:
+			m_Skin->DrawMouse(2, MouseX, MouseY);
+			break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool GUIControlManager::GetEvent(GUIEvent *Event) {
+	if (Event && !m_EventQueue.empty()) {
+
+		// Copy the event
+		*Event = *m_EventQueue.back();
+
+		// Free the event
+		GUIEvent *ptr = m_EventQueue.at(m_EventQueue.size() - 1);
+		if (ptr) { delete ptr; }
+
+		m_EventQueue.pop_back();
+		return true;
+	}
+	// Empty queue OR null Event pointer
+	return false;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::AddEvent(GUIEvent *Event) {
+	// Add the event to the queue
+	if (Event) { m_EventQueue.push_back(Event); }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GUIControlManager::SetCursor(int CursorType) {
+	m_CursorType = CursorType;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool GUIControlManager::Save(const std::string Filename) {
+	GUIWriter W;
+	if (W.Create((char *)Filename.c_str()) != 0) {
+		return false;
+	}
+	bool Result = Save(&W);
+
+	W.EndWrite();
+
+	return Result;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool GUIControlManager::Save(GUIWriter *W) {
+	assert(W);
+
+	// Go through each control
+	std::vector<GUIControl *>::iterator it;
+
+	for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+		GUIControl *C = *it;
+		C->Save(W);
+		// Separate controls by one line
+		W->NewLine();
+	}
+
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,14 +442,14 @@ bool GUIControlManager::Load(const std::string &Filename, bool keepOld) {
 		}
 	}
 
-    // Go through each control item and create it
-    std::vector<GUIProperties *>::iterator it;
-    for(it = ControlList.begin(); it != ControlList.end(); it++) {
-        GUIProperties *Prop = *it;
-        AddControl(Prop);
-        // Free the property class
-        delete Prop;
-    }
+	// Go through each control item and create it
+	std::vector<GUIProperties *>::iterator it;
+	for (it = ControlList.begin(); it != ControlList.end(); it++) {
+		GUIProperties *Prop = *it;
+		AddControl(Prop);
+		// Free the property class
+		delete Prop;
+	}
 
-    return true;
+	return true;
 }
