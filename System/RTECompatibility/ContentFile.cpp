@@ -57,6 +57,6 @@ namespace RTE {
 
 		PALETTE currentPalette;
 		get_palette(currentPalette);
-		return load_bmp(m_DataPath.c_str(), currentPalette);
+		return load_bitmap(m_DataPath.c_str(), currentPalette);
 	}
 }

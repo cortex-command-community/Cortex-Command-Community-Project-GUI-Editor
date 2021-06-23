@@ -69,13 +69,13 @@
       <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;zlibstat.lib;libpng16_static.lib;loadpng.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4098 /ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
       <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <Manifest>
@@ -102,7 +102,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;zlibstat.lib;libpng16_static.lib;loadpng.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -111,7 +111,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalOptions>/ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4098 /ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
       <LargeAddressAware>true</LargeAddressAware>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <FixedBaseAddress>false</FixedBaseAddress>
