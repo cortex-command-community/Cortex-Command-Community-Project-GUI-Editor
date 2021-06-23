@@ -27,8 +27,11 @@ namespace RTEGUI {
 		/// <returns>A reference to the sole instance of this Singleton.</returns>
 		static Type & Instance() {
 			if (!s_Instance) {
-				try { s_Instance = new Type(); }
-				catch (std::bad_alloc &catchResult) { abort(); }
+				try {
+					s_Instance = new Type(); }
+				catch (std::bad_alloc &catchResult) {
+					abort();
+				}
 			}
 			return *s_Instance;
 		}

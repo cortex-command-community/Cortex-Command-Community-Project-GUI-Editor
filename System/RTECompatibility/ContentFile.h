@@ -7,151 +7,136 @@ struct BITMAP;
 
 namespace RTE {
 
-/// <summary>
-/// A representation of a content file that is stored either directly on disk or packaged in another file.
-/// </summary>
-class ContentFile : public Serializable {
-
-public:
-
 	/// <summary>
-	/// Constructor method used to instantiate a ContentFile object in system memory. Create() should be called before using the object.
+	/// A representation of a content file that is stored directly on disk.
 	/// </summary>
-    ContentFile() { Clear(); }
+	class ContentFile : public Serializable {
 
-	/// <summary>
-	/// Constructor method used to instantiate a ContentFile object in system memory, and also do a Create() in the same line. Create() should therefore not be called after using this constructor.
-	/// </summary>
-	/// <param name="filePath">A string defining the path to where the content file itself is located, either within the package file, or directly on the disk.</param>
-    ContentFile(const char *filePath) { Clear(); Create(filePath); }
+	public:
 
-	/// <summary>
-	/// Destructor method used to clean up a ContentFile object before deletion from system memory.
-	/// </summary>
-    ~ContentFile() { Destroy(); }
+		SerializableClassNameGetter
+		SerializableOverrideMethods
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Makes the ContentFile object ready for use.
-// Arguments:       A string defining the path to where the content file itself is located,
-//                  either within the package file, or directly on the disk.
-// Return value:    An error return value signaling success or any particular failure.
-//                  Anything below 0 is an error signal.
+#pragma region Creation
+		/// <summary>
+		/// Constructor method used to instantiate a ContentFile object in system memory. Create() should be called before using the object.
+		/// </summary>
+		ContentFile() { Clear(); }
 
-    int Create(const char *filePath);
+		/// <summary>
+		/// Constructor method used to instantiate a ContentFile object in system memory, and also do a Create() in the same line.
+		/// </summary>
+		/// <param name="filePath">A string defining the path to where the content file itself is located.</param>
+		explicit ContentFile(const char *filePath) { Clear(); Create(filePath); }
 
+		/// <summary>
+		/// Makes the ContentFile object ready for use.
+		/// </summary>
+		/// <param name="filePath">A string defining the path to where the content file itself is located.</param>
+		/// <returns>An error return value signaling success or any particular failure. Anything below 0 is an error signal.</returns>
+		int Create(const char *filePath);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Creates a ContentFile to be identical to another, by deep copy.
-// Arguments:       A reference to the ContentFile to deep copy.
-// Return value:    An error return value signaling success or any particular failure.
-//                  Anything below 0 is an error signal.
+		/// <summary>
+		/// Creates a ContentFile to be identical to another, by deep copy.
+		/// </summary>
+		/// <param name="reference">A reference to the ContentFile to deep copy.</param>
+		/// <returns>An error return value signaling success or any particular failure. Anything below 0 is an error signal.</returns>
+		int Create(const ContentFile &reference);
+#pragma endregion
 
-    int Create(const ContentFile &reference);
+#pragma region Destruction
+		/// <summary>
+		/// Destructor method used to clean up a ContentFile object before deletion from system memory.
+		/// </summary>
+		~ContentFile() override { Destroy(); }
 
+		/// <summary>
+		/// Destroys and resets (through Clear()) the ContentFile object.
+		/// </summary>
+		void Destroy() { Clear(); }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  Destroy
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destroys and resets (through Clear()) the ContentFile object.
-// Arguments:       Whether to only destroy the members defined in this derived class, or
-//                  to destroy all inherited members also.
-// Return value:    None.
+		/// <summary>
+		/// Frees all loaded data used by all ContentFile instances. This should ONLY be done when quitting the app, or after everything else is completely destroyed.
+		/// </summary>
+		static void FreeAllLoaded();
+#pragma endregion
 
-    void Destroy() { Clear(); }
+#pragma region Getters and Setters
+		/// <summary>
+		/// Gets the file path of the content file represented by this ContentFile object.
+		/// </summary>
+		/// <returns>A string with the file name path.</returns>
+		const std::string & GetDataPath() const { return m_DataPath; }
 
+		/// <summary>
+		/// Sets the file path of the content file represented by this ContentFile object.
+		/// </summary>
+		/// <param name="newDataPath">A string with the new file name path.</param>
+		void SetDataPath(const std::string &newDataPath);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Static method:   FreeAllLoaded
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Frees all loaded data used by all ContentFile instances. This should
-//                  ONLY be done when quitting the app, or after everything else is
-//                  completely destroyed
-// Arguments:       None.
-// Return value:    None.
+		/// <summary>
+		/// Sets the DataPath combined with the file and line it's being created from. This is used in cases we can't get the file and line from Serializable::Create(&reader).
+		/// For example when creating a ContentFile for the sound during the readSound lambda in SoundContainer::ReadAndGetSound.
+		/// </summary>
+		/// <param name="newPosition">The file and line that are currently being read.</param>
+		void SetFormattedReaderPosition(const std::string &newPosition);
+#pragma endregion
 
-    static void FreeAllLoaded();
+#pragma region Data Handling
+		/// <summary>
+		/// Gets the data represented by this ContentFile object as an Allegro BITMAP, loading it into the static maps if it's not already loaded. Note that ownership of the BITMAP is NOT transferred!
+		/// </summary>
+		/// <param name="conversionMode">The Allegro color conversion mode to use when loading this bitmap.</param>
+		/// <param name="storeBitmap">Whether to store the BITMAP in the relevant static map after loading it or not.</param>
+		/// <param name="dataPathToSpecificFrame">Path to a specific frame when loading an animation to avoid overwriting the original preset DataPath when loading each frame.</param>
+		/// <returns>Pointer to the BITMAP loaded from disk.</returns>
+		BITMAP * GetAsBitmap(int conversionMode = 0, bool storeBitmap = true, const std::string &dataPathToSpecificFrame = "");
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  GetClassName
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the class name of this Entity.
-// Arguments:       None.
-// Return value:    A string with the friendly-formatted type name of this object.
+		/// <summary>
+		/// Gets the data represented by this ContentFile object as an array of Allegro BITMAPs, each representing a frame in the animation.
+		/// It loads the BITMAPs into the static maps if they're not already loaded. Ownership of the BITMAPs is NOT transferred, but the array itself IS!
+		/// </summary>
+		/// <param name="frameCount">The number of frames to attempt to load, more than 1 frame will mean 00# is appended to datapath to handle naming conventions.</param>
+		/// <param name="conversionMode">The Allegro color conversion mode to use when loading this bitmap.</param>
+		/// <returns>Pointer to the beginning of the array of BITMAP pointers loaded from the disk, the length of which is specified with the FrameCount argument.</returns>
+		BITMAP ** GetAsAnimation(int frameCount = 1, int conversionMode = 0);
+#pragma endregion
 
-    const std::string & GetClassName() const { return m_ClassName; }
+	protected:
 
+		/// <summary>
+		/// Enumeration for loading BITMAPs by bit depth. NOTE: This can't be lower down because s_LoadedBitmaps relies on this definition.
+		/// </summary>
+		enum BitDepths { Eight = 0, ThirtyTwo, BitDepthCount };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  SetDataPath
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the file path of the content file represented by this ContentFile
-//                  object.
-// Arguments:       A string with the datafile object name path
-// Return value:    None.
+		static std::array<std::unordered_map<std::string, BITMAP *>, BitDepthCount> s_LoadedBitmaps; //!< Static map containing all the already loaded BITMAPs and their paths for each bit depth.
 
-    void SetDataPath(std::string newDataPath) { m_DataPath = newDataPath; }
+		std::string m_DataPath; //!< The path to this ContentFile's data file. In the case of an animation, this filename/name will be appended with 000, 001, 002 etc.
+		std::string m_DataPathExtension; //!< The extension of the data file of this ContentFile's path.
+		std::string m_DataPathWithoutExtension; //!< The path to this ContentFile's data file without the file's extension.
 
+		std::string m_FormattedReaderPosition; //!< A string containing the currently read file path and the line being read. Formatted to be used for logging.
+		std::string m_DataPathAndReaderPosition; //!< The path to this ContentFile's data file combined with the ini file and line it is being read from. This is used for logging.
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  GetDataPath
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the file path of the content file represented by this ContentFile
-//                  object.
-// Arguments:       None.
-// Return value:    A string with the datafile object name path
+	private:
 
-    const std::string & GetDataPath() const { return m_DataPath; };
+		static const std::string c_ClassName; //!< A string with the friendly-formatted type name of this object.
 
+#pragma region Data Handling
+		/// <summary>
+		/// Loads and transfers the data represented by this ContentFile object as an Allegro BITMAP. Ownership of the BITMAP IS transferred!
+		/// Note that this is relatively slow since it reads the data from disk each time.
+		/// </summary>
+		/// <param name="conversionMode">The Allegro color conversion mode to use when loading this bitmap. Only applies the first time a bitmap is loaded from the disk.</param>
+		/// <param name="dataPathToSpecificFrame">Path to a specific frame when loading an animation to avoid overwriting the original preset DataPath when loading each frame.</param>
+		/// <returns>Pointer to the BITMAP loaded from disk.</returns>
+		BITMAP * LoadAndReleaseBitmap(int conversionMode = 0, const std::string &dataPathToSpecificFrame = "");
+#pragma endregion
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  GetAsBitmap
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Loads and gets the data represented by this ConentFile object as an
-//                  Allegro BITMAP. Note that ownership of the BITMAP IS NOT TRANSFERRED!
-//                  Also, this should only be done once upon startup, since getting the
-//                  BITMAP again is slow. 
-// Arguments:       The Allegro color conversion mode to use when loading this bitmap.
-//                  Note it will only apply the first time you get a bitmap since it is
-//                  only loaded from disk the first time. See allegro docs for the modes.
-// Return value:    The pointer to the beginning of the data object loaded from the allegro
-//                  .dat datafile. file.
-//                  Ownership is NOT transferred! If 0, the file could not be found/loaded.
-
-    BITMAP * GetAsBitmap(int conversionMode = 0);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual method:  LoadAndReleaseBitmap
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Loads and transfers the data represented by this ConentFile object as
-//                  an Allegro BITMAP. Note that ownership of the BITMAP IS TRANSFERRED!
-//                  Also, this is relatively slow since it reads the data from disk each time.
-// Arguments:       The Allegro color conversion mode to use when loading this bitmap.
-//                  Note it will only apply the first time you get a bitmap since it is
-//                  only loaded from disk the first time. See allegro docs for the modes.
-// Return value:    The pointer to the BITMAP loaded from disk Ownership IS transferred!
-//                  If 0, the file could not be found/loaded.
-
-    BITMAP * LoadAndReleaseBitmap(int conversionMode = 0);
-
-
-protected:
-
-    static const std::string m_ClassName;
-    static std::unordered_map<std::string, BITMAP *> m_LoadedBitmaps; // Static map containing all the already loaded BITMAP:s and their paths
-    std::string m_DataPath; // Path to this ContentFile's Datafile Object's path.
-
-private:
-
-	/// <summary>
-	/// Clears all the member variables of this ContentFile, effectively resetting the members of this abstraction level only.
-	/// </summary>
-    void Clear() { m_DataPath.erase(); }
-};
+		/// <summary>
+		/// Clears all the member variables of this ContentFile, effectively resetting the members of this abstraction level only.
+		/// </summary>
+		void Clear();
+	};
 }
 #endif

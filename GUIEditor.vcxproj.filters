@@ -147,6 +147,9 @@
     <ClCompile Include="GUI\GUIWriter.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="System\RTECompatibility\Serializable.cpp">
+      <Filter>System\RTECompatibility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -267,9 +270,6 @@
       <Filter>System\RTECompatibility</Filter>
     </ClInclude>
     <ClInclude Include="System\RTECompatibility\Timer.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Vector.h">
       <Filter>System\RTECompatibility</Filter>
     </ClInclude>
     <ClInclude Include="System\RTECompatibility\Writer.h">
