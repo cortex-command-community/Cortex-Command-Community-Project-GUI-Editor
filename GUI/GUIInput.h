@@ -130,9 +130,6 @@ public:
     void GetMouseButtons(int *Events, int *States) const;
 
 
-	static void SetNetworkMouseButton(int whichPlayer, int state1, int state2, int state3);
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetMousePosition
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -140,10 +137,6 @@ public:
 // Arguments:       Pointers to store the X and Y coordinates in
 
     void GetMousePosition(int *X, int *Y) const;
-
-
-	static void SetNetworkMouseMovement(int whichPlayer, int x, int y);
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -159,9 +152,7 @@ public:
 	/// This function returns how much the mouse scroll wheel has moved. Positive integer is scroll up, negative is scroll down.
 	/// </summary>
 	/// <returns>Mouse scroll wheel movement in integer value.</returns>
-	int GetMouseWheelChange() const {
-		return m_MouseWheelChange;
-	}
+	int GetMouseWheelChange() const { return m_MouseWheelChange; }
 
 	/// <summary>
 	/// Sets whether the keyboard and joysticks also control the mouse.
@@ -186,19 +177,10 @@ protected:
 	int m_MouseButtonsEvents[3];
 	int m_MouseButtonsStates[3];
 
-	static int m_NetworkMouseButtonsEvents[4][3];
-	static int m_NetworkMouseButtonsStates[4][3];
-	static int m_PrevNetworkMouseButtonsStates[4][3];
-
-	static bool m_OverrideInput;
-
 	int m_MouseX;
 	int m_MouseY;
 	int m_LastFrameMouseX;
 	int m_LastFrameMouseY;
-
-	static int m_NetworkMouseX[4];
-	static int m_NetworkMouseY[4];
 
 	int m_Player;
 

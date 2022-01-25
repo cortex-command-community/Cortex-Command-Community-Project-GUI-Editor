@@ -138,91 +138,37 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void AllegroInput::UpdateMouseInput() {
-		if (!m_OverrideInput) {
-			if (mouse_needs_poll()) { poll_mouse(); }
-
-#ifndef GUI_STANDALONE
-		} else {
-			mouse_x = m_LastFrameMouseX;
-			mouse_y = m_LastFrameMouseY;
-
-			if (m_Player >= 0 && m_Player < 4) {
-				if (m_NetworkMouseX[m_Player] != 0) {
-					if (m_NetworkMouseX[m_Player] < 0) m_NetworkMouseX[m_Player] = 1;
-					if (m_NetworkMouseX[m_Player] >= g_FrameMan.GetPlayerFrameBufferWidth(m_Player)) m_NetworkMouseX[m_Player] = g_FrameMan.GetPlayerFrameBufferWidth(m_Player) - 2;
-					mouse_x = m_NetworkMouseX[m_Player];
-				}
-				if (m_NetworkMouseY[m_Player] != 0) {
-					if (m_NetworkMouseY[m_Player] < 0) m_NetworkMouseY[m_Player] = 1;
-					if (m_NetworkMouseY[m_Player] >= g_FrameMan.GetPlayerFrameBufferHeight(m_Player)) m_NetworkMouseY[m_Player] = g_FrameMan.GetPlayerFrameBufferHeight(m_Player) - 2;
-					mouse_y = m_NetworkMouseY[m_Player];
-				}
-			} else {
-				if (m_NetworkMouseX[0] != 0) {
-					if (m_NetworkMouseX[0] < 0) m_NetworkMouseX[0] = 1;
-					if (m_NetworkMouseX[0] >= g_FrameMan.GetPlayerFrameBufferWidth(0)) m_NetworkMouseX[0] = g_FrameMan.GetPlayerFrameBufferWidth(0) - 2;
-					mouse_x = m_NetworkMouseX[0];
-				}
-				if (m_NetworkMouseY[0] != 0) {
-					if (m_NetworkMouseY[0] < 0) m_NetworkMouseY[0] = 1;
-					if (m_NetworkMouseY[0] >= g_FrameMan.GetPlayerFrameBufferHeight(0)) m_NetworkMouseY[0] = g_FrameMan.GetPlayerFrameBufferHeight(0) - 2;
-					mouse_y = m_NetworkMouseY[0];
-				}
-			}
-#endif
-		}
+		if (mouse_needs_poll()) { poll_mouse(); }
 
 		m_LastFrameMouseX = mouse_x;
 		m_LastFrameMouseY = mouse_y;
 
-		if (!m_OverrideInput) {
-			if (!m_KeyJoyMouseCursor) {
-				if (mouse_b & AllegroMouseButtons::ButtonLeft) {
-					m_MouseButtonsEvents[0] = (m_MouseButtonsStates[0] == Up) ? Pushed : Repeat;
-					m_MouseButtonsStates[0] = Down;
-				} else {
-					m_MouseButtonsEvents[0] = (m_MouseButtonsStates[0] == Down) ? Released : None;
-					m_MouseButtonsStates[0] = Up;
-				}
-			}
-			if (mouse_b & AllegroMouseButtons::ButtonMiddle) {
-				m_MouseButtonsEvents[1] = (m_MouseButtonsStates[1] == Up) ? Pushed : Repeat;
-				m_MouseButtonsStates[1] = Down;
-			} else {
-				m_MouseButtonsEvents[1] = (m_MouseButtonsStates[1] == Down) ? Released : None;
-				m_MouseButtonsStates[1] = Up;
-			}
-			if (mouse_b & AllegroMouseButtons::ButtonRight) {
-				m_MouseButtonsEvents[2] = (m_MouseButtonsStates[2] == Up) ? Pushed : Repeat;
-				m_MouseButtonsStates[2] = Down;
-			} else {
-				m_MouseButtonsEvents[2] = (m_MouseButtonsStates[2] == Down) ? Released : None;
-				m_MouseButtonsStates[2] = Up;
-			}
-
 #ifndef GUI_STANDALONE
-			if (m_Player < 0 || m_Player >= 4) {
-				for (int i = 0; i < 4; i++) {
-					m_MouseWheelChange = g_UInputMan.MouseWheelMovedByPlayer(i);
-					if (m_MouseWheelChange) {
-						break;
-					}
-				}
-			} else {
-				m_MouseWheelChange = g_UInputMan.MouseWheelMovedByPlayer(m_Player);
-			}
-		} else {
-			int player = m_Player;
-			if (player < 0 || player >= 4) { player = 0; }
-
-			m_NetworkMouseButtonsEvents[player][0] = m_NetworkMouseButtonsStates[player][0] == Down ? (m_PrevNetworkMouseButtonsStates[player][0] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][0] == Down ? Released : None);
-			m_NetworkMouseButtonsEvents[player][1] = m_NetworkMouseButtonsStates[player][1] == Down ? (m_PrevNetworkMouseButtonsStates[player][1] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][1] == Down ? Released : None);
-			m_NetworkMouseButtonsEvents[player][2] = m_NetworkMouseButtonsStates[player][2] == Down ? (m_PrevNetworkMouseButtonsStates[player][2] == Up ? Pushed : Repeat) : (m_PrevNetworkMouseButtonsStates[player][2] == Down ? Released : None);
-
-			m_PrevNetworkMouseButtonsStates[player][0] = m_NetworkMouseButtonsEvents[player][0];
-			m_PrevNetworkMouseButtonsStates[player][1] = m_NetworkMouseButtonsEvents[player][1];
-			m_PrevNetworkMouseButtonsStates[player][2] = m_NetworkMouseButtonsEvents[player][2];
+		m_MouseWheelChange = g_UInputMan.MouseWheelMoved();
 #endif
+
+		if (!m_KeyJoyMouseCursor) {
+			if (mouse_b & AllegroMouseButtons::ButtonLeft) {
+				m_MouseButtonsEvents[0] = (m_MouseButtonsStates[0] == Up) ? Pushed : Repeat;
+				m_MouseButtonsStates[0] = Down;
+			} else {
+				m_MouseButtonsEvents[0] = (m_MouseButtonsStates[0] == Down) ? Released : None;
+				m_MouseButtonsStates[0] = Up;
+			}
+		}
+		if (mouse_b & AllegroMouseButtons::ButtonMiddle) {
+			m_MouseButtonsEvents[1] = (m_MouseButtonsStates[1] == Up) ? Pushed : Repeat;
+			m_MouseButtonsStates[1] = Down;
+		} else {
+			m_MouseButtonsEvents[1] = (m_MouseButtonsStates[1] == Down) ? Released : None;
+			m_MouseButtonsStates[1] = Up;
+		}
+		if (mouse_b & AllegroMouseButtons::ButtonRight) {
+			m_MouseButtonsEvents[2] = (m_MouseButtonsStates[2] == Up) ? Pushed : Repeat;
+			m_MouseButtonsStates[2] = Down;
+		} else {
+			m_MouseButtonsEvents[2] = (m_MouseButtonsStates[2] == Down) ? Released : None;
+			m_MouseButtonsStates[2] = Up;
 		}
 	}
 
