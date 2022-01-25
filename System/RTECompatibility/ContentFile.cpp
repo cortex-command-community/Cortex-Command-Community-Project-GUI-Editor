@@ -3,8 +3,6 @@
 
 namespace RTE {
 
-	const std::string ContentFile::c_ClassName = "ContentFile";
-
 	std::array<std::unordered_map<std::string, BITMAP *>, ContentFile::BitDepths::BitDepthCount> ContentFile::s_LoadedBitmaps;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,15 +11,12 @@ namespace RTE {
 		m_DataPath.clear();
 		m_DataPathExtension.clear();
 		m_DataPathWithoutExtension.clear();
-		m_FormattedReaderPosition.clear();
-		m_DataPathAndReaderPosition.clear();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	int ContentFile::Create(const char *filePath) {
 		SetDataPath(filePath);
-		SetFormattedReaderPosition(GetFormattedReaderPosition());
 
 		return 0;
 	}
@@ -40,49 +35,21 @@ namespace RTE {
 
 	void ContentFile::FreeAllLoaded() {
 		for (int depth = BitDepths::Eight; depth < BitDepths::BitDepthCount; ++depth) {
-			for (const std::pair<std::string, BITMAP *> &bitmap : s_LoadedBitmaps.at(depth)) {
-				destroy_bitmap(bitmap.second);
+			for (const auto &[bitmapPath, bitmapPtr] : s_LoadedBitmaps.at(depth)) {
+				destroy_bitmap(bitmapPtr);
 			}
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int ContentFile::ReadProperty(const std::string_view &propName, Reader &reader) {
-		if (propName == "FilePath" || propName == "Path") {
-			SetDataPath(reader.ReadPropValue());
-		} else {
-			return Serializable::ReadProperty(propName, reader);
-		}
-		return 0;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int ContentFile::Save(Writer &writer) const {
-		Serializable::Save(writer);
-
-		if (!m_DataPath.empty()) { writer.NewPropertyWithValue("FilePath", m_DataPath); }
-
-		return 0;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void ContentFile::SetDataPath(const std::string &newDataPath) {
-		m_DataPath = CorrectBackslashesInPath(newDataPath);
+		m_DataPath = std::filesystem::path(newDataPath).generic_string();
 		m_DataPathExtension = std::filesystem::path(m_DataPath).extension().string();
 
-		RTEAssert(!m_DataPathExtension.empty(), "Failed to find file extension when trying to find file with path and name:\n" + m_DataPath + "\n" + GetFormattedReaderPosition());
+		RTEAssert(!m_DataPathExtension.empty(), "Failed to find file extension when trying to find file with path and name:\n" + m_DataPath);
 
 		m_DataPathWithoutExtension = m_DataPath.substr(0, m_DataPath.length() - m_DataPathExtension.length());
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void ContentFile::SetFormattedReaderPosition(const std::string &newPosition) {
-		m_FormattedReaderPosition = newPosition;
-		m_DataPathAndReaderPosition = m_DataPath + "\n" + newPosition;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +61,6 @@ namespace RTE {
 		BITMAP *returnBitmap = nullptr;
 		const int bitDepth = (conversionMode == COLORCONV_8_TO_32) ? BitDepths::ThirtyTwo : BitDepths::Eight;
 		std::string dataPathToLoad = dataPathToSpecificFrame.empty() ? m_DataPath : dataPathToSpecificFrame;
-		SetFormattedReaderPosition(GetFormattedReaderPosition());
 
 		// Check if the file has already been read and loaded from the disk and, if so, use that data.
 		std::unordered_map<std::string, BITMAP *>::iterator foundBitmap = s_LoadedBitmaps.at(bitDepth).find(dataPathToLoad);
@@ -109,7 +75,7 @@ namespace RTE {
 					SetDataPath(m_DataPathWithoutExtension + altFileExtension);
 					dataPathToLoad = dataPathWithoutExtension + altFileExtension;
 				} else {
-					RTEAbort("Failed to find image file with following path and name:\n\n" + m_DataPath + " or " + altFileExtension + "\n" + m_FormattedReaderPosition);
+					RTEAbort("Failed to find image file with following path and name:\n\n" + m_DataPath + " or " + altFileExtension);
 				}
 			}
 			returnBitmap = LoadAndReleaseBitmap(conversionMode, dataPathToLoad); // NOTE: This takes ownership of the bitmap file
@@ -128,7 +94,6 @@ namespace RTE {
 		}
 		// Create the array of as many BITMAP pointers as requested frames
 		BITMAP **returnBitmaps = new BITMAP *[frameCount];
-		SetFormattedReaderPosition(GetFormattedReaderPosition());
 
 		// Don't try to append numbers if there's only one frame
 		if (frameCount == 1) {
@@ -160,7 +125,6 @@ namespace RTE {
 			return nullptr;
 		}
 		const std::string dataPathToLoad = dataPathToSpecificFrame.empty() ? m_DataPath : dataPathToSpecificFrame;
-		SetFormattedReaderPosition(GetFormattedReaderPosition());
 
 		BITMAP *returnBitmap = nullptr;
 
@@ -169,7 +133,7 @@ namespace RTE {
 
 		set_color_conversion((conversionMode == 0) ? COLORCONV_MOST : conversionMode);
 		returnBitmap = load_bitmap(dataPathToLoad.c_str(), currentPalette);
-		RTEAssert(returnBitmap, "Failed to load image file with following path and name:\n\n" + m_DataPathAndReaderPosition + "\nThe file may be corrupt, incorrectly converted or saved with unsupported parameters.");
+		RTEAssert(returnBitmap, "Failed to load image file with path and name:\n" + m_DataPath);
 
 		return returnBitmap;
 	}

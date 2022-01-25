@@ -1,8 +1,6 @@
 #ifndef _RTECONTENTFILE_
 #define _RTECONTENTFILE_
 
-#include "Serializable.h"
-
 struct BITMAP;
 
 namespace RTE {
@@ -10,12 +8,9 @@ namespace RTE {
 	/// <summary>
 	/// A representation of a content file that is stored directly on disk.
 	/// </summary>
-	class ContentFile : public Serializable {
+	class ContentFile {
 
 	public:
-
-		SerializableClassNameGetter
-		SerializableOverrideMethods
 
 #pragma region Creation
 		/// <summary>
@@ -48,12 +43,12 @@ namespace RTE {
 		/// <summary>
 		/// Destructor method used to clean up a ContentFile object before deletion from system memory.
 		/// </summary>
-		~ContentFile() override { Destroy(); }
+		~ContentFile() { Reset(); }
 
 		/// <summary>
-		/// Destroys and resets (through Clear()) the ContentFile object.
+		/// Resets (through Clear()) the ContentFile object.
 		/// </summary>
-		void Destroy() { Clear(); }
+		void Reset() { Clear(); }
 
 		/// <summary>
 		/// Frees all loaded data used by all ContentFile instances. This should ONLY be done when quitting the app, or after everything else is completely destroyed.
@@ -73,13 +68,6 @@ namespace RTE {
 		/// </summary>
 		/// <param name="newDataPath">A string with the new file name path.</param>
 		void SetDataPath(const std::string &newDataPath);
-
-		/// <summary>
-		/// Sets the DataPath combined with the file and line it's being created from. This is used in cases we can't get the file and line from Serializable::Create(&reader).
-		/// For example when creating a ContentFile for the sound during the readSound lambda in SoundContainer::ReadAndGetSound.
-		/// </summary>
-		/// <param name="newPosition">The file and line that are currently being read.</param>
-		void SetFormattedReaderPosition(const std::string &newPosition);
 #pragma endregion
 
 #pragma region Data Handling
@@ -115,12 +103,7 @@ namespace RTE {
 		std::string m_DataPathExtension; //!< The extension of the data file of this ContentFile's path.
 		std::string m_DataPathWithoutExtension; //!< The path to this ContentFile's data file without the file's extension.
 
-		std::string m_FormattedReaderPosition; //!< A string containing the currently read file path and the line being read. Formatted to be used for logging.
-		std::string m_DataPathAndReaderPosition; //!< The path to this ContentFile's data file combined with the ini file and line it is being read from. This is used for logging.
-
 	private:
-
-		static const std::string c_ClassName; //!< A string with the friendly-formatted type name of this object.
 
 #pragma region Data Handling
 		/// <summary>

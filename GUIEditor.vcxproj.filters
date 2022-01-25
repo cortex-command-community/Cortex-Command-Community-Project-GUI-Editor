@@ -120,13 +120,7 @@
     <ClCompile Include="System\RTECompatibility\ContentFile.cpp">
       <Filter>System\RTECompatibility</Filter>
     </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Reader.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
     <ClCompile Include="System\RTECompatibility\RTEError.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Writer.cpp">
       <Filter>System\RTECompatibility</Filter>
     </ClCompile>
     <ClCompile Include="Editor\EditorApp.cpp">
@@ -146,9 +140,6 @@
     </ClCompile>
     <ClCompile Include="GUI\GUIWriter.cpp">
       <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Serializable.cpp">
-      <Filter>System\RTECompatibility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,19 +251,10 @@
     <ClInclude Include="System\RTECompatibility\ContentFile.h">
       <Filter>System\RTECompatibility</Filter>
     </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Reader.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
     <ClInclude Include="System\RTECompatibility\RTEError.h">
       <Filter>System\RTECompatibility</Filter>
     </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Serializable.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
     <ClInclude Include="System\RTECompatibility\Timer.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Writer.h">
       <Filter>System\RTECompatibility</Filter>
     </ClInclude>
     <ClInclude Include="Editor\EditorApp.h">

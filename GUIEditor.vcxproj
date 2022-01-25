@@ -159,10 +159,7 @@
     <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\RTECompatibility\ContentFile.cpp" />
-    <ClCompile Include="System\RTECompatibility\Reader.cpp" />
     <ClCompile Include="System\RTECompatibility\RTEError.cpp" />
-    <ClCompile Include="System\RTECompatibility\Serializable.cpp" />
-    <ClCompile Include="System\RTECompatibility\Writer.cpp" />
     <ClCompile Include="System\StandardIncludes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -209,11 +206,8 @@
     <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="System\RTECompatibility\ContentFile.h" />
-    <ClInclude Include="System\RTECompatibility\Reader.h" />
     <ClInclude Include="System\RTECompatibility\RTEError.h" />
-    <ClInclude Include="System\RTECompatibility\Serializable.h" />
     <ClInclude Include="System\RTECompatibility\Timer.h" />
-    <ClInclude Include="System\RTECompatibility\Writer.h" />
     <ClInclude Include="System\Singleton.h" />
     <ClInclude Include="System\StandardIncludes.h" />
   </ItemGroup>
