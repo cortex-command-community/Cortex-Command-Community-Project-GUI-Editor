@@ -26,10 +26,6 @@ struct GUIRect { long left; long top; long right; long bottom; };
 inline void SetRect(GUIRect *rect, int left, int top, int right, int bottom) { rect->left = left; rect->top = top; rect->right = right; rect->bottom = bottom; }
 #pragma endregion
 
-#ifndef GUI_STANDALONE
-#include "RTETools.h"
-#endif
-
 #include "GUIInterface.h"
 #include "GUIProperties.h"
 #include "GUIInput.h"
