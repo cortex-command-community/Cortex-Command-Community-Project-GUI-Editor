@@ -119,6 +119,14 @@ GUIPanel * GUITextBox::GetPanel() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void GUITextBox::StoreProperties() {
+	m_Properties.AddVariable("NumericOnly", GetNumericOnly());
+	m_Properties.AddVariable("MaxNumericValue", GetMaxNumericValue());
+	m_Properties.AddVariable("MaxTextLength", GetMaxTextLength());
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void GUITextBox::Move(int X, int Y) {
 	GUITextPanel::SetPositionAbs(X, Y);
 }
@@ -159,6 +167,18 @@ void GUITextBox::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
 
 void GUITextBox::ApplyProperties(GUIProperties *Props) {
 	GUIControl::ApplyProperties(Props);
+
+	bool numericOnly = GetNumericOnly();
+	m_Properties.GetValue("NumericOnly", &numericOnly);
+	SetNumericOnly(numericOnly);
+
+	int maxNumericValue = GetMaxNumericValue();
+	m_Properties.GetValue("MaxNumericValue", &maxNumericValue);
+	SetMaxNumericValue(maxNumericValue);
+
+	int maxTextLength = GetMaxTextLength();
+	m_Properties.GetValue("MaxTextLength", &maxTextLength);
+	SetMaxTextLength(maxTextLength);
 
 	// Force a rebuild of the bitmap
 	ChangeSkin(m_Skin);

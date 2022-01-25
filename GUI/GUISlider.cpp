@@ -527,6 +527,7 @@ void GUISlider::StoreProperties() {
 	m_Properties.AddVariable("Value", m_Value);
 	m_Properties.AddVariable("Minimum", m_Minimum);
 	m_Properties.AddVariable("Maximum", m_Maximum);
+	m_Properties.AddVariable("ValueResolution", m_ValueResolution);
 	m_Properties.AddVariable("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
 	m_Properties.AddVariable("TickDirection", m_TickDirection == TopLeft ? "TopLeft" : "BottomRight");
 }
@@ -555,6 +556,7 @@ void GUISlider::ApplyProperties(GUIProperties *Props) {
 	m_Properties.GetValue("Minimum", &m_Minimum);
 	m_Properties.GetValue("Maximum", &m_Maximum);
 	m_Properties.GetValue("Value", &m_Value);
+	m_Properties.GetValue("ValueResolution", &m_ValueResolution);
 
 	// Clamp the value
 	m_Value = std::max(m_Value, m_Minimum);

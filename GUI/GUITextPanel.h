@@ -221,16 +221,34 @@ public:
     bool GetLocked() const;
 
 	/// <summary>
+	/// Gets whether this text panel accepts numeric symbols only.
+	/// </summary>
+	/// <returns>Whether this text panel accepts numeric symbols only.</returns>
+	bool GetNumericOnly() const { return m_NumericOnly; }
+
+	/// <summary>
 	/// Sets this text panel to accept numeric symbols only.
 	/// </summary>
 	/// <param name="numericOnly">Whether to accept numeric symbols only or not.</param>
 	void SetNumericOnly(bool numericOnly) { m_NumericOnly = numericOnly; }
 
 	/// <summary>
+	/// Gets this text panel's maximum numeric value when in numeric only mode.
+	/// </summary>
+	/// <returns>Maximum numeric value when in numeric only mode.</returns>
+	int GetMaxNumericValue() const { return m_MaxNumericValue; }
+
+	/// <summary>
 	/// Sets this text panel's maximum numeric value when in numeric only mode.
 	/// </summary>
 	/// <param name="maxValue">The maximum numeric value. 0 means no maximum value.</param>
 	void SetMaxNumericValue(int maxValue) { m_MaxNumericValue = maxValue; }
+
+	/// <summary>
+	/// Gets the maximum length of the text this text panel can contain.
+	/// </summary>
+	/// <returns>The maximum length of the text this text panel can contain.</returns>
+	int GetMaxTextLength() const { return m_MaxTextLength; }
 
 	/// <summary>
 	/// Sets the maximum length of the text this text panel can contain.

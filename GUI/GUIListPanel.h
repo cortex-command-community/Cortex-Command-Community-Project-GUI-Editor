@@ -516,10 +516,22 @@ public:
 	void SetMouseScrolling(bool mouseScroll);
 
 	/// <summary>
+	/// Gets the thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars.
+	/// </summary>
+	/// <returns>The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.</returns>
+	int GetScrollBarThickness() const { return m_ScrollBarThickness; }
+
+	/// <summary>
 	/// Sets the thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars and adjusts them to the new thickness.
 	/// </summary>
 	/// <param name="newThickness">The new scroll bar thickness, in pixels.</param>
 	void SetScrollBarThickness(int newThickness) { m_ScrollBarThickness = newThickness; AdjustScrollbars(); }
+
+	/// <summary>
+	/// Gets the padding around the ListPanel's scrollbars.
+	/// </summary>
+	/// <returns>Gets the padding around the ListPanel's scrollbars, in pixels.</returns>
+	int GetScrollBarPadding() const { return m_ScrollBarPadding; }
 
 	/// <summary>
 	/// Sets the padding around the ListPanel's scrollbars and adjusts them to the new padding. Used to better size and position scrollbars within panel bounds, allowing to not overdraw on panel borders.

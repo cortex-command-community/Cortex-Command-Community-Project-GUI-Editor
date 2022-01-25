@@ -108,6 +108,8 @@ void GUIListBox::GetControlRect(int *X, int *Y, int *Width, int *Height) {
 
 void GUIListBox::StoreProperties() {
 	m_Properties.AddVariable("MultiSelect", GetMultiSelect());
+	m_Properties.AddVariable("ScrollBarThickness", GetScrollBarThickness());
+	m_Properties.AddVariable("ScrollBarPadding", GetScrollBarPadding());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,6 +146,14 @@ void GUIListBox::ApplyProperties(GUIProperties *Props) {
 	bool Multi = false;
 	m_Properties.GetValue("MultiSelect", &Multi);
 	SetMultiSelect(Multi);
+
+	int scrollBarThickness = GetScrollBarThickness();
+	m_Properties.GetValue("ScrollBarThickness", &scrollBarThickness);
+	SetScrollBarThickness(scrollBarThickness);
+
+	int scrollBarPadding = GetScrollBarPadding();
+	m_Properties.GetValue("ScrollBarPadding", &scrollBarPadding);
+	SetScrollBarPadding(scrollBarPadding);
 
 	// Rebuild the bitmap
 	BuildBitmap(true, true);

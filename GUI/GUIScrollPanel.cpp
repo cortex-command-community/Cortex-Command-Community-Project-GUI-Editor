@@ -695,6 +695,7 @@ void GUIScrollPanel::SaveProps(GUIProperties *Props) const {
 	Props->AddVariable("Value", m_Value);
 	Props->AddVariable("PageSize", m_PageSize);
 	Props->AddVariable("SmallChange", m_SmallChange);
+	Props->AddVariable("ValueResolution", m_ValueResolution);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
