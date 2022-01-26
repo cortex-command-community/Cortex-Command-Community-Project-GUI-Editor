@@ -292,7 +292,7 @@ public:
     void RemoveChildren();
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <returns></returns>
 	virtual const std::string_view & GetControlType() const = 0;

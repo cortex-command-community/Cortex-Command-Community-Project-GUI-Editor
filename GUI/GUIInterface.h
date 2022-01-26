@@ -113,7 +113,7 @@ namespace RTE {
 		virtual void SetClipRect(GUIRect *clippingRect) = 0;
 
 		/// <summary>
-		/// Sets the clipping rectangle of the specified bitmap as the intersection of its current clipping rectangle and the rectangle described by the passed-in GUIRect. 
+		/// Sets the clipping rectangle of the specified bitmap as the intersection of its current clipping rectangle and the rectangle described by the passed-in GUIRect.
 		/// </summary>
 		/// <param name="rect">Rectangle pointer.</param>
 		virtual void AddClipRect(GUIRect *rect) = 0;

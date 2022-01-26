@@ -65,7 +65,7 @@ public:
 // Description:     Called when the control has been destroyed.
 // Arguments:       None.
 
-    void Destroy() override; 
+    void Destroy() override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

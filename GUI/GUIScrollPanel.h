@@ -66,7 +66,7 @@ public:
 // Description:     Called when the panel has been destroyed.
 // Arguments:       None.
 
-    void Destroy(); 
+    void Destroy();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

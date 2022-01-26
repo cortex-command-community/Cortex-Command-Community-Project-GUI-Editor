@@ -69,7 +69,7 @@ namespace RTEGUI {
 		GUICollectionBox * GetEditorBase() const { return m_EditorBase.get(); }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		GUICollectionBox * GetToolBar() const { return m_ToolBar.get(); }

@@ -223,7 +223,7 @@ public:
 // Description:     Gets an event from the queue.
 // Arguments:       Pointer to variable receiving the Event.
 // Returns:         Returns true when an event was grabbed.
-//                  Returns false when there was no more events in the queue 
+//                  Returns false when there was no more events in the queue
 //                  OR the Event pointer is 0.
 
     bool GetEvent(GUIEvent *Event);

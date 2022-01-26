@@ -14,7 +14,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIProperties
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIProperties object in 
+// Description:     Constructor method used to instantiate a GUIProperties object in
 //                  system memory.
 // Arguments:       Name of section.
 
@@ -24,7 +24,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIProperties
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIProperties object in 
+// Description:     Constructor method used to instantiate a GUIProperties object in
 //                  system memory.
 // Arguments:       None.
 
