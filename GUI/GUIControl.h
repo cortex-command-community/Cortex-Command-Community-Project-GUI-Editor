@@ -1,11 +1,10 @@
 #ifndef _GUICONTROL_
 #define _GUICONTROL_
 
-#include "GUIWriter.h"
-
 namespace RTE {
 
 class GUIControlManager;
+class GUIWriter;
 
 /// <summary>
 /// A base class inherited by all controls.

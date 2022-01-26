@@ -1,4 +1,6 @@
 #include "GUI.h"
+#include "GUIReader.h"
+#include "GUIWriter.h"
 
 namespace RTE {
 

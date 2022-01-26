@@ -1,10 +1,9 @@
 #ifndef _GUICONTROLMANAGER_
 #define _GUICONTROLMANAGER_
 
-#include "GUIWriter.h"
-#include "GUIReader.h"
-
 namespace RTE {
+
+class GUIWriter;
 
 /// <summary>
 /// A class used to manage the GUI as a whole and provide the interface between the GUI and the rest of the system.

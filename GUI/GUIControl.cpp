@@ -1,4 +1,5 @@
 #include "GUI.h"
+#include "GUIWriter.h"
 
 namespace RTE {
 
