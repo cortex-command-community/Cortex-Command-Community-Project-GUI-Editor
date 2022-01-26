@@ -165,7 +165,7 @@ public:
 // Description:     Called when the mouse enters the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override;
+	void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override { SendSignal(MouseEnter, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ public:
 // Description:     Called when the mouse leaves the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override;
+	void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override { SendSignal(MouseLeave, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@ public:
 // Description:     Called when a key goes down.
 // Arguments:       KeyCode, Modifier.
 
-	void OnKeyDown(int KeyCode, int Modifier) override;
+	void OnKeyDown(int KeyCode, int Modifier) override { SendSignal(KeyDown, KeyCode); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ public:
 // Description:     Locks the control from updating every time a new item is added.
 // Arguments:       None.
 
-    void BeginUpdate();
+	void BeginUpdate() { m_UpdateLocked = true; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -286,7 +286,7 @@ public:
 // Description:     Gets the multi-selection value.
 // Arguments:       None.
 
-    bool GetMultiSelect() const;
+	bool GetMultiSelect() const { return m_MultiSelect; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +313,7 @@ public:
 // Description:     Gets the item list.
 // Arguments:       None.
 
-    std::vector<Item *> * GetItemList();
+	std::vector<Item *> * GetItemList() { return &m_Items; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -411,7 +411,7 @@ public:
 // Description:     Gets the selection list.
 // Arguments:       None.
 
-    std::vector<Item *> * GetSelectionList();
+	std::vector<Item *> * GetSelectionList() { return &m_SelectedList; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -506,14 +506,14 @@ public:
 	/// Sets whether the scroll panel scrolls in a loop or not.
 	/// </summary>
 	/// <param name="scrollLoop">True to scroll in a loop, false to scroll with edge stopping.</param>
-	void SetSelectionScrollingLoop(bool scrollLoop);
+	void SetSelectionScrollingLoop(bool scrollLoop) { m_LoopSelectionScroll = scrollLoop; }
 
 
 	/// <summary>
 	/// Sets whether the list panel can be scrolled with the mouse scroll wheel.
 	/// </summary>
 	/// <param name="mouseScroll">True to enable scrolling, false to disable.</param>
-	void SetMouseScrolling(bool mouseScroll);
+	void SetMouseScrolling(bool mouseScroll) { m_MouseScroll = mouseScroll; }
 
 	/// <summary>
 	/// Gets the thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars.

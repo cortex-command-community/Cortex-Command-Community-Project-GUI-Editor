@@ -78,7 +78,7 @@ public:
 // Description:     Called when the mouse goes down on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseDown(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseDown(int X, int Y, int Buttons, int Modifier) override { CaptureMouse(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ public:
 // Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseMove(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseMove(int X, int Y, int Buttons, int Modifier) override {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+    void Move(int X, int Y) override { GUIPanel::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+    void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ public:
 // Description:     Gets the value.
 // Arguments:       None.
 
-    int GetValue() const;
+    int GetValue() const { return m_Value; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ public:
 // Description:     Sets the minimum.
 // Arguments:       Minimum.
 
-    void SetMinimum(int Minimum);
+    void SetMinimum(int Minimum) { m_Minimum = Minimum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ public:
 // Description:     Gets the minimum.
 // Arguments:       None.
 
-    int GetMinimum() const;
+    int GetMinimum() const { return m_Minimum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ public:
 // Description:     Sets the maximum.
 // Arguments:       Maximum.
 
-    void SetMaximum(int Maximum);
+    void SetMaximum(int Maximum) { m_Maximum = Maximum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +205,7 @@ public:
 // Description:     Gets the maximum.
 // Arguments:       None.
 
-    int GetMaximum() const;
+    int GetMaximum() const { return m_Maximum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

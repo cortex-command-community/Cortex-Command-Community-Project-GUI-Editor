@@ -173,7 +173,7 @@ public:
 // Description:     Clears the selection. Does NOT remove the selection text though.
 // Arguments:       None.
 
-    void ClearSelection();
+    void ClearSelection() { m_GotSelection = false; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +218,7 @@ public:
 // Description:     Gets the locked state on the textbox.
 // Arguments:       None.
 
-    bool GetLocked() const;
+    bool GetLocked() const { return m_Locked; }
 
 	/// <summary>
 	/// Gets whether this text panel accepts numeric symbols only.

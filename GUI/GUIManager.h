@@ -101,7 +101,7 @@ public:
 // Description:     Gets a unique ID for a panel.
 // Arguments:       None.
 
-    int GetPanelID();
+	int GetPanelID() { return m_UniqueIDCount++; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

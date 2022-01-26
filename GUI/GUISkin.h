@@ -28,7 +28,7 @@ public:
 //                  memory.
 // Arguments:       None.
 
-    ~GUISkin();
+    ~GUISkin() { Destroy(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ public:
 // Description:     Creates a blank bitmap.
 // Arguments:       Width, Height.
 
-    GUIBitmap * CreateBitmap(int Width, int Height);
+    GUIBitmap * CreateBitmap(int Width, int Height) { return m_Screen->CreateBitmap(Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ public:
 //                  should be converted to. If this is 0, then the current video color depth
 //                  will be used as target.
     
-    unsigned long ConvertColor(unsigned long color, int targetDepth = 0);
+    unsigned long ConvertColor(unsigned long color, int targetDepth = 0) { return m_Screen->ConvertColor(color, targetDepth); }
 
 
 private:

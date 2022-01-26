@@ -98,7 +98,7 @@ public:
 // Description:     Called when the mouse leaves the panel.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override { m_Mouseover = false; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+    void Move(int X, int Y) override { GUIPanel::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+    void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ public:
 // Description:     Gets the check state.
 // Arguments:       None.
 
-    bool GetCheck() const;
+    bool GetCheck() const { return m_Selected; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ public:
 // Description:     Sets the text.
 // Arguments:       Text.
 
-    void SetText(const std::string &Text);
+    void SetText(const std::string &Text) { m_Text = Text; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ public:
 // Description:     Gets the text.
 // Arguments:       None.
 
-    std::string GetText() const;
+    std::string GetText() const { return m_Text; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

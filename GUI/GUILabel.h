@@ -105,7 +105,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+	GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+	void Move(int X, int Y) override { GUIPanel::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

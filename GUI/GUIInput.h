@@ -71,7 +71,7 @@ public:
 // Description:     Destroy the screen
 // Arguments:       None.
 
-    virtual void Destroy();
+    virtual void Destroy() {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ public:
 // Description:     Updates the Input.
 // Arguments:       None.
 
-    virtual void Update();
+	virtual void Update() {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -116,9 +116,9 @@ public:
 
     void GetKeyboard(unsigned char *Buffer) const;
 
-	unsigned char GetAsciiState(unsigned char ascii) const;
+	unsigned char GetAsciiState(unsigned char ascii) const { return m_KeyboardBuffer[ascii]; }
 
-	unsigned char GetScanCodeState(unsigned char scancode) const;
+	unsigned char GetScanCodeState(unsigned char scancode) const { return m_ScanCodeState[scancode]; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ public:
 // Description:     Gets the key modifiers.
 // Arguments:       None.
 
-    int GetModifier() const;
+	int GetModifier() const { return m_Modifier; }
 
 
 	/// <summary>

@@ -94,7 +94,7 @@ public:
 // Description:     Called when the mouse goes down on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseDown(int X, int Y, int Buttons, int Modifier) override;
+	void OnMouseDown(int X, int Y, int Buttons, int Modifier) override { CaptureMouse(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ public:
 // Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseMove(int X, int Y, int Buttons, int Modifier) override;
+	void OnMouseMove(int X, int Y, int Buttons, int Modifier) override { AddEvent(GUIEvent::Notification, MouseMove, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+	GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ public:
 // Description:     Sets whether to draw the background.
 // Arguments:       Draw.
 
-    void SetDrawBackground(bool DrawBack);
+	void SetDrawBackground(bool DrawBack) { m_DrawBackground = DrawBack; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ public:
 // Description:     Sets the drawing type.
 // Arguments:       Type.
 
-    void SetDrawType(int Type);
+	void SetDrawType(int Type) { m_DrawType = Type; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +222,7 @@ public:
 // Description:     Sets the drawing color.
 // Arguments:       Color.
 
-    void SetDrawColor(unsigned long Color);
+	void SetDrawColor(unsigned long Color) { m_DrawColor = Color; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

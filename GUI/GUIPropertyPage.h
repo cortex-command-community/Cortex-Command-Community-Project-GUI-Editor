@@ -90,7 +90,7 @@ public:
 // Description:     Called when the mouse goes up on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseUp(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseUp(int X, int Y, int Buttons, int Modifier) override {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public:
 // Description:     Called when the mouse enters the panel.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ public:
 // Description:     Called when the mouse leaves the panel.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override;
+    void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -145,16 +145,16 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+    void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          StoreProperties
 //////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the control to store the values into properties.
+// Description:     Gets the control to store the values into properties. // Note: This is for saving the control, not related directly to our control type
 // Arguments:       None.
 
-    void StoreProperties() override;
+	void StoreProperties() override {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+    void Move(int X, int Y) override { GUIPanel::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ public:
 // Description:     Gets the properties in the page.
 // Arguments:       None.
 
-    GUIProperties * GetPropertyValues();
+	GUIProperties * GetPropertyValues() { return &m_PageValues; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

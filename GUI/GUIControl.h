@@ -57,7 +57,7 @@ public:
 // Description:     Called when the control has been destroyed.
 // Arguments:       None.
 
-    virtual void Destroy();
+    virtual void Destroy() {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ public:
 // Description:     Called when the control is activated and ready for use.
 // Arguments:       None.
 
-    virtual void Activate();
+    virtual void Activate() {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ public:
 // Description:     Called when the skin has been changed.
 // Arguments:       New skin pointer.
 
-    virtual void ChangeSkin(GUISkin *Skin);
+	virtual void ChangeSkin(GUISkin *Skin) { m_Skin = Skin; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ public:
 // Description:     Returns a string representing the control's ID
 // Arguments:       None.
 
-    std::string GetID() const;
+	std::string GetID() const { return m_ControlID; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ public:
 // Description:     Gets the children lst
 // Arguments:       None.
 
-    std::vector<GUIControl *> * GetChildren();
+	std::vector<GUIControl *> * GetChildren() { return &m_ControlChildren; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    virtual GUIPanel * GetPanel();
+	virtual GUIPanel * GetPanel() { return nullptr; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ public:
 // Description:     Gets the control to store the values into properties.
 // Arguments:       None.
 
-    virtual void StoreProperties();
+    virtual void StoreProperties() {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    virtual void Move(int X, int Y);
+    virtual void Move(int X, int Y) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ public:
 // Description:     Called when the control needs to be resized.
 // Arguments:       New size.
 
-    virtual void Resize(int Width, int Height);
+    virtual void Resize(int Width, int Height) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ public:
 // Description:     Gets the parent of this control.
 // Arguments:       None.
 
-    GUIControl * GetParent();
+	GUIControl * GetParent() { return m_ControlParent; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -257,7 +257,7 @@ public:
 // Description:     Gets the control properties.
 // Arguments:       None.
 
-    GUIProperties * GetProperties();
+	GUIProperties * GetProperties() { return &m_Properties; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ public:
 // Description:     Returns the IsContainer value.
 // Arguments:       None.
 
-    bool IsContainer();
+	bool IsContainer() { return m_IsContainer; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

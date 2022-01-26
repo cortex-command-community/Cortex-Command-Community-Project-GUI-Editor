@@ -37,7 +37,7 @@ public:
 // Description:     Called when the control has been destroyed.
 // Arguments:       None.
 
-    void Destroy() override; 
+	void Destroy() override { GUIListPanel::Destroy(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ public:
 // Description:     Called when the skin has been changed.
 // Arguments:       New skin pointer.
 
-    void ChangeSkin(GUISkin *Skin) override;
+	void ChangeSkin(GUISkin *Skin) override { GUIListPanel::ChangeSkin(Skin); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+	GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+	void Move(int X, int Y) override { SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIListPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -103,7 +103,7 @@ public:
 // Description:     Draws the GUI to the back buffer.
 // Arguments:       None.
 
-    void Draw();
+	void Draw() { m_GUIManager->Draw(m_Screen); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ public:
 // Description:     Draws the GUI to the back buffer.
 // Arguments:       The GUIScreen to draw to, overriding the one passed in on construction
 
-    void Draw(GUIScreen *pScreen);
+	void Draw(GUIScreen *pScreen) { m_GUIManager->Draw(pScreen); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ public:
 // Arguments:       None.
 // Returns:         vector<GUIControl *> Pointer.
 
-    std::vector<GUIControl *> * GetControlList();
+	std::vector<GUIControl *> * GetControlList() { return &m_ControlList; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ public:
 // Description:     Sets the cursor type.
 // Arguments:       Cursor type.
 
-    void SetCursor(int CursorType);
+	void SetCursor(int CursorType) { m_CursorType = CursorType; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

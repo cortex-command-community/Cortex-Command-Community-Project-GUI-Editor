@@ -14,7 +14,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIReader object in system memory. Create() should be called before using the object.
 		/// </summary>
-		GUIReader();
+		GUIReader() { Clear(); }
 
 		/// <summary>
 		/// Makes the GUIReader object ready for use.
@@ -29,31 +29,31 @@ namespace RTE {
 		/// Gets a pointer to the istream of this reader.
 		/// </summary>
 		/// <returns>A pointer to the istream object for this reader.</returns>
-		std::istream * GetStream() const;
+		std::istream * GetStream() const { return m_Stream.get(); }
 
 		/// <summary>
 		/// Gets the path of the current file this reader is reading from.
 		/// </summary>
 		/// <returns>A string with the path, relative from the working directory.</returns>
-		std::string GetCurrentFilePath() const;
+		std::string GetCurrentFilePath() const { return m_FilePath; }
 
 		/// <summary>
 		/// Gets the line of the current file line this reader is reading from.
 		/// </summary>
 		/// <returns>A string with the line number that will be read from next.</returns>
-		std::string GetCurrentFileLine() const;
+		std::string GetCurrentFileLine() const { return std::to_string(m_CurrentLine); }
 
 		/// <summary>
 		/// Returns true if reader was told to skip InlcudeFile statements
 		/// </summary>
 		/// <returns>Returns whether reader was told to skip included files.</returns>
-		bool GetSkipIncludes() const;
+		bool GetSkipIncludes() const { return m_SkipIncludes; }
 
 		/// <summary>
 		/// Set whether this reader should skip included files.
 		/// </summary>
 		/// <param name="skip>To make reader skip included files pass true, pass false otherwise.</param>
-		void SetSkipIncludes(bool skip);
+		void SetSkipIncludes(bool skip) { m_SkipIncludes = skip; }
 #pragma endregion
 
 #pragma region Reading Operations
@@ -102,7 +102,7 @@ namespace RTE {
 		/// Shows whether this is still OK to read from. If file isn't present, etc, this will return false.
 		/// </summary>
 		/// <returns>Whether this GUIReader's stream is OK or not.</returns>
-		bool ReaderOK() const;
+		bool ReaderOK() const { return m_Stream.get() && !m_Stream->fail() && m_Stream->is_open(); }
 
 		/// <summary>
 		/// Makes an error message box pop up for the user that tells them something went wrong with the reading, and where.

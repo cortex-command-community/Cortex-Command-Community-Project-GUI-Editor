@@ -14,7 +14,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIWriter object in system memory. Create() should be called before using the object.
 		/// </summary>
-		GUIWriter();
+		GUIWriter() { Clear(); }
 
 		/// <summary>
 		/// Makes the GUIWriter object ready for use.
@@ -30,19 +30,19 @@ namespace RTE {
 		/// Gets the path to the file being written.
 		/// </summary>
 		/// <returns>The full path to the file being written.</returns>
-		std::string GetFilePath() const;
+		std::string GetFilePath() const { return m_FilePath; }
 
 		/// <summary>
 		/// Gets the name (without path) of the file being written.
 		/// </summary>
 		/// <returns>The name of file being written.</returns>
-		std::string GetFileName() const;
+		std::string GetFileName() const { return m_FileName; }
 
 		/// <summary>
 		/// Gets the folder path (without filename) to where the file is being written.
 		/// </summary>
 		/// <returns>The name of folder being written in.</returns>
-		std::string GetFolderPath() const;
+		std::string GetFolderPath() const { return m_FolderPath; }
 #pragma endregion
 
 #pragma region Writing Operations
@@ -90,7 +90,7 @@ namespace RTE {
 		/// Shows whether the writer is ready to start accepting data streamed to it.
 		/// </summary>
 		/// <returns>Whether the writer is ready to start accepting data streamed to it or not.</returns>
-		bool WriterOK() const;
+		bool WriterOK() const { return m_Stream.get() && !m_Stream->fail() && m_Stream->is_open(); }
 
 		/// <summary>
 		/// Flushes and closes the output stream of this GUIWriter. This happens automatically at destruction but needs to be called manually if a written file must be read from in the same scope.

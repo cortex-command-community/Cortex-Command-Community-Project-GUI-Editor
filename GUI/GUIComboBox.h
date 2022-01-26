@@ -102,7 +102,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+	GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ public:
 // Description:     Locks the control from updating every time a new item is added.
 // Arguments:       None.
 
-    void BeginUpdate();
+	void BeginUpdate() { m_ListPanel->BeginUpdate(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ public:
 //                  Will automatically update the control.
 // Arguments:       None.
 
-    void EndUpdate();
+	void EndUpdate() { m_ListPanel->EndUpdate(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ public:
 // Description:     Add an item to the list.
 // Arguments:       Name, Extra text, bitmap to show in the list, extra entity data
 
-    void AddItem(const std::string &Name, const std::string &ExtraText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = nullptr);
+	void AddItem(const std::string &Name, const std::string &ExtraText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = nullptr) { m_ListPanel->AddItem(Name, ExtraText, pBitmap, pEntity); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ public:
 // Description:     Get the item count.
 // Arguments:       None.
 
-    int GetCount();
+	int GetCount() { return m_ListPanel->GetItemList()->size(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ public:
 // Description:     Get the index of the selected item.
 // Arguments:       None.
 
-    int GetSelectedIndex();
+	int GetSelectedIndex() { return m_ListPanel->GetSelectedIndex(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ public:
 // Arguments:       Index.
 // Returns:         Pointer to the item structure. 0 if the index was invalid.
 
-    GUIListPanel::Item * GetItem(int Index);
+	GUIListPanel::Item * GetItem(int Index) { return m_ListPanel->GetItem(Index); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +306,7 @@ public:
 // Description:     Gets the drop down style of the combo box.
 // Arguments:       None.
 
-    int GetDropDownStyle() const;
+	int GetDropDownStyle() const { return m_DropDownStyle; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +324,7 @@ public:
 // Description:     Gets the visibility of the control.
 // Arguments:       None.
 
-    bool GetVisible() override;
+	bool GetVisible() override { return _GetVisible(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -342,7 +342,7 @@ public:
 // Description:     Gets the enabled state of the control.
 // Arguments:       None.
 
-    bool GetEnabled() override;
+	bool GetEnabled() override { return _GetEnabled(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -471,7 +471,7 @@ public:
 // Description:     Called when the mouse goes up on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    void OnMouseUp(int X, int Y, int Buttons, int Modifier) override;
+	void OnMouseUp(int X, int Y, int Buttons, int Modifier) override { m_Pushed = false; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -480,7 +480,7 @@ public:
 // Description:     Sets the pushed state of the button.
 // Arguments:       Pushed.
 
-    void SetPushed(bool Pushed);
+	void SetPushed(bool Pushed) { m_Pushed = Pushed; }
 
 private:
 

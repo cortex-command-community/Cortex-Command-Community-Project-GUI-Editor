@@ -53,7 +53,7 @@ public:
 // Description:     Called when the control has been destroyed.
 // Arguments:       None.
 
-    void Destroy() override; 
+    void Destroy() override { GUIScrollPanel::Destroy(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
 // Description:     Called when the skin has been changed.
 // Arguments:       New skin pointer.
 
-    void ChangeSkin(GUISkin *Skin) override;
+    void ChangeSkin(GUISkin *Skin) override { GUIScrollPanel::ChangeSkin(Skin); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ public:
 // Arguments:       None.
 // Returns:         0 if the control does not have a panel, otherwise the topmost panel.
 
-    GUIPanel * GetPanel() override;
+    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override;
+    void Move(int X, int Y) override { GUIScrollPanel::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ public:
 // Description:     Gets the rectangle of the control.
 // Arguments:       Position, Size.
 
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override;
+    void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIScrollPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ public:
 // Description:     Gets the control to store the values into properties.
 // Arguments:       None.
 
-    void StoreProperties() override;
+    void StoreProperties() override { GUIScrollPanel::SaveProps(&m_Properties); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

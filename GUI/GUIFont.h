@@ -136,7 +136,7 @@ public:
 // Description:     Gets the font height.
 // Arguments:       None.
 
-    int GetFontHeight() const;
+	int GetFontHeight() const { return m_FontHeight; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ public:
 // Description:     Gets the name of the font
 // Arguments:       None.
 
-    std::string GetName() const;
+	std::string GetName() const { return m_Name; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ public:
 // Description:     Get the character kerning (spacing)
 // Arguments:       None.
 
-    int GetKerning() const;
+	int GetKerning() const { return m_Kerning; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -147,7 +147,7 @@ public:
 // Description:     Gets the minimum value for the scrollpanel
 // Arguments:       None.
 
-    int GetMinimum() const;
+    int GetMinimum() const { return m_Minimum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ public:
 // Description:     Gets the maximum value for the scrollpanel
 // Arguments:       None.
 
-    int GetMaximum() const;
+    int GetMaximum() const { return m_Maximum; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ public:
 // Description:     Gets the current value of the scrollpanel.
 // Arguments:       None.
 
-    int GetValue() const;
+    int GetValue() const { return m_Value; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +201,7 @@ public:
 // Description:     Gets the size of the page.
 // Arguments:       None.
 
-    int GetPageSize() const;
+    int GetPageSize() const { return m_PageSize; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ public:
 // Description:     Gets the orientation of the scrollpanel.
 // Arguments:       None.
 
-    int GetOrientation() const;
+    int GetOrientation() const { return m_Orientation; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -237,13 +237,13 @@ public:
 // Description:     Gets the small change value.
 // Arguments:       None.
 
-    int GetSmallChange() const;
+    int GetSmallChange() const { return m_SmallChange; }
 
 	/// <summary>
 	/// Gets the value resolution for this scroll panel.
 	/// </summary>
 	/// <returns>The value resolution</returns>
-	int GetValueResolution() const;
+	int GetValueResolution() const { return m_ValueResolution; }
 
 protected:
 

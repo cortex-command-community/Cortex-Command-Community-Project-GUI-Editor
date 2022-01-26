@@ -54,7 +54,7 @@ public:
 //                  memory.
 // Arguments:       None.
 
-    GUIPanel();
+	GUIPanel() { Clear(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ public:
 // Description:     Invalidates the panel
 // Arguments:       None.
 
-    void Invalidate();
+	void Invalidate() { m_ValidRegion = false; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ public:
 // Description:     Checks if the panel is valid
 // Arguments:       None.
 
-    bool IsValid() const;
+	bool IsValid() const { return m_ValidRegion; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ public:
 // Description:     Called when the mouse goes down on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseDown(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseDown(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ public:
 // Description:     Called when the mouse goes up on the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseUp(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseUp(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ public:
 // Description:     Called when the mouse has double-clicked on the pane.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnDoubleClick(int X, int Y, int Buttons, int Modifier);
+	virtual void OnDoubleClick(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ public:
 // Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseMove(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseMove(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ public:
 // Description:     Called when the mouse enters the panel.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseEnter(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseEnter(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ public:
 // Description:     Called when the mouse leaves the panel.
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseLeave(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseLeave(int X, int Y, int Buttons, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ public:
 // Description:     Called when the mouse is hovering over the panel (has to be enabled)
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-    virtual void OnMouseHover(int X, int Y, int Buttons, int Modifier);
+	virtual void OnMouseHover(int X, int Y, int Buttons, int Modifier) {}
 
 
 	/// <summary>
@@ -228,7 +228,7 @@ public:
 // Description:     Called when a key goes down.
 // Arguments:       KeyCode, Modifier.
 
-    virtual void OnKeyDown(int KeyCode, int Modifier);
+	virtual void OnKeyDown(int KeyCode, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ public:
 // Description:     Called when a key goes up.
 // Arguments:       KeyCode, Modifier.
 
-    virtual void OnKeyUp(int KeyCode, int Modifier);
+	virtual void OnKeyUp(int KeyCode, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -246,7 +246,7 @@ public:
 // Description:     Called when a key is pressed (OnDown & repeating).
 // Arguments:       KeyCode, Modifier.
 
-    virtual void OnKeyPress(int KeyCode, int Modifier);
+	virtual void OnKeyPress(int KeyCode, int Modifier) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ public:
 // Description:     Called when the panel gains focus.
 // Arguments:       None.
 
-    virtual void OnGainFocus();
+    virtual void OnGainFocus() { m_GotFocus = true; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +264,7 @@ public:
 // Description:     Called when the panel looses focus.
 // Arguments:       None.
 
-    virtual void OnLoseFocus();
+    virtual void OnLoseFocus() { m_GotFocus = false; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -318,7 +318,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    virtual void ReceiveSignal(GUIPanel *Source, int Code, int Data);
+    virtual void ReceiveSignal(GUIPanel *Source, int Code, int Data) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -354,7 +354,7 @@ public:
 // Description:     Sets the visibility of the panel.
 // Arguments:       Visible.
 
-    void _SetVisible(bool Visible);
+    void _SetVisible(bool Visible) { m_Visible = Visible; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -363,7 +363,7 @@ public:
 // Description:     Gets the visibility of the panel.
 // Arguments:       None.
 
-    bool _GetVisible() const;
+    bool _GetVisible() const { return m_Visible; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -372,7 +372,7 @@ public:
 // Description:     Sets the enabled state of the panel.
 // Arguments:       Enabled.
 
-    void _SetEnabled(bool Enabled);
+    void _SetEnabled(bool Enabled) { m_Enabled = Enabled; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -381,7 +381,7 @@ public:
 // Description:     Gets the enabled state of the panel.
 // Arguments:       None.
 
-    bool _GetEnabled() const;
+    bool _GetEnabled() const { return m_Enabled; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +390,7 @@ public:
 // Description:     Gets the width of the panel.
 // Arguments:       None.
 
-    int GetWidth() const;
+    int GetWidth() const { return m_Width; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -399,7 +399,7 @@ public:
 // Description:     Gets the height of the panel.
 // Arguments:       None.
 
-    int    GetHeight() const;
+    int    GetHeight() const { return m_Height; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -463,7 +463,7 @@ public:
 // Description:     Gets the parent of this panel.
 // Arguments:       None.
 
-    GUIPanel * GetParentPanel();
+    GUIPanel * GetParentPanel() { return m_Parent; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -472,7 +472,7 @@ public:
 // Description:     Gets the panel's ID.
 // Arguments:       None.
 
-    int GetPanelID() const;
+    int GetPanelID() const { return m_ID; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -481,7 +481,7 @@ public:
 // Description:     Sets the panel's captured state.
 // Arguments:       Captured.
 
-    void SetCaptureState(bool Captured);
+    void SetCaptureState(bool Captured) { m_Captured = Captured; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -490,7 +490,7 @@ public:
 // Description:     Gets the panel's captured state.
 // Arguments:       None.
 
-    bool IsCaptured() const;
+    bool IsCaptured() const { return m_Captured; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -499,7 +499,7 @@ public:
 // Description:     Gets the panel's enabled state.
 // Arguments:       None.
 
-    bool IsEnabled() const;
+    bool IsEnabled() const { return m_Enabled; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -536,7 +536,7 @@ public:
 // Description:     Gets the focus value of the panel.
 // Arguments:       None.
 
-    bool HasFocus() const;
+    bool HasFocus() const { return m_GotFocus; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -545,7 +545,7 @@ public:
 // Description:     Sets the Z index of the panel.
 // Arguments:       ZPos.
 
-    void SetZPos(int Z);
+    void SetZPos(int Z) { m_ZPos = Z; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -554,7 +554,7 @@ public:
 // Description:     Gets the Z index of the panel.
 // Arguments:       None.
 
-    int GetZPos() const;
+    int GetZPos() const { return m_ZPos; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
