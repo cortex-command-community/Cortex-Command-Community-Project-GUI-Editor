@@ -17,6 +17,8 @@ public:
         Changed,
     } Notification;
 
+	GUIPanelOverrideMethods;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIRadioButton
@@ -98,16 +100,6 @@ public:
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
     void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override { m_Mouseover = false; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the panel of the control.
-// Arguments:       None.
-// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
-
-    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

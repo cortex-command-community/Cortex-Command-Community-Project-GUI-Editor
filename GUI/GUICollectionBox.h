@@ -23,6 +23,8 @@ public:
         Panel
     } DrawType;
 
+	GUIPanelOverrideMethods;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUICollectionBox
@@ -140,16 +142,6 @@ public:
 // Arguments:       Position, Size.
 
 	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the panel of the control.
-// Arguments:       None.
-// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
-
-	GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

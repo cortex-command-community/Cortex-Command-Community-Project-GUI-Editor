@@ -27,6 +27,8 @@ public:
         Changed = 0,
     } Notification;
 
+	GUIPanelOverrideMethods;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUISlider
@@ -118,16 +120,6 @@ public:
 	/// <param name="modifier">Activated modifier buttons.</param>
 	/// <param name="mouseWheelChange">The amount of wheel movement. Positive is scroll up, negative is scroll down.</param>
 	void OnMouseWheelChange(int x, int y, int modifier, int mouseWheelChange) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns the panel of the control.
-// Arguments:       None.
-// Returns:         0 if the control does not have a panel, otherwise the topmost panel.
-
-    GUIPanel * GetPanel() override { return this; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
