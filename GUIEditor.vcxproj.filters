@@ -69,15 +69,6 @@
     <ClCompile Include="GUI\GUIUtil.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroInput.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp">
-      <Filter>System\Wrappers</Filter>
-    </ClCompile>
     <ClCompile Include="System\StandardIncludes.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -144,6 +135,15 @@
     <ClCompile Include="GUI\Controls\GUITextBox.cpp">
       <Filter>GUI\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="System\Wrappers\AllegroBitmap.cpp">
+      <Filter>System\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Wrappers\AllegroInput.cpp">
+      <Filter>System\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Wrappers\AllegroScreen.cpp">
+      <Filter>System\Wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -193,15 +193,6 @@
     </ClInclude>
     <ClInclude Include="GUI\GUIUtil.h">
       <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroBitmap.h">
-      <Filter>System\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroInput.h">
-      <Filter>System\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroScreen.h">
-      <Filter>System\Wrappers</Filter>
     </ClInclude>
     <ClInclude Include="System\StandardIncludes.h">
       <Filter>System</Filter>
@@ -277,6 +268,15 @@
     </ClInclude>
     <ClInclude Include="GUI\Controls\GUITextBox.h">
       <Filter>GUI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Wrappers\AllegroBitmap.h">
+      <Filter>System\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Wrappers\AllegroInput.h">
+      <Filter>System\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Wrappers\AllegroScreen.h">
+      <Filter>System\Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
