@@ -30,7 +30,6 @@ void GUIPanel::Clear() {
 	m_Children.clear();
 
 	m_Manager = nullptr;
-	m_ValidRegion = false;
 	m_SignalTarget = this;
 	m_ZPos = 0;
 
@@ -125,9 +124,6 @@ void GUIPanel::LoadProperties(GUIProperties *Props) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPanel::Draw(GUIScreen *Screen) {
-	// Validate this panel
-	m_ValidRegion = true;
-
 	// Calculate this panel's clipping region - set the clipping rect to be the intersection of what
 	// was already set by the parent, and the dimensions of this panel.
 	Screen->GetBitmap()->AddClipRect(GetRect());

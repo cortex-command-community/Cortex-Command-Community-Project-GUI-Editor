@@ -153,7 +153,6 @@ private:
 	GUIPanel *m_HoverPanel;
 	float m_HoverTime;
 
-	bool m_UseValidation;
 	int m_UniqueIDCount;
 
 	Timer *m_pTimer;

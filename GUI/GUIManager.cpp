@@ -8,7 +8,6 @@ using namespace RTE;
 GUIManager::GUIManager(GUIInput *input) {
 	m_Input = input;
 	m_MouseEnabled = true;
-	m_UseValidation = false;
 
 	Clear();
 
@@ -256,7 +255,7 @@ void GUIManager::Draw(GUIScreen *Screen) {
 		GUIPanel *p = *it;
 
 		// Draw the panel
-		if ((!p->IsValid() || !m_UseValidation) && p->_GetVisible()) { p->Draw(Screen); }
+		if (p->_GetVisible()) { p->Draw(Screen); }
 	}
 }
 
