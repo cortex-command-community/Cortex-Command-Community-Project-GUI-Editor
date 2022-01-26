@@ -56,7 +56,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIUtil::SetClipboardText(std::string text) {
+	bool GUIUtil::SetClipboardText(const std::string &text) {
 #ifdef _WIN32
 		if (OpenClipboard(nullptr)) {
 			// Allocate global memory for the text

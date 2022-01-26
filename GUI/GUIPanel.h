@@ -14,27 +14,27 @@ class GUIPanel {
 public:
 
     // Mouse buttons
-    enum {
+    enum MouseButtons {
         MOUSE_NONE = 0x00,
         MOUSE_LEFT = 0x01,
         MOUSE_MIDDLE = 0x02,
         MOUSE_RIGHT = 0x04,
-    } MouseButtons;
+    };
 
     // Mouse Modifiers
-    enum {
+    enum MouseModifiers {
         MODI_NONE = 0x00,
         MODI_SHIFT = 0x01,
         MODI_CTRL = 0x02,
         MODI_ALT = 0x04,
 		MODI_COMMAND = 0x08
-    } MouseModifiers;
+    };
 
     // Z Change
-    enum {
+    enum ZChange {
         TopMost=0,
         BottomMost,
-    } ZChange;
+    };
 
 
 #pragma region Global Macro Definitions

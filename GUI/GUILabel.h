@@ -15,9 +15,9 @@ class GUILabel : public GUIControl, public GUIPanel {
 public:
 
     // Label Notifications
-    enum {
+    enum Notification {
         Clicked = 0,
-    } Notification;
+    };
 
     enum class OverflowScrollState {
         Deactivated = 0,

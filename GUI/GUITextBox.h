@@ -13,11 +13,11 @@ class GUITextBox : public GUIControl, public GUITextPanel {
 public:
 
     // Notifications
-    enum {
+    enum Notification {
         Changed = 0,
         Clicked,
         Enter
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

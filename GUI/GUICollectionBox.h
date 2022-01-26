@@ -11,17 +11,17 @@ class GUICollectionBox : public GUIControl, public GUIPanel {
 public:
 
     // CollectionBox Notifications
-    enum {
+    enum Notification {
         Clicked = 0,
         MouseMove    // Mouse moved over the panel
-    } Notification;
+    };
 
     // Drawing type
-    enum {
+    enum DrawType {
         Color,
         Image,
         Panel
-    } DrawType;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

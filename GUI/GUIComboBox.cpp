@@ -53,7 +53,7 @@ namespace RTE {
 
 		m_TextPanel->Create(0, 0, m_Width - 12, m_Height);
 		m_TextPanel->_SetVisible(true);
-		m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
 		m_TextPanel->SetSignalTarget(this);
 		GUIPanel::AddChild(m_TextPanel);
 
@@ -119,7 +119,7 @@ namespace RTE {
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
 			m_DropDownStyle = DropDown;
 		}
-		m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ namespace RTE {
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();
 			delete m_DrawBitmap;
-			m_DrawBitmap = 0;
+			m_DrawBitmap = nullptr;
 		}
 
 		// Create a new bitmap
@@ -263,7 +263,7 @@ namespace RTE {
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
 				m_ListPanel->ReleaseMouse();
-				m_Manager->SetFocus(0);
+				m_Manager->SetFocus(nullptr);
 				m_Button->SetPushed(false);
 
 				// Restore the old selection
@@ -275,7 +275,7 @@ namespace RTE {
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
 				m_ListPanel->ReleaseMouse();
-				m_Manager->SetFocus(0);
+				m_Manager->SetFocus(nullptr);
 				m_Button->SetPushed(false);
 
 				AddEvent(GUIEvent::Notification, Closed, 0);
@@ -455,7 +455,7 @@ namespace RTE {
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
 			m_DropDownStyle = DropDown;
 		}
-		m_TextPanel->SetLocked((m_DropDownStyle == DropDownList));
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
 
 		// Force a rebuild of the bitmap
 		ChangeSkin(m_Skin);
@@ -475,7 +475,7 @@ namespace RTE {
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();
 			delete m_DrawBitmap;
-			m_DrawBitmap = 0;
+			m_DrawBitmap = nullptr;
 		}
 
 		// Create a new bitmap. Same width, but double the height to allow for both up

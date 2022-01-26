@@ -120,10 +120,10 @@ namespace RTE {
 					Screen->GetBitmap()->SetClipRect(GetRect());
 
 					// Draw the image
-					m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, 0);
+					m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
 					// Get rid of clipping
-					Screen->GetBitmap()->SetClipRect(0);
+					Screen->GetBitmap()->SetClipRect(nullptr);
 				}
 			} else if (m_DrawType == Panel && m_DrawBackground) {
 				if (m_DrawBitmap) {

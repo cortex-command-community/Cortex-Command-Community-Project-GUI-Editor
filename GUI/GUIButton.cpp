@@ -129,7 +129,7 @@ namespace RTE {
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();
 			delete m_DrawBitmap;
-			m_DrawBitmap = 0;
+			m_DrawBitmap = nullptr;
 		}
 
 		// Create a new bitmap. Same width, but triple the height to allow for Up, Down

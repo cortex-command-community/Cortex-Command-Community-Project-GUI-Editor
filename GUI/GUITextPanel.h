@@ -11,12 +11,12 @@ class GUITextPanel : public GUIPanel {
 public:
 
     // Text panel signals
-    enum {
+    enum Signals {
         Clicked = 0,
         MouseDown,
         Changed,
         Enter
-    } Signals;
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public:
 // Description:     Sets the text in the textpanel.
 // Arguments:       Text.
 
-    void SetText(const std::string &Text);
+    void SetText(const std::string_view &Text);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ public:
 // Description:     Sets the extra text which appears right-justified in the textpanel.
 // Arguments:       Text.
 
-    void SetRightText(const std::string &rightText);
+    void SetRightText(const std::string_view&rightText);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -556,7 +556,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextPanel::SetText(const std::string &Text) {
+	void GUITextPanel::SetText(const std::string_view &Text) {
 		m_Text = Text;
 
 		// Clear the selection
@@ -574,7 +574,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextPanel::SetRightText(const std::string &rightText) {
+	void GUITextPanel::SetRightText(const std::string_view &rightText) {
 		m_RightText = rightText;
 		SendSignal(Changed, 0);
 	}

@@ -34,7 +34,7 @@ namespace RTE {
 		// Load the skin
 		if (!m_Skin->Load(SkinDir, SkinFilename)) {
 			delete m_Skin;
-			m_Skin = 0;
+			m_Skin = nullptr;
 			return false;
 		}
 

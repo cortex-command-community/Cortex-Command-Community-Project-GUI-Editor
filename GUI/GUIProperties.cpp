@@ -160,7 +160,7 @@ namespace RTE {
 
 		while (tok && count < MaxArraySize) {
 			Array[count++] = GUIUtil::TrimString(tok);
-			tok = strtok(0, ",");
+			tok = strtok(nullptr, ",");
 		}
 
 		delete[] str;
@@ -192,7 +192,7 @@ namespace RTE {
 
 		while (tok && count < MaxArraySize) {
 			Array[count++] = atoi(tok);
-			tok = strtok(0, ",");
+			tok = strtok(nullptr, ",");
 		}
 
 		delete[] str;

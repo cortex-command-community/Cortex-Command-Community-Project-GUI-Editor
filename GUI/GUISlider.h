@@ -11,21 +11,21 @@ class GUISlider : public GUIControl, public GUIPanel {
 public:
 
     // Slider orientation
-    enum {
+    enum Orientation {
         Horizontal,
         Vertical
-    } Orientation;
+    };
 
     // Tick Direction
-    enum {
+    enum TickDirection {
         TopLeft,
         BottomRight
-    } TickDirection;
+    };
 
     // Slider Notifications
-    enum {
+    enum Notification {
         Changed = 0,
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

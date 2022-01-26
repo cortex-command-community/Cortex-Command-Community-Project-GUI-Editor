@@ -11,10 +11,10 @@ class GUIProgressBar : public GUIControl, public GUIPanel {
 public:
 
     // Progressbar Notifications
-    enum {
+    enum Notification {
         Clicked = 0,
         Changed
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

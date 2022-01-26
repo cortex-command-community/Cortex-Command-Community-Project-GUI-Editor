@@ -17,7 +17,7 @@ class GUIListPanel : public GUIPanel {
 public:
 
     // Signals
-    enum {
+    enum Signal {
         Click,        // Mouse click. Not just inside the panel
         MouseDown,    // Mouse down inside the panel
         MouseUp,    // Mouse up inside the panel
@@ -28,7 +28,7 @@ public:
         DoubleClick,// Double click
 		KeyDown,    // Key Down
 		EdgeHit //!< Tried scrolling the selection past the first or last item. data = 0 for top edge, data = 1 for bottom edge.
-    } Signal;
+    };
 
     // Item structure
     struct Item
@@ -48,8 +48,8 @@ public:
         const Entity          *m_pEntity;
         int             m_Height;
 
-        Item() { m_pBitmap = 0; m_pEntity = 0; m_Height = 0; }
-        ~Item() { delete m_pBitmap; m_pBitmap = 0; }
+        Item() { m_pBitmap = nullptr; m_pEntity = nullptr; m_Height = 0; }
+        ~Item() { delete m_pBitmap; m_pBitmap = nullptr; }
 
     };
 
@@ -102,7 +102,7 @@ public:
 //                  An Extra menu-specific index that this item may be associated with.
 //                  Object instance associated with the item. Ownership is NOT TRANSFERRED!
 
-    void AddItem(const std::string &Name, const std::string &rightText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = 0, const int extraIndex = -1);
+    void AddItem(const std::string &Name, const std::string &rightText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = nullptr, const int extraIndex = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

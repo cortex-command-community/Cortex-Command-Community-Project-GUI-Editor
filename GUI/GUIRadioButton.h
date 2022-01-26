@@ -11,11 +11,11 @@ class GUIRadioButton : public GUIControl, public GUIPanel {
 public:
 
     // RadioButton Notifications
-    enum {
+    enum Notification {
         Pushed = 0,
         UnPushed,
         Changed,
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

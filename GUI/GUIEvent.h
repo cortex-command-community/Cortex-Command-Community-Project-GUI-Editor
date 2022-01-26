@@ -11,10 +11,10 @@ class GUIEvent {
 public:
 
     // Event Types
-    enum {
+    enum EventType {
         Command = 0,
         Notification
-    } EventType;
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

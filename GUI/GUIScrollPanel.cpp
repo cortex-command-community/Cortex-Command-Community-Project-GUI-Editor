@@ -62,7 +62,7 @@ namespace RTE {
 			if (m_DrawBitmap[i]) {
 				m_DrawBitmap[i]->Destroy();
 				delete m_DrawBitmap[i];
-				m_DrawBitmap[i] = 0;
+				m_DrawBitmap[i] = nullptr;
 			}
 		}
 	}
@@ -121,12 +121,10 @@ namespace RTE {
 				m_DrawBitmap[Back] = nullptr;
 			}
 		}
-		if (UpdateKnob) {
-			if (m_DrawBitmap[KnobStates]) {
-				m_DrawBitmap[KnobStates]->Destroy();
-				delete m_DrawBitmap[KnobStates];
-				m_DrawBitmap[KnobStates] = nullptr;
-			}
+		if (UpdateKnob && m_DrawBitmap[KnobStates]) {
+			m_DrawBitmap[KnobStates]->Destroy();
+			delete m_DrawBitmap[KnobStates];
+			m_DrawBitmap[KnobStates] = nullptr;
 		}
 
 		// Calculate the knob size & position
@@ -313,7 +311,7 @@ namespace RTE {
 		GUIBitmap *Dest = Screen->GetBitmap();
 
 		// Draw the background
-		m_DrawBitmap[Back]->Draw(Dest, m_X, m_Y, 0);
+		m_DrawBitmap[Back]->Draw(Dest, m_X, m_Y, nullptr);
 
 		// Vertical
 		if (m_Orientation == Vertical) {

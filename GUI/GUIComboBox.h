@@ -19,16 +19,16 @@ class GUIComboBox : public GUIControl, public GUIPanel {
 public:
 
     // Notifications
-    enum {
+    enum Notifications {
         Dropped,        // When listpanel has dropped
         Closed,            // When listpanel has closed
-    } Notifications;
+    };
 
     // Combo Style
-    enum {
+    enum DropDownStyles {
         DropDown,
         DropDownList,
-    } DropDownStyles;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
@@ -391,9 +391,9 @@ class GUIComboBoxButton : public GUIPanel {
 public:
 
     // Signals
-    enum {
+    enum Signals {
         Clicked
-    } Signals;
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

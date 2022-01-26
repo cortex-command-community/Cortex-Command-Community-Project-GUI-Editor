@@ -11,7 +11,7 @@ namespace RTE {
 		m_Image = nullptr;
 		m_ControlManager = ControlManager;
 		m_Checked = false;
-		m_Font = 0;
+		m_Font = nullptr;
 		m_Mouseover = false;
 		m_FontColor = 0;
 		m_Text = "";

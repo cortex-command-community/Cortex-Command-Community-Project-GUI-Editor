@@ -401,7 +401,7 @@ namespace RTE {
 
 		// Go through the color cache and destroy the bitmaps
 		std::vector<FontColor>::iterator it;
-		FontColor *FC = 0;
+		FontColor *FC = nullptr;
 		for (it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {
 			FC = &(*it);
 			if (FC && FC->m_Bitmap) {

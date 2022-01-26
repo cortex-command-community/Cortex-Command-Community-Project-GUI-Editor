@@ -10,19 +10,19 @@ class GUIFont {
 
 public:
 
-    // Horizontal Text Alignment, 
-    enum {
+    // Horizontal Text Alignment,
+    enum HAlignment {
         Left = 0,
         Centre,
         Right
-    } HAlignment;
+    };
 
-    // Vertical Text Alignment, 
-    enum {
+    // Vertical Text Alignment,
+    enum VAlignment {
         Top = 0,
         Middle,
         Bottom
-    } VAlignment;
+    };
 
     // Character structure
     typedef struct {

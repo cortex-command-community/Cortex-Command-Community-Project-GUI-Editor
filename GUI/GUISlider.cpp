@@ -401,8 +401,8 @@ namespace RTE {
 
 		if (m_Maximum > m_Minimum) {
 			const bool horizontalOrientation = (m_Orientation == Horizontal);
-			m_KnobSize = (horizontalOrientation) ? m_KnobImage->GetWidth() : m_KnobImage->GetHeight();
-			const int size = (horizontalOrientation) ? m_Width : m_Height;
+			m_KnobSize = horizontalOrientation ? m_KnobImage->GetWidth() : m_KnobImage->GetHeight();
+			const int size = horizontalOrientation ? m_Width : m_Height;
 			const float valueRatio = static_cast<float>(m_Value - m_Minimum) / static_cast<float>(m_Maximum - m_Minimum);
 			m_KnobPosition = m_EndThickness + static_cast<int>(static_cast<float>(size - m_KnobSize - (m_EndThickness * 2)) * valueRatio);
 		}

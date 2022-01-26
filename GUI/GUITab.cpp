@@ -173,7 +173,7 @@ namespace RTE {
 			// TODO: DONT HARDCODE TEXT OFFSET
 			m_Font->Draw(Screen->GetBitmap(), m_X + 4, m_Y + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
 		}
-		Screen->GetBitmap()->SetClipRect(0);
+		Screen->GetBitmap()->SetClipRect(nullptr);
 
 		GUIPanel::Draw(Screen);
 	}

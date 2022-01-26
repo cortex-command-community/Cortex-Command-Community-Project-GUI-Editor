@@ -14,10 +14,10 @@ class GUIPropertyPage : public GUIControl, public GUIPanel {
 public:
 
     // PropertyPage Notifications
-    enum {
+    enum Notification {
         Changed = 0,        // Any text panel has changed. Property values are NOT updated
         Enter                // A text panel has lost focus or the enter key was hit
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

@@ -18,11 +18,11 @@ public:
     };
 
     // Checkbox Notifications
-    enum {
+    enum Notification {
         Pushed = 0,
         UnPushed,
         Changed,
-    } Notification;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

@@ -14,11 +14,11 @@ class GUIControlManager {
 public:
 
     // Cursor types
-    enum {
+    enum CursorType {
         Pointer,
         Text,
         HorSize
-    } CursorType;
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

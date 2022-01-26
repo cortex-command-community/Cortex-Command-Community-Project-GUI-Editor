@@ -72,6 +72,6 @@ namespace RTE {
 			return new GUIPropertyPage(Manager, ControlManager);
 		}
 		// Not Found
-		return 0;
+		return nullptr;
 	}
 }
