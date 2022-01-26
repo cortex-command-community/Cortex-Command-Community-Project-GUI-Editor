@@ -19,9 +19,9 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='15.0'">v141</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='16.0'">v142</PlatformToolset>
-	<PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v143</PlatformToolset>
     <WindowsTargetPlatformVersion Condition="'$(VisualStudioVersion)'=='15.0'">10.0.17763.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformVersion Condition="'$(VisualStudioVersion)'>='16.0'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(VisualStudioVersion)'&gt;='16.0'">10.0</WindowsTargetPlatformVersion>
     <OutDir>$(SolutionDir)_Bin\</OutDir>
     <IntDir>_Bin\$(Configuration)\</IntDir>
     <EmbedManifest>false</EmbedManifest>
@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;DEBUG_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -85,7 +85,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -127,38 +127,38 @@
     <ClCompile Include="Editor\EditorManager.cpp" />
     <ClCompile Include="Editor\EditorSelection.cpp" />
     <ClCompile Include="Editor\EditorUtil.cpp" />
-    <ClCompile Include="GUI\GUIButton.cpp" />
-    <ClCompile Include="GUI\GUICheckbox.cpp" />
-    <ClCompile Include="GUI\GUICollectionBox.cpp" />
-    <ClCompile Include="GUI\GUIComboBox.cpp" />
+    <ClCompile Include="GUI\Controls\GUIButton.cpp" />
+    <ClCompile Include="GUI\Controls\GUICheckbox.cpp" />
+    <ClCompile Include="GUI\Controls\GUICollectionBox.cpp" />
+    <ClCompile Include="GUI\Controls\GUIComboBox.cpp" />
+    <ClCompile Include="GUI\Controls\GUILabel.cpp" />
+    <ClCompile Include="GUI\Controls\GUIListBox.cpp" />
+    <ClCompile Include="GUI\Controls\GUIProgressBar.cpp" />
+    <ClCompile Include="GUI\Controls\GUIPropertyPage.cpp" />
+    <ClCompile Include="GUI\Controls\GUIRadioButton.cpp" />
+    <ClCompile Include="GUI\Controls\GUIScrollbar.cpp" />
+    <ClCompile Include="GUI\Controls\GUISlider.cpp" />
+    <ClCompile Include="GUI\Controls\GUITab.cpp" />
+    <ClCompile Include="GUI\Controls\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUIControl.cpp" />
     <ClCompile Include="GUI\GUIControlFactory.cpp" />
     <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIEvent.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
-    <ClCompile Include="GUI\GUILabel.cpp" />
-    <ClCompile Include="GUI\GUIListBox.cpp" />
     <ClCompile Include="GUI\GUIListPanel.cpp" />
     <ClCompile Include="GUI\GUIManager.cpp" />
     <ClCompile Include="GUI\GUIPanel.cpp" />
-    <ClCompile Include="GUI\GUIProgressBar.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
-    <ClCompile Include="GUI\GUIPropertyPage.cpp" />
-    <ClCompile Include="GUI\GUIRadioButton.cpp" />
     <ClCompile Include="GUI\GUIReader.cpp" />
-    <ClCompile Include="GUI\GUIScrollbar.cpp" />
     <ClCompile Include="GUI\GUIScrollPanel.cpp" />
     <ClCompile Include="GUI\GUISkin.cpp" />
-    <ClCompile Include="GUI\GUISlider.cpp" />
-    <ClCompile Include="GUI\GUITab.cpp" />
-    <ClCompile Include="GUI\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUITextPanel.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\GUIWriter.cpp" />
-    <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp" />
-    <ClCompile Include="GUI\Wrappers\AllegroInput.cpp" />
-    <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp" />
+    <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
+    <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
+    <ClCompile Include="System\Wrappers\AllegroScreen.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\RTECompatibility\ContentFile.cpp" />
     <ClCompile Include="System\RTECompatibility\RTEError.cpp" />
@@ -172,11 +172,20 @@
     <ClInclude Include="Editor\EditorManager.h" />
     <ClInclude Include="Editor\EditorSelection.h" />
     <ClInclude Include="Editor\EditorUtil.h" />
+    <ClInclude Include="GUI\Controls\GUIButton.h" />
+    <ClInclude Include="GUI\Controls\GUICheckbox.h" />
+    <ClInclude Include="GUI\Controls\GUICollectionBox.h" />
+    <ClInclude Include="GUI\Controls\GUIComboBox.h" />
+    <ClInclude Include="GUI\Controls\GUILabel.h" />
+    <ClInclude Include="GUI\Controls\GUIListBox.h" />
+    <ClInclude Include="GUI\Controls\GUIProgressBar.h" />
+    <ClInclude Include="GUI\Controls\GUIPropertyPage.h" />
+    <ClInclude Include="GUI\Controls\GUIRadioButton.h" />
+    <ClInclude Include="GUI\Controls\GUIScrollbar.h" />
+    <ClInclude Include="GUI\Controls\GUISlider.h" />
+    <ClInclude Include="GUI\Controls\GUITab.h" />
+    <ClInclude Include="GUI\Controls\GUITextBox.h" />
     <ClInclude Include="GUI\GUI.h" />
-    <ClInclude Include="GUI\GUIButton.h" />
-    <ClInclude Include="GUI\GUICheckbox.h" />
-    <ClInclude Include="GUI\GUICollectionBox.h" />
-    <ClInclude Include="GUI\GUIComboBox.h" />
     <ClInclude Include="GUI\GUIControl.h" />
     <ClInclude Include="GUI\GUIControlFactory.h" />
     <ClInclude Include="GUI\GUIControlManager.h" />
@@ -184,28 +193,19 @@
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
-    <ClInclude Include="GUI\GUILabel.h" />
-    <ClInclude Include="GUI\GUIListBox.h" />
     <ClInclude Include="GUI\GUIListPanel.h" />
     <ClInclude Include="GUI\GUIManager.h" />
     <ClInclude Include="GUI\GUIPanel.h" />
-    <ClInclude Include="GUI\GUIProgressBar.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
-    <ClInclude Include="GUI\GUIPropertyPage.h" />
-    <ClInclude Include="GUI\GUIRadioButton.h" />
     <ClInclude Include="GUI\GUIReader.h" />
-    <ClInclude Include="GUI\GUIScrollbar.h" />
     <ClInclude Include="GUI\GUIScrollPanel.h" />
     <ClInclude Include="GUI\GUISkin.h" />
-    <ClInclude Include="GUI\GUISlider.h" />
-    <ClInclude Include="GUI\GUITab.h" />
-    <ClInclude Include="GUI\GUITextBox.h" />
     <ClInclude Include="GUI\GUITextPanel.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\GUIWriter.h" />
-    <ClInclude Include="GUI\Wrappers\AllegroBitmap.h" />
-    <ClInclude Include="GUI\Wrappers\AllegroInput.h" />
-    <ClInclude Include="GUI\Wrappers\AllegroScreen.h" />
+    <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
+    <ClInclude Include="System\Wrappers\AllegroInput.h" />
+    <ClInclude Include="System\Wrappers\AllegroScreen.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="System\RTECompatibility\ContentFile.h" />
     <ClInclude Include="System\RTECompatibility\RTEError.h" />
