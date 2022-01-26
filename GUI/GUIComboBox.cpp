@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIComboBox::c_ControlType = "COMBOBOX";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIComboBox::GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "COMBOBOX";
 	m_ControlManager = ControlManager;
 	m_DrawBitmap = nullptr;
 	m_OldSelection = 0;

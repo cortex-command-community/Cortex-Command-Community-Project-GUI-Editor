@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIRadioButton::c_ControlType = "RADIOBUTTON";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIRadioButton::GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "RADIOBUTTON";
 	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Checked = false;
@@ -246,7 +247,7 @@ void GUIRadioButton::SetCheck(bool Check) {
 				}
 
 				// Make sure the control is a radio button
-				if (C->GetID().compare(GetID()) == 0) {
+				if (C->GetControlType().compare(GetControlType()) == 0) {
 					GUIRadioButton *R = (GUIRadioButton *)C;
 					R->SetCheck(false);
 				}

@@ -16,6 +16,7 @@ public:
         Changed
     } Notification;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -99,15 +100,6 @@ public:
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
     void OnMouseMove(int X, int Y, int Buttons, int Modifier) override {}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "PROGRESSBAR"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +201,8 @@ public:
     void ApplyProperties(GUIProperties *Props) override;
 
 private:
+
+	static const std::string_view c_ControlType;
 
     GUIBitmap *m_DrawBitmap;
     GUIBitmap *m_IndicatorImage;

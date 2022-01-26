@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIListBox::c_ControlType = "LISTBOX";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIListBox::GUIListBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIListPanel(Manager) {
-	m_ControlID = "LISTBOX";
 	m_ControlManager = ControlManager;
 }
 

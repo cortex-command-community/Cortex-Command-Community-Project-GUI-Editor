@@ -30,6 +30,7 @@ public:
         DropDownList,
     } DropDownStyles;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -105,15 +106,6 @@ public:
 // Returns:         The ListPanel component of this ComboBox.
 
     GUIListPanel * GetListPanel() { return m_ListPanel; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "COMBOBOX"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -375,6 +367,8 @@ public:
     bool IsDropped() { return m_ListPanel->_GetVisible(); }
 
 private:
+
+	static const std::string_view c_ControlType;
 
     GUIBitmap *m_DrawBitmap;
     int m_OldSelection;

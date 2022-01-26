@@ -19,6 +19,7 @@ public:
         Enter                // A text panel has lost focus or the enter key was hit
     } Notification;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -123,15 +124,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "PROPERTYPAGE"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetControlRect
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the rectangle of the control.
@@ -222,6 +214,8 @@ public:
     bool HasTextFocus();
 
 private:
+
+	static const std::string_view c_ControlType;
 
     GUIBitmap *m_DrawBitmap;
     unsigned long m_LineColor;

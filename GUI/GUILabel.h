@@ -26,6 +26,7 @@ public:
         WaitAtEnd
     };
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -98,15 +99,6 @@ public:
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
     void OnMouseUp(int X, int Y, int Buttons, int Modifier) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "LABEL"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -271,6 +263,8 @@ public:
     void ApplyProperties(GUIProperties *Props) override;
 
 private:
+
+	static const std::string_view c_ControlType;
 
     std::string m_Text;
     int m_HAlignment;

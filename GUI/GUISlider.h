@@ -27,6 +27,7 @@ public:
         Changed = 0,
     } Notification;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -120,15 +121,6 @@ public:
 	/// <param name="modifier">Activated modifier buttons.</param>
 	/// <param name="mouseWheelChange">The amount of wheel movement. Positive is scroll up, negative is scroll down.</param>
 	void OnMouseWheelChange(int x, int y, int modifier, int mouseWheelChange) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "SLIDER"; };
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -273,6 +265,8 @@ public:
 	void SetValueResolution(int valueRes);
 
 private:
+
+	static const std::string_view c_ControlType;
 
 	GUIBitmap *m_DrawBitmap;
 	GUIBitmap *m_KnobImage;

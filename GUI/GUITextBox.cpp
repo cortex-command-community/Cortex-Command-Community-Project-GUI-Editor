@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUITextBox::c_ControlType = "TEXTBOX";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUITextBox::GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(Manager) {
-	m_ControlID = "TEXTBOX";
 	m_ControlManager = ControlManager;
 	m_DrawBitmap = nullptr;
 	m_HAlignment = GUIFont::Left;

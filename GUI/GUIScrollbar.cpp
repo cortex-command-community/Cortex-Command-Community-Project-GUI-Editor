@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIScrollbar::c_ControlType = "SCROLLBAR";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIScrollbar::GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIScrollPanel(Manager) {
-	m_ControlID = "SCROLLBAR";
 	m_ControlManager = ControlManager;
 }
 

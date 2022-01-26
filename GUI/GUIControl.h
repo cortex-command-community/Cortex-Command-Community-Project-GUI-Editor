@@ -23,6 +23,12 @@ public:
     } Anchor;
 
 
+#pragma region Global Macro Definitions
+	#define GUIControlTypeGetter \
+		const std::string_view & GetControlType() const override { return c_ControlType; };
+#pragma endregion
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIControl
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -112,15 +118,6 @@ public:
 // Arguments:       None.
 
     std::string GetToolTip();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-	std::string GetID() const { return m_ControlID; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +292,12 @@ public:
 
     void RemoveChildren();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	virtual const std::string_view & GetControlType() const = 0;
+
 protected:
 
     GUISkin *m_Skin;
@@ -302,8 +305,6 @@ protected:
     GUIProperties m_Properties;
     GUIControl *m_ControlParent;
     std::vector<GUIControl *> m_ControlChildren;
-
-    std::string m_ControlID;
 
     bool m_IsContainer;
 

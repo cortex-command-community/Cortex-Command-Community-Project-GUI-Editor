@@ -89,7 +89,7 @@ bool GUIControl::Save(GUIWriter *W) {
 
 	// General control values
 	OutString.append("ControlType = ");
-	OutString += m_ControlID;
+	OutString += GetControlType();
 	OutString.append("\n");
 
 	// Parent

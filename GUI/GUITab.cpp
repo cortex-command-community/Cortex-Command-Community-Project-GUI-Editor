@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUITab::c_ControlType = "TAB";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUITab::GUITab(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "TAB";
 	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Selected = false;
@@ -256,7 +257,7 @@ void GUITab::SetCheck(bool Check) {
 					continue;
 				}
 				// Make sure the control is a radio button
-				if (C->GetID().compare(GetID()) == 0) {
+				if (C->GetControlType().compare(GetControlType()) == 0) {
 					GUITab *R = (GUITab *)C;
 					R->SetCheck(false);
 				}

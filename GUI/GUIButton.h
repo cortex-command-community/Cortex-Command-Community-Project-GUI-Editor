@@ -20,6 +20,7 @@ public:
         Focused
     } Notification;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -150,15 +151,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "BUTTON"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetControlRect
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the rectangle of the control.
@@ -265,6 +257,8 @@ public:
     void ApplyProperties(GUIProperties *Props) override;
 
 private:
+
+	static const std::string_view c_ControlType;
 
 	GUIBitmap *m_DrawBitmap;
 

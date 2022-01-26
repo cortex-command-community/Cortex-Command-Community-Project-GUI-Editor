@@ -5,10 +5,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIButton::c_ControlType = "BUTTON";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIButton::GUIButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "BUTTON";
 	m_DrawBitmap = nullptr;
 	m_ControlManager = ControlManager;
 	m_Pushed = false;

@@ -20,55 +20,55 @@ using namespace RTE;
 
 GUIControl * GUIControlFactory::CreateControl(GUIManager *Manager, GUIControlManager *ControlManager, const std::string &ControlName) {
 	// Button
-	if (ControlName.compare(GUIButton::GetControlID()) == 0) {
+	if (ControlName == "BUTTON") {
 		return new GUIButton(Manager, ControlManager);
 	}
 	// Listbox
-	if (ControlName.compare(GUIListBox::GetControlID()) == 0) {
+	if (ControlName == "LISTBOX") {
 		return new GUIListBox(Manager, ControlManager);
 	}
 	// Checkbox
-	if (ControlName.compare(GUICheckbox::GetControlID()) == 0) {
+	if (ControlName == "CHECKBOX") {
 		return new GUICheckbox(Manager, ControlManager);
 	}
 	// RadioButton
-	if (ControlName.compare(GUIRadioButton::GetControlID()) == 0) {
+	if (ControlName == "RADIOBUTTON") {
 		return new GUIRadioButton(Manager, ControlManager);
 	}
 	// Tab
-	if (ControlName.compare(GUITab::GetControlID()) == 0) {
+	if (ControlName == "TAB") {
 		return new GUITab(Manager, ControlManager);
 	}
 	// CollectionBox
-	if (ControlName.compare(GUICollectionBox::GetControlID()) == 0) {
+	if (ControlName == "COLLECTIONBOX") {
 		return new GUICollectionBox(Manager, ControlManager);
 	}
 	// ProgressBar
-	if (ControlName.compare(GUIProgressBar::GetControlID()) == 0) {
+	if (ControlName == "PROGRESSBAR") {
 		return new GUIProgressBar(Manager, ControlManager);
 	}
 	// Slider
-	if (ControlName.compare(GUISlider::GetControlID()) == 0) {
+	if (ControlName == "SLIDER") {
 		return new GUISlider(Manager, ControlManager);
 	}
 	// TextBox
-	if (ControlName.compare(GUITextBox::GetControlID()) == 0) {
+	if (ControlName == "TEXTBOX") {
 		return new GUITextBox(Manager, ControlManager);
 	}
 	// Label
-	if (ControlName.compare(GUILabel::GetControlID()) == 0) {
+	if (ControlName == "LABEL") {
 		return new GUILabel(Manager, ControlManager);
 	}
 	// Scrollbar
-	if (ControlName.compare(GUIScrollbar::GetControlID()) == 0) {
+	if (ControlName == "SCROLLBAR") {
 		return new GUIScrollbar(Manager, ControlManager);
 	}
 	// ComboBox
-	if (ControlName.compare(GUIComboBox::GetControlID()) == 0) {
+	if (ControlName == "COMBOBOX") {
 		return new GUIComboBox(Manager, ControlManager);
 	}
 	// PropertyPage
-	if (ControlName.compare(GUIPropertyPage::GetControlID()) == 0) {
+	if (ControlName == "PROPERTYPAGE") {
 		return new GUIPropertyPage(Manager, ControlManager);
 	}
 	// Not Found

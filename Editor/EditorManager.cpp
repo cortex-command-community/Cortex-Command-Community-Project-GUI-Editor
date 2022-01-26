@@ -161,7 +161,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool EditorManager::AddNewControl(GUIEvent &editorEvent) {
-		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->GetID() != "COLLECTIONBOX") {
+		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->GetControlType() != "COLLECTIONBOX") {
 			s_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 		}
@@ -222,7 +222,7 @@ namespace RTEGUI {
 		UpdateCollectionBoxList();
 		UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(createdControl->GetParent()));
 
-		if (createdControl->GetID() == "COLLECTIONBOX") {
+		if (createdControl->GetControlType() == "COLLECTIONBOX") {
 			SelectActiveControlInParentList(createdControl);
 		} else {
 			SelectActiveControlInChildrenList(createdControl);
@@ -234,7 +234,7 @@ namespace RTEGUI {
 
 	void EditorManager::RemoveControl(GUIControl *controlToRemove) const {
 		m_WorkspaceManager->RemoveControl(controlToRemove->GetName(), true);
-		if (controlToRemove->GetID() == "COLLECTIONBOX") {
+		if (controlToRemove->GetControlType() == "COLLECTIONBOX") {
 			ClearCurrentSelection();
 			UpdateCollectionBoxList();
 		} else {
@@ -381,7 +381,7 @@ namespace RTEGUI {
 
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
 		for (GUIControl *control : *collectionBox->GetChildren()) {
-			if (control->GetID() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
+			if (control->GetControlType() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
 			// Check if this is selected in the editor, and if so, select it in the list too
 			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(-1); }
 		}
@@ -466,7 +466,7 @@ namespace RTEGUI {
 		if (selectedControl) {
 			s_SelectionCopyInfo = {
 				selectedControl->GetName(),
-				selectedControl->GetID(),
+				std::string(selectedControl->GetControlType()),
 				selectedControl->GetPanel()->GetRelXPos(),
 				selectedControl->GetPanel()->GetRelYPos(),
 				selectedControl->GetPanel()->GetWidth(),

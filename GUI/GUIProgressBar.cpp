@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIProgressBar::c_ControlType = "PROGRESSBAR";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIProgressBar::GUIProgressBar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "PROGRESSBAR";
 	m_DrawBitmap = nullptr;
 	m_IndicatorImage = nullptr;
 	m_ControlManager = ControlManager;

@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUILabel::c_ControlType = "LABEL";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUILabel::GUILabel(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "LABEL";
 	m_ControlManager = ControlManager;
 	m_Font = nullptr;
 	m_FontColor = 0;

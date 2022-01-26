@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUIPropertyPage::c_ControlType = "PROPERTYPAGE";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIPropertyPage::GUIPropertyPage(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "PROPERTYPAGE";
 	m_DrawBitmap = nullptr;
 	m_ControlManager = ControlManager;
 	m_Font = nullptr;

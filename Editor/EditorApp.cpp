@@ -90,7 +90,7 @@ namespace RTEGUI {
 					currentSelection.GrabControl(clickedControl, mousePosX, mousePosY);
 
 					m_EditorManager->UpdateControlProperties(currentSelection.GetControl());
-					if (currentSelection.GetControl()->GetID() == "COLLECTIONBOX") {
+					if (currentSelection.GetControl()->GetControlType() == "COLLECTIONBOX") {
 						m_EditorManager->SelectActiveControlInParentList(currentSelection.GetControl());
 					} else {
 						m_EditorManager->SelectActiveControlInChildrenList(currentSelection.GetControl());

@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUICollectionBox::c_ControlType = "COLLECTIONBOX";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUICollectionBox::GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "COLLECTIONBOX";
 	m_Background = nullptr;
 	m_ControlManager = ControlManager;
 	m_DrawBackground = true;

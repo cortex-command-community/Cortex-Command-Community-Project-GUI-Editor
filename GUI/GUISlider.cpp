@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUISlider::c_ControlType = "SLIDER";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUISlider::GUISlider(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "SLIDER";
 	m_DrawBitmap = nullptr;
 	m_KnobImage = nullptr;
 	m_ControlManager = ControlManager;

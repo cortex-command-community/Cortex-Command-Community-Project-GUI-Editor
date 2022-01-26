@@ -18,6 +18,7 @@ public:
 
     } Notifications;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -95,15 +96,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "SCROLLBAR"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          ReceiveSignal
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Called when receiving a signal.
@@ -157,6 +149,8 @@ public:
     void ApplyProperties(GUIProperties *Props) override;
 
 private:
+
+	static const std::string_view c_ControlType;
 
 };
 };

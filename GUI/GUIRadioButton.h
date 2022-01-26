@@ -17,6 +17,7 @@ public:
         Changed,
     } Notification;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -103,15 +104,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "RADIOBUTTON"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Move
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Called when the control needs to be moved.
@@ -192,6 +184,8 @@ public:
     void ApplyProperties(GUIProperties *Props) override;
 
 private:
+
+	static const std::string_view c_ControlType;
 
     GUIBitmap *m_Image;
     GUIRect m_ImageRects[4];

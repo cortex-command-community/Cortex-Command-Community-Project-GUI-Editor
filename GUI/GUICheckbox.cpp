@@ -3,10 +3,11 @@
 
 using namespace RTE;
 
+const std::string_view GUICheckbox::c_ControlType = "CHECKBOX";
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
-	m_ControlID = "CHECKBOX";
 	m_Image = nullptr;
 	m_ControlManager = ControlManager;
 	m_Check = Unchecked;

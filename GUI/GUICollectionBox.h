@@ -23,6 +23,7 @@ public:
         Panel
     } DrawType;
 
+	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
 
@@ -145,15 +146,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Returns a string representing the control's ID
-// Arguments:       None.
-
-    static std::string GetControlID()    { return "COLLECTIONBOX"; };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          StoreProperties
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets the control to store the values into properties.
@@ -236,6 +228,8 @@ public:
 
 
 private:
+
+	static const std::string_view c_ControlType;
 
 	GUIBitmap *m_Background;
 
