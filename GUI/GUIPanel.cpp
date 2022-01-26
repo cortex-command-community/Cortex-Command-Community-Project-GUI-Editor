@@ -111,7 +111,7 @@ void GUIPanel::RemoveChild(const GUIPanel *pChild) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPanel::LoadProperties(GUIProperties *Props) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	Props->GetValue("X", &m_X);
 	Props->GetValue("Y", &m_Y);
@@ -364,7 +364,7 @@ void GUIPanel::ChangeZPosition(int Type) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPanel::_ChangeZ(GUIPanel *Child, int Type) {
-	assert(Child);
+	GUIAssert(Child, "");
 
 	int Index = -1;
 
@@ -435,7 +435,7 @@ std::string GUIPanel::ToString() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPanel::BuildProperties(GUIProperties *Prop) {
-	assert(Prop);
+	GUIAssert(Prop, "");
 
 	// Subtract the position from the parent
 	int X = m_X;
@@ -483,7 +483,7 @@ std::string GUIPanel::WriteValue(const std::string &Name, bool Value) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPanel::_ApplyProperties(GUIProperties *Props) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	Props->GetValue("Visible", &m_Visible);
 	Props->GetValue("Enabled", &m_Enabled);

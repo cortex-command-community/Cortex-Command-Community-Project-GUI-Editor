@@ -25,7 +25,7 @@ void GUIControl::Create(const std::string &Name, int X, int Y, int Width, int He
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIControl::Create(GUIProperties *Props) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	// Add the default variables
 	m_Properties.AddVariable("Name", "");
@@ -62,7 +62,7 @@ std::string GUIControl::GetToolTip() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIControl::AddChild(GUIControl *Control) {
-	assert(Control);
+	GUIAssert(Control, "");
 
 	// Remove the control from any previous parent
 	if (Control->GetParent()) { Control->GetParent()->GUIControl::RemoveChild(Control->GetName()); }
@@ -186,7 +186,7 @@ bool GUIControl::GetEnabled() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIControl::ApplyProperties(GUIProperties *Props) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	m_Properties.Update(Props);
 

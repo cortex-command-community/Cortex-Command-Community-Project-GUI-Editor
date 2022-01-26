@@ -18,7 +18,7 @@ GUIControlManager::GUIControlManager() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIControlManager::Create(GUIScreen *Screen, GUIInput *Input, const std::string &SkinDir, const std::string &SkinFilename) {
-	assert(Screen && Input);
+	GUIAssert(Screen && Input, "");
 
 	m_Screen = Screen;
 	m_Input = Input;
@@ -145,7 +145,7 @@ GUIControl * GUIControlManager::AddControl(const std::string &Name, const std::s
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIControl * GUIControlManager::AddControl(GUIProperties *Property) {
-	assert(Property);
+	GUIAssert(Property, "");
 
 	// Get the control type and name
 	std::string Type;
@@ -236,7 +236,7 @@ GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUI
 	std::vector<GUIControl *> *List = pParent->GetChildren();
 	std::vector<GUIControl *>::reverse_iterator it;
 
-	assert(List);
+	GUIAssert(List, "");
 
 	// Control the depth. If negative, it'll go forever
 	if (depth != 0) {
@@ -361,7 +361,7 @@ bool GUIControlManager::Save(const std::string &Filename) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIControlManager::Save(GUIWriter *W) {
-	assert(W);
+	GUIAssert(W, "");
 
 	// Go through each control
 	std::vector<GUIControl *>::iterator it;

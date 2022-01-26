@@ -202,7 +202,7 @@ void GUIComboBox::Draw(GUIScreen *Screen) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIComboBox::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
-	assert(Source);
+	GUIAssert(Source, "");
 
 	int sourcePanelID = Source->GetPanelID();
 

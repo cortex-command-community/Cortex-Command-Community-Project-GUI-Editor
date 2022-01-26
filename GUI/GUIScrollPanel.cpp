@@ -70,7 +70,7 @@ void GUIScrollPanel::Destroy() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIScrollPanel::LoadProps(GUIProperties *Props) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	std::string Ori;
 	Props->GetValue("Orientation", &Ori);
@@ -89,7 +89,7 @@ void GUIScrollPanel::LoadProps(GUIProperties *Props) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIScrollPanel::ChangeSkin(GUISkin *Skin) {
-	assert(Skin);
+	GUIAssert(Skin, "");
 
 	m_Skin = Skin;
 
@@ -675,7 +675,7 @@ void GUIScrollPanel::AdjustValue(int Delta) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIScrollPanel::SaveProps(GUIProperties *Props) const {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	Props->AddVariable("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
 	Props->AddVariable("Minimum", m_Minimum);

@@ -263,7 +263,7 @@ void GUIManager::Draw(GUIScreen *Screen) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIManager::CaptureMouse(GUIPanel *Panel) {
-	assert(Panel);
+	GUIAssert(Panel, "");
 
 	// Release any old capture
 	ReleaseMouse();
@@ -332,7 +332,7 @@ bool GUIManager::MouseInRect(const GUIRect *Rect, int X, int Y) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay) {
-	assert(Pan);
+	GUIAssert(Pan, "");
 	m_HoverTrack = Enabled;
 	m_HoverPanel = Pan;
 	if (m_HoverTrack) { m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay / 1000.0F); }

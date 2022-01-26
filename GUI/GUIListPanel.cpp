@@ -71,7 +71,7 @@ void GUIListPanel::Create(int X, int Y, int Width, int Height) {
 	m_Width = Width;
 	m_Height = Height;
 
-	assert(m_Manager);
+	GUIAssert(m_Manager, "");
 
 	// Create the 2 scrollpanels
 	m_HorzScroll = new GUIScrollPanel(m_Manager);
@@ -196,7 +196,7 @@ void GUIListPanel::AddItem(const std::string &Name, const std::string &rightText
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIListPanel::ChangeSkin(GUISkin *Skin) {
-	assert(Skin);
+	GUIAssert(Skin, "");
 
 	m_Skin = Skin;
 
@@ -909,7 +909,7 @@ void GUIListPanel::OnLoseFocus() {
 
 void GUIListPanel::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
 	// ChangeValue signal from scrollpanels?
-	assert(Source);
+	GUIAssert(Source, "");
 
 	int sourcePanelID = Source->GetPanelID();
 

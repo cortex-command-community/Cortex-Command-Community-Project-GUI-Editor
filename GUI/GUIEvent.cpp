@@ -14,7 +14,7 @@ GUIEvent::GUIEvent() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GUIEvent::GUIEvent(GUIControl *Control, int Type, int Msg, int Data) {
-	assert(Control);
+	GUIAssert(Control, "");
 	m_Control = Control;
 	m_Type = Type;
 	m_Msg = Msg;

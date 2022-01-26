@@ -271,7 +271,7 @@ void GUIPropertyPage::SetPropertyValues(GUIProperties *Props) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
-	assert(Source);
+	GUIAssert(Source, "");
 
 	bool TextSignal = false;
 

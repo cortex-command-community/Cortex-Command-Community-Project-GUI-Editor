@@ -65,7 +65,7 @@ void GUIScrollbar::Create(GUIProperties *Props) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIScrollbar::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
-	assert(Source);
+	GUIAssert(Source, "");
 
 	// Should be our scroll panel
 	if (Source->GetPanelID() == GetPanelID() && Code == GUIScrollPanel::ChangeValue) {

@@ -105,7 +105,7 @@ bool GUIProperties::SetValue(const std::string &Variable, int Value) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GUIProperties::Update(GUIProperties *Props, bool Add) {
-	assert(Props);
+	GUIAssert(Props, "");
 
 	std::vector <PropVariable *>::iterator it1;
 
@@ -140,7 +140,7 @@ bool GUIProperties::GetValue(const std::string &Variable, std::string *Value) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int GUIProperties::GetValue(const std::string &Variable, std::string *Array, int MaxArraySize) {
-	assert(Array);
+	GUIAssert(Array, "");
 
 	std::string Value;
 
@@ -172,7 +172,7 @@ int GUIProperties::GetValue(const std::string &Variable, std::string *Array, int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int GUIProperties::GetValue(const std::string &Variable, int *Array, int MaxArraySize) {
-	assert(Array);
+	GUIAssert(Array, "");
 
 	std::string Value;
 
@@ -204,7 +204,7 @@ int GUIProperties::GetValue(const std::string &Variable, int *Array, int MaxArra
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIProperties::GetValue(const std::string &Variable, int *Value) {
-	assert(Value);
+	GUIAssert(Value, "");
 
 	std::string val;
 
@@ -221,7 +221,7 @@ bool GUIProperties::GetValue(const std::string &Variable, int *Value) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIProperties::GetValue(const std::string &Variable, unsigned long *Value) {
-	assert(Value);
+	GUIAssert(Value, "");
 
 	std::string val;
 
@@ -238,7 +238,7 @@ bool GUIProperties::GetValue(const std::string &Variable, unsigned long *Value) 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIProperties::GetValue(const std::string &Variable, bool *Value) {
-	assert(Value);
+	GUIAssert(Value, "");
 
 	std::string val;
 

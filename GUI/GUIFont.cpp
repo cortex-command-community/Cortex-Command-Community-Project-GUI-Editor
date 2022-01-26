@@ -23,7 +23,7 @@ GUIFont::GUIFont(const std::string &Name) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool GUIFont::Load(GUIScreen *Screen, const std::string &Filename) {
-	assert(Screen);
+	GUIAssert(Screen, "");
 
 	m_Screen = Screen;
 
@@ -113,7 +113,7 @@ void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, uns
 	GUIBitmap *Surf = m_CurrentBitmap;
 	int initX = X;
 
-	assert(Surf);
+	GUIAssert(Surf, "");
 
 	// Make the shadow color
 	FontColor *FSC = nullptr;
