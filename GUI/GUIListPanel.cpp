@@ -818,32 +818,32 @@ namespace RTE {
 		}
 		switch (KeyCode) {
 			// Up Arrow
-			case GUIInput::Key_UpArrow:
+			case GUIInput::KeyboardKeys::KeyUpArrow:
 				m_LastSelected--;
 				break;
 
 				// Down Arrow
-			case GUIInput::Key_DownArrow:
+			case GUIInput::KeyboardKeys::KeyDownArrow:
 				m_LastSelected++;
 				break;
 
 				// Home
-			case GUIInput::Key_Home:
+			case GUIInput::KeyboardKeys::KeyHome:
 				m_LastSelected = 0;
 				break;
 
 				// End
-			case GUIInput::Key_End:
+			case GUIInput::KeyboardKeys::KeyEnd:
 				m_LastSelected = m_Items.size() - 1;
 				break;
 
 				// Page Up
-			case GUIInput::Key_PageUp:
+			case GUIInput::KeyboardKeys::KeyPageUp:
 				m_LastSelected -= m_VertScroll->GetPageSize();
 				break;
 
 				// Page Down
-			case GUIInput::Key_PageDown:
+			case GUIInput::KeyboardKeys::KeyPageDown:
 				m_LastSelected += m_VertScroll->GetPageSize();
 				break;
 

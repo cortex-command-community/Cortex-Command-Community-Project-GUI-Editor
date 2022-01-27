@@ -93,7 +93,7 @@ namespace RTE {
 		float CurTime = m_pTimer->GetElapsedRealTimeMS();
 
 		// Build the modifier state
-		Modifier = m_Input->GetModifier();
+		Modifier = m_Input->GetKeyModifier();
 		if (Modifier & GUIInput::ModShift) { Mod |= GUIPanel::MODI_SHIFT; }
 		if (Modifier & GUIInput::ModCtrl) { Mod |= GUIPanel::MODI_CTRL; }
 		if (Modifier & GUIInput::ModAlt) { Mod |= GUIPanel::MODI_ALT; }
@@ -209,7 +209,7 @@ namespace RTE {
 		if (!ignoreKeyboardEvents) {
 			// Keyboard Events
 			uint8_t KeyboardBuffer[256];
-			m_Input->GetKeyboard(KeyboardBuffer);
+			m_Input->GetKeyboardBuffer(KeyboardBuffer);
 
 			// If we don't have a panel with focus, just ignore keyboard events
 			if (!m_FocusPanel) {

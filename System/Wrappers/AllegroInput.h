@@ -18,9 +18,8 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a AllegroInput object in system memory.
 		/// </summary>
-		/// <param name="whichPlayer">Which player this AllegroInput will handle input for. -1 means no specific player and will default to player 1.</param>
 		/// <param name="keyJoyMouseCursor">Whether the keyboard and joysticks also can control the mouse cursor.</param>
-		AllegroInput(int whichPlayer, bool keyJoyMouseCursor = false);
+		AllegroInput(bool keyJoyMouseCursor = false);
 #pragma endregion
 
 #pragma region Concrete Methods

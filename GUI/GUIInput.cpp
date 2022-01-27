@@ -4,46 +4,38 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIInput::GUIInput(int whichPlayer, bool keyJoyMouseCursor) {
-		// Clear all the states
-		memset(m_KeyboardBuffer, 0, sizeof(unsigned char) * KEYBOARD_BUFFER_SIZE);
-		memset(m_ScanCodeState, 0, sizeof(unsigned char) * KEYBOARD_BUFFER_SIZE);
-		memset(m_MouseButtonsEvents, 0, sizeof(int) * 3);
-		memset(m_MouseButtonsStates, 0, sizeof(int) * 3);
-
+	void GUIInput::Clear() {
 		m_MouseX = 0;
 		m_MouseY = 0;
-		m_LastFrameMouseX = 0;
-		m_LastFrameMouseY = 0;
-
 		m_MouseOffsetX = 0;
 		m_MouseOffsetY = 0;
-		m_Modifier = ModNone;
-
-		m_KeyJoyMouseCursor = keyJoyMouseCursor;
-
-		m_Player = whichPlayer;
-
 		m_MouseWheelChange = 0;
+		m_KeyModifier = KeyModifiers::ModNone;
+		m_KeyJoyMouseCursor = false;
+
+		memset(m_KeyboardBuffer, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
+		memset(m_ScanCodeState, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
+		memset(m_MouseButtonsEvents, 0, sizeof(int) * InputConstants::MouseButtonCount);
+		memset(m_MouseButtonsStates, 0, sizeof(int) * InputConstants::MouseButtonCount);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIInput::GetKeyboard(unsigned char *Buffer) const {
-		if (Buffer) { memcpy(Buffer, m_KeyboardBuffer, sizeof(unsigned char) * KEYBOARD_BUFFER_SIZE); }
+	void GUIInput::GetKeyboardBuffer(unsigned char *bufferArray) const {
+		if (bufferArray) { memcpy(bufferArray, m_KeyboardBuffer, sizeof(unsigned char) * InputConstants::KeyboardBufferSize); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIInput::GetMouseButtons(int *Buttons, int *States) const {
-		if (Buttons) { memcpy(Buttons, m_MouseButtonsEvents, sizeof(int) * 3); }
-		if (States) { memcpy(States, m_MouseButtonsStates, sizeof(int) * 3); }
+	void GUIInput::GetMouseButtons(int *eventsArray, int *statesArray) const {
+		if (eventsArray) { memcpy(eventsArray, m_MouseButtonsEvents, sizeof(int) * InputConstants::MouseButtonCount); }
+		if (statesArray) { memcpy(statesArray, m_MouseButtonsStates, sizeof(int) * InputConstants::MouseButtonCount); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIInput::GetMousePosition(int *X, int *Y) const {
-		if (X) { *X = (m_MouseX + m_MouseOffsetX); }
-		if (Y) { *Y = (m_MouseY + m_MouseOffsetY); }
+	void GUIInput::GetMousePosition(int *mousePosX, int *mousePosY) const {
+		if (mousePosX) { *mousePosX = (m_MouseX + m_MouseOffsetX); }
+		if (mousePosY) { *mousePosY = (m_MouseY + m_MouseOffsetY); }
 	}
 }

@@ -157,7 +157,7 @@ namespace RTE {
 		}
 
 		// Backspace
-		if (KeyCode == GUIInput::Key_Backspace) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyBackspace) {
 			if (m_GotSelection) {
 				RemoveSelectionText();
 			} else {
@@ -173,7 +173,7 @@ namespace RTE {
 		}
 
 		// Delete
-		if (KeyCode == GUIInput::Key_Delete) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyDelete) {
 			if (m_GotSelection) {
 				RemoveSelectionText();
 			} else {
@@ -188,7 +188,7 @@ namespace RTE {
 		}
 
 		// Left Arrow
-		if (KeyCode == GUIInput::Key_LeftArrow) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyLeftArrow) {
 			if (m_CursorIndex > 0) {
 				int newCursorIndex = ModKey ? GetStartOfPreviousCharacterGroup(m_Text, m_CursorIndex) : m_CursorIndex - 1;
 				if (Shift) {
@@ -203,7 +203,7 @@ namespace RTE {
 		}
 
 		// Right Arrow
-		if (KeyCode == GUIInput::Key_RightArrow) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyRightArrow) {
 			int newCursorIndex = ModKey ? GetStartOfNextCharacterGroup(m_Text, m_CursorIndex) : m_CursorIndex + 1;
 			if (m_CursorIndex < m_Text.size()) {
 				if (Shift) {
@@ -218,7 +218,7 @@ namespace RTE {
 		}
 
 		// Home
-		if (KeyCode == GUIInput::Key_Home) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyHome) {
 			if (Shift) {
 				DoSelection(m_CursorIndex, 0);
 			} else {
@@ -230,7 +230,7 @@ namespace RTE {
 		}
 
 		// End
-		if (KeyCode == GUIInput::Key_End) {
+		if (KeyCode == GUIInput::KeyboardKeys::KeyEnd) {
 			if (Shift) {
 				DoSelection(m_CursorIndex, m_Text.size());
 			} else {
