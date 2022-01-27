@@ -65,13 +65,13 @@ namespace RTE {
 		// Grab the check value
 		m_Check = Unchecked;
 		std::string value;
-		Props->GetValue("Checked", &value);
+		Props->GetPropertyValue("Checked", &value);
 		if (stricmp(value.c_str(), "Checked") == 0) {
 			m_Check = Checked;
 		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
 			m_Check = Greycheck;
 		}
-		Props->GetValue("Text", &m_Text);
+		Props->GetPropertyValue("Text", &m_Text);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,13 +223,13 @@ namespace RTE {
 
 	void GUICheckbox::StoreProperties() {
 		if (m_Check == Unchecked) {
-			m_Properties.AddVariable("Checked", "Unchecked");
+			m_Properties.AddProperty("Checked", "Unchecked");
 		} else if (m_Check == Checked) {
-			m_Properties.AddVariable("Checked", "Checked");
+			m_Properties.AddProperty("Checked", "Checked");
 		} else if (m_Check == Greycheck) {
-			m_Properties.AddVariable("Checked", "Greycheck");
+			m_Properties.AddProperty("Checked", "Greycheck");
 		}
-		m_Properties.AddVariable("Text", m_Text);
+		m_Properties.AddProperty("Text", m_Text);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,12 +239,12 @@ namespace RTE {
 
 		m_Check = Unchecked;
 		std::string value;
-		m_Properties.GetValue("Checked", &value);
+		m_Properties.GetPropertyValue("Checked", &value);
 		if (stricmp(value.c_str(), "Checked") == 0) {
 			m_Check = Checked;
 		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
 			m_Check = Greycheck;
 		}
-		m_Properties.GetValue("Text", &m_Text);
+		m_Properties.GetPropertyValue("Text", &m_Text);
 	}
 }

@@ -66,9 +66,9 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Get the values
-		Props->GetValue("DrawBackground", &m_DrawBackground);
+		Props->GetPropertyValue("DrawBackground", &m_DrawBackground);
 		std::string v;
-		Props->GetValue("DrawType", &v);
+		Props->GetPropertyValue("DrawType", &v);
 		if (stricmp(v.c_str(), "Color") == 0) {
 			m_DrawType = Color;
 		} else if (stricmp(v.c_str(), "Image") == 0) {
@@ -76,7 +76,7 @@ namespace RTE {
 		} else if (stricmp(v.c_str(), "Panel") == 0) {
 			m_DrawType = Panel;
 		}
-		Props->GetValue("DrawColor", &m_DrawColor);
+		Props->GetPropertyValue("DrawColor", &m_DrawColor);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,9 +220,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::StoreProperties() {
-		m_Properties.AddVariable("DrawBackground", m_DrawBackground);
-		m_Properties.AddVariable("DrawType", m_DrawType == Color ? "Color" : "Image");
-		m_Properties.AddVariable("DrawColor", (int)m_DrawColor);
+		m_Properties.AddProperty("DrawBackground", m_DrawBackground);
+		m_Properties.AddProperty("DrawType", m_DrawType == Color ? "Color" : "Image");
+		m_Properties.AddProperty("DrawColor", (int)m_DrawColor);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,14 +231,14 @@ namespace RTE {
 		GUIControl::ApplyProperties(Props);
 
 		// Get the values
-		m_Properties.GetValue("DrawBackground", &m_DrawBackground);
+		m_Properties.GetPropertyValue("DrawBackground", &m_DrawBackground);
 		std::string v;
-		m_Properties.GetValue("DrawType", &v);
+		m_Properties.GetPropertyValue("DrawType", &v);
 		if (stricmp(v.c_str(), "Color") == 0) {
 			m_DrawType = Color;
 		} else if (stricmp(v.c_str(), "Image") == 0) {
 			m_DrawType = Image;
 		}
-		m_Properties.GetValue("DrawColor", &m_DrawColor);
+		m_Properties.GetPropertyValue("DrawColor", &m_DrawColor);
 	}
 }

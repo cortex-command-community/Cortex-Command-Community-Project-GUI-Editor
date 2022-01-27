@@ -71,7 +71,7 @@ namespace RTE {
 
 		// Get the values
 		std::string ori;
-		Props->GetValue("Orientation", &ori);
+		Props->GetPropertyValue("Orientation", &ori);
 		if (stricmp(ori.c_str(), "horizontal") == 0) {
 			m_Orientation = Horizontal;
 		} else if (stricmp(ori.c_str(), "vertical") == 0) {
@@ -79,16 +79,16 @@ namespace RTE {
 		}
 
 		std::string tick;
-		Props->GetValue("TickDirection", &tick);
+		Props->GetPropertyValue("TickDirection", &tick);
 		if (stricmp(tick.c_str(), "TopLeft") == 0) {
 			m_TickDirection = TopLeft;
 		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
 			m_TickDirection = BottomRight;
 		}
-		Props->GetValue("Minimum", &m_Minimum);
-		Props->GetValue("Maximum", &m_Maximum);
-		Props->GetValue("Value", &m_Value);
-		if (!Props->GetValue("ValueResolution", &m_ValueResolution)) { m_ValueResolution = std::max((m_Maximum - m_Minimum) / 100, 1); }
+		Props->GetPropertyValue("Minimum", &m_Minimum);
+		Props->GetPropertyValue("Maximum", &m_Maximum);
+		Props->GetPropertyValue("Value", &m_Value);
+		if (!Props->GetPropertyValue("ValueResolution", &m_ValueResolution)) { m_ValueResolution = std::max((m_Maximum - m_Minimum) / 100, 1); }
 
 		m_Value = std::clamp(m_Value, m_Minimum, m_Maximum);
 
@@ -477,12 +477,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUISlider::StoreProperties() {
-		m_Properties.AddVariable("Value", m_Value);
-		m_Properties.AddVariable("Minimum", m_Minimum);
-		m_Properties.AddVariable("Maximum", m_Maximum);
-		m_Properties.AddVariable("ValueResolution", m_ValueResolution);
-		m_Properties.AddVariable("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
-		m_Properties.AddVariable("TickDirection", m_TickDirection == TopLeft ? "TopLeft" : "BottomRight");
+		m_Properties.AddProperty("Value", m_Value);
+		m_Properties.AddProperty("Minimum", m_Minimum);
+		m_Properties.AddProperty("Maximum", m_Maximum);
+		m_Properties.AddProperty("ValueResolution", m_ValueResolution);
+		m_Properties.AddProperty("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
+		m_Properties.AddProperty("TickDirection", m_TickDirection == TopLeft ? "TopLeft" : "BottomRight");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -492,7 +492,7 @@ namespace RTE {
 
 		// Get the values
 		std::string ori;
-		m_Properties.GetValue("Orientation", &ori);
+		m_Properties.GetPropertyValue("Orientation", &ori);
 		if (stricmp(ori.c_str(), "horizontal") == 0) {
 			m_Orientation = Horizontal;
 		} else if (stricmp(ori.c_str(), "vertical") == 0) {
@@ -500,16 +500,16 @@ namespace RTE {
 		}
 
 		std::string tick;
-		m_Properties.GetValue("TickDirection", &tick);
+		m_Properties.GetPropertyValue("TickDirection", &tick);
 		if (stricmp(tick.c_str(), "TopLeft") == 0) {
 			m_TickDirection = TopLeft;
 		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
 			m_TickDirection = BottomRight;
 		}
-		m_Properties.GetValue("Minimum", &m_Minimum);
-		m_Properties.GetValue("Maximum", &m_Maximum);
-		m_Properties.GetValue("Value", &m_Value);
-		m_Properties.GetValue("ValueResolution", &m_ValueResolution);
+		m_Properties.GetPropertyValue("Minimum", &m_Minimum);
+		m_Properties.GetPropertyValue("Maximum", &m_Maximum);
+		m_Properties.GetPropertyValue("Value", &m_Value);
+		m_Properties.GetPropertyValue("ValueResolution", &m_ValueResolution);
 
 		// Clamp the value
 		m_Value = std::max(m_Value, m_Minimum);

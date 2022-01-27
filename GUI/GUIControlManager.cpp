@@ -151,9 +151,9 @@ namespace RTE {
 
 		// Get the control type and name
 		std::string Type;
-		Property->GetValue("ControlType", &Type);
+		Property->GetPropertyValue("ControlType", &Type);
 		std::string Name;
-		Property->GetValue("Name", &Name);
+		Property->GetPropertyValue("Name", &Name);
 
 		// Skip if we already have a control of this name
 		if (GetControl(Name)) {
@@ -170,7 +170,7 @@ namespace RTE {
 
 		// Get the parent control
 		std::string Parent;
-		Property->GetValue("Parent", &Parent);
+		Property->GetPropertyValue("Parent", &Parent);
 
 		GUIControl *Par = GetControl(Parent);
 		GUIPanel *Pan = nullptr;
@@ -419,7 +419,7 @@ namespace RTE {
 					std::string Value = reader.TrimString(line.substr(Position + 1, std::string::npos));
 
 					// Add it to the current property
-					CurProp->AddVariable(Name, Value);
+					CurProp->AddProperty(Name, Value);
 				}
 				continue;
 			}

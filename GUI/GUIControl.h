@@ -107,7 +107,7 @@ public:
 // Description:     Sets the control's tooltip string.
 // Arguments:       The new ToolTip for this.
 
-    void SetToolTip(const std::string &tip) { m_Properties.SetValue("ToolTip", tip); }
+    void SetToolTip(const std::string &tip) { m_Properties.SetPropertyValue("ToolTip", tip); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -310,7 +310,7 @@ namespace RTEGUI {
 			newRootControl->StoreProperties();
 
 			GUIProperties newRootControlProps;
-			newRootControlProps.Update(newRootControl->GetProperties(), true);
+			newRootControlProps.OverwriteProperties(newRootControl->GetProperties(), true);
 			newRootControl->GetPanel()->BuildProperties(&newRootControlProps);
 
 			m_EditorManager->ClearCurrentSelection();

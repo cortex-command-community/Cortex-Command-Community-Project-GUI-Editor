@@ -65,8 +65,8 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Get the values
-		Props->GetValue("Text", &m_Text);
-		Props->GetValue("Checked", &m_Selected);
+		Props->GetPropertyValue("Text", &m_Text);
+		Props->GetPropertyValue("Checked", &m_Selected);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,8 +224,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITab::StoreProperties() {
-		m_Properties.AddVariable("Text", m_Text);
-		m_Properties.AddVariable("Selected", m_Selected);
+		m_Properties.AddProperty("Text", m_Text);
+		m_Properties.AddProperty("Selected", m_Selected);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,7 +271,7 @@ namespace RTE {
 	void GUITab::ApplyProperties(GUIProperties *Props) {
 		GUIControl::ApplyProperties(Props);
 
-		m_Properties.GetValue("Text", &m_Text);
-		m_Properties.GetValue("Selected", &m_Selected);
+		m_Properties.GetPropertyValue("Text", &m_Text);
+		m_Properties.GetPropertyValue("Selected", &m_Selected);
 	}
 }

@@ -61,7 +61,7 @@ namespace RTE {
 
 		// Get the properties
 		bool Multi = false;
-		Props->GetValue("MultiSelect", &Multi);
+		Props->GetPropertyValue("MultiSelect", &Multi);
 		SetMultiSelect(Multi);
 	}
 
@@ -78,9 +78,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::StoreProperties() {
-		m_Properties.AddVariable("MultiSelect", GetMultiSelect());
-		m_Properties.AddVariable("ScrollBarThickness", GetScrollBarThickness());
-		m_Properties.AddVariable("ScrollBarPadding", GetScrollBarPadding());
+		m_Properties.AddProperty("MultiSelect", GetMultiSelect());
+		m_Properties.AddProperty("ScrollBarThickness", GetScrollBarThickness());
+		m_Properties.AddProperty("ScrollBarPadding", GetScrollBarPadding());
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,15 +115,15 @@ namespace RTE {
 		GUIControl::ApplyProperties(Props);
 
 		bool Multi = false;
-		m_Properties.GetValue("MultiSelect", &Multi);
+		m_Properties.GetPropertyValue("MultiSelect", &Multi);
 		SetMultiSelect(Multi);
 
 		int scrollBarThickness = GetScrollBarThickness();
-		m_Properties.GetValue("ScrollBarThickness", &scrollBarThickness);
+		m_Properties.GetPropertyValue("ScrollBarThickness", &scrollBarThickness);
 		SetScrollBarThickness(scrollBarThickness);
 
 		int scrollBarPadding = GetScrollBarPadding();
-		m_Properties.GetValue("ScrollBarPadding", &scrollBarPadding);
+		m_Properties.GetPropertyValue("ScrollBarPadding", &scrollBarPadding);
 		SetScrollBarPadding(scrollBarPadding);
 
 		// Rebuild the bitmap

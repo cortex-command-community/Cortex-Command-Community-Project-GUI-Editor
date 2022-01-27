@@ -92,13 +92,13 @@ namespace RTE {
 
 		// Load the values
 		std::string text;
-		Props->GetValue("Text", &text);
+		Props->GetPropertyValue("Text", &text);
 		m_Text->SetText(text);
 		bool overflowScroll = false;
-		Props->GetValue("HorizontalOverflowScroll", &overflowScroll);
+		Props->GetPropertyValue("HorizontalOverflowScroll", &overflowScroll);
 		m_Text->SetHorizontalOverflowScroll(overflowScroll);
 		overflowScroll = false;
-		Props->GetValue("VerticalOverflowScroll", &overflowScroll);
+		Props->GetPropertyValue("VerticalOverflowScroll", &overflowScroll);
 		m_Text->SetVerticalOverflowScroll(overflowScroll);
 	}
 
@@ -329,9 +329,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::StoreProperties() {
-		m_Properties.AddVariable("Text", m_Text->GetText());
-		m_Properties.AddVariable("HorizontalOverflowScroll", m_Text->GetHorizontalOverflowScroll());
-		m_Properties.AddVariable("VerticalOverflowScroll", m_Text->GetVerticalOverflowScroll());
+		m_Properties.AddProperty("Text", m_Text->GetText());
+		m_Properties.AddProperty("HorizontalOverflowScroll", m_Text->GetHorizontalOverflowScroll());
+		m_Properties.AddProperty("VerticalOverflowScroll", m_Text->GetVerticalOverflowScroll());
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,13 +411,13 @@ namespace RTE {
 		GUIControl::ApplyProperties(Props);
 
 		std::string text;
-		m_Properties.GetValue("Text", &text);
+		m_Properties.GetPropertyValue("Text", &text);
 		m_Text->SetText(text);
 		bool overflowScroll = false;
-		m_Properties.GetValue("HorizontalOverflowScroll", &overflowScroll);
+		m_Properties.GetPropertyValue("HorizontalOverflowScroll", &overflowScroll);
 		m_Text->SetHorizontalOverflowScroll(overflowScroll);
 		overflowScroll = false;
-		m_Properties.GetValue("VerticalOverflowScroll", &overflowScroll);
+		m_Properties.GetPropertyValue("VerticalOverflowScroll", &overflowScroll);
 		m_Text->SetVerticalOverflowScroll(overflowScroll);
 
 		BuildBitmap();

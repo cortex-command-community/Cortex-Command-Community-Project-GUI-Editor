@@ -109,11 +109,11 @@ namespace RTE {
 		GUIPanel::AddChild(m_Button);
 
 		// Load the info
-		Props->GetValue("Dropheight", &m_DropHeight);
+		Props->GetPropertyValue("Dropheight", &m_DropHeight);
 		m_DropHeight = std::max(m_DropHeight, 20);
 
 		std::string Val;
-		Props->GetValue("DropDownStyle", &Val);
+		Props->GetPropertyValue("DropDownStyle", &Val);
 		if (stricmp(Val.c_str(), "DropDownList") == 0) {
 			m_DropDownStyle = DropDownList;
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
@@ -392,11 +392,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::StoreProperties() {
-		m_Properties.AddVariable("DropHeight", m_DropHeight);
+		m_Properties.AddProperty("DropHeight", m_DropHeight);
 		if (m_DropDownStyle == DropDownList) {
-			m_Properties.AddVariable("DropDownStyle", "DropDownList");
+			m_Properties.AddProperty("DropDownStyle", "DropDownList");
 		} else if (m_DropDownStyle == DropDown) {
-			m_Properties.AddVariable("DropDownStyle", "DropDown");
+			m_Properties.AddProperty("DropDownStyle", "DropDown");
 		}
 	}
 
@@ -445,11 +445,11 @@ namespace RTE {
 	void GUIComboBox::ApplyProperties(GUIProperties *Props) {
 		GUIControl::ApplyProperties(Props);
 
-		m_Properties.GetValue("Dropheight", &m_DropHeight);
+		m_Properties.GetPropertyValue("Dropheight", &m_DropHeight);
 		m_DropHeight = std::max(m_DropHeight, 20);
 
 		std::string Val;
-		m_Properties.GetValue("DropDownStyle", &Val);
+		m_Properties.GetPropertyValue("DropDownStyle", &Val);
 		if (stricmp(Val.c_str(), "DropDownList") == 0) {
 			m_DropDownStyle = DropDownList;
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {

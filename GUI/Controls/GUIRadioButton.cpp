@@ -65,8 +65,8 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Get the values
-		Props->GetValue("Text", &m_Text);
-		Props->GetValue("Checked", &m_Checked);
+		Props->GetPropertyValue("Text", &m_Text);
+		Props->GetPropertyValue("Checked", &m_Checked);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,8 +212,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::StoreProperties() {
-		m_Properties.AddVariable("Text", m_Text);
-		m_Properties.AddVariable("Checked", m_Checked);
+		m_Properties.AddProperty("Text", m_Text);
+		m_Properties.AddProperty("Checked", m_Checked);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ namespace RTE {
 	void GUIRadioButton::ApplyProperties(GUIProperties *Props) {
 		GUIControl::ApplyProperties(Props);
 
-		m_Properties.GetValue("Text", &m_Text);
-		m_Properties.GetValue("Checked", &m_Checked);
+		m_Properties.GetPropertyValue("Text", &m_Text);
+		m_Properties.GetPropertyValue("Checked", &m_Checked);
 	}
 }

@@ -73,17 +73,17 @@ namespace RTE {
 		GUIAssert(Props, "");
 
 		std::string Ori;
-		Props->GetValue("Orientation", &Ori);
+		Props->GetPropertyValue("Orientation", &Ori);
 
 		m_Orientation = Horizontal;
 		if (stricmp(Ori.c_str(), "Vertical") == 0) { m_Orientation = Vertical; }
 
-		Props->GetValue("Minimum", &m_Minimum);
-		Props->GetValue("Maximum", &m_Maximum);
-		Props->GetValue("Value", &m_Value);
-		Props->GetValue("PageSize", &m_PageSize);
-		Props->GetValue("SmallChange", &m_SmallChange);
-		if (!Props->GetValue("ValueResolution", &m_ValueResolution)) { m_ValueResolution = std::max((m_Maximum - m_Minimum) / 100, 1); }
+		Props->GetPropertyValue("Minimum", &m_Minimum);
+		Props->GetPropertyValue("Maximum", &m_Maximum);
+		Props->GetPropertyValue("Value", &m_Value);
+		Props->GetPropertyValue("PageSize", &m_PageSize);
+		Props->GetPropertyValue("SmallChange", &m_SmallChange);
+		if (!Props->GetPropertyValue("ValueResolution", &m_ValueResolution)) { m_ValueResolution = std::max((m_Maximum - m_Minimum) / 100, 1); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,12 +675,12 @@ namespace RTE {
 	void GUIScrollPanel::SaveProps(GUIProperties *Props) const {
 		GUIAssert(Props, "");
 
-		Props->AddVariable("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
-		Props->AddVariable("Minimum", m_Minimum);
-		Props->AddVariable("Maximum", m_Maximum);
-		Props->AddVariable("Value", m_Value);
-		Props->AddVariable("PageSize", m_PageSize);
-		Props->AddVariable("SmallChange", m_SmallChange);
-		Props->AddVariable("ValueResolution", m_ValueResolution);
+		Props->AddProperty("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
+		Props->AddProperty("Minimum", m_Minimum);
+		Props->AddProperty("Maximum", m_Maximum);
+		Props->AddProperty("Value", m_Value);
+		Props->AddProperty("PageSize", m_PageSize);
+		Props->AddProperty("SmallChange", m_SmallChange);
+		Props->AddProperty("ValueResolution", m_ValueResolution);
 	}
 }

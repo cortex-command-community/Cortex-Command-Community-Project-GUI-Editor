@@ -66,7 +66,7 @@ namespace RTE {
 					std::string Value = skinFile.TrimString(line.substr(Position + 1, std::string::npos));
 
 					// Add it to the current property
-					CurProp->AddVariable(Name, Value);
+					CurProp->AddProperty(Name, Value);
 				}
 				continue;
 			}
@@ -89,7 +89,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetValue(Variable, Value)) {
+			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
 				return true;
 			}
 		}
@@ -107,7 +107,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetValue(Variable, Array, MaxArraySize)) {
+			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Array, MaxArraySize)) {
 				return true;
 			}
 		}
@@ -125,7 +125,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetValue(Variable, Value)) {
+			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
 				return true;
 			}
 		}
@@ -143,7 +143,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetValue(Variable, Value)) {
+			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
 				return true;
 			}
 		}

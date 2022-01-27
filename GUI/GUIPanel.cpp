@@ -112,13 +112,13 @@ namespace RTE {
 	void GUIPanel::LoadProperties(GUIProperties *Props) {
 		GUIAssert(Props, "");
 
-		Props->GetValue("X", &m_X);
-		Props->GetValue("Y", &m_Y);
-		Props->GetValue("Width", &m_Width);
-		Props->GetValue("Height", &m_Height);
+		Props->GetPropertyValue("X", &m_X);
+		Props->GetPropertyValue("Y", &m_Y);
+		Props->GetPropertyValue("Width", &m_Width);
+		Props->GetPropertyValue("Height", &m_Height);
 
-		Props->GetValue("Visible", &m_Visible);
-		Props->GetValue("Enabled", &m_Enabled);
+		Props->GetPropertyValue("Visible", &m_Visible);
+		Props->GetPropertyValue("Enabled", &m_Enabled);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -442,12 +442,12 @@ namespace RTE {
 			Y -= m_Parent->m_Y;
 		}
 
-		Prop->AddVariable("X", X);
-		Prop->AddVariable("Y", Y);
-		Prop->AddVariable("Width", m_Width);
-		Prop->AddVariable("Height", m_Height);
-		Prop->AddVariable("Visible", m_Visible);
-		Prop->AddVariable("Enabled", m_Enabled);
+		Prop->AddProperty("X", X);
+		Prop->AddProperty("Y", Y);
+		Prop->AddProperty("Width", m_Width);
+		Prop->AddProperty("Height", m_Height);
+		Prop->AddProperty("Visible", m_Visible);
+		Prop->AddProperty("Enabled", m_Enabled);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,7 +481,7 @@ namespace RTE {
 	void GUIPanel::_ApplyProperties(GUIProperties *Props) {
 		GUIAssert(Props, "");
 
-		Props->GetValue("Visible", &m_Visible);
-		Props->GetValue("Enabled", &m_Enabled);
+		Props->GetPropertyValue("Visible", &m_Visible);
+		Props->GetPropertyValue("Enabled", &m_Enabled);
 	}
 }

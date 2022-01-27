@@ -64,9 +64,9 @@ namespace RTE {
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 
-		Props->GetValue("Minimum", &m_Minimum);
-		Props->GetValue("Maximum", &m_Maximum);
-		Props->GetValue("Value", &m_Value);
+		Props->GetPropertyValue("Minimum", &m_Minimum);
+		Props->GetPropertyValue("Maximum", &m_Maximum);
+		Props->GetPropertyValue("Value", &m_Value);
 
 		// Clamp the value
 		m_Value = std::max(m_Value, m_Minimum);
@@ -218,9 +218,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::StoreProperties() {
-		m_Properties.AddVariable("Minimum", m_Minimum);
-		m_Properties.AddVariable("Maximum", m_Maximum);
-		m_Properties.AddVariable("Value", m_Value);
+		m_Properties.AddProperty("Minimum", m_Minimum);
+		m_Properties.AddProperty("Maximum", m_Maximum);
+		m_Properties.AddProperty("Value", m_Value);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,9 +242,9 @@ namespace RTE {
 	void GUIProgressBar::ApplyProperties(GUIProperties *Props) {
 		GUIControl::ApplyProperties(Props);
 
-		m_Properties.GetValue("Minimum", &m_Minimum);
-		m_Properties.GetValue("Maximum", &m_Maximum);
-		m_Properties.GetValue("Value", &m_Value);
+		m_Properties.GetPropertyValue("Minimum", &m_Minimum);
+		m_Properties.GetPropertyValue("Maximum", &m_Maximum);
+		m_Properties.GetPropertyValue("Value", &m_Value);
 
 		// Clamp the value
 		m_Value = std::max(m_Value, m_Minimum);

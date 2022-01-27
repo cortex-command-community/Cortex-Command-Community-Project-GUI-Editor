@@ -59,12 +59,12 @@ namespace RTE {
 
 		// Alignment values - these don't affect anything as of yet
 		std::string alignString;
-		Props->GetValue("HAlignment", &alignString);
+		Props->GetPropertyValue("HAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
 		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::Centre; }
 		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
 
-		Props->GetValue("VAlignment", &alignString);
+		Props->GetPropertyValue("VAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
 		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
 		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
@@ -115,9 +115,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::StoreProperties() {
-		m_Properties.AddVariable("NumericOnly", GetNumericOnly());
-		m_Properties.AddVariable("MaxNumericValue", GetMaxNumericValue());
-		m_Properties.AddVariable("MaxTextLength", GetMaxTextLength());
+		m_Properties.AddProperty("NumericOnly", GetNumericOnly());
+		m_Properties.AddProperty("MaxNumericValue", GetMaxNumericValue());
+		m_Properties.AddProperty("MaxTextLength", GetMaxTextLength());
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,15 +152,15 @@ namespace RTE {
 		GUIControl::ApplyProperties(Props);
 
 		bool numericOnly = GetNumericOnly();
-		m_Properties.GetValue("NumericOnly", &numericOnly);
+		m_Properties.GetPropertyValue("NumericOnly", &numericOnly);
 		SetNumericOnly(numericOnly);
 
 		int maxNumericValue = GetMaxNumericValue();
-		m_Properties.GetValue("MaxNumericValue", &maxNumericValue);
+		m_Properties.GetPropertyValue("MaxNumericValue", &maxNumericValue);
 		SetMaxNumericValue(maxNumericValue);
 
 		int maxTextLength = GetMaxTextLength();
-		m_Properties.GetValue("MaxTextLength", &maxTextLength);
+		m_Properties.GetPropertyValue("MaxTextLength", &maxTextLength);
 		SetMaxTextLength(maxTextLength);
 
 		// Force a rebuild of the bitmap

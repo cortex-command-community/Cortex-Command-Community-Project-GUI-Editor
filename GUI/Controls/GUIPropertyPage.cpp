@@ -14,7 +14,7 @@ namespace RTE {
 		m_VertScroll = nullptr;
 		m_FontColor = 0;
 		m_LineColor = 0;
-		m_PageValues.Clear();
+		m_PageValues.ClearProperties();
 		m_TextPanelList.clear();
 	}
 
@@ -192,7 +192,7 @@ namespace RTE {
 		}
 
 		// Draw the properties
-		int Count = m_PageValues.GetCount();
+		int Count = m_PageValues.GetPropertyCount();
 		int Spacer = 2;
 		int Y = m_Y + Spacer;
 		int Size = 16;
@@ -200,7 +200,7 @@ namespace RTE {
 		std::string Value;
 
 		for (int i = 0; i < Count; i++) {
-			m_PageValues.GetVariable(i, &Name, &Value);
+			m_PageValues.GetProperty(i, &Name, &Value);
 			m_Font->SetColor(m_FontColor);
 			m_Font->SetKerning(m_FontKerning);
 			m_Font->Draw(Screen->GetBitmap(), m_X + Spacer, Y, Name, m_FontShadow);
@@ -251,8 +251,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::SetPropertyValues(GUIProperties *Props) {
-		m_PageValues.Clear();
-		m_PageValues.Update(Props, true);
+		m_PageValues.ClearProperties();
+		m_PageValues.OverwriteProperties(Props, true);
 
 		// Update the text panels
 		for (int i = 0; i < m_TextPanelList.size(); i++) {
@@ -260,11 +260,11 @@ namespace RTE {
 			T->_SetVisible(false);
 			T->SetText("");
 
-			if (i < m_PageValues.GetCount()) {
+			if (i < m_PageValues.GetPropertyCount()) {
 				T->_SetVisible(true);
 				std::string Name;
 				std::string Value;
-				if (m_PageValues.GetVariable(i, &Name, &Value)) { T->SetText(Value); }
+				if (m_PageValues.GetProperty(i, &Name, &Value)) { T->SetText(Value); }
 			}
 		}
 	}
@@ -309,13 +309,13 @@ namespace RTE {
 		for (int i = 0; i < m_TextPanelList.size(); i++) {
 			const GUITextPanel *T = m_TextPanelList.at(i);
 
-			if (i < m_PageValues.GetCount()) {
+			if (i < m_PageValues.GetPropertyCount()) {
 				std::string Name;
 				std::string Value;
-				if (m_PageValues.GetVariable(i, &Name, &Value)) {
+				if (m_PageValues.GetProperty(i, &Name, &Value)) {
 					if (T->GetText().compare(Value) != 0) { Changed = true; }
 					// Set the value
-					m_PageValues.SetVariable(i, Name, T->GetText());
+					m_PageValues.SetProperty(i, Name, T->GetText());
 				}
 			}
 		}
@@ -326,7 +326,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::ClearValues() {
-		m_PageValues.Clear();
+		m_PageValues.ClearProperties();
 
 		// Hide the text panels
 		std::vector<GUITextPanel *>::iterator it;

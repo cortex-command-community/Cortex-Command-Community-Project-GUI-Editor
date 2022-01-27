@@ -211,8 +211,8 @@ namespace RTEGUI {
 
 		GUIProperties properties;
 		createdControl->StoreProperties();
-		properties.Update(s_SelectionCopyInfo.Properties, true);
-		properties.SetValue("Name", newControlName);
+		properties.OverwriteProperties(s_SelectionCopyInfo.Properties, true);
+		properties.SetPropertyValue("Name", newControlName);
 		createdControl->GetPanel()->BuildProperties(&properties);
 		createdControl->ApplyProperties(&properties);
 		m_PropertyPage->SetPropertyValues(&properties);
@@ -504,7 +504,7 @@ namespace RTEGUI {
 			if (manualEdit) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
 			control->StoreProperties();
 			GUIProperties properties;
-			properties.Update(control->GetProperties(), true);
+			properties.OverwriteProperties(control->GetProperties(), true);
 			control->GetPanel()->BuildProperties(&properties);
 			m_PropertyPage->SetPropertyValues(&properties);
 			result = true;

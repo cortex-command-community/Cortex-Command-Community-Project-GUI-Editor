@@ -68,21 +68,21 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Get the values
-		Props->GetValue("Text", &m_Text);
+		Props->GetPropertyValue("Text", &m_Text);
 
 		std::string alignString;
-		Props->GetValue("HAlignment", &alignString);
+		Props->GetPropertyValue("HAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
 		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::Centre; }
 		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
 
-		Props->GetValue("VAlignment", &alignString);
+		Props->GetPropertyValue("VAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
 		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
 		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
 
-		Props->GetValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
-		Props->GetValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
+		Props->GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
+		Props->GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,24 +270,24 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::StoreProperties() {
-		m_Properties.AddVariable("Text", m_Text);
+		m_Properties.AddProperty("Text", m_Text);
 
 		if (m_HAlignment == GUIFont::Left) {
-			m_Properties.AddVariable("HAlignment", "left");
+			m_Properties.AddProperty("HAlignment", "left");
 		} else if (m_HAlignment == GUIFont::Centre) {
-			m_Properties.AddVariable("HAlignment", "centre");
+			m_Properties.AddProperty("HAlignment", "centre");
 		} else if (m_HAlignment == GUIFont::Right) {
-			m_Properties.AddVariable("HAlignment", "right");
+			m_Properties.AddProperty("HAlignment", "right");
 		}
 		if (m_VAlignment == GUIFont::Top) {
-			m_Properties.AddVariable("VAlignment", "top");
+			m_Properties.AddProperty("VAlignment", "top");
 		} else if (m_VAlignment == GUIFont::Middle) {
-			m_Properties.AddVariable("VAlignment", "middle");
+			m_Properties.AddProperty("VAlignment", "middle");
 		} else if (m_VAlignment == GUIFont::Bottom) {
-			m_Properties.AddVariable("VAlignment", "bottom");
+			m_Properties.AddProperty("VAlignment", "bottom");
 		}
-		m_Properties.AddVariable("HorizontalOverflowScroll", m_HorizontalOverflowScroll);
-		m_Properties.AddVariable("VerticalOverflowScroll", m_VerticalOverflowScroll);
+		m_Properties.AddProperty("HorizontalOverflowScroll", m_HorizontalOverflowScroll);
+		m_Properties.AddProperty("VerticalOverflowScroll", m_VerticalOverflowScroll);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,20 +295,20 @@ namespace RTE {
 	void GUILabel::ApplyProperties(GUIProperties *Props) {
 		GUIControl::ApplyProperties(Props);
 
-		m_Properties.GetValue("Text", &m_Text);
+		m_Properties.GetPropertyValue("Text", &m_Text);
 
 		std::string alignString;
-		m_Properties.GetValue("HAlignment", &alignString);
+		m_Properties.GetPropertyValue("HAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
 		if (stricmp(alignString.c_str(), "centre") == 0) { m_HAlignment = GUIFont::Centre; }
 		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
 
-		m_Properties.GetValue("VAlignment", &alignString);
+		m_Properties.GetPropertyValue("VAlignment", &alignString);
 		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
 		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
 		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
 
-		m_Properties.GetValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
-		m_Properties.GetValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
+		m_Properties.GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
+		m_Properties.GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
 	}
 }

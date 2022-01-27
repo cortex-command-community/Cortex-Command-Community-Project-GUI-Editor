@@ -8,7 +8,7 @@ namespace RTE {
 	GUIControl::GUIControl() {
 		m_Skin = nullptr;
 		m_SkinPreset = 1;
-		m_Properties.Clear();
+		m_Properties.ClearProperties();
 		m_ControlChildren.clear();
 		m_ControlParent = nullptr;
 		m_IsContainer = false;
@@ -17,10 +17,10 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		m_Properties.Clear();
-		m_Properties.AddVariable("Name", Name);
-		m_Properties.AddVariable("Anchor", "Left, Top");
-		m_Properties.AddVariable("ToolTip", "");
+		m_Properties.ClearProperties();
+		m_Properties.AddProperty("Name", Name);
+		m_Properties.AddProperty("Anchor", "Left, Top");
+		m_Properties.AddProperty("ToolTip", "");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,11 +29,11 @@ namespace RTE {
 		GUIAssert(Props, "");
 
 		// Add the default variables
-		m_Properties.AddVariable("Name", "");
-		m_Properties.AddVariable("Anchor", "Left, Top");
-		m_Properties.AddVariable("ToolTip", "");
+		m_Properties.AddProperty("Name", "");
+		m_Properties.AddProperty("Anchor", "Left, Top");
+		m_Properties.AddProperty("ToolTip", "");
 
-		m_Properties.Update(Props);
+		m_Properties.OverwriteProperties(Props);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ namespace RTE {
 
 	std::string GUIControl::GetName() {
 		std::string Name;
-		m_Properties.GetValue("Name", &Name);
+		m_Properties.GetPropertyValue("Name", &Name);
 
 		return Name;
 	}
@@ -55,7 +55,7 @@ namespace RTE {
 
 	std::string GUIControl::GetToolTip() {
 		std::string tip;
-		m_Properties.GetValue("ToolTip", &tip);
+		m_Properties.GetPropertyValue("ToolTip", &tip);
 
 		return tip;
 	}
@@ -82,7 +82,7 @@ namespace RTE {
 		StoreProperties();
 
 		// Section Header
-		m_Properties.GetValue("Name", &Name);
+		m_Properties.GetPropertyValue("Name", &Name);
 
 		OutString.append("[");
 		OutString.append(Name);
@@ -131,7 +131,7 @@ namespace RTE {
 		int Anchor = 0;
 		std::string Value[4];
 
-		int Count = m_Properties.GetValue("Anchor", Value, 4);
+		int Count = m_Properties.GetPropertyValue("Anchor", Value, 4);
 
 		for (int i = 0; i < Count; i++) {
 			if (stricmp(Value[i].c_str(), "left") == 0) { Anchor |= Anchor_Left; }
@@ -189,18 +189,18 @@ namespace RTE {
 	void GUIControl::ApplyProperties(GUIProperties *Props) {
 		GUIAssert(Props, "");
 
-		m_Properties.Update(Props);
+		m_Properties.OverwriteProperties(Props);
 
 		int X, Y;
 		int Width, Height;
 		bool Enabled;
 		bool Visible;
-		Props->GetValue("X", &X);
-		Props->GetValue("Y", &Y);
-		Props->GetValue("Width", &Width);
-		Props->GetValue("Height", &Height);
-		Props->GetValue("Enabled", &Enabled);
-		Props->GetValue("Visible", &Visible);
+		Props->GetPropertyValue("X", &X);
+		Props->GetPropertyValue("Y", &Y);
+		Props->GetPropertyValue("Width", &Width);
+		Props->GetPropertyValue("Height", &Height);
+		Props->GetPropertyValue("Enabled", &Enabled);
+		Props->GetPropertyValue("Visible", &Visible);
 
 		// Adjust position from parent
 		GUIPanel *P = GetPanel();
