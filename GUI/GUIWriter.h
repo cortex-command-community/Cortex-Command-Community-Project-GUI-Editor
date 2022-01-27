@@ -50,12 +50,12 @@ namespace RTE {
 		/// Used to specify the start of an object to be written.
 		/// </summary>
 		/// <param name="className">The class name of the object about to be written.</param>
-		void ObjectStart(const std::string &className);
+		void ObjectStart(const std::string &className) { *m_Stream << className; ++m_IndentCount; }
 
 		/// <summary>
 		/// Used to specify the end of an object that has just been written.
 		/// </summary>
-		void ObjectEnd();
+		void ObjectEnd() { --m_IndentCount; if (m_IndentCount == 0) { NewLine(false, 2); } }
 
 		/// <summary>
 		/// Creates a new line that can be properly indented.
@@ -69,20 +69,20 @@ namespace RTE {
 		/// </summary>
 		/// <param name="textString">The text string to write to the new line.</param>
 		/// <param name="toIndent">Whether to indent the new line or not.</param>
-		void NewLineString(const std::string &textString, bool toIndent = true) const;
+		void NewLineString(const std::string &textString, bool toIndent = true) const { NewLine(toIndent); *m_Stream << textString; }
 
 		/// <summary>
 		/// Creates a new line and fills it with slashes to create a divider line for INI.
 		/// </summary>
 		/// <param name="toIndent">Whether to indent the new line or not.</param>
 		/// <param name="dividerLength">The length of the divider (number of slashes).</param>
-		void NewDivider(bool toIndent = true, int dividerLength = 72) const;
+		void NewDivider(bool toIndent = true, int dividerLength = 72) const { NewLine(toIndent); *m_Stream << std::string(dividerLength, '/'); }
 
 		/// <summary>
 		/// Creates a new line and writes the name of the property in preparation to writing it's value.
 		/// </summary>
 		/// <param name="propName">The name of the property to be written.</param>
-		void NewProperty(const std::string &propName) const;
+		void NewProperty(const std::string &propName) const { NewLine(); *m_Stream << propName + " = "; }
 #pragma endregion
 
 #pragma region Writer Status
@@ -95,7 +95,7 @@ namespace RTE {
 		/// <summary>
 		/// Flushes and closes the output stream of this GUIWriter. This happens automatically at destruction but needs to be called manually if a written file must be read from in the same scope.
 		/// </summary>
-		void EndWrite() const;
+		void EndWrite() const { m_Stream->flush(); m_Stream->close(); }
 #pragma endregion
 
 #pragma region Operator Overloads
@@ -104,21 +104,21 @@ namespace RTE {
 		/// </summary>
 		/// <param name="var">A reference to the variable that will be written to the ostream.</param>
 		/// <returns>A GUIWriter reference for further use in an expression.</returns>
-		GUIWriter & operator<<(const bool &var);
-		GUIWriter & operator<<(const char &var);
-		GUIWriter & operator<<(const unsigned char &var);
-		GUIWriter & operator<<(const short &var);
-		GUIWriter & operator<<(const unsigned short &var);
-		GUIWriter & operator<<(const int &var);
-		GUIWriter & operator<<(const unsigned int &var);
-		GUIWriter & operator<<(const long &var);
-		GUIWriter & operator<<(const long long &var);
-		GUIWriter & operator<<(const unsigned long &var);
-		GUIWriter & operator<<(const unsigned long long &var);
-		GUIWriter & operator<<(const float &var);
-		GUIWriter & operator<<(const double &var);
-		GUIWriter & operator<<(const char *var);
-		GUIWriter & operator<<(const std::string &var);
+		GUIWriter & operator<<(const bool &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const char &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const unsigned char &var) { int temp = var; *m_Stream << temp; return *this; }
+		GUIWriter & operator<<(const short &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const unsigned short &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const int &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const unsigned int &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const long &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const long long &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const unsigned long &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const unsigned long long &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const float &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const double &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const char *var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const std::string &var) { *m_Stream << var; return *this; }
 #pragma endregion
 
 	protected:

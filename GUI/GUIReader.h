@@ -117,19 +117,19 @@ namespace RTE {
 		/// </summary>
 		/// <param name="var">A reference to the variable that will be filled by the extracted data.</param>
 		/// <returns>A GUIReader reference for further use in an expression.</returns>
-		GUIReader & operator>>(bool &var);
-		GUIReader & operator>>(char &var);
-		GUIReader & operator>>(unsigned char &var);
-		GUIReader & operator>>(short &var);
-		GUIReader & operator>>(unsigned short &var);
-		GUIReader & operator>>(int &var);
-		GUIReader & operator>>(unsigned int &var);
-		GUIReader & operator>>(long &var);
-		GUIReader & operator>>(unsigned long &var);
-		GUIReader & operator>>(float &var);
-		GUIReader & operator>>(double &var);
-		GUIReader & operator>>(char * var);
-		GUIReader & operator>>(std::string &var);
+		GUIReader & operator>>(bool &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(char &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(unsigned char &var) { DiscardEmptySpace(); int temp; *m_Stream >> temp; var = static_cast<unsigned char>(temp); return *this; }
+		GUIReader & operator>>(short &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(unsigned short &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(int &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(unsigned int &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(long &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(unsigned long &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(float &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(double &var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(char *var) { DiscardEmptySpace(); *m_Stream >> var; return *this; }
+		GUIReader & operator>>(std::string &var) { var.assign(ReadLine()); return *this; }
 #pragma endregion
 
 	protected:
@@ -141,7 +141,7 @@ namespace RTE {
 			/// <summary>
 			/// Constructor method used to instantiate a StreamInfo object in system memory.
 			/// </summary>
-			StreamInfo(std::ifstream *stream, const std::string &filePath, int currentLine, int prevIndent);
+			StreamInfo(std::ifstream *stream, const std::string &filePath, int currentLine, int prevIndent) : Stream(stream), FilePath(filePath), CurrentLine(currentLine), PreviousIndent(prevIndent) {}
 
 			// NOTE: These members are owned by the reader that owns this struct, so are not deleted when this is destroyed.
 			std::ifstream *Stream; //!< Currently used stream, is not on the StreamStack until a new stream is opened.
