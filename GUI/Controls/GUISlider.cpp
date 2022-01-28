@@ -173,7 +173,7 @@ namespace RTE {
 		m_KnobImage = m_Skin->CreateBitmap(Values[2], Values[3]);
 		SrcImage->Draw(m_KnobImage, 0, 0, &Rect);
 
-		unsigned long ColorKey;
+		int ColorKey;
 		m_Skin->GetValue(Section, "ColorKeyIndex", &ColorKey);
 		ColorKey = m_Skin->ConvertColor(ColorKey, m_KnobImage->GetColorDepth());
 		m_KnobImage->SetColorKey(ColorKey);

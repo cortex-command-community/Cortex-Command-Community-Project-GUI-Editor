@@ -82,7 +82,7 @@ namespace RTE {
 		/// <param name="color">Color value in any bit depth. Will be converted to the format specified.</param>
 		/// <param name="targetColorDepth">An optional target color depth that will determine what format the color should be converted to. If this is 0, then the current video color depth will be used as target.</param>
 		/// <returns>The converted color.</returns>
-		unsigned long ConvertColor(unsigned long color, int targetColorDepth = 0) override;
+		int ConvertColor(int color, int targetColorDepth = 0) override;
 #pragma endregion
 
 	private:

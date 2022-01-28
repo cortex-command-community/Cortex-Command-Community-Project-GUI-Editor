@@ -151,7 +151,7 @@ public:
 //                  should be converted to. If this is 0, then the current video color depth
 //                  will be used as target.
     
-    unsigned long ConvertColor(unsigned long color, int targetDepth = 0) { return m_Screen->ConvertColor(color, targetDepth); }
+    int ConvertColor(int color, int targetDepth = 0) { return m_Screen->ConvertColor(color, targetDepth); }
 
 
 private:

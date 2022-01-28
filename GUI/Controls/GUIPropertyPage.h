@@ -212,7 +212,7 @@ private:
 	static const std::string_view c_ControlType;
 
     GUIBitmap *m_DrawBitmap;
-    unsigned long m_LineColor;
+    int m_LineColor;
 
     GUIProperties m_PageValues;
     std::vector<GUITextPanel *> m_TextPanelList;

@@ -42,11 +42,11 @@ namespace RTE {
 		m_CurrentColor = m_MainColor;
 
 		// Set the color key to be the same color as the Top-Right hand corner pixel
-		unsigned long BackG = m_Font->GetPixel(m_Font->GetWidth() - 1, 0);
+		int BackG = m_Font->GetPixel(m_Font->GetWidth() - 1, 0);
 		m_Font->SetColorKey(BackG);
 
 		// The red separator MUST be on the Top-Left hand corner
-		unsigned long Red = m_Font->GetPixel(0, 0);
+		int Red = m_Font->GetPixel(0, 0);
 
 		// Find the separating gap of the font lines
 		int y;
@@ -79,7 +79,7 @@ namespace RTE {
 			int Height = 0;
 			for (int j = y; j < y + m_FontHeight; j++) {
 				for (int i = x; i < x + w; i++) {
-					unsigned long Pixel = m_Font->GetPixel(i, j);
+					int Pixel = m_Font->GetPixel(i, j);
 					if (Pixel != Red && Pixel != BackG) { Height = std::max(Height, j - y); }
 				}
 			}
@@ -107,7 +107,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, unsigned long Shadow) {
+	void GUIFont::Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int Shadow) {
 		unsigned char c;
 		GUIRect Rect;
 		GUIBitmap *Surf = m_CurrentBitmap;
@@ -157,7 +157,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign, int MaxWidth, unsigned long Shadow) {
+	void GUIFont::DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign, int MaxWidth, int Shadow) {
 		std::string TextLine = Text;
 		int lineStartPos = 0;
 		int lineEndPos = 0;
@@ -239,7 +239,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIFont::SetColor(unsigned long Color) {
+	void GUIFont::SetColor(int Color) {
 		// Only check the change if the color is different
 		if (Color != m_CurrentColor) {
 
@@ -339,7 +339,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIFont::CacheColor(unsigned long Color) {
+	void GUIFont::CacheColor(int Color) {
 		// Make sure we haven't already cached this color and it isn't a 0 color
 		if (GetFontColor(Color) != nullptr || !Color) {
 			return;
@@ -359,7 +359,7 @@ namespace RTE {
 		m_Font->Draw(FC.m_Bitmap, 0, 0, nullptr);
 
 		// Set the color key to be the same color as the Top-Right hand corner pixel
-		unsigned long BackG = FC.m_Bitmap->GetPixel(FC.m_Bitmap->GetWidth() - 1, 0);
+		int BackG = FC.m_Bitmap->GetPixel(FC.m_Bitmap->GetWidth() - 1, 0);
 		FC.m_Bitmap->SetColorKey(BackG);
 
 		// Go through the bitmap and change the pixels
@@ -375,7 +375,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIFont::FontColor * GUIFont::GetFontColor(unsigned long Color) {
+	GUIFont::FontColor * GUIFont::GetFontColor(int Color) {
 		std::vector<FontColor>::iterator it;
 		FontColor *F = nullptr;
 		for (it = m_ColorCache.begin(); it != m_ColorCache.end(); it++) {

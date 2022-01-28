@@ -94,7 +94,7 @@ namespace RTE {
 		/// <param name="posX">X position on bitmap.</param>
 		/// <param name="posY">Y position on bitmap.</param>
 		/// <returns>The color of the pixel at the specified point.</returns>
-		virtual unsigned long GetPixel(int posX, int posY) const = 0;
+		virtual int GetPixel(int posX, int posY) const = 0;
 
 		/// <summary>
 		/// Sets the color of a pixel at a specific point on the bitmap.
@@ -102,7 +102,7 @@ namespace RTE {
 		/// <param name="posX">X position on bitmap.</param>
 		/// <param name="posY">Y position on bitmap.</param>
 		/// <param name="pixelColor">The color to set the pixel to.</param>
-		virtual void SetPixel(int posX, int posY, unsigned long pixelColor) = 0;
+		virtual void SetPixel(int posX, int posY, int pixelColor) = 0;
 
 		/// <summary>
 		/// Sets the color key (mask color) of the bitmap to the color of the pixel in the upper right corner of the bitmap.
@@ -113,7 +113,7 @@ namespace RTE {
 		/// Sets the color key (mask color) of the bitmap.
 		/// </summary>
 		/// <param name="colorKey">Color key (mask color).</param>
-		virtual void SetColorKey(unsigned long colorKey) {}
+		virtual void SetColorKey(int colorKey) {}
 #pragma endregion
 
 #pragma region Clipping
@@ -175,7 +175,7 @@ namespace RTE {
 		/// <param name="x2">End position on X axis.</param>
 		/// <param name="y2">End position on Y axis.</param>
 		/// <param name="color">Color to draw this line with.</param>
-		virtual void DrawLine(int x1, int y1, int x2, int y2, unsigned long color) = 0;
+		virtual void DrawLine(int x1, int y1, int x2, int y2, int color) = 0;
 
 		/// <summary>
 		/// Draws a rectangle on this bitmap.
@@ -186,7 +186,7 @@ namespace RTE {
 		/// <param name="height">Height of rectangle.</param>
 		/// <param name="color">Color to draw this rectangle with.</param>
 		/// <param name="filled">Whether to fill the rectangle with the set color or not.</param>
-		virtual void DrawRectangle(int posX, int posY, int width, int height, unsigned long color, bool filled) = 0;
+		virtual void DrawRectangle(int posX, int posY, int width, int height, int color, bool filled) = 0;
 #pragma endregion
 
 		// Disallow the use of some implicit methods.
@@ -269,7 +269,7 @@ namespace RTE {
 		/// <param name="color">Color value in any bit depth. Will be converted to the format specified.</param>
 		/// <param name="targetColorDepth">An optional target color depth that will determine what format the color should be converted to. If this is 0, then the current video color depth will be used as target.</param>
 		/// <returns>The converted color.</returns>
-		virtual unsigned long ConvertColor(unsigned long color, int targetColorDepth = 0) = 0;
+		virtual int ConvertColor(int color, int targetColorDepth = 0) = 0;
 #pragma endregion
 
 		// Disallow the use of some implicit methods.

@@ -587,8 +587,8 @@ protected:
 	GUIPanel *m_Parent;
 
 	GUIFont *m_Font;
-	unsigned long m_FontColor;
-	unsigned long m_FontShadow;
+	int m_FontColor;
+	int m_FontShadow;
 	int m_FontKerning;
 
 

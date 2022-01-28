@@ -203,7 +203,7 @@ namespace RTE {
 		}
 
 		// Get the transparent colour key
-		unsigned long ColorKey = 0;
+		int ColorKey = 0;
 		m_Skin->GetValue(ArrowName, "ColorKeyIndex", &ColorKey);
 		ColorKey = m_Skin->ConvertColor(ColorKey, Arrow->GetColorDepth());
 		Arrow->SetColorKey(ColorKey);

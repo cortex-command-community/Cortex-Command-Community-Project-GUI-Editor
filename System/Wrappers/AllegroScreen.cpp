@@ -57,7 +57,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	unsigned long AllegroScreen::ConvertColor(unsigned long color, int targetColorDepth) {
+	int AllegroScreen::ConvertColor(int color, int targetColorDepth) {
 		if (targetColorDepth == 0) { targetColorDepth = get_color_depth(); }
 
 		if (targetColorDepth == 8) {

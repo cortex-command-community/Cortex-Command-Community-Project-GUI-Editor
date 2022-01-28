@@ -541,7 +541,7 @@ private:
 	GUIBitmap *m_BaseBitmap;
 	GUIBitmap *m_DrawBitmap;
 	GUIBitmap *m_FrameBitmap;
-	unsigned long m_FontSelectColor;
+	int m_FontSelectColor;
 
 	bool m_UpdateLocked;
 
@@ -567,7 +567,7 @@ private:
 
 	std::vector<Item *> m_Items;
 	std::vector<Item *> m_SelectedList;
-	unsigned long m_SelectedColorIndex;
+	int m_SelectedColorIndex;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildDrawBitmap

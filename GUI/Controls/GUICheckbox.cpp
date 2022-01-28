@@ -87,7 +87,7 @@ namespace RTE {
 
 	void GUICheckbox::BuildBitmap() {
 		std::string Filename;
-		unsigned long ColorIndex = 0;
+		int ColorIndex = 0;
 		int Values[4];
 
 		// Load the image

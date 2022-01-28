@@ -62,13 +62,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	unsigned long AllegroBitmap::GetPixel(int posX, int posY) const {
+	int AllegroBitmap::GetPixel(int posX, int posY) const {
 		return m_Bitmap ? getpixel(m_Bitmap, posX, posY) : 0;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void AllegroBitmap::SetPixel(int posX, int posY, unsigned long pixelColor) {
+	void AllegroBitmap::SetPixel(int posX, int posY, int pixelColor) {
 		RTEAssert(m_Bitmap, "Trying to set a pixel on a null bitmap!");
 		putpixel(m_Bitmap, posX, posY, pixelColor);
 	}
@@ -162,7 +162,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void AllegroBitmap::DrawLine(int x1, int y1, int x2, int y2, unsigned long color) {
+	void AllegroBitmap::DrawLine(int x1, int y1, int x2, int y2, int color) {
 		if (!m_Bitmap) {
 			return;
 		}
@@ -171,7 +171,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void AllegroBitmap::DrawRectangle(int posX, int posY, int width, int height, unsigned long color, bool filled) {
+	void AllegroBitmap::DrawRectangle(int posX, int posY, int width, int height, int color, bool filled) {
 		if (!m_Bitmap) {
 			return;
 		}

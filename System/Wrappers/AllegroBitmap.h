@@ -95,7 +95,7 @@ namespace RTE {
 		/// <param name="posX">X position on bitmap.</param>
 		/// <param name="posY">Y position on bitmap.</param>
 		/// <returns>The color of the pixel at the specified point.</returns>
-		unsigned long GetPixel(int posX, int posY) const override;
+		int GetPixel(int posX, int posY) const override;
 
 		/// <summary>
 		/// Sets the color of a pixel at a specific point on the bitmap.
@@ -103,7 +103,7 @@ namespace RTE {
 		/// <param name="posX">X position on bitmap.</param>
 		/// <param name="posY">Y position on bitmap.</param>
 		/// <param name="pixelColor">The color to set the pixel to.</param>
-		void SetPixel(int posX, int posY, unsigned long pixelColor) override;
+		void SetPixel(int posX, int posY, int pixelColor) override;
 #pragma endregion
 
 #pragma region Clipping
@@ -165,7 +165,7 @@ namespace RTE {
 		/// <param name="x2">End position on X axis.</param>
 		/// <param name="y2">End position on Y axis.</param>
 		/// <param name="color">Color to draw this line with.</param>
-		void DrawLine(int x1, int y1, int x2, int y2, unsigned long color) override;
+		void DrawLine(int x1, int y1, int x2, int y2, int color) override;
 
 		/// <summary>
 		/// Draws a rectangle on this bitmap.
@@ -176,7 +176,7 @@ namespace RTE {
 		/// <param name="height">Height of rectangle.</param>
 		/// <param name="color">Color to draw this rectangle with.</param>
 		/// <param name="filled">Whether to fill the rectangle with the set color or not.</param>
-		void DrawRectangle(int posX, int posY, int width, int height, unsigned long color, bool filled) override;
+		void DrawRectangle(int posX, int posY, int width, int height, int color, bool filled) override;
 #pragma endregion
 
 	private:

@@ -494,7 +494,7 @@ namespace RTE {
 			return;
 		}
 
-		unsigned long ColorKey;
+		int ColorKey;
 		Skin->GetValue("ComboBox_Arrow", "ColorKeyIndex", &ColorKey);
 		ColorKey = Skin->ConvertColor(ColorKey, m_DrawBitmap->GetColorDepth());
 		Arrow->SetColorKey(ColorKey);

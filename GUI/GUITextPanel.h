@@ -259,7 +259,7 @@ public:
 
 private:
 
-	unsigned long m_FontSelectColor;
+	int m_FontSelectColor;
 
 	std::string m_Text;
 	std::string m_RightText; // Appears right-justified in the text field
@@ -274,7 +274,7 @@ private:
 	int m_CursorX;
 	int m_CursorY;
 	int m_CursorIndex;
-	unsigned long m_CursorColor;
+	int m_CursorColor;
 	int m_CursorBlinkCount; // Hacky way to make cursor blink without a timer
 
 	int m_StartIndex;
@@ -283,7 +283,7 @@ private:
 	bool m_GotSelection;
 	int m_StartSelection;
 	int m_EndSelection;
-	unsigned long m_SelectedColorIndex;
+	int m_SelectedColorIndex;
 	int m_SelectionX;
 	int m_SelectionWidth;
 

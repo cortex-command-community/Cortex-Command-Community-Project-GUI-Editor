@@ -33,7 +33,7 @@ public:
 
     // Font Color structure
     typedef struct {
-        unsigned long        m_Color;
+        int        m_Color;
         GUIBitmap    *m_Bitmap;
     } FontColor;
 
@@ -63,7 +63,7 @@ public:
 // Description:     Pre-Calculates the font using a specific color.
 // Arguments:       Color.
 
-    void CacheColor(unsigned long Color);
+    void CacheColor(int Color);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ public:
 // Description:     Finds a font color structure from the cache.
 // Arguments:       Color.
 
-    FontColor * GetFontColor(unsigned long Color);
+    FontColor * GetFontColor(int Color);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ public:
 // Description:     Draws text to a bitmap.
 // Arguments:       Bitmap, Position, Text, Color, Drop-shadow, 0 = none.
 
-    void Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, unsigned long Shadow = 0);
+    void Draw(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int Shadow = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public:
 // Description:     Draws text to a bitmap aligned.
 // Arguments:       Bitmap, Position, Text.
 
-    void DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign = Top, int maxWidth = 0, unsigned long Shadow = 0);
+    void DrawAligned(GUIBitmap *Bitmap, int X, int Y, const std::string &Text, int HAlign, int VAlign = Top, int maxWidth = 0, int Shadow = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ public:
 // Description:     Sets the current color.
 // Arguments:       Color.
 
-    void SetColor(unsigned long Color);
+    void SetColor(int Color);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,8 +182,8 @@ private:
     std::vector<FontColor > m_ColorCache;
 
     int m_FontHeight;
-    unsigned long m_MainColor;
-    unsigned long m_CurrentColor;
+    int m_MainColor;
+    int m_CurrentColor;
     GUIBitmap *m_CurrentBitmap;
     std::string m_Name;
     Character m_Characters[256];
