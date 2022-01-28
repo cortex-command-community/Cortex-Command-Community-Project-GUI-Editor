@@ -16,20 +16,6 @@ class GUIListPanel : public GUIPanel {
 
 public:
 
-    // Signals
-    enum Signal {
-        Click,        // Mouse click. Not just inside the panel
-        MouseDown,    // Mouse down inside the panel
-        MouseUp,    // Mouse up inside the panel
-        Select,        // Selected (on mouse down) an item
-        MouseMove,    // Mouse moved over the panel
-        MouseEnter, // Mouse left the panel
-        MouseLeave, // Mouse left the panel
-        DoubleClick,// Double click
-		KeyDown,    // Key Down
-		EdgeHit //!< Tried scrolling the selection past the first or last item. data = 0 for top edge, data = 1 for bottom edge.
-    };
-
     // Item structure
     struct Item
     {
@@ -165,7 +151,7 @@ public:
 // Description:     Called when the mouse enters the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override { SendSignal(MouseEnter, Buttons); }
+	void OnMouseEnter(int X, int Y, int Buttons, int Modifier) override { SendSignal(GUIEventCode::MouseEnter, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +160,7 @@ public:
 // Description:     Called when the mouse leaves the panel
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override { SendSignal(MouseLeave, Buttons); }
+	void OnMouseLeave(int X, int Y, int Buttons, int Modifier) override { SendSignal(GUIEventCode::MouseLeave, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +197,7 @@ public:
 // Description:     Called when a key goes down.
 // Arguments:       KeyCode, Modifier.
 
-	void OnKeyDown(int KeyCode, int Modifier) override { SendSignal(KeyDown, KeyCode); }
+	void OnKeyDown(int KeyCode, int Modifier) override { SendSignal(GUIEventCode::KeyDown, KeyCode); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +235,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data) override;
+    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

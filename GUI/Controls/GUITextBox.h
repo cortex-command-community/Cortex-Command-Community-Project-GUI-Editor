@@ -12,13 +12,6 @@ class GUITextBox : public GUIControl, public GUITextPanel {
 
 public:
 
-    // Notifications
-    enum Notification {
-        Changed = 0,
-        Clicked,
-        Enter
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
@@ -120,7 +113,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data) override;
+    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

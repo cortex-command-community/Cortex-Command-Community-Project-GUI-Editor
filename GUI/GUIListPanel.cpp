@@ -421,10 +421,10 @@ namespace RTE {
 
 		if ((Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) && PointInside(X, Y)) {
 			SelectItem(X, Y, Modifier);
-			SendSignal(MouseDown, Buttons);
+			SendSignal(GUIEventCode::MouseDown, Buttons);
 		} else {
 			// Click signifies mouse down anywhere outside the list panel.
-			SendSignal(Click, Buttons);
+			SendSignal(GUIEventCode::Click, Buttons);
 		}
 	}
 
@@ -501,7 +501,7 @@ namespace RTE {
 					I->m_Selected = true;
 					m_SelectedList.push_back(I);
 					m_LastSelected = Count;
-					SendSignal(Select, 0);
+					SendSignal(GUIEventCode::Select, 0);
 				}
 
 				// Multiselect individual items
@@ -510,7 +510,7 @@ namespace RTE {
 					if (Ctrl) {
 						I->m_Selected = true;
 						m_SelectedList.push_back(I);
-						SendSignal(Select, 0);
+						SendSignal(GUIEventCode::Select, 0);
 						if (!Shift) { m_LastSelected = Count; }
 					}
 					// Shift key down
@@ -518,7 +518,7 @@ namespace RTE {
 						if (m_LastSelected == -1) {
 							I->m_Selected = true;
 							m_SelectedList.push_back(I);
-							SendSignal(Select, 0);
+							SendSignal(GUIEventCode::Select, 0);
 							m_LastSelected = Count;
 						} else {
 							// Select a list of items
@@ -530,14 +530,14 @@ namespace RTE {
 										Item *SelItem = *sel;
 										SelItem->m_Selected = true;
 										m_SelectedList.push_back(SelItem);
-										SendSignal(Select, 0);
+										SendSignal(GUIEventCode::Select, 0);
 									}
 								} else {
 									if (Num >= Count && Num <= m_LastSelected) {
 										Item *SelItem = *sel;
 										SelItem->m_Selected = true;
 										m_SelectedList.push_back(SelItem);
-										SendSignal(Select, 0);
+										SendSignal(GUIEventCode::Select, 0);
 									}
 								}
 							}
@@ -568,7 +568,7 @@ namespace RTE {
 			if (PointInside(X, Y)) {
 				//SendSignal(Select, 0);
 			//} else {
-				SendSignal(MouseUp, Buttons);
+				SendSignal(GUIEventCode::MouseUp, Buttons);
 			}
 		}
 	}
@@ -583,14 +583,14 @@ namespace RTE {
 		} else if (PointInsideList(X, Y)) {
 			// Using Hot-Tracking
 			if (m_HotTracking && GetItem(X, Y) != nullptr && (GetItem(X, Y) != GetSelected())) { SelectItem(X, Y, Modifier); }
-			SendSignal(MouseMove, Buttons);
+			SendSignal(GUIEventCode::MouseMove, Buttons);
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::OnDoubleClick(int X, int Y, int Buttons, int Modifier) {
-		if (PointInside(X, Y)) { SendSignal(DoubleClick, Buttons); }
+		if (PointInside(X, Y)) { SendSignal(GUIEventCode::DoubleClick, Buttons); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -716,7 +716,7 @@ namespace RTE {
 			} else {
 				newItemIndex = std::clamp(newItemIndex, 0, static_cast<int>(itemListSize - 1));
 				if (oldItemIndex == newItemIndex) {
-					SendSignal(EdgeHit, (newItemIndex < 0) ? 0 : 1);
+					SendSignal(GUIEventCode::EdgeHit, (newItemIndex < 0) ? 0 : 1);
 					return;
 				}
 			}
@@ -869,7 +869,7 @@ namespace RTE {
 		Item *I = m_Items[m_LastSelected];
 		I->m_Selected = true;
 		m_SelectedList.push_back(I);
-		SendSignal(Select, 0);
+		SendSignal(GUIEventCode::Select, 0);
 
 		int stackHeight = GetStackHeight(I);
 		int itemHeight = GetItemHeight(I);
@@ -907,26 +907,26 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListPanel::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
+	void GUIListPanel::ReceiveSignal(GUIPanel* Source, GUIEventCode Code, int Data) {
 		// ChangeValue signal from scrollpanels?
 		GUIAssert(Source, "");
 
 		int sourcePanelID = Source->GetPanelID();
 
-		if ((sourcePanelID == m_VertScroll->GetPanelID() || sourcePanelID == m_HorzScroll->GetPanelID()) && Code == GUIScrollPanel::ChangeValue) {
+		if ((sourcePanelID == m_VertScroll->GetPanelID() || sourcePanelID == m_HorzScroll->GetPanelID()) && Code == GUIEventCode::ChangeValue) {
 			BuildBitmap(false, true);
 		} else if (sourcePanelID == m_VertScroll->GetPanelID()) {
 			// Vertical Scrollbar
-			if (Code == GUIScrollPanel::Grab) {
+			if (Code == GUIEventCode::Grab) {
 				m_CapturedVert = true;
-			} else if (Code == GUIScrollPanel::Release) {
+			} else if (Code == GUIEventCode::Release) {
 				m_CapturedVert = false;
 			}
 		} else if (sourcePanelID == m_HorzScroll->GetPanelID()) {
 			// Horizontal Scrollbar
-			if (Code == GUIScrollPanel::Grab) {
+			if (Code == GUIEventCode::Grab) {
 				m_CapturedHorz = true;
-			} else if (Code == GUIScrollPanel::Release) {
+			} else if (Code == GUIEventCode::Release) {
 				m_CapturedHorz = false;
 			}
 		}
@@ -1076,7 +1076,7 @@ namespace RTE {
 			Item *I = m_Items.at(Index);
 			I->m_Selected = true;
 			m_SelectedList.push_back(I);
-			SendSignal(Select, 0);
+			SendSignal(GUIEventCode::Select, 0);
 
 			int stackHeight = GetStackHeight(I);
 			int itemHeight = GetItemHeight(I);

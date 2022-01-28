@@ -85,24 +85,24 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
+	void GUIListBox::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
 		if (Source->GetPanelID() == GetPanelID()) {
-			if (Code == GUIListPanel::Signal::MouseMove) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseMove, Data);
-			} else if (Code == GUIListPanel::Signal::MouseEnter) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseEnter, Data);
-			} else if (Code == GUIListPanel::Signal::MouseLeave) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseLeave, Data);
-			} else if (Code == GUIListPanel::Signal::Select) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::Select, 0);
-			} else if (Code == GUIListPanel::Signal::MouseDown) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseDown, 0);
-			} else if (Code == GUIListPanel::Signal::DoubleClick) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::DoubleClick, 0);
-			} else if (Code == GUIListPanel::Signal::KeyDown) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::KeyDown, Data);
-			} else if (Code == GUIListPanel::Signal::EdgeHit) {
-				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::EdgeHit, Data);
+			if (Code == GUIEventCode::MouseMove) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::MouseMove, Data);
+			} else if (Code == GUIEventCode::MouseEnter) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::MouseEnter, Data);
+			} else if (Code == GUIEventCode::MouseLeave) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::MouseLeave, Data);
+			} else if (Code == GUIEventCode::Select) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::Select, 0);
+			} else if (Code == GUIEventCode::MouseDown) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::MouseDown, 0);
+			} else if (Code == GUIEventCode::DoubleClick) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::DoubleClick, 0);
+			} else if (Code == GUIEventCode::KeyDown) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::KeyDown, Data);
+			} else if (Code == GUIEventCode::EdgeHit) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::EdgeHit, Data);
 			}
 		}
 

@@ -221,7 +221,7 @@ namespace RTE {
 			//m_Pushed = true;
 			//CaptureMouse();
 
-			//AddEvent(GUIEvent::EventType::Notification, Pushed, 0);
+			//AddEvent(GUIEventType::Notification, Pushed, 0);
 		}
 		SetFocus();
 	}
@@ -271,7 +271,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
+	void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		bool TextSignal = false;
@@ -285,8 +285,8 @@ namespace RTE {
 				TextSignal = true;
 
 				// Change event. Do not update properties
-				if (Code == GUITextPanel::Changed) {
-					AddEvent(GUIEvent::EventType::Notification, GUIPropertyPage::Changed, 0);
+				if (Code == GUIEventCode::Changed) {
+					AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
 					return;
 				}
 				break;
@@ -297,7 +297,7 @@ namespace RTE {
 		// If any of the values are different, fire a 'changed' notification event
 		if (TextSignal && InvokeUpdate()) {
 			// Fire the enter event
-			AddEvent(GUIEvent::EventType::Notification, GUIPropertyPage::Enter, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Enter, 0);
 		}
 	}
 

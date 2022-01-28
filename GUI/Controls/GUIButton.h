@@ -12,14 +12,6 @@ class GUIButton : public GUIControl, public GUIPanel {
 
 public:
 
-    // Button Notifications
-    enum Notification {
-        Pushed = 0,
-        UnPushed,
-        Clicked,
-        Focused
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 

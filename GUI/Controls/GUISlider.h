@@ -22,11 +22,6 @@ public:
         BottomRight
     };
 
-    // Slider Notifications
-    enum Notification {
-        Changed = 0,
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 

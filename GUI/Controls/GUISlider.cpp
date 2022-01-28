@@ -308,7 +308,7 @@ namespace RTE {
 
 		// If the value has changed, add the "Changed" notification
 		if (m_Value != m_OldValue)
-			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +319,7 @@ namespace RTE {
 		m_KnobGrabbed = false;
 
 		// If the value has changed, add the "Changed" notification
-		if (m_Value != m_OldValue) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
+		if (m_Value != m_OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,7 +369,7 @@ namespace RTE {
 			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobSize - m_EndThickness);
 
 			// If the value has changed, add the "Changed" notification
-			if (m_Value != m_OldValue) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
+			if (m_Value != m_OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0); }
 
 			m_OldValue = m_Value;
 		}
@@ -388,7 +388,7 @@ namespace RTE {
 
 		if (m_Value != m_OldValue) {
 			CalculateKnob();
-			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
 		}
 	}
 
@@ -470,7 +470,7 @@ namespace RTE {
 
 		if (m_Value != OldValue) {
 			CalculateKnob();
-			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
 		}
 	}
 

@@ -202,7 +202,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::ReceiveSignal(GUIPanel* Source, int Code, int Data) {
+	void GUIComboBox::ReceiveSignal(GUIPanel* Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		int sourcePanelID = Source->GetPanelID();
@@ -210,7 +210,7 @@ namespace RTE {
 		// ComboBoxButton
 		if (sourcePanelID == m_Button->GetPanelID()) {
 			// Clicked and list panel is not visible. open the list panel.
-			if (Code == GUIComboBoxButton::Signals::Clicked && !m_ListPanel->_GetVisible()) {
+			if (Code == GUIEventCode::Clicked && !m_ListPanel->_GetVisible()) {
 				m_ListPanel->_SetVisible(true);
 				m_ListPanel->SetFocus();
 				m_ListPanel->CaptureMouse();
@@ -224,12 +224,12 @@ namespace RTE {
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEvent::EventType::Notification, Notifications::Dropped, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped, 0);
 			}
 		} else if (sourcePanelID == m_TextPanel->GetPanelID()) {
 			// Textbox
 			// MouseDown
-			if (Code == GUITextPanel::Signals::MouseDown && m_DropDownStyle == DropDownStyles::DropDownList && Data & GUIPanel::MouseButtons::MOUSE_LEFT) {
+			if (Code == GUIEventCode::MouseDown && m_DropDownStyle == DropDownStyles::DropDownList && Data & GUIPanel::MouseButtons::MOUSE_LEFT) {
 				// Drop
 				m_ListPanel->_SetVisible(true);
 				m_ListPanel->SetFocus();
@@ -244,13 +244,13 @@ namespace RTE {
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEvent::EventType::Notification, Notifications::Dropped, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped, 0);
 			}
 
 		} else if (sourcePanelID == m_ListPanel->GetPanelID()) {
 			// ListPanel
 			// MouseMove
-			if (Code == GUIListPanel::MouseMove) {
+			if (Code == GUIEventCode::MouseMove) {
 				m_Button->SetPushed(false);
 				return;
 			}
@@ -259,7 +259,7 @@ namespace RTE {
 			int mouseY = 0;
 			m_Manager->GetInputController()->GetMousePosition(&mouseX, &mouseY);
 			// Mouse down anywhere outside the list panel.
-			if (Code == GUIListPanel::Signal::Click) {
+			if (Code == GUIEventCode::Click) {
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
 				m_ListPanel->ReleaseMouse();
@@ -269,8 +269,8 @@ namespace RTE {
 				// Restore the old selection
 				m_ListPanel->SetSelectedIndex(m_OldSelection);
 
-				AddEvent(GUIEvent::EventType::Notification, Notifications::Closed, 0);
-			} else if (Code == GUIListPanel::Signal::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
+				AddEvent(GUIEventType::Notification, GUIEventCode::Closed, 0);
+			} else if (Code == GUIEventCode::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
 				// Select on mouse up instead of down so we don't accidentally click stuff behind the disappearing listbox immediately after. Also only work if inside the actual list, and not its scrollbars.
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
@@ -278,7 +278,7 @@ namespace RTE {
 				m_Manager->SetFocus(nullptr);
 				m_Button->SetPushed(false);
 
-				AddEvent(GUIEvent::EventType::Notification, Notifications::Closed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Closed, 0);
 
 				// Set the text to the item in the list panel
 				GUIListPanel::Item* Item = m_ListPanel->GetSelected();
@@ -532,7 +532,7 @@ namespace RTE {
 	void GUIComboBoxButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
 		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			m_Pushed = true;
-			SendSignal(Signals::Clicked, Buttons);
+			SendSignal(GUIEventCode::Clicked, Buttons);
 		}
 	}
 

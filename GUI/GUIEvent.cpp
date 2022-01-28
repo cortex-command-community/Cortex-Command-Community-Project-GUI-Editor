@@ -6,14 +6,14 @@ namespace RTE {
 
 	GUIEvent::GUIEvent() {
 		m_Control = nullptr;
-		m_Type = 0;
-		m_Msg = 0;
+		m_Type = GUIEventType::NoEvent;
+		m_Msg = GUIEventCode::NoNotification;
 		m_Data = 0;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIEvent::GUIEvent(GUIControl *Control, int Type, int Msg, int Data) {
+	GUIEvent::GUIEvent(GUIControl *Control, GUIEventType Type, GUIEventCode Msg, int Data) {
 		GUIAssert(Control, "");
 		m_Control = Control;
 		m_Type = Type;

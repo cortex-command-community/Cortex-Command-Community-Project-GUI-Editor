@@ -10,13 +10,6 @@ class GUIEvent {
 
 public:
 
-    // Event Types
-    enum EventType {
-        Command = 0,
-        Notification
-    };
-
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIEvent
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +27,7 @@ public:
 //                  memory.
 // Arguments:       Control, Event type, Msg, Data.
 
-    GUIEvent(GUIControl *Control, int Type, int Msg, int Data);
+    GUIEvent(GUIControl *Control, GUIEventType Type, GUIEventCode Msg, int Data);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +36,7 @@ public:
 // Description:     Gets the event type
 // Arguments:       None.
 
-	int GetType() const { return m_Type; }
+	GUIEventType GetType() const { return m_Type; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +45,7 @@ public:
 // Description:     Gets the msg.
 // Arguments:       None.
 
-	int GetMsg() const { return m_Msg; }
+	GUIEventCode GetMsg() const { return m_Msg; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +68,8 @@ public:
 private:
 
     GUIControl *m_Control;
-    int m_Type;
-    int m_Msg;
+	GUIEventType m_Type;
+	GUIEventCode m_Msg;
     int m_Data;
 
 };

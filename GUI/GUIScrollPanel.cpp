@@ -360,7 +360,7 @@ namespace RTE {
 		m_GrabbedBackg = false;
 		m_GrabbedSide = 0;
 
-		SendSignal(Grab, Buttons);
+		SendSignal(GUIEventCode::Grab, Buttons);
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
@@ -470,7 +470,7 @@ namespace RTE {
 		m_GrabbedKnob = false;
 		m_GrabbedBackg = false;
 
-		SendSignal(Release, Buttons);
+		SendSignal(GUIEventCode::Release, Buttons);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -514,7 +514,7 @@ namespace RTE {
 				m_Value = std::max(m_Value, m_Minimum);
 				m_Value = std::min(m_Value, m_Maximum - m_PageSize);
 
-				if (OldValue != m_Value) { SendSignal(ChangeValue, 0); }
+				if (OldValue != m_Value) { SendSignal(GUIEventCode::ChangeValue, 0); }
 			}
 		}
 	}
@@ -667,7 +667,7 @@ namespace RTE {
 		// Calculate the new knob position
 		CalculateKnob();
 
-		if (OldValue != m_Value) { SendSignal(ChangeValue, 0); }
+		if (OldValue != m_Value) { SendSignal(GUIEventCode::ChangeValue, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

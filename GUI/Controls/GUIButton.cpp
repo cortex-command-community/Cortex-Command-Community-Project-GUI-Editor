@@ -246,7 +246,7 @@ namespace RTE {
 			SetPushed(true);
 			CaptureMouse();
 
-			AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
 		}
 		SetFocus();
 	}
@@ -254,7 +254,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
-		if (PointInside(X, Y)) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons); }
+		if (PointInside(X, Y)) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
 
 		if (!IsCaptured()) {
 			return;
@@ -264,9 +264,9 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y)) { AddEvent(GUIEvent::EventType::Command, 0, 0); }
+		if (PointInside(X, Y)) { AddEvent(GUIEventType::Command, GUIEventCode::NoNotification, 0); }
 
-		AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ namespace RTE {
 		m_Over = true;
 		m_Text->ActivateDeactivateOverflowScroll(true);
 
-		AddEvent(GUIEvent::EventType::Notification, Notification::Focused, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::Focused, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,12 +315,12 @@ namespace RTE {
 		// If the mouse goes outside of the button, un-push the button
 		if (!PointInside(X, Y)) {
 			if (m_Pushed) {
-				AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
 				SetPushed(false);
 			}
 		} else {
 			if (!m_Pushed) {
-				AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
 				SetPushed(true);
 			}
 		}

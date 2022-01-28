@@ -12,12 +12,6 @@ class GUIScrollbar : public GUIControl, public GUIScrollPanel {
 
 public:
 
-    // Notifications
-    enum Notifications {
-        ChangeValue=0,
-
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
@@ -101,7 +95,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data) override;
+    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -186,7 +186,7 @@ namespace RTE {
 			CaptureMouse();
 			SetFocus();
 
-			AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
 		}
 	}
 
@@ -198,14 +198,14 @@ namespace RTE {
 		// If the mouse is over the button, add the command to the event queue
 		if (PointInside(X, Y) && Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) { SetCheck(true); }
 
-		AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITab::OnMouseEnter(int X, int Y, int Buttons, int Modifier) {
 		m_Mouseover = true;
-		AddEvent(GUIEvent::EventType::Notification, Notification::Hovered, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::Hovered, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ namespace RTE {
 		}
 		m_Selected = Check;
 
-		AddEvent(GUIEvent::EventType::Notification, Notification::Changed, Check);
+		AddEvent(GUIEventType::Notification, GUIEventCode::Changed, Check);
 
 		// Don't worry if we are not checked
 		if (!m_Selected) {

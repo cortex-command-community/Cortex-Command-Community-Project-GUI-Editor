@@ -141,7 +141,7 @@ namespace RTE {
 	void GUICollectionBox::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		ReleaseMouse();
 
-		AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons);
+		AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

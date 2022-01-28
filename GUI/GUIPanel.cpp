@@ -334,7 +334,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPanel::SendSignal(int Code, int Data) {
+	void GUIPanel::SendSignal(GUIEventCode Code, int Data) {
 		if (m_SignalTarget) { m_SignalTarget->ReceiveSignal(this, Code, Data); }
 	}
 

@@ -135,15 +135,15 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextBox::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
+	void GUITextBox::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
 		// Clicked
-		if (Code == GUITextPanel::Signals::Clicked) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Data); }
+		if (Code == GUIEventCode::Clicked) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Data); }
 
 		// Changed
-		if (Code == GUITextPanel::Signals::Changed) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
+		if (Code == GUIEventCode::Changed) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0); }
 
 		// Enter
-		if (Code == GUITextPanel::Signals::Enter) { AddEvent(GUIEvent::EventType::Notification, Notification::Enter, 0); }
+		if (Code == GUIEventCode::Enter) { AddEvent(GUIEventType::Notification, GUIEventCode::Enter, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

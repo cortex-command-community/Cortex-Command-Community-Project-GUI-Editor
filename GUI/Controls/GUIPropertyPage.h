@@ -13,12 +13,6 @@ class GUIPropertyPage : public GUIControl, public GUIPanel {
 
 public:
 
-    // PropertyPage Notifications
-    enum Notification {
-        Changed = 0,        // Any text panel has changed. Property values are NOT updated
-        Enter                // A text panel has lost focus or the enter key was hit
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
@@ -183,7 +177,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data) override;
+    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

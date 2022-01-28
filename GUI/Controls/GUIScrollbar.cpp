@@ -65,12 +65,12 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollbar::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
+	void GUIScrollbar::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		// Should be our scroll panel
-		if (Source->GetPanelID() == GetPanelID() && Code == GUIScrollPanel::ChangeValue) {
-			AddEvent(GUIEvent::EventType::Notification, Notifications::ChangeValue, 0);
+		if (Source->GetPanelID() == GetPanelID() && Code == GUIEventCode::ChangeValue) {
+			AddEvent(GUIEventType::Notification, GUIEventCode::ChangeValue, 0);
 		}
 	}
 
@@ -99,7 +99,7 @@ namespace RTE {
 		int newValue = std::clamp(oldValue - (GetValueResolution() * ((mouseWheelChange > 0) ? 1 : -1)), GetMinimum(), GetMaximum() - GetPageSize());
 		if (newValue != oldValue) {
 			SetValue(newValue);
-			AddEvent(GUIEvent::EventType::Notification, Notifications::ChangeValue, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::ChangeValue, 0);
 		}
 	}
 

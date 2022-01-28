@@ -307,7 +307,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    virtual void ReceiveSignal(GUIPanel *Source, int Code, int Data) {}
+    virtual void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -598,7 +598,7 @@ protected:
 // Description:     Sends a signal to the target.
 // Arguments:       Signal code, Data.
 
-    void SendSignal(int Code, int Data);
+    void SendSignal(GUIEventCode Code, int Data);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

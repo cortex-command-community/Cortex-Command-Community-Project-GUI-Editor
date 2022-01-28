@@ -195,7 +195,7 @@ namespace RTEGUI {
 		while (m_EditorManager->GetControlManager()->GetEvent(&editorEvent)) {
 			std::string controlName = editorEvent.GetControl()->GetName();
 			switch (editorEvent.GetType()) {
-				case GUIEvent::EventType::Command:
+				case GUIEventType::Command:
 					if (controlName == "NewButton") {
 						OnNewButton();
 					} else if (controlName == "LoadButton") {
@@ -212,17 +212,17 @@ namespace RTEGUI {
 						m_UnsavedChanges = m_EditorManager->AddNewControl(editorEvent);
 					}
 					break;
-				case GUIEvent::EventType::Notification:
-					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIPropertyPage::Notification::Enter) {
+				case GUIEventType::Notification:
+					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIEventCode::Enter) {
 						m_UnsavedChanges = m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl(), true);
 						m_EditorManager->UpdateCollectionBoxList();
 						m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetCurrentSelection().GetControl()));
 						m_EditorManager->RemoveFocus();
-					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::Signal::MouseDown) {
+					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIEventCode::MouseDown) {
 						m_EditorManager->SelectActiveControlFromParentList();
-					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::Signal::MouseDown) {
+					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIEventCode::MouseDown) {
 						m_EditorManager->SelectActiveControlFromChildrenList();
-					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Notification::Enter) {
+					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUIEventCode::Enter) {
 						m_EditorManager->UpdateSnapGridSize(editorEvent);
 					} else if (controlName == "SnapCheckBox") {
 						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::State::Checked;

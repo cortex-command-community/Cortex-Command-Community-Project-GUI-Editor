@@ -23,13 +23,6 @@ public:
         Back
     };
 
-    // Signals
-    enum Signal {
-        ChangeValue=0,
-        Grab,
-        Release
-    };
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIScrollPanel

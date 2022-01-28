@@ -18,12 +18,6 @@ class GUIComboBox : public GUIControl, public GUIPanel {
 
 public:
 
-    // Notifications
-    enum Notifications {
-        Dropped,        // When listpanel has dropped
-        Closed,            // When listpanel has closed
-    };
-
     // Combo Style
     enum DropDownStyles {
         DropDown,
@@ -114,7 +108,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, int Code, int Data) override;
+    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -389,12 +383,6 @@ private:
 class GUIComboBoxButton : public GUIPanel {
 
 public:
-
-    // Signals
-    enum Signals {
-        Clicked
-    };
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIComboBoxButton

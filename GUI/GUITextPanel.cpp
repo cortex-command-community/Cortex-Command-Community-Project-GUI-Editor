@@ -168,7 +168,7 @@ namespace RTE {
 				}
 			}
 			UpdateText();
-			SendSignal(Changed, 0);
+			SendSignal(GUIEventCode::Changed, 0);
 			return;
 		}
 
@@ -183,7 +183,7 @@ namespace RTE {
 				}
 			}
 			UpdateText();
-			SendSignal(Changed, 0);
+			SendSignal(GUIEventCode::Changed, 0);
 			return;
 		}
 
@@ -246,7 +246,7 @@ namespace RTE {
 			if (m_GotSelection) {
 				GUIUtil::SetClipboardText(GetSelectionText());
 				RemoveSelectionText();
-				SendSignal(Changed, 0);
+				SendSignal(GUIEventCode::Changed, 0);
 			}
 			return;
 		}
@@ -265,7 +265,7 @@ namespace RTE {
 			m_Text.insert(m_CursorIndex, Text);
 			m_CursorIndex += Text.size();
 			UpdateText(true, true);
-			SendSignal(Changed, 0);
+			SendSignal(GUIEventCode::Changed, 0);
 			return;
 		}
 
@@ -278,7 +278,7 @@ namespace RTE {
 
 		// Enter key
 		if (KeyCode == '\n' || KeyCode == '\r') {
-			SendSignal(Enter, 0);
+			SendSignal(GUIEventCode::Enter, 0);
 			return;
 		}
 
@@ -300,7 +300,7 @@ namespace RTE {
 
 			if (m_NumericOnly && m_MaxNumericValue > 0 && std::stoi(m_Text) > m_MaxNumericValue) { m_Text = std::to_string(m_MaxNumericValue); }
 
-			SendSignal(Changed, 0);
+			SendSignal(GUIEventCode::Changed, 0);
 			UpdateText(true);
 			return;
 		}
@@ -309,7 +309,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		SendSignal(MouseDown, Buttons);
+		SendSignal(GUIEventCode::MouseDown, Buttons);
 
 		if (m_Locked) {
 			return;
@@ -381,7 +381,7 @@ namespace RTE {
 
 	void GUITextPanel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		ReleaseMouse();
-		SendSignal(Clicked, Buttons);
+		SendSignal(GUIEventCode::Clicked, Buttons);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -569,14 +569,14 @@ namespace RTE {
 
 		UpdateText(false, false);
 
-		SendSignal(Changed, 0);
+		SendSignal(GUIEventCode::Changed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::SetRightText(const std::string_view &rightText) {
 		m_RightText = rightText;
-		SendSignal(Changed, 0);
+		SendSignal(GUIEventCode::Changed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -10,12 +10,6 @@ class GUICollectionBox : public GUIControl, public GUIPanel {
 
 public:
 
-    // CollectionBox Notifications
-    enum Notification {
-        Clicked = 0,
-        MouseMove    // Mouse moved over the panel
-    };
-
     // Drawing type
     enum DrawType {
         Color,
@@ -115,7 +109,7 @@ public:
 // Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseMove(int X, int Y, int Buttons, int Modifier) override { AddEvent(GUIEvent::EventType::Notification, Notification::MouseMove, Buttons); }
+	void OnMouseMove(int X, int Y, int Buttons, int Modifier) override { AddEvent(GUIEventType::Notification, GUIEventCode::MouseMove, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

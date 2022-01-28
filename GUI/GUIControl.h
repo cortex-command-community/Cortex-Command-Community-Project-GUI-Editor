@@ -91,7 +91,7 @@ public:
 // Description:     Add a new event to the queue.
 // Arguments:       Type, Message, Data.
 
-    void AddEvent(int Type, int Msg, int Data);
+    void AddEvent(GUIEventType Type, GUIEventCode Msg, int Data);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

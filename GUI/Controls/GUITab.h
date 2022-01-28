@@ -10,14 +10,6 @@ class GUITab : public GUIControl, public GUIPanel {
 
 public:
 
-    // Tab Notifications
-    enum Notification {
-        Hovered = 0,
-        Pushed,
-        UnPushed,
-        Changed,
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 

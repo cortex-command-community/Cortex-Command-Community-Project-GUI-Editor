@@ -17,13 +17,6 @@ public:
         Greycheck
     };
 
-    // Checkbox Notifications
-    enum Notification {
-        Pushed = 0,
-        UnPushed,
-        Changed,
-    };
-
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;
 
