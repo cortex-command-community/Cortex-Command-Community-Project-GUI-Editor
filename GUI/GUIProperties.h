@@ -90,14 +90,6 @@ namespace RTE {
 		bool GetPropertyValue(const std::string &propName, int *propValue) const;
 
 		/// <summary>
-		/// Gets an unsigned long integer value.
-		/// </summary>
-		/// <param name="propName">Property name.</param>
-		/// <param name="propValue">Unsigned long integer pointer.</param>
-		/// <returns></returns>
-		bool GetPropertyValue(const std::string &propName, unsigned long *propValue) const;
-
-		/// <summary>
 		/// Gets a boolean value.
 		/// </summary>
 		/// <param name="propName">Property name.</param>

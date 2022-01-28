@@ -50,19 +50,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIProperties::GetPropertyValue(const std::string &propName, unsigned long *propValue) const {
-		GUIAssert(propValue, "");
-
-		std::string returnValue;
-		if (!GetPropertyValue(propName, &returnValue)) {
-			return false;
-		}
-		*propValue = std::stol(returnValue);
-		return true;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool GUIProperties::GetPropertyValue(const std::string &propName, bool *propValue) const {
 		GUIAssert(propValue, "");
 

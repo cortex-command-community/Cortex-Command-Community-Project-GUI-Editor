@@ -136,24 +136,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUISkin::GetValue(const std::string &Section, const std::string &Variable, unsigned long *Value) {
-		std::vector <GUIProperties *>::iterator it;
-
-		// Find the property
-		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
-			GUIProperties *p = *it;
-
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
-				return true;
-			}
-		}
-
-		// Not found
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUISkin::Destroy() {
 		std::vector <GUIProperties *>::iterator it;
 
