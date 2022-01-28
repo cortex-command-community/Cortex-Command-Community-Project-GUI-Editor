@@ -1,6 +1,8 @@
 #ifndef _GUIPANEL_
 #define _GUIPANEL_
 
+#include "GUIConstants.h"
+
 namespace RTE {
 
 class GUIPanel;

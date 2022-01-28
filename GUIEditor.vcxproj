@@ -186,6 +186,7 @@
     <ClInclude Include="GUI\Controls\GUITab.h" />
     <ClInclude Include="GUI\Controls\GUITextBox.h" />
     <ClInclude Include="GUI\GUI.h" />
+    <ClInclude Include="GUI\GUIConstants.h" />
     <ClInclude Include="GUI\GUIControl.h" />
     <ClInclude Include="GUI\GUIControlFactory.h" />
     <ClInclude Include="GUI\GUIControlManager.h" />

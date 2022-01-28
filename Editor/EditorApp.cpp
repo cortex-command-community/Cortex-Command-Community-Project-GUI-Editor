@@ -1,5 +1,6 @@
 #include "EditorApp.h"
 #include "EditorUtil.h"
+#include "GUIConstants.h"
 #include "GUICheckbox.h"
 #include "GUITextBox.h"
 #include "winalleg.h"

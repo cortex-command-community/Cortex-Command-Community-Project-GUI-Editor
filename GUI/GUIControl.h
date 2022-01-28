@@ -1,6 +1,8 @@
 #ifndef _GUICONTROL_
 #define _GUICONTROL_
 
+#include "GUIConstants.h"
+
 namespace RTE {
 
 class GUIControlManager;
