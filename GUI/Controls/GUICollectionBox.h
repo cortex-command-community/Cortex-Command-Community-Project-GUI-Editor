@@ -115,7 +115,7 @@ public:
 // Description:     Called when the mouse moves (over the panel, or when captured).
 // Arguments:       Mouse Position, Mouse Buttons, Modifier.
 
-	void OnMouseMove(int X, int Y, int Buttons, int Modifier) override { AddEvent(GUIEvent::Notification, MouseMove, Buttons); }
+	void OnMouseMove(int X, int Y, int Buttons, int Modifier) override { AddEvent(GUIEvent::EventType::Notification, Notification::MouseMove, Buttons); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

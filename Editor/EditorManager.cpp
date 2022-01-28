@@ -24,18 +24,18 @@ namespace RTEGUI {
 		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorBase", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), screen->GetBitmap()->GetHeight())));
 		m_EditorBase->SetDrawBackground(true);
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
-		m_EditorBase->SetDrawType(GUICollectionBox::Color);
+		m_EditorBase->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 285, screen->GetBitmap()->GetHeight())));
 		m_LeftColumn->SetDrawBackground(true);
 		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
-		m_LeftColumn->SetDrawType(GUICollectionBox::Color);
+		m_LeftColumn->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, 30, 270, 155));
-		editorControls->SetDrawType(GUICollectionBox::Panel);
+		editorControls->SetDrawType(GUICollectionBox::DrawType::Panel);
 
 		GUICollectionBox *elementPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("NewElementPanel", "COLLECTIONBOX", editorControls, 5, 25, 260, 105));
-		elementPanel->SetDrawType(GUICollectionBox::Panel);
+		elementPanel->SetDrawType(GUICollectionBox::DrawType::Panel);
 		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelXPos() + 5, elementPanel->GetRelYPos() - 20, 100, 20));
 		newElementLabel->SetText("Add New Element :");
 
@@ -75,10 +75,10 @@ namespace RTEGUI {
 
 		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 85, snapCheckbox->GetRelYPos(), 75, 15));
 		zoomCheckBox->SetText("Zoom");
-		zoomCheckBox->SetCheck(GUICheckbox::Unchecked);
+		zoomCheckBox->SetCheck(GUICheckbox::State::Unchecked);
 
 		GUICollectionBox *propertyPagePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("PropertyPagePanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, editorControls->GetYPos() + editorControls->GetHeight() + 10, 270, 340));
-		propertyPagePanel->SetDrawType(GUICollectionBox::Panel);
+		propertyPagePanel->SetDrawType(GUICollectionBox::DrawType::Panel);
 
 		GUILabel *propertyPageLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("PropertyPageLabel", "LABEL", propertyPagePanel, 10, 5, 110, 20));
 		propertyPageLabel->SetText("Element Properties :");
@@ -87,10 +87,10 @@ namespace RTEGUI {
 		m_RightColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("RightColumn", "COLLECTIONBOX", nullptr, 955, 0, 285, screen->GetBitmap()->GetHeight())));
 		m_RightColumn->SetDrawBackground(true);
 		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
-		m_RightColumn->SetDrawType(GUICollectionBox::Color);
+		m_RightColumn->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		GUICollectionBox *listsPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ControlListsPanel", "COLLECTIONBOX", m_RightColumn.get(), 15, 30, m_RightColumn->GetWidth() - 15, 505));
-		listsPanel->SetDrawType(GUICollectionBox::Panel);
+		listsPanel->SetDrawType(GUICollectionBox::DrawType::Panel);
 
 		GUILabel *collectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("CollectionBoxListLabel", "LABEL", listsPanel, 10, 5, 100, 20));
 		collectionBoxListLabel->SetText("Active Containers :");
@@ -106,7 +106,7 @@ namespace RTEGUI {
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
 		workspace->SetDrawBackground(true);
 		workspace->SetDrawColor(makecol(64, 64, 64));
-		workspace->SetDrawType(GUICollectionBox::Color);
+		workspace->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		m_ToolBar.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBar", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), 30)));
 		m_ToolBar->SetDrawBackground(false);
@@ -114,7 +114,7 @@ namespace RTEGUI {
 		GUICollectionBox *toolBarStrip = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBarStrip", "COLLECTIONBOX", m_ToolBar.get(), 0, 0, m_ToolBar->GetWidth(), 30));
 		toolBarStrip->SetDrawBackground(true);
 		toolBarStrip->SetDrawColor(makecol(16, 16, 16));
-		toolBarStrip->SetDrawType(GUICollectionBox::Color);
+		toolBarStrip->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", toolBarStrip, 370, 0, 100, 20));
 		frameTimeLabel->SetText("Frame Time: 0");

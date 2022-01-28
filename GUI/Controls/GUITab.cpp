@@ -181,12 +181,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITab::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			// Push the checkbox down
 			CaptureMouse();
 			SetFocus();
 
-			AddEvent(GUIEvent::Notification, Pushed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
 		}
 	}
 
@@ -196,16 +196,16 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y) && Buttons & MOUSE_LEFT) { SetCheck(true); }
+		if (PointInside(X, Y) && Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) { SetCheck(true); }
 
-		AddEvent(GUIEvent::Notification, UnPushed, 0);
+		AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITab::OnMouseEnter(int X, int Y, int Buttons, int Modifier) {
 		m_Mouseover = true;
-		AddEvent(GUIEvent::Notification, Hovered, 0);
+		AddEvent(GUIEvent::EventType::Notification, Notification::Hovered, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ namespace RTE {
 		}
 		m_Selected = Check;
 
-		AddEvent(GUIEvent::Notification, Changed, Check);
+		AddEvent(GUIEvent::EventType::Notification, Notification::Changed, Check);
 
 		// Don't worry if we are not checked
 		if (!m_Selected) {

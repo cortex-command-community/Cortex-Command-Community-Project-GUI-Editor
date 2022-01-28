@@ -12,8 +12,8 @@ namespace RTE {
 		m_Font = nullptr;
 		m_FontColor = 0;
 		m_Text = "";
-		m_HAlignment = GUIFont::Left;
-		m_VAlignment = GUIFont::Middle;
+		m_HAlignment = GUIFont::HAlignment::Left;
+		m_VAlignment = GUIFont::VAlignment::Middle;
 		m_HorizontalOverflowScroll = false;
 		m_VerticalOverflowScroll = false;
 		m_OverflowScrollState = OverflowScrollState::Deactivated;
@@ -72,14 +72,14 @@ namespace RTE {
 
 		std::string alignString;
 		Props->GetPropertyValue("HAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
-		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::Centre; }
-		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
+		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::HAlignment::Right; }
 
 		Props->GetPropertyValue("VAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
-		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
-		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
+		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::VAlignment::Bottom; }
 
 		Props->GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
 		Props->GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
@@ -123,17 +123,17 @@ namespace RTE {
 
 			// Adjust for horizontal alignment
 			int xPos = m_X;
-			if (m_HAlignment == GUIFont::Centre) {
+			if (m_HAlignment == GUIFont::HAlignment::Centre) {
 				xPos += m_Width / 2;
-			} else if (m_HAlignment == GUIFont::Right) {
+			} else if (m_HAlignment == GUIFont::HAlignment::Right) {
 				xPos += m_Width;
 			}
 
 			// Adjust for vertical alignment
 			int yPos = m_Y;
-			if (m_VAlignment == GUIFont::Middle) {
+			if (m_VAlignment == GUIFont::VAlignment::Middle) {
 				yPos += (m_Height / 2) - 1;
-			} else if (m_VAlignment == GUIFont::Bottom) {
+			} else if (m_VAlignment == GUIFont::VAlignment::Bottom) {
 				yPos += (m_Height)-1;
 			}
 
@@ -190,7 +190,7 @@ namespace RTE {
 						break;
 				}
 			}
-			m_Font->DrawAligned(Bitmap, xPos, yPos, m_Text, m_HorizontalOverflowScroll && textFullWidth > m_Width ? GUIFont::Left : m_HAlignment, m_VerticalOverflowScroll && textFullHeight > m_Height ? GUIFont::Top : m_VAlignment, m_HorizontalOverflowScroll ? textFullWidth : m_Width, m_FontShadow);
+			m_Font->DrawAligned(Bitmap, xPos, yPos, m_Text, m_HorizontalOverflowScroll && textFullWidth > m_Width ? GUIFont::HAlignment::Left : m_HAlignment, m_VerticalOverflowScroll && textFullHeight > m_Height ? GUIFont::VAlignment::Top : m_VAlignment, m_HorizontalOverflowScroll ? textFullWidth : m_Width, m_FontShadow);
 		}
 
 		Bitmap->SetClipRect(nullptr);
@@ -199,7 +199,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			CaptureMouse();
 			SetFocus();
 		}
@@ -209,7 +209,7 @@ namespace RTE {
 
 	void GUILabel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		// If the mouse is over the button, add the clicked notification to the event queue
-		if (PointInside(X, Y) && (Buttons & MOUSE_LEFT) && IsCaptured()) { AddEvent(GUIEvent::Notification, Clicked, Buttons); }
+		if (PointInside(X, Y) && (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) && IsCaptured()) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons); }
 
 		ReleaseMouse();
 	}
@@ -272,18 +272,18 @@ namespace RTE {
 	void GUILabel::StoreProperties() {
 		m_Properties.AddProperty("Text", m_Text);
 
-		if (m_HAlignment == GUIFont::Left) {
+		if (m_HAlignment == GUIFont::HAlignment::Left) {
 			m_Properties.AddProperty("HAlignment", "left");
-		} else if (m_HAlignment == GUIFont::Centre) {
+		} else if (m_HAlignment == GUIFont::HAlignment::Centre) {
 			m_Properties.AddProperty("HAlignment", "centre");
-		} else if (m_HAlignment == GUIFont::Right) {
+		} else if (m_HAlignment == GUIFont::HAlignment::Right) {
 			m_Properties.AddProperty("HAlignment", "right");
 		}
-		if (m_VAlignment == GUIFont::Top) {
+		if (m_VAlignment == GUIFont::VAlignment::Top) {
 			m_Properties.AddProperty("VAlignment", "top");
-		} else if (m_VAlignment == GUIFont::Middle) {
+		} else if (m_VAlignment == GUIFont::VAlignment::Middle) {
 			m_Properties.AddProperty("VAlignment", "middle");
-		} else if (m_VAlignment == GUIFont::Bottom) {
+		} else if (m_VAlignment == GUIFont::VAlignment::Bottom) {
 			m_Properties.AddProperty("VAlignment", "bottom");
 		}
 		m_Properties.AddProperty("HorizontalOverflowScroll", m_HorizontalOverflowScroll);
@@ -299,14 +299,14 @@ namespace RTE {
 
 		std::string alignString;
 		m_Properties.GetPropertyValue("HAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
-		if (stricmp(alignString.c_str(), "centre") == 0) { m_HAlignment = GUIFont::Centre; }
-		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
+		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (stricmp(alignString.c_str(), "centre") == 0) { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::HAlignment::Right; }
 
 		m_Properties.GetPropertyValue("VAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
-		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
-		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
+		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::VAlignment::Bottom; }
 
 		m_Properties.GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
 		m_Properties.GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);

@@ -216,12 +216,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			// Push the button down
 			//m_Pushed = true;
 			//CaptureMouse();
 
-			//AddEvent(GUIEvent::Notification, Pushed, 0);
+			//AddEvent(GUIEvent::EventType::Notification, Pushed, 0);
 		}
 		SetFocus();
 	}
@@ -229,7 +229,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 	}
@@ -286,7 +286,7 @@ namespace RTE {
 
 				// Change event. Do not update properties
 				if (Code == GUITextPanel::Changed) {
-					AddEvent(GUIEvent::Notification, GUIPropertyPage::Changed, 0);
+					AddEvent(GUIEvent::EventType::Notification, GUIPropertyPage::Changed, 0);
 					return;
 				}
 				break;
@@ -297,7 +297,7 @@ namespace RTE {
 		// If any of the values are different, fire a 'changed' notification event
 		if (TextSignal && InvokeUpdate()) {
 			// Fire the enter event
-			AddEvent(GUIEvent::Notification, GUIPropertyPage::Enter, 0);
+			AddEvent(GUIEvent::EventType::Notification, GUIPropertyPage::Enter, 0);
 		}
 	}
 

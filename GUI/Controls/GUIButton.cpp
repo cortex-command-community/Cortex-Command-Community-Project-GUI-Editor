@@ -47,8 +47,8 @@ namespace RTE {
 
 		if (!m_Text) {
 			m_Text = std::make_unique<GUILabel>(m_Manager, m_ControlManager);
-			m_Text->SetHAlignment(GUIFont::Centre);
-			m_Text->SetVAlignment(GUIFont::Top);
+			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
+			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
@@ -80,8 +80,8 @@ namespace RTE {
 
 		if (!m_Text) {
 			m_Text = std::make_unique<GUILabel>(m_Manager, m_ControlManager);
-			m_Text->SetHAlignment(GUIFont::Centre);
-			m_Text->SetVAlignment(GUIFont::Top);
+			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
+			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
@@ -242,11 +242,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			SetPushed(true);
 			CaptureMouse();
 
-			AddEvent(GUIEvent::Notification, Pushed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
 		}
 		SetFocus();
 	}
@@ -254,7 +254,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
-		if (PointInside(X, Y)) { AddEvent(GUIEvent::Notification, Clicked, Buttons); }
+		if (PointInside(X, Y)) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons); }
 
 		if (!IsCaptured()) {
 			return;
@@ -264,9 +264,9 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y)) { AddEvent(GUIEvent::Command, 0, 0); }
+		if (PointInside(X, Y)) { AddEvent(GUIEvent::EventType::Command, 0, 0); }
 
-		AddEvent(GUIEvent::Notification, UnPushed, 0);
+		AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ namespace RTE {
 		m_Over = true;
 		m_Text->ActivateDeactivateOverflowScroll(true);
 
-		AddEvent(GUIEvent::Notification, Focused, 0);
+		AddEvent(GUIEvent::EventType::Notification, Notification::Focused, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,19 +308,19 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 
 		// If the mouse goes outside of the button, un-push the button
 		if (!PointInside(X, Y)) {
 			if (m_Pushed) {
-				AddEvent(GUIEvent::Notification, UnPushed, 0);
+				AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
 				SetPushed(false);
 			}
 		} else {
 			if (!m_Pushed) {
-				AddEvent(GUIEvent::Notification, Pushed, 0);
+				AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
 				SetPushed(true);
 			}
 		}

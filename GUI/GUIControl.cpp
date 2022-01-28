@@ -134,15 +134,15 @@ namespace RTE {
 		int Count = m_Properties.GetPropertyValue("Anchor", Value, 4);
 
 		for (int i = 0; i < Count; i++) {
-			if (stricmp(Value[i].c_str(), "left") == 0) { Anchor |= Anchor_Left; }
-			if (stricmp(Value[i].c_str(), "top") == 0) { Anchor |= Anchor_Top; }
-			if (stricmp(Value[i].c_str(), "right") == 0) { Anchor |= Anchor_Right; }
-			if (stricmp(Value[i].c_str(), "bottom") == 0) { Anchor |= Anchor_Bottom; }
+			if (stricmp(Value[i].c_str(), "left") == 0) { Anchor |= Anchor::AnchorLeft; }
+			if (stricmp(Value[i].c_str(), "top") == 0) { Anchor |= Anchor::AnchorTop; }
+			if (stricmp(Value[i].c_str(), "right") == 0) { Anchor |= Anchor::AnchorRight; }
+			if (stricmp(Value[i].c_str(), "bottom") == 0) { Anchor |= Anchor::AnchorBottom; }
 		}
 
 		// The anchor cannot have both sides missing, so we default to Left, Top is that is the case
-		if (!(Anchor & Anchor_Left) && !(Anchor & Anchor_Right)) { Anchor |= Anchor_Left; }
-		if (!(Anchor & Anchor_Top) && !(Anchor & Anchor_Bottom)) { Anchor |= Anchor_Top; }
+		if (!(Anchor & Anchor::AnchorLeft) && !(Anchor & Anchor::AnchorRight)) { Anchor |= Anchor::AnchorLeft; }
+		if (!(Anchor & Anchor::AnchorTop) && !(Anchor & Anchor::AnchorBottom)) { Anchor |= Anchor::AnchorTop; }
 
 		return Anchor;
 	}

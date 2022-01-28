@@ -11,7 +11,7 @@ class GUIScrollPanel : public GUIPanel {
 public:
 
     // Scroll panel orientation
-    enum {
+    enum Orientation {
         Horizontal,
         Vertical
     };
@@ -24,7 +24,7 @@ public:
     };
 
     // Signals
-    enum {
+    enum Signal {
         ChangeValue=0,
         Grab,
         Release

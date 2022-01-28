@@ -67,7 +67,7 @@ namespace RTEGUI {
 		// Trigger the grab only if we grabbed the control/handle and moved it far enough from the starting spot, this prevents accidental small movements when grabbing/releasing.
 		currentSelection.CheckMovementAndSetTriggerGrab(mousePosX, mousePosY);
 
-		if (mouseButtons.at(0) == GUIInput::Released) {
+		if (mouseButtons.at(0) == GUIInput::InputEvents::Released) {
 			if (currentSelection.GetControl()) {
 				// Move the control after a grab
 				if (currentSelection.ControlGrabbedAndTriggered()) { m_UnsavedChanges = currentSelection.MoveSelection(mousePosX, mousePosY); }
@@ -77,7 +77,7 @@ namespace RTEGUI {
 				if (m_UnsavedChanges && !m_EditorManager->ControlUnderMouse(m_EditorManager->GetPropertyPage(), mousePosX, mousePosY)) { m_EditorManager->UpdateControlProperties(currentSelection.GetControl()); }
 			}
 			currentSelection.ReleaseAnyGrabs();
-		} else if (mouseButtons.at(0) == GUIInput::Pushed) {
+		} else if (mouseButtons.at(0) == GUIInput::InputEvents::Pushed) {
 			// Check for grabbing handles
 			if (currentSelection.GetControl() && !currentSelection.IsGrabbingControl()) {
 				int handleIndex = m_EditorManager->HandleUnderMouse(currentSelection.GetControl(), mousePosX, mousePosY);
@@ -98,7 +98,7 @@ namespace RTEGUI {
 					// Remove focus from the currently focused editor manager element between selection changes so the currently selected property page line doesn't persist between selection changes
 					m_EditorManager->RemoveFocus();
 				} else if (clickedControl == m_EditorManager->GetRootControl()) {
-					// Unselect control if the workspace was clicked
+					// Deselect control if the workspace was clicked
 					m_EditorManager->ClearCurrentSelection();
 					m_EditorManager->SelectActiveControlInParentList(m_EditorManager->GetRootControl());
 				}
@@ -194,7 +194,7 @@ namespace RTEGUI {
 		while (m_EditorManager->GetControlManager()->GetEvent(&editorEvent)) {
 			std::string controlName = editorEvent.GetControl()->GetName();
 			switch (editorEvent.GetType()) {
-				case GUIEvent::Command:
+				case GUIEvent::EventType::Command:
 					if (controlName == "NewButton") {
 						OnNewButton();
 					} else if (controlName == "LoadButton") {
@@ -211,23 +211,23 @@ namespace RTEGUI {
 						m_UnsavedChanges = m_EditorManager->AddNewControl(editorEvent);
 					}
 					break;
-				case GUIEvent::Notification:
-					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIPropertyPage::Enter) {
+				case GUIEvent::EventType::Notification:
+					if (controlName == "PropertyPage" && editorEvent.GetMsg() == GUIPropertyPage::Notification::Enter) {
 						m_UnsavedChanges = m_EditorManager->UpdateControlProperties(m_EditorManager->GetCurrentSelection().GetControl(), true);
 						m_EditorManager->UpdateCollectionBoxList();
 						m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetCurrentSelection().GetControl()));
 						m_EditorManager->RemoveFocus();
-					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
+					} else if (controlName == "CollectionBoxList" && editorEvent.GetMsg() == GUIListBox::Signal::MouseDown) {
 						m_EditorManager->SelectActiveControlFromParentList();
-					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::MouseDown) {
+					} else if (controlName == "ControlsInCollectionBoxList" && editorEvent.GetMsg() == GUIListBox::Signal::MouseDown) {
 						m_EditorManager->SelectActiveControlFromChildrenList();
-					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Enter) {
+					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUITextBox::Notification::Enter) {
 						m_EditorManager->UpdateSnapGridSize(editorEvent);
 					} else if (controlName == "SnapCheckBox") {
-						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::Checked;
+						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::State::Checked;
 						m_EditorManager->RemoveFocus();
 					} else if (controlName == "ZoomCheckBox") {
-						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::Checked;
+						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::State::Checked;
 						show_mouse(m_ZoomWorkspace ? nullptr : screen);
 						m_EditorManager->RemoveFocus();
 					}

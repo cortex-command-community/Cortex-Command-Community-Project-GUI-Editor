@@ -199,7 +199,7 @@ namespace RTE {
 
 	void GUIProgressBar::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		ReleaseMouse();
-		if (PointInside(X, Y)) { AddEvent(GUIEvent::Notification, Clicked, Buttons); }
+		if (PointInside(X, Y)) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ namespace RTE {
 		m_Value = std::max(m_Value, m_Minimum);
 
 		// Changed?
-		if (m_Value != OldValue) { AddEvent(GUIEvent::Notification, Changed, 0); }
+		if (m_Value != OldValue) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

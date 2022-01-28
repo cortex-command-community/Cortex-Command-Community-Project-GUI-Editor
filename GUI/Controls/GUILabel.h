@@ -173,7 +173,7 @@ public:
 // Description:     Sets the horizontal alignment of the text of this label.
 // Arguments:       The desired alignment.
 
-    void SetHAlignment(int HAlignment = GUIFont::Left) { m_HAlignment = HAlignment; }
+    void SetHAlignment(int HAlignment = GUIFont::HAlignment::Left) { m_HAlignment = HAlignment; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ public:
 // Description:     Sets the vertical alignment of the text of this label.
 // Arguments:       The desired alignment.
 
-    void SetVAlignment(int VAlignment = GUIFont::Top) { m_VAlignment = VAlignment; }
+    void SetVAlignment(int VAlignment = GUIFont::VAlignment::Top) { m_VAlignment = VAlignment; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -11,7 +11,7 @@ class GUICheckbox : public GUIControl, public GUIPanel {
 public:
 
     // Check types
-    enum {
+    enum State {
         Unchecked = 0,
         Checked,
         Greycheck

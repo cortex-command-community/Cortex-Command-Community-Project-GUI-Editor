@@ -76,7 +76,7 @@ namespace RTE {
 		Props->GetPropertyValue("Orientation", &Ori);
 
 		m_Orientation = Horizontal;
-		if (stricmp(Ori.c_str(), "Vertical") == 0) { m_Orientation = Vertical; }
+		if (stricmp(Ori.c_str(), "Vertical") == 0) { m_Orientation = Orientation::Vertical; }
 
 		Props->GetPropertyValue("Minimum", &m_Minimum);
 		Props->GetPropertyValue("Maximum", &m_Maximum);
@@ -132,7 +132,7 @@ namespace RTE {
 
 
 		// Create the 3 bitmaps
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			// Vertical
 			if (UpdateSize) {
 				m_DrawBitmap[ButtonStates] = m_Skin->CreateBitmap(m_Width * 2, m_ButtonSize * 2);
@@ -150,7 +150,7 @@ namespace RTE {
 
 		// Update the buttons and the background
 		if (UpdateSize) {
-			if (m_Orientation == Vertical) {
+			if (m_Orientation == Orientation::Vertical) {
 				// Vertical
 				BuildButton("ScrollTopArrow", 0, m_Width, m_ButtonSize);
 				BuildButton("ScrollBottomArrow", m_ButtonSize, m_Width, m_ButtonSize);
@@ -166,7 +166,7 @@ namespace RTE {
 
 		// Update the knob
 		if (UpdateKnob && m_KnobLength > 0) {
-			if (m_Orientation == Vertical) {
+			if (m_Orientation == Orientation::Vertical) {
 				// Vertical
 				BuildKnob("ScrollKnob_Up", 0, 0, m_Width, m_KnobLength);
 				BuildKnob("ScrollKnob_Down", m_Width, 0, m_Width, m_KnobLength);
@@ -314,7 +314,7 @@ namespace RTE {
 		m_DrawBitmap[Back]->Draw(Dest, m_X, m_Y, nullptr);
 
 		// Vertical
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			// Top Button
 			int X = m_ButtonPushed[0] ? m_Width : 0;
 			SetRect(&Rect, X, 0, X + m_Width, m_ButtonSize);
@@ -333,7 +333,7 @@ namespace RTE {
 		}
 
 		// Horizontal
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			// Left Button
 			int X = m_ButtonPushed[0] ? m_ButtonSize : 0;
 			SetRect(&Rect, X, 0, X + m_ButtonSize, m_Height);
@@ -363,7 +363,7 @@ namespace RTE {
 		SendSignal(Grab, Buttons);
 
 		// Vertical
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			int KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
 
 			if (Y < m_Y + m_ButtonSize) {
@@ -413,7 +413,7 @@ namespace RTE {
 		}
 
 		// Horizontal
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			int KnobTop = m_X + m_ButtonSize + m_KnobPosition;
 
 			if (X < m_X + m_ButtonSize) {
@@ -481,13 +481,13 @@ namespace RTE {
 		int MousePos = X;
 
 		// Vertical
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			MoveLength = m_Height - m_ButtonSize * 2;
 			KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
 			MousePos = Y;
 		}
 		// Horizontal
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			MoveLength = m_Width - m_ButtonSize * 2;
 			KnobTop = m_X + m_ButtonSize + m_KnobPosition;
 			MousePos = X;
@@ -523,7 +523,7 @@ namespace RTE {
 
 	void GUIScrollPanel::OnMouseHover(int X, int Y, int Buttons, int Modifier) {
 		// Ignore if the left mouse button is not down
-		if (!(Buttons & MOUSE_LEFT)) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -535,7 +535,7 @@ namespace RTE {
 		}
 
 		// Vertical
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			int KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
 
 			if (Y < m_Y + m_ButtonSize && m_ButtonPushed[0]) {
@@ -624,8 +624,8 @@ namespace RTE {
 		int MoveLength = 1;
 
 		// Calculate the length of the movable area (panel minus buttons)
-		if (m_Orientation == Vertical) { MoveLength = m_Height - m_ButtonSize * 2; }
-		if (m_Orientation == Horizontal) { MoveLength = m_Width - m_ButtonSize * 2; }
+		if (m_Orientation == Orientation::Vertical) { MoveLength = m_Height - m_ButtonSize * 2; }
+		if (m_Orientation == Orientation::Horizontal) { MoveLength = m_Width - m_ButtonSize * 2; }
 
 		// Calculate the knob length
 		m_KnobLength = 0;
@@ -675,7 +675,7 @@ namespace RTE {
 	void GUIScrollPanel::SaveProps(GUIProperties *Props) const {
 		GUIAssert(Props, "");
 
-		Props->AddProperty("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
+		Props->AddProperty("Orientation", m_Orientation == Orientation::Horizontal ? "Horizontal" : "Vertical");
 		Props->AddProperty("Minimum", m_Minimum);
 		Props->AddProperty("Maximum", m_Maximum);
 		Props->AddProperty("Value", m_Value);

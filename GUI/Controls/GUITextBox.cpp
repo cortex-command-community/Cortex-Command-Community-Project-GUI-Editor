@@ -10,8 +10,8 @@ namespace RTE {
 	GUITextBox::GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(Manager) {
 		m_ControlManager = ControlManager;
 		m_DrawBitmap = nullptr;
-		m_HAlignment = GUIFont::Left;
-		m_VAlignment = GUIFont::Top;
+		m_HAlignment = GUIFont::HAlignment::Left;
+		m_VAlignment = GUIFont::VAlignment::Top;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,14 +60,14 @@ namespace RTE {
 		// Alignment values - these don't affect anything as of yet
 		std::string alignString;
 		Props->GetPropertyValue("HAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::Left; }
-		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::Centre; }
-		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::Right; }
+		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::HAlignment::Right; }
 
 		Props->GetPropertyValue("VAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::Top; }
-		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::Middle; }
-		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::Bottom; }
+		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::VAlignment::Bottom; }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,13 +137,13 @@ namespace RTE {
 
 	void GUITextBox::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
 		// Clicked
-		if (Code == GUITextPanel::Clicked) { AddEvent(GUIEvent::Notification, Clicked, Data); }
+		if (Code == GUITextPanel::Signals::Clicked) { AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Data); }
 
 		// Changed
-		if (Code == GUITextPanel::Changed) { AddEvent(GUIEvent::Notification, Changed, 0); }
+		if (Code == GUITextPanel::Signals::Changed) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
 
 		// Enter
-		if (Code == GUITextPanel::Enter) { AddEvent(GUIEvent::Notification, Enter, 0); }
+		if (Code == GUITextPanel::Signals::Enter) { AddEvent(GUIEvent::EventType::Notification, Notification::Enter, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

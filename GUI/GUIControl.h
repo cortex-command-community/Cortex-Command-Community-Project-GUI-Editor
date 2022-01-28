@@ -14,12 +14,12 @@ class GUIControl {
 public:
 
     // Anchor points
-    enum {
-        Anchor_Left = 0x01,
-        Anchor_Top = 0x02,
-        Anchor_Right = 0x04,
-        Anchor_Bottom = 0x08
-    } Anchor;
+    enum Anchor {
+        AnchorLeft = 0x01,
+        AnchorTop = 0x02,
+        AnchorRight = 0x04,
+        AnchorBottom = 0x08
+    };
 
 
 #pragma region Global Macro Definitions

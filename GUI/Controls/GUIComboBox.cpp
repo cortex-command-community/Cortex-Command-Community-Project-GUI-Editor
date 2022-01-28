@@ -13,7 +13,7 @@ namespace RTE {
 		m_OldSelection = 0;
 		m_CreatedList = false;
 		m_DropHeight = 80;
-		m_DropDownStyle = DropDownList;
+		m_DropDownStyle = DropDownStyles::DropDownList;
 
 		// Create the listpanel
 		m_ListPanel = new GUIListPanel(Manager);
@@ -53,7 +53,7 @@ namespace RTE {
 
 		m_TextPanel->Create(0, 0, m_Width - 12, m_Height);
 		m_TextPanel->_SetVisible(true);
-		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 		m_TextPanel->SetSignalTarget(this);
 		GUIPanel::AddChild(m_TextPanel);
 
@@ -115,11 +115,11 @@ namespace RTE {
 		std::string Val;
 		Props->GetPropertyValue("DropDownStyle", &Val);
 		if (stricmp(Val.c_str(), "DropDownList") == 0) {
-			m_DropDownStyle = DropDownList;
+			m_DropDownStyle = DropDownStyles::DropDownList;
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
-			m_DropDownStyle = DropDown;
+			m_DropDownStyle = DropDownStyles::DropDown;
 		}
-		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +210,7 @@ namespace RTE {
 		// ComboBoxButton
 		if (sourcePanelID == m_Button->GetPanelID()) {
 			// Clicked and list panel is not visible. open the list panel.
-			if (Code == GUIComboBoxButton::Clicked && !m_ListPanel->_GetVisible()) {
+			if (Code == GUIComboBoxButton::Signals::Clicked && !m_ListPanel->_GetVisible()) {
 				m_ListPanel->_SetVisible(true);
 				m_ListPanel->SetFocus();
 				m_ListPanel->CaptureMouse();
@@ -219,17 +219,17 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(TopMost);
+				m_ListPanel->ChangeZPosition(GUIPanel::ZChange::TopMost);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEvent::Notification, Dropped, 0);
+				AddEvent(GUIEvent::EventType::Notification, Notifications::Dropped, 0);
 			}
 		} else if (sourcePanelID == m_TextPanel->GetPanelID()) {
 			// Textbox
 			// MouseDown
-			if (Code == GUITextPanel::MouseDown && m_DropDownStyle == DropDownList && Data & MOUSE_LEFT) {
+			if (Code == GUITextPanel::Signals::MouseDown && m_DropDownStyle == DropDownStyles::DropDownList && Data & GUIPanel::MouseButtons::MOUSE_LEFT) {
 				// Drop
 				m_ListPanel->_SetVisible(true);
 				m_ListPanel->SetFocus();
@@ -239,12 +239,12 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(TopMost);
+				m_ListPanel->ChangeZPosition(GUIPanel::ZChange::TopMost);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEvent::Notification, Dropped, 0);
+				AddEvent(GUIEvent::EventType::Notification, Notifications::Dropped, 0);
 			}
 
 		} else if (sourcePanelID == m_ListPanel->GetPanelID()) {
@@ -259,7 +259,7 @@ namespace RTE {
 			int mouseY = 0;
 			m_Manager->GetInputController()->GetMousePosition(&mouseX, &mouseY);
 			// Mouse down anywhere outside the list panel.
-			if (Code == GUIListPanel::Click) {
+			if (Code == GUIListPanel::Signal::Click) {
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
 				m_ListPanel->ReleaseMouse();
@@ -269,8 +269,8 @@ namespace RTE {
 				// Restore the old selection
 				m_ListPanel->SetSelectedIndex(m_OldSelection);
 
-				AddEvent(GUIEvent::Notification, Closed, 0);
-			} else if (Code == GUIListPanel::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
+				AddEvent(GUIEvent::EventType::Notification, Notifications::Closed, 0);
+			} else if (Code == GUIListPanel::Signal::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
 				// Select on mouse up instead of down so we don't accidentally click stuff behind the disappearing listbox immediately after. Also only work if inside the actual list, and not its scrollbars.
 				// Hide the list panel
 				m_ListPanel->_SetVisible(false);
@@ -278,7 +278,7 @@ namespace RTE {
 				m_Manager->SetFocus(nullptr);
 				m_Button->SetPushed(false);
 
-				AddEvent(GUIEvent::Notification, Closed, 0);
+				AddEvent(GUIEvent::EventType::Notification, Notifications::Closed, 0);
 
 				// Set the text to the item in the list panel
 				GUIListPanel::Item* Item = m_ListPanel->GetSelected();
@@ -393,9 +393,9 @@ namespace RTE {
 
 	void GUIComboBox::StoreProperties() {
 		m_Properties.AddProperty("DropHeight", m_DropHeight);
-		if (m_DropDownStyle == DropDownList) {
+		if (m_DropDownStyle == DropDownStyles::DropDownList) {
 			m_Properties.AddProperty("DropDownStyle", "DropDownList");
-		} else if (m_DropDownStyle == DropDown) {
+		} else if (m_DropDownStyle == DropDownStyles::DropDown) {
 			m_Properties.AddProperty("DropDownStyle", "DropDown");
 		}
 	}
@@ -403,9 +403,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::SetDropDownStyle(int Style) {
-		if (Style == DropDown || Style == DropDownList) { m_DropDownStyle = Style; }
+		if (Style == DropDownStyles::DropDown || Style == DropDownStyles::DropDownList) { m_DropDownStyle = Style; }
 
-		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
+		m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	std::string GUIComboBox::GetText() {
-		if (m_DropDownStyle != DropDown) {
+		if (m_DropDownStyle != DropDownStyles::DropDown) {
 			return "";
 		}
 		if (m_TextPanel) {
@@ -437,7 +437,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::SetText(const std::string &Text) {
-		if (m_DropDownStyle == DropDown && m_TextPanel) { m_TextPanel->SetText(Text); }
+		if (m_DropDownStyle == DropDownStyles::DropDown && m_TextPanel) { m_TextPanel->SetText(Text); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -451,9 +451,9 @@ namespace RTE {
 		std::string Val;
 		m_Properties.GetPropertyValue("DropDownStyle", &Val);
 		if (stricmp(Val.c_str(), "DropDownList") == 0) {
-			m_DropDownStyle = DropDownList;
+			m_DropDownStyle = DropDownStyles::DropDownList;
 		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
-			m_DropDownStyle = DropDown;
+			m_DropDownStyle = DropDownStyles::DropDown;
 		}
 		m_TextPanel->SetLocked(m_DropDownStyle == DropDownList);
 
@@ -530,9 +530,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBoxButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			m_Pushed = true;
-			SendSignal(Clicked, Buttons);
+			SendSignal(Signals::Clicked, Buttons);
 		}
 	}
 

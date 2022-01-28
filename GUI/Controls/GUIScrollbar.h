@@ -13,10 +13,10 @@ class GUIScrollbar : public GUIControl, public GUIScrollPanel {
 public:
 
     // Notifications
-    enum {
+    enum Notifications {
         ChangeValue=0,
 
-    } Notifications;
+    };
 
 	GUIControlTypeGetter;
 	GUIPanelOverrideMethods;

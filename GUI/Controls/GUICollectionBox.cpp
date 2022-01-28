@@ -11,7 +11,7 @@ namespace RTE {
 		m_Background = nullptr;
 		m_ControlManager = ControlManager;
 		m_DrawBackground = true;
-		m_DrawType = Color;
+		m_DrawType = DrawType::Color;
 		m_DrawColor = 0;
 		m_DrawBitmap = nullptr;
 
@@ -70,11 +70,11 @@ namespace RTE {
 		std::string v;
 		Props->GetPropertyValue("DrawType", &v);
 		if (stricmp(v.c_str(), "Color") == 0) {
-			m_DrawType = Color;
+			m_DrawType = DrawType::Color;
 		} else if (stricmp(v.c_str(), "Image") == 0) {
-			m_DrawType = Image;
+			m_DrawType = DrawType::Image;
 		} else if (stricmp(v.c_str(), "Panel") == 0) {
-			m_DrawType = Panel;
+			m_DrawType = DrawType::Panel;
 		}
 		Props->GetPropertyValue("DrawColor", &m_DrawColor);
 	}
@@ -112,9 +112,9 @@ namespace RTE {
 
 	void GUICollectionBox::Draw(GUIScreen *Screen) {
 		if (m_DrawBackground) {
-			if (m_DrawType == Color) {
+			if (m_DrawType == DrawType::Color) {
 				Screen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(m_DrawColor, Screen->GetBitmap()->GetColorDepth()), true);
-			} else if (m_DrawType == Image) {
+			} else if (m_DrawType == DrawType::Image) {
 				if (m_DrawBitmap && m_DrawBackground) {
 					// Setup the clipping
 					Screen->GetBitmap()->SetClipRect(GetRect());
@@ -125,7 +125,7 @@ namespace RTE {
 					// Get rid of clipping
 					Screen->GetBitmap()->SetClipRect(nullptr);
 				}
-			} else if (m_DrawType == Panel && m_DrawBackground) {
+			} else if (m_DrawType == DrawType::Panel && m_DrawBackground) {
 				if (m_DrawBitmap) {
 					GUIRect Rect;
 					SetRect(&Rect, 0, 0, m_Width, m_Height);
@@ -141,7 +141,7 @@ namespace RTE {
 	void GUICollectionBox::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		ReleaseMouse();
 
-		AddEvent(GUIEvent::Notification, Clicked, Buttons);
+		AddEvent(GUIEvent::EventType::Notification, Notification::Clicked, Buttons);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,8 +191,8 @@ namespace RTE {
 			int H = CH;
 
 			// Attached to Right and/or Bottom edges
-			if ((Anchor & GUIControl::Anchor_Right) && !(Anchor & GUIControl::Anchor_Left)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
-			if ((Anchor & GUIControl::Anchor_Bottom) && !(Anchor & GUIControl::Anchor_Top)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
+			if ((Anchor & GUIControl::Anchor::AnchorRight) && !(Anchor & GUIControl::Anchor::AnchorLeft)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
+			if ((Anchor & GUIControl::Anchor::AnchorBottom) && !(Anchor & GUIControl::Anchor::AnchorTop)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
 
 			if (DX != CX || DY != CY) { C->Move(DX, DY); }
 
@@ -200,8 +200,8 @@ namespace RTE {
 			CY -= m_Y;
 
 			// Attached to opposing edges
-			if (Anchor & GUIControl::Anchor_Left && Anchor & GUIControl::Anchor_Right) { W = (m_Width - (OldWidth - (CX + CW))) - CX; }
-			if (Anchor & GUIControl::Anchor_Top && Anchor & GUIControl::Anchor_Bottom) { H = (m_Height - (OldHeight - (CY + CH))) - CY; }
+			if (Anchor & GUIControl::Anchor::AnchorLeft && Anchor & GUIControl::Anchor::AnchorRight) { W = (m_Width - (OldWidth - (CX + CW))) - CX; }
+			if (Anchor & GUIControl::Anchor::AnchorTop && Anchor & GUIControl::Anchor::AnchorBottom) { H = (m_Height - (OldHeight - (CY + CH))) - CY; }
 
 			if (W != CW || H != CH) { C->Resize(W, H); }
 		}
@@ -221,7 +221,7 @@ namespace RTE {
 
 	void GUICollectionBox::StoreProperties() {
 		m_Properties.AddProperty("DrawBackground", m_DrawBackground);
-		m_Properties.AddProperty("DrawType", m_DrawType == Color ? "Color" : "Image");
+		m_Properties.AddProperty("DrawType", m_DrawType == DrawType::Color ? "Color" : "Image");
 		m_Properties.AddProperty("DrawColor", (int)m_DrawColor);
 	}
 
@@ -235,9 +235,9 @@ namespace RTE {
 		std::string v;
 		m_Properties.GetPropertyValue("DrawType", &v);
 		if (stricmp(v.c_str(), "Color") == 0) {
-			m_DrawType = Color;
+			m_DrawType = DrawType::Color;
 		} else if (stricmp(v.c_str(), "Image") == 0) {
-			m_DrawType = Image;
+			m_DrawType = DrawType::Image;
 		}
 		m_Properties.GetPropertyValue("DrawColor", &m_DrawColor);
 	}

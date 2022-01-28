@@ -342,8 +342,8 @@ namespace RTE {
 					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + 1, m_SelectedColorIndex);
 					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + itemHeight, m_SelectedColorIndex);
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::Right, GUIFont::Middle, m_Width, m_FontShadow);
-					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::Left, GUIFont::Middle, mainTextWidth);
+					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth);
 				} else {
 					// Unselected
 					// TODO: Don't hardcode unselected color index
@@ -351,8 +351,8 @@ namespace RTE {
 					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + itemHeight, 144);
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::Right, GUIFont::Middle, m_Width, m_FontShadow);
-					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::Left, GUIFont::Middle, mainTextWidth, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth, m_FontShadow);
 				}
 
 				// Draw another line to make sure the last item has two
@@ -371,13 +371,13 @@ namespace RTE {
 
 				if (I->m_Selected && m_GotFocus) {
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::Right);
+					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right);
 					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name);
 				} else {
 					// Unselected
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::Right, GUIFont::Top, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->_GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
 					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name, m_FontShadow);
 				}
 
@@ -419,7 +419,7 @@ namespace RTE {
 		// Give this panel focus
 		SetFocus();
 
-		if ((Buttons & MOUSE_LEFT) && PointInside(X, Y)) {
+		if ((Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) && PointInside(X, Y)) {
 			SelectItem(X, Y, Modifier);
 			SendSignal(MouseDown, Buttons);
 		} else {

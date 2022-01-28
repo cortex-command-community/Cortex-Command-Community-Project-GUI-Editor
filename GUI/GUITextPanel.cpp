@@ -117,7 +117,7 @@ namespace RTE {
 		m_Font->Draw(Screen->GetBitmap(), m_X + wSpacer, m_Y + hSpacer, Text, m_FontShadow);
 
 		// Draw the right-justified extra text in the background
-		m_Font->DrawAligned(Screen->GetBitmap(), m_X + m_Width - wSpacer, m_Y + hSpacer, m_RightText, GUIFont::Right, GUIFont::Top, m_Width, m_FontShadow);
+		m_Font->DrawAligned(Screen->GetBitmap(), m_X + m_Width - wSpacer, m_Y + hSpacer, m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
 
 		// Draw the selected text
 		if (m_GotSelection && m_GotFocus && !m_Text.empty()) {
@@ -319,7 +319,7 @@ namespace RTE {
 		SetFocus();
 		CaptureMouse();
 
-		if (!(Buttons & MOUSE_LEFT)) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -329,7 +329,7 @@ namespace RTE {
 		std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
 		m_CursorIndex = m_Text.size();
 
-		if (!(Modifier & MODI_SHIFT)) { m_GotSelection = false; }
+		if (!(Modifier & GUIPanel::MouseModifiers::MODI_SHIFT)) { m_GotSelection = false; }
 
 		// Go through each character until we to the mouse point
 		int TX = m_X;
@@ -342,7 +342,7 @@ namespace RTE {
 		}
 
 		// Do a selection if holding the shift button
-		if (Modifier & MODI_SHIFT)
+		if (Modifier & GUIPanel::MouseModifiers::MODI_SHIFT)
 			DoSelection(OldIndex, m_CursorIndex);
 
 		// Update the text
@@ -352,7 +352,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 

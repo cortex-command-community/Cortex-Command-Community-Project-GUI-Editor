@@ -87,22 +87,22 @@ namespace RTE {
 
 	void GUIListBox::ReceiveSignal(GUIPanel *Source, int Code, int Data) {
 		if (Source->GetPanelID() == GetPanelID()) {
-			if (Code == GUIListPanel::MouseMove) {
-				AddEvent(GUIEvent::Notification, MouseMove, Data);
-			} else if (Code == GUIListPanel::MouseEnter) {
-				AddEvent(GUIEvent::Notification, MouseEnter, Data);
-			} else if (Code == GUIListPanel::MouseLeave) {
-				AddEvent(GUIEvent::Notification, MouseLeave, Data);
-			} else if (Code == GUIListPanel::Select) {
-				AddEvent(GUIEvent::Notification, Select, 0);
-			} else if (Code == GUIListPanel::MouseDown) {
-				AddEvent(GUIEvent::Notification, MouseDown, 0);
-			} else if (Code == GUIListPanel::DoubleClick) {
-				AddEvent(GUIEvent::Notification, DoubleClick, 0);
-			} else if (Code == GUIListPanel::KeyDown) {
-				AddEvent(GUIEvent::Notification, KeyDown, Data);
-			} else if (Code == GUIListPanel::EdgeHit) {
-				AddEvent(GUIEvent::Notification, EdgeHit, Data);
+			if (Code == GUIListPanel::Signal::MouseMove) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseMove, Data);
+			} else if (Code == GUIListPanel::Signal::MouseEnter) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseEnter, Data);
+			} else if (Code == GUIListPanel::Signal::MouseLeave) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseLeave, Data);
+			} else if (Code == GUIListPanel::Signal::Select) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::Select, 0);
+			} else if (Code == GUIListPanel::Signal::MouseDown) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::MouseDown, 0);
+			} else if (Code == GUIListPanel::Signal::DoubleClick) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::DoubleClick, 0);
+			} else if (Code == GUIListPanel::Signal::KeyDown) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::KeyDown, Data);
+			} else if (Code == GUIListPanel::Signal::EdgeHit) {
+				AddEvent(GUIEvent::EventType::Notification, GUIListPanel::Signal::EdgeHit, Data);
 			}
 		}
 

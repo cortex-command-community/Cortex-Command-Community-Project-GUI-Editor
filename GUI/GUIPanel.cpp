@@ -382,13 +382,13 @@ namespace RTE {
 
 		switch (Type) {
 			// Put the child at the end of the list
-			case TopMost:
+			case GUIPanel::ZChange::TopMost:
 				m_Children.erase(m_Children.begin() + Index);
 				m_Children.push_back(Child);
 				break;
 
 				// Put the child at the start of the list
-			case BottomMost:
+			case GUIPanel::ZChange::BottomMost:
 				m_Children.erase(m_Children.begin() + Index);
 				m_Children.insert(m_Children.begin(), Child);
 				break;

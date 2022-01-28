@@ -83,21 +83,21 @@ namespace RTE {
 		int MouseButtons[3];
 		int MouseStates[3];
 		int MouseWheelChange = 0;
-		int Released = GUIPanel::MOUSE_NONE;
-		int Pushed = GUIPanel::MOUSE_NONE;
-		int Buttons = GUIPanel::MOUSE_NONE;
-		int Repeated = GUIPanel::MOUSE_NONE;
-		int Modifier = GUIInput::ModNone;
-		int Mod = GUIPanel::MODI_NONE;
+		int Released = GUIPanel::MouseButtons::MOUSE_NONE;
+		int Pushed = GUIPanel::MouseButtons::MOUSE_NONE;
+		int Buttons = GUIPanel::MouseButtons::MOUSE_NONE;
+		int Repeated = GUIPanel::MouseButtons::MOUSE_NONE;
+		int Modifier = GUIInput::KeyModifiers::ModNone;
+		int Mod = GUIPanel::MouseModifiers::MODI_NONE;
 
 		float CurTime = m_pTimer->GetElapsedRealTimeMS();
 
 		// Build the modifier state
 		Modifier = m_Input->GetKeyModifier();
-		if (Modifier & GUIInput::ModShift) { Mod |= GUIPanel::MODI_SHIFT; }
-		if (Modifier & GUIInput::ModCtrl) { Mod |= GUIPanel::MODI_CTRL; }
-		if (Modifier & GUIInput::ModAlt) { Mod |= GUIPanel::MODI_ALT; }
-		if (Modifier & GUIInput::ModCommand) { Mod |= GUIPanel::MODI_COMMAND; }
+		if (Modifier & GUIInput::KeyModifiers::ModShift) { Mod |= GUIPanel::MouseModifiers::MODI_SHIFT; }
+		if (Modifier & GUIInput::KeyModifiers::ModCtrl) { Mod |= GUIPanel::MouseModifiers::MODI_CTRL; }
+		if (Modifier & GUIInput::KeyModifiers::ModAlt) { Mod |= GUIPanel::MouseModifiers::MODI_ALT; }
+		if (Modifier & GUIInput::KeyModifiers::ModCommand) { Mod |= GUIPanel::MouseModifiers::MODI_COMMAND; }
 
 		// Get the mouse data
 		if (m_MouseEnabled) {
@@ -120,31 +120,31 @@ namespace RTE {
 
 			// Build the states
 			for (i = 0; i < 3; i++) {
-				if (MouseButtons[i] == GUIInput::Released)
+				if (MouseButtons[i] == GUIInput::InputEvents::Released)
 					Released |= 1 << i;
-				if (MouseButtons[i] == GUIInput::Pushed)
+				if (MouseButtons[i] == GUIInput::InputEvents::Pushed)
 					Pushed |= 1 << i;
-				if (MouseButtons[i] == GUIInput::Repeat)
+				if (MouseButtons[i] == GUIInput::InputEvents::Repeat)
 					Repeated |= 1 << i;
-				if (MouseStates[i] == GUIInput::Down)
+				if (MouseStates[i] == GUIInput::InputStates::Down)
 					Buttons |= 1 << i;
 			}
 
 			// Mouse Up
-			if (Released != GUIPanel::MOUSE_NONE && CurPanel) {
+			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && CurPanel) {
 				CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod);
 			}
 
 			// Double click (on the mouse up)
-			if (Released != GUIPanel::MOUSE_NONE && m_DoubleClickButtons != GUIPanel::MOUSE_NONE) {
+			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIPanel::MouseButtons::MOUSE_NONE) {
 				if (CurPanel) { CurPanel->OnDoubleClick(MouseX, MouseY, m_DoubleClickButtons, Mod); }
 				m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0f;
 			}
 
 			// Mouse Down
-			if (Pushed != GUIPanel::MOUSE_NONE) {
+			if (Pushed != GUIPanel::MouseButtons::MOUSE_NONE) {
 				// Double click settings
-				m_DoubleClickButtons = GUIPanel::MOUSE_NONE;
+				m_DoubleClickButtons = GUIPanel::MouseButtons::MOUSE_NONE;
 
 				// Check for a double click
 				for (i = 0; i < 3; i++) {
@@ -153,14 +153,14 @@ namespace RTE {
 							m_DoubleClickButtons |= (1 << i);
 						} else {
 							// Setup the first click
-							m_DoubleClickButtons = GUIPanel::MOUSE_NONE;
+							m_DoubleClickButtons = GUIPanel::MouseButtons::MOUSE_NONE;
 							m_LastMouseDown[i] = CurTime;
 						}
 					}
 				}
 
 				// Setup the double click rectangle
-				if (m_DoubleClickButtons == GUIPanel::MOUSE_NONE) {
+				if (m_DoubleClickButtons == GUIPanel::MouseButtons::MOUSE_NONE) {
 					SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize);
 				}
 
@@ -224,18 +224,18 @@ namespace RTE {
 			for (i = 1; i < 256; i++) {
 				switch (KeyboardBuffer[i]) {
 					// KeyDown & KeyPress
-					case GUIInput::Pushed:
+					case GUIInput::InputEvents::Pushed:
 						m_FocusPanel->OnKeyDown(i, Mod);
 						m_FocusPanel->OnKeyPress(i, Mod);
 						break;
 
 						// KeyUp
-					case GUIInput::Released:
+					case GUIInput::InputEvents::Released:
 						m_FocusPanel->OnKeyUp(i, Mod);
 						break;
 
 						// KeyPress
-					case GUIInput::Repeat:
+					case GUIInput::InputEvents::Repeat:
 						m_FocusPanel->OnKeyPress(i, Mod);
 						break;
 					default:

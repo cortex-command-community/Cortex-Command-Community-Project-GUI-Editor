@@ -10,7 +10,7 @@ namespace RTE {
 	GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
 		m_Image = nullptr;
 		m_ControlManager = ControlManager;
-		m_Check = Unchecked;
+		m_Check = State::Unchecked;
 		m_Mouseover = false;
 	}
 
@@ -63,13 +63,13 @@ namespace RTE {
 
 
 		// Grab the check value
-		m_Check = Unchecked;
+		m_Check = State::Unchecked;
 		std::string value;
 		Props->GetPropertyValue("Checked", &value);
 		if (stricmp(value.c_str(), "Checked") == 0) {
-			m_Check = Checked;
+			m_Check = State::Checked;
 		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
-			m_Check = Greycheck;
+			m_Check = State::Greycheck;
 		}
 		Props->GetPropertyValue("Text", &m_Text);
 	}
@@ -180,12 +180,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & MOUSE_LEFT) {
+		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
 			// Push the checkbox down
 			CaptureMouse();
 			SetFocus();
 
-			AddEvent(GUIEvent::Notification, Pushed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Pushed, 0);
 		}
 	}
 
@@ -195,16 +195,16 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y) && Buttons & MOUSE_LEFT) {
-			if (m_Check == Unchecked) {
-				m_Check = Checked;
+		if (PointInside(X, Y) && Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
+			if (m_Check == State::Unchecked) {
+				m_Check = State::Checked;
 			} else {
-				m_Check = Unchecked;
+				m_Check = State::Unchecked;
 			}
-			AddEvent(GUIEvent::Notification, Changed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
 		}
 
-		AddEvent(GUIEvent::Notification, UnPushed, 0);
+		AddEvent(GUIEvent::EventType::Notification, Notification::UnPushed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,11 +222,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::StoreProperties() {
-		if (m_Check == Unchecked) {
+		if (m_Check == State::Unchecked) {
 			m_Properties.AddProperty("Checked", "Unchecked");
-		} else if (m_Check == Checked) {
+		} else if (m_Check == State::Checked) {
 			m_Properties.AddProperty("Checked", "Checked");
-		} else if (m_Check == Greycheck) {
+		} else if (m_Check == State::Greycheck) {
 			m_Properties.AddProperty("Checked", "Greycheck");
 		}
 		m_Properties.AddProperty("Text", m_Text);
@@ -241,9 +241,9 @@ namespace RTE {
 		std::string value;
 		m_Properties.GetPropertyValue("Checked", &value);
 		if (stricmp(value.c_str(), "Checked") == 0) {
-			m_Check = Checked;
+			m_Check = State::Checked;
 		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
-			m_Check = Greycheck;
+			m_Check = State::Greycheck;
 		}
 		m_Properties.GetPropertyValue("Text", &m_Text);
 	}

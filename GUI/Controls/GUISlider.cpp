@@ -11,8 +11,8 @@ namespace RTE {
 		m_DrawBitmap = nullptr;
 		m_KnobImage = nullptr;
 		m_ControlManager = ControlManager;
-		m_Orientation = Horizontal;
-		m_TickDirection = BottomRight;
+		m_Orientation = Orientation::Horizontal;
+		m_TickDirection = TickDirection::BottomRight;
 		m_KnobPosition = 0;
 		m_KnobSize = 0;
 		m_KnobGrabbed = false;
@@ -73,17 +73,17 @@ namespace RTE {
 		std::string ori;
 		Props->GetPropertyValue("Orientation", &ori);
 		if (stricmp(ori.c_str(), "horizontal") == 0) {
-			m_Orientation = Horizontal;
+			m_Orientation = Orientation::Horizontal;
 		} else if (stricmp(ori.c_str(), "vertical") == 0) {
-			m_Orientation = Vertical;
+			m_Orientation = Orientation::Vertical;
 		}
 
 		std::string tick;
 		Props->GetPropertyValue("TickDirection", &tick);
 		if (stricmp(tick.c_str(), "TopLeft") == 0) {
-			m_TickDirection = TopLeft;
+			m_TickDirection = TickDirection::TopLeft;
 		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
-			m_TickDirection = BottomRight;
+			m_TickDirection = TickDirection::BottomRight;
 		}
 		Props->GetPropertyValue("Minimum", &m_Minimum);
 		Props->GetPropertyValue("Maximum", &m_Maximum);
@@ -139,7 +139,7 @@ namespace RTE {
 		}
 
 		std::string Section;
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			Section = "Slider_Horz";
 		} else {
 			Section = "Slider_Vert";
@@ -158,7 +158,7 @@ namespace RTE {
 
 		// Load the indicator image
 		std::string Side;
-		if (m_TickDirection == TopLeft) {
+		if (m_TickDirection == TickDirection::TopLeft) {
 			Side = "TopLeftSlider";
 		} else {
 			Side = "BottomRightSlider";
@@ -191,7 +191,7 @@ namespace RTE {
 
 		// Get the size of the middle bit for determining part of the bitmap size
 		m_Skin->GetValue(Section, "Middle", Values, 4);
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			m_DrawBitmap = m_Skin->CreateBitmap(m_Width, Values[3]);
 		} else {
 			m_DrawBitmap = m_Skin->CreateBitmap(Values[2], m_Height);
@@ -200,7 +200,7 @@ namespace RTE {
 		// Tile the line
 		m_Skin->GetValue(Section, "Middle", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			for (int i = 0; i < m_Width; i += Values[2]) {
 				SrcImage->Draw(m_DrawBitmap, i, 0, &Rect);
 			}
@@ -215,14 +215,14 @@ namespace RTE {
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 		SrcImage->Draw(m_DrawBitmap, 0, 0, &Rect);
 
-		m_EndThickness = m_Orientation == Horizontal ? Values[2] : Values[3];
+		m_EndThickness = m_Orientation == Orientation::Horizontal ? Values[2] : Values[3];
 
 		// Draw the end
 		int X = 0;
 		int Y = 0;
 		m_Skin->GetValue(Section, "End", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			X = m_Width - Values[2];
 		} else {
 			Y = m_Height - Values[3];
@@ -236,7 +236,7 @@ namespace RTE {
 		int X = 0;
 		int Y = 0;
 
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			Y = m_Height / 2 - m_DrawBitmap->GetHeight() / 2;
 		} else {
 			X = m_Width / 2 - m_DrawBitmap->GetWidth() / 2;
@@ -251,12 +251,12 @@ namespace RTE {
 		}
 
 		int Half = 0;
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			Half = m_DrawBitmap->GetHeight() / 2;
 		} else {
 			Half = m_DrawBitmap->GetWidth() / 2;
 		}
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + m_KnobPosition, m_Y + Y + Half - m_KnobImage->GetHeight() / 2, nullptr);
 		} else {
 			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + X + Half - m_KnobImage->GetWidth() / 2, m_Y + m_KnobPosition, nullptr);
@@ -274,11 +274,11 @@ namespace RTE {
 		int Size = 0;
 
 		// Only do stuff here on a left mouse click
-		if (!(Buttons & MOUSE_LEFT)) {
+		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			if (X > m_X + m_EndThickness && X < m_X + m_Width - m_EndThickness) {
 				m_KnobGrabbed = true;
 				m_KnobPosition = X - m_X - (m_KnobSize / 2);
@@ -308,7 +308,7 @@ namespace RTE {
 
 		// If the value has changed, add the "Changed" notification
 		if (m_Value != m_OldValue)
-			AddEvent(GUIEvent::Notification, Changed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +319,7 @@ namespace RTE {
 		m_KnobGrabbed = false;
 
 		// If the value has changed, add the "Changed" notification
-		if (m_Value != m_OldValue) { AddEvent(GUIEvent::Notification, Changed, 0); }
+		if (m_Value != m_OldValue) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,14 +330,14 @@ namespace RTE {
 		int Size = 1;
 
 		// Horizontal
-		if (m_Orientation == Horizontal) {
+		if (m_Orientation == Orientation::Horizontal) {
 			MousePos = X;
 			KnobTop = m_X + m_KnobPosition;
 			Size = m_Width;
 		}
 
 		// Vertical
-		if (m_Orientation == Vertical) {
+		if (m_Orientation == Orientation::Vertical) {
 			MousePos = Y;
 			KnobTop = m_Y + m_KnobPosition;
 			Size = m_Height;
@@ -369,7 +369,7 @@ namespace RTE {
 			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobSize - m_EndThickness);
 
 			// If the value has changed, add the "Changed" notification
-			if (m_Value != m_OldValue) { AddEvent(GUIEvent::Notification, Changed, 0); }
+			if (m_Value != m_OldValue) { AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0); }
 
 			m_OldValue = m_Value;
 		}
@@ -388,7 +388,7 @@ namespace RTE {
 
 		if (m_Value != m_OldValue) {
 			CalculateKnob();
-			AddEvent(GUIEvent::Notification, Changed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
 		}
 	}
 
@@ -400,7 +400,7 @@ namespace RTE {
 		}
 
 		if (m_Maximum > m_Minimum) {
-			const bool horizontalOrientation = (m_Orientation == Horizontal);
+			const bool horizontalOrientation = (m_Orientation == Orientation::Horizontal);
 			m_KnobSize = horizontalOrientation ? m_KnobImage->GetWidth() : m_KnobImage->GetHeight();
 			const int size = horizontalOrientation ? m_Width : m_Height;
 			const float valueRatio = static_cast<float>(m_Value - m_Minimum) / static_cast<float>(m_Maximum - m_Minimum);
@@ -470,7 +470,7 @@ namespace RTE {
 
 		if (m_Value != OldValue) {
 			CalculateKnob();
-			AddEvent(GUIEvent::Notification, Changed, 0);
+			AddEvent(GUIEvent::EventType::Notification, Notification::Changed, 0);
 		}
 	}
 
@@ -481,8 +481,8 @@ namespace RTE {
 		m_Properties.AddProperty("Minimum", m_Minimum);
 		m_Properties.AddProperty("Maximum", m_Maximum);
 		m_Properties.AddProperty("ValueResolution", m_ValueResolution);
-		m_Properties.AddProperty("Orientation", m_Orientation == Horizontal ? "Horizontal" : "Vertical");
-		m_Properties.AddProperty("TickDirection", m_TickDirection == TopLeft ? "TopLeft" : "BottomRight");
+		m_Properties.AddProperty("Orientation", m_Orientation == Orientation::Horizontal ? "Horizontal" : "Vertical");
+		m_Properties.AddProperty("TickDirection", m_TickDirection == TickDirection::TopLeft ? "TopLeft" : "BottomRight");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,17 +494,17 @@ namespace RTE {
 		std::string ori;
 		m_Properties.GetPropertyValue("Orientation", &ori);
 		if (stricmp(ori.c_str(), "horizontal") == 0) {
-			m_Orientation = Horizontal;
+			m_Orientation = Orientation::Horizontal;
 		} else if (stricmp(ori.c_str(), "vertical") == 0) {
-			m_Orientation = Vertical;
+			m_Orientation = Orientation::Vertical;
 		}
 
 		std::string tick;
 		m_Properties.GetPropertyValue("TickDirection", &tick);
 		if (stricmp(tick.c_str(), "TopLeft") == 0) {
-			m_TickDirection = TopLeft;
+			m_TickDirection = TickDirection::TopLeft;
 		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
-			m_TickDirection = BottomRight;
+			m_TickDirection = TickDirection::BottomRight;
 		}
 		m_Properties.GetPropertyValue("Minimum", &m_Minimum);
 		m_Properties.GetPropertyValue("Maximum", &m_Maximum);
