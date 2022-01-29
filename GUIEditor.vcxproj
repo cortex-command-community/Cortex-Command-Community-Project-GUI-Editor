@@ -143,7 +143,6 @@
     <ClCompile Include="GUI\GUIControl.cpp" />
     <ClCompile Include="GUI\GUIControlFactory.cpp" />
     <ClCompile Include="GUI\GUIControlManager.cpp" />
-    <ClCompile Include="GUI\GUIEvent.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
     <ClCompile Include="GUI\GUIListPanel.cpp" />

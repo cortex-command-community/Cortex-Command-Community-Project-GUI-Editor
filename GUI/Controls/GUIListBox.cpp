@@ -94,11 +94,11 @@ namespace RTE {
 			} else if (Code == GUIEventCode::MouseLeave) {
 				AddEvent(GUIEventType::Notification, GUIEventCode::MouseLeave, Data);
 			} else if (Code == GUIEventCode::Select) {
-				AddEvent(GUIEventType::Notification, GUIEventCode::Select, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Select);
 			} else if (Code == GUIEventCode::MouseDown) {
-				AddEvent(GUIEventType::Notification, GUIEventCode::MouseDown, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::MouseDown);
 			} else if (Code == GUIEventCode::DoubleClick) {
-				AddEvent(GUIEventType::Notification, GUIEventCode::DoubleClick, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::DoubleClick);
 			} else if (Code == GUIEventCode::KeyDown) {
 				AddEvent(GUIEventType::Notification, GUIEventCode::KeyDown, Data);
 			} else if (Code == GUIEventCode::EdgeHit) {

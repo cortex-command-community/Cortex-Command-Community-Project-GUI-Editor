@@ -3,75 +3,61 @@
 
 namespace RTE {
 
-/// <summary>
-/// A class to hold event information.
-/// </summary>
-class GUIEvent {
+	/// <summary>
+	/// A class to hold event information.
+	/// </summary>
+	class GUIEvent {
 
-public:
+	public:
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIEvent
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIEvent object in system
-//                  memory.
-// Arguments:       None.
+#pragma region Creation
+		/// <summary>
+		/// Constructor method used to instantiate a GUIEvent object in system memory.
+		/// </summary>
+		GUIEvent() = default;
 
-    GUIEvent();
+		/// <summary>
+		/// Constructor method used to instantiate a GUIEvent object in system memory.
+		/// </summary>
+		/// <param name="eventOrigin">Control.</param>
+		/// <param name="eventType">Event type.</param>
+		/// <param name="eventCode">Msg.</param>
+		/// <param name="eventData">Data.</param>
+		GUIEvent(GUIControl *eventOrigin, GUIEventType eventType, GUIEventCode eventCode, int eventData = 0) : m_Origin(eventOrigin), m_Type(eventType), m_Code(eventCode), m_Data(eventData) {}
+#pragma endregion
 
+#pragma region Getters
+		/// <summary>
+		/// Gets the event control.
+		/// </summary>
+		/// <returns></returns>
+		GUIControl * GetOrigin() const { return m_Origin; }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIEvent
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIEvent object in system
-//                  memory.
-// Arguments:       Control, Event type, Msg, Data.
+		/// <summary>
+		/// Gets the event type.
+		/// </summary>
+		/// <returns></returns>
+		GUIEventType GetType() const { return m_Type; }
 
-    GUIEvent(GUIControl *Control, GUIEventType Type, GUIEventCode Msg, int Data);
+		/// <summary>
+		/// Gets the msg.
+		/// </summary>
+		/// <returns></returns>
+		GUIEventCode GetMsg() const { return m_Code; }
 
+		/// <summary>
+		/// Gets the data.
+		/// </summary>
+		/// <returns></returns>
+		int GetData() const { return m_Data; }
+#pragma endregion
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetType
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the event type
-// Arguments:       None.
+	private:
 
-	GUIEventType GetType() const { return m_Type; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetMsg
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the msg.
-// Arguments:       None.
-
-	GUIEventCode GetMsg() const { return m_Msg; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetData
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the data.
-// Arguments:       None.
-
-	int GetData() const { return m_Data; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControl
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the event control.
-// Arguments:       None.
-
-	GUIControl * GetControl() { return m_Control; }
-
-private:
-
-    GUIControl *m_Control;
-	GUIEventType m_Type;
-	GUIEventCode m_Msg;
-    int m_Data;
-
-};
+		GUIControl *m_Origin = nullptr;
+		GUIEventType m_Type = GUIEventType::NoEvent;
+		GUIEventCode m_Code = GUIEventCode::NoNotification;
+		int m_Data = 0;
+	};
 };
 #endif

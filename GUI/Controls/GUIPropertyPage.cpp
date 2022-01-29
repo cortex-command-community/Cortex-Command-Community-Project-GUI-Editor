@@ -221,7 +221,7 @@ namespace RTE {
 			//m_Pushed = true;
 			//CaptureMouse();
 
-			//AddEvent(GUIEventType::Notification, Pushed, 0);
+			//AddEvent(GUIEventType::Notification, Pushed);
 		}
 		SetFocus();
 	}
@@ -286,7 +286,7 @@ namespace RTE {
 
 				// Change event. Do not update properties
 				if (Code == GUIEventCode::Changed) {
-					AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
+					AddEvent(GUIEventType::Notification, GUIEventCode::Changed);
 					return;
 				}
 				break;
@@ -297,7 +297,7 @@ namespace RTE {
 		// If any of the values are different, fire a 'changed' notification event
 		if (TextSignal && InvokeUpdate()) {
 			// Fire the enter event
-			AddEvent(GUIEventType::Notification, GUIEventCode::Enter, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Enter);
 		}
 	}
 

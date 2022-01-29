@@ -165,7 +165,7 @@ namespace RTEGUI {
 			s_SelectionInfo.ClearSelection();
 			m_PropertyPage->ClearValues();
 		}
-		std::string controlClass = editorEvent.GetControl()->GetName().substr(2, std::string::npos);
+		std::string controlClass = editorEvent.GetOrigin()->GetName().substr(2, std::string::npos);
 		std::string controlName = GenerateControlName(controlClass);
 
 		GUIControl *parent = m_RootControl;
@@ -480,7 +480,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::UpdateSnapGridSize(GUIEvent &editorEvent) const {
-		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetControl())->GetText();
+		std::string newValue = dynamic_cast<GUITextBox *>(editorEvent.GetOrigin())->GetText();
 		if (newValue.empty()) { newValue = "1"; }
 
 		bool validEntry = true;
@@ -491,7 +491,7 @@ namespace RTEGUI {
 			}
 		}
 		EditorSelection::s_SnapGridSize = validEntry ? std::clamp(std::stoi(newValue), 0, 255) : EditorSelection::s_SnapGridSize;
-		dynamic_cast<GUITextBox *>(editorEvent.GetControl())->SetText(std::to_string(EditorSelection::s_SnapGridSize));
+		dynamic_cast<GUITextBox *>(editorEvent.GetOrigin())->SetText(std::to_string(EditorSelection::s_SnapGridSize));
 
 		RemoveFocus();
 	}

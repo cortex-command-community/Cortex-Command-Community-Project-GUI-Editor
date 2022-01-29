@@ -193,7 +193,7 @@ namespace RTEGUI {
 		m_EditorManager->GetControlManager()->Update();
 		GUIEvent editorEvent;
 		while (m_EditorManager->GetControlManager()->GetEvent(&editorEvent)) {
-			std::string controlName = editorEvent.GetControl()->GetName();
+			std::string controlName = editorEvent.GetOrigin()->GetName();
 			switch (editorEvent.GetType()) {
 				case GUIEventType::Command:
 					if (controlName == "NewButton") {
@@ -225,10 +225,10 @@ namespace RTEGUI {
 					} else if (controlName == "GridSizeTextBox" && editorEvent.GetMsg() == GUIEventCode::Enter) {
 						m_EditorManager->UpdateSnapGridSize(editorEvent);
 					} else if (controlName == "SnapCheckBox") {
-						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetControl())->GetCheck() == GUICheckbox::State::Checked;
+						EditorSelection::s_SnapToGrid = dynamic_cast<GUICheckbox *>(editorEvent.GetOrigin())->GetCheck() == GUICheckbox::State::Checked;
 						m_EditorManager->RemoveFocus();
 					} else if (controlName == "ZoomCheckBox") {
-						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetControl()))->GetCheck() == GUICheckbox::State::Checked;
+						m_ZoomWorkspace = (dynamic_cast<GUICheckbox *>(editorEvent.GetOrigin()))->GetCheck() == GUICheckbox::State::Checked;
 						show_mouse(m_ZoomWorkspace ? nullptr : screen);
 						m_EditorManager->RemoveFocus();
 					}

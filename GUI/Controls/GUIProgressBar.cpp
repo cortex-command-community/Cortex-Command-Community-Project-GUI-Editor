@@ -234,7 +234,7 @@ namespace RTE {
 		m_Value = std::max(m_Value, m_Minimum);
 
 		// Changed?
-		if (m_Value != OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0); }
+		if (m_Value != OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

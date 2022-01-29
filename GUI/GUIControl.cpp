@@ -38,8 +38,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::AddEvent(GUIEventType Type, GUIEventCode Msg, int Data) {
-		m_ControlManager->AddEvent(new GUIEvent(this, Type, Msg, Data));
+	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
+		m_ControlManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

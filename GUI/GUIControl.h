@@ -85,13 +85,13 @@ public:
 	virtual void ChangeSkin(GUISkin *Skin) { m_Skin = Skin; }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AddEvent
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Add a new event to the queue.
-// Arguments:       Type, Message, Data.
-
-    void AddEvent(GUIEventType Type, GUIEventCode Msg, int Data);
+	/// <summary>
+	/// Add a new event to the queue.
+	/// </summary>
+	/// <param name="eventType">Type.</param>
+	/// <param name="eventCode">Message.</param>
+	/// <param name="eventData">Data.</param>
+    void AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData = 0);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

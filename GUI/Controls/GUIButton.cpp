@@ -246,7 +246,7 @@ namespace RTE {
 			SetPushed(true);
 			CaptureMouse();
 
-			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed);
 		}
 		SetFocus();
 	}
@@ -264,9 +264,9 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y)) { AddEvent(GUIEventType::Command, GUIEventCode::NoNotification, 0); }
+		if (PointInside(X, Y)) { AddEvent(GUIEventType::Command, GUIEventCode::NoNotification); }
 
-		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ namespace RTE {
 		m_Over = true;
 		m_Text->ActivateDeactivateOverflowScroll(true);
 
-		AddEvent(GUIEventType::Notification, GUIEventCode::Focused, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::Focused);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,12 +315,12 @@ namespace RTE {
 		// If the mouse goes outside of the button, un-push the button
 		if (!PointInside(X, Y)) {
 			if (m_Pushed) {
-				AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed);
 				SetPushed(false);
 			}
 		} else {
 			if (!m_Pushed) {
-				AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Pushed);
 				SetPushed(true);
 			}
 		}

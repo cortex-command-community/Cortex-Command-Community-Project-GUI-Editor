@@ -36,9 +36,6 @@
     <ClCompile Include="GUI\GUIControlManager.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUIEvent.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUIFont.cpp">
       <Filter>GUI</Filter>
     </ClCompile>

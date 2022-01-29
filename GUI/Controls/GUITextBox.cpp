@@ -140,10 +140,10 @@ namespace RTE {
 		if (Code == GUIEventCode::Clicked) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Data); }
 
 		// Changed
-		if (Code == GUIEventCode::Changed) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0); }
+		if (Code == GUIEventCode::Changed) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed); }
 
 		// Enter
-		if (Code == GUIEventCode::Enter) { AddEvent(GUIEventType::Notification, GUIEventCode::Enter, 0); }
+		if (Code == GUIEventCode::Enter) { AddEvent(GUIEventType::Notification, GUIEventCode::Enter); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

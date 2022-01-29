@@ -185,7 +185,7 @@ namespace RTE {
 			CaptureMouse();
 			SetFocus();
 
-			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed);
 		}
 	}
 
@@ -201,10 +201,10 @@ namespace RTE {
 			} else {
 				m_Check = State::Unchecked;
 			}
-			AddEvent(GUIEventType::Notification, GUIEventCode::Changed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Changed);
 		}
 
-		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

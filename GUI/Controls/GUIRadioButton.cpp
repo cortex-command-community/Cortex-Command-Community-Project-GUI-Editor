@@ -181,7 +181,7 @@ namespace RTE {
 			CaptureMouse();
 			SetFocus();
 
-			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed, 0);
+			AddEvent(GUIEventType::Notification, GUIEventCode::Pushed);
 		}
 	}
 
@@ -193,7 +193,7 @@ namespace RTE {
 		// If the mouse is over the button, add the command to the event queue
 		if (PointInside(X, Y) && Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) { SetCheck(true); }
 
-		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed, 0);
+		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -224,7 +224,7 @@ namespace RTE {
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped);
 			}
 		} else if (sourcePanelID == m_TextPanel->GetPanelID()) {
 			// Textbox
@@ -244,7 +244,7 @@ namespace RTE {
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
 
-				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Dropped);
 			}
 
 		} else if (sourcePanelID == m_ListPanel->GetPanelID()) {
@@ -269,7 +269,7 @@ namespace RTE {
 				// Restore the old selection
 				m_ListPanel->SetSelectedIndex(m_OldSelection);
 
-				AddEvent(GUIEventType::Notification, GUIEventCode::Closed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Closed);
 			} else if (Code == GUIEventCode::MouseUp && m_ListPanel->PointInsideList(mouseX, mouseY)) {
 				// Select on mouse up instead of down so we don't accidentally click stuff behind the disappearing listbox immediately after. Also only work if inside the actual list, and not its scrollbars.
 				// Hide the list panel
@@ -278,7 +278,7 @@ namespace RTE {
 				m_Manager->SetFocus(nullptr);
 				m_Button->SetPushed(false);
 
-				AddEvent(GUIEventType::Notification, GUIEventCode::Closed, 0);
+				AddEvent(GUIEventType::Notification, GUIEventCode::Closed);
 
 				// Set the text to the item in the list panel
 				GUIListPanel::Item* Item = m_ListPanel->GetSelected();
