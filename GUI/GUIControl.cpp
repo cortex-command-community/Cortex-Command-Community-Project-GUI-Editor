@@ -5,7 +5,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl::GUIControl() {
+	void GUIControl::Clear() {
 		m_Skin = nullptr;
 		m_SkinPreset = 1;
 		m_Properties.ClearProperties();
@@ -16,65 +16,64 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::Create(const std::string &Name, int X, int Y, int Width, int Height) {
+	void GUIControl::Create(const std::string &name, int posX, int posY, int width, int height) {
 		m_Properties.ClearProperties();
-		m_Properties.AddProperty("Name", Name);
+		m_Properties.AddProperty("Name", name);
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::Create(GUIProperties *Props) {
-		GUIAssert(Props, "");
+	void GUIControl::Create(GUIProperties *reference) {
+		GUIAssert(reference, "");
 
 		// Add the default variables
 		m_Properties.AddProperty("Name", "");
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
 
-		m_Properties.OverwriteProperties(Props);
+		m_Properties.OverwriteProperties(reference);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
-		m_ControlManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
+	void GUIControl::ApplyProperties(GUIProperties *properties) {
+		GUIAssert(properties, "");
+
+		m_Properties.OverwriteProperties(properties);
+
+		int X, Y;
+		int Width, Height;
+		bool Enabled;
+		bool Visible;
+		properties->GetPropertyValue("X", &X);
+		properties->GetPropertyValue("Y", &Y);
+		properties->GetPropertyValue("Width", &Width);
+		properties->GetPropertyValue("Height", &Height);
+		properties->GetPropertyValue("Enabled", &Enabled);
+		properties->GetPropertyValue("Visible", &Visible);
+
+		// Adjust position from parent
+		GUIPanel *panel = GetPanel();
+		if (panel && panel->GetParentPanel()) {
+			int px;
+			int py;
+			int pw;
+			int ph;
+			panel->GetParentPanel()->GetRect(&px, &py, &pw, &ph);
+			X += px;
+			Y += py;
+		}
+		SetEnabled(Enabled);
+
+		Move(X, Y);
+		Resize(Width, Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIControl::GetName() {
-		std::string Name;
-		m_Properties.GetPropertyValue("Name", &Name);
-
-		return Name;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	std::string GUIControl::GetToolTip() {
-		std::string tip;
-		m_Properties.GetPropertyValue("ToolTip", &tip);
-
-		return tip;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::AddChild(GUIControl *Control) {
-		GUIAssert(Control, "");
-
-		// Remove the control from any previous parent
-		if (Control->GetParent()) { Control->GetParent()->GUIControl::RemoveChild(Control->GetName()); }
-
-		Control->m_ControlParent = this;
-		m_ControlChildren.push_back(Control);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool GUIControl::Save(GUIWriter *W) {
+	bool GUIControl::Save(GUIWriter *writer) {
 		std::string OutString = "";
 		std::string Name;
 
@@ -110,19 +109,49 @@ namespace RTE {
 		OutString.append(m_Properties.ToString());
 
 		// Write to the writer class
-		*W << OutString;
+		*writer << OutString;
 
 		return true;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::GetControlRect(int *posX, int *posY, int *width, int *height) {
-		// Zero the values for controls that don't override this
-		if (posX) { *posX = 0; }
-		if (posY) { *posY = 0; }
-		if (width) { *width = 0; }
-		if (height) { *height = 0; }
+	bool GUIControl::GetEnabled() {
+		if (const GUIPanel *panel = GetPanel()) {
+			return panel->_GetEnabled();
+		}
+		return false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControl::SetEnabled(bool enabled) {
+		// Default method is the grab the main panel and directly set its state. Controls that use multiple panels on the same layer will need to override this function
+		if (GUIPanel *panel = GetPanel()) { panel->_SetEnabled(enabled); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIControl::GetVisible() {
+		if (const GUIPanel *panel = GetPanel()) {
+			return panel->_GetVisible();
+		}
+		return false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControl::SetVisible(bool visible) {
+		// Default method is the grab the main panel and directly set its state. Controls that use multiple panels on the same layer will need to override this function
+		if (GUIPanel *panel = GetPanel()) { panel->_SetVisible(visible); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	std::string GUIControl::GetName() const {
+		std::string name;
+		m_Properties.GetPropertyValue("Name", &name);
+		return name;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,87 +178,42 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::SetVisible(bool Visible) {
-		// Default method is the grab the main panel and directly set its state. Controls that use multiple panels on the same layer will need to override this function
-		GUIPanel *Panel = GetPanel();
-		if (Panel) { Panel->_SetVisible(Visible); }
+	std::string GUIControl::GetToolTip() const {
+		std::string tip;
+		m_Properties.GetPropertyValue("ToolTip", &tip);
+		return tip;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::GetVisible() {
-		// See SetVisible() comment
-		GUIPanel *Panel = GetPanel();
-		if (Panel) {
-			return Panel->_GetVisible();
-		}
-		return false;
+	void GUIControl::GetControlRect(int *posX, int *posY, int *width, int *height) const {
+		// Zero the values for controls that don't override this
+		if (posX) { *posX = 0; }
+		if (posY) { *posY = 0; }
+		if (width) { *width = 0; }
+		if (height) { *height = 0; }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::SetEnabled(bool Enabled) {
-		// See SetVisible() comment
-		GUIPanel *Panel = GetPanel();
-		if (Panel) { Panel->_SetEnabled(Enabled); }
+	void GUIControl::AddChild(GUIControl *control) {
+		GUIAssert(control, "");
+
+		// Remove the control from any previous parent
+		if (control->GetParent()) { control->GetParent()->GUIControl::RemoveChild(control->GetName()); }
+
+		control->m_ControlParent = this;
+		m_ControlChildren.push_back(control);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::GetEnabled() {
-		// See SetVisible() comment
-		GUIPanel *Panel = GetPanel();
-		if (Panel) { return Panel->_GetEnabled(); }
-
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::ApplyProperties(GUIProperties *Props) {
-		GUIAssert(Props, "");
-
-		m_Properties.OverwriteProperties(Props);
-
-		int X, Y;
-		int Width, Height;
-		bool Enabled;
-		bool Visible;
-		Props->GetPropertyValue("X", &X);
-		Props->GetPropertyValue("Y", &Y);
-		Props->GetPropertyValue("Width", &Width);
-		Props->GetPropertyValue("Height", &Height);
-		Props->GetPropertyValue("Enabled", &Enabled);
-		Props->GetPropertyValue("Visible", &Visible);
-
-		// Adjust position from parent
-		GUIPanel *P = GetPanel();
-		if (P && P->GetParentPanel()) {
-			int px;
-			int py;
-			int pw;
-			int ph;
-			P->GetParentPanel()->GetRect(&px, &py, &pw, &ph);
-			X += px;
-			Y += py;
-		}
-
-		SetEnabled(Enabled);
-
-		Move(X, Y);
-		Resize(Width, Height);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::RemoveChild(const std::string Name) {
+	void GUIControl::RemoveChild(const std::string_view &name) {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		std::vector<GUIControl *>::iterator it;
-
-		for (it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
-			GUIControl *C = *it;
-			if (C && C->GetName().compare(Name) == 0) {
+		for (std::vector<GUIControl *>::iterator it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
+			const GUIControl *C = *it;
+			if (C && C->GetName().compare(name) == 0) {
 				m_ControlChildren.erase(it);
 				break;
 			}
@@ -238,16 +222,18 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::RemoveChildren() {
+	void GUIControl::RemoveAllChildren() {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		std::vector<GUIControl *>::iterator it;
-
-		for (it = m_ControlChildren.begin(); it != m_ControlChildren.end(); it++) {
-			GUIControl *C = *it;
-			if (C) { m_ControlManager->RemoveControl(C->GetName(), false); }
+		for (const GUIControl *control : m_ControlChildren) {
+			if (control) { m_ControlManager->RemoveControl(control->GetName(), false); }
 		}
-
 		m_ControlChildren.clear();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
+		m_ControlManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
 	}
 }

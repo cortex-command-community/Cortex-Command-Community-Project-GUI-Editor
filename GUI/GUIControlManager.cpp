@@ -273,7 +273,7 @@ namespace RTE {
 				m_ControlList.erase(it);
 
 				// Remove all my children
-				C->RemoveChildren();
+				C->RemoveAllChildren();
 
 				// Remove me from my parent
 				if (C->GetParent() && RemoveFromParent) { C->GetParent()->RemoveChild(Name); }
