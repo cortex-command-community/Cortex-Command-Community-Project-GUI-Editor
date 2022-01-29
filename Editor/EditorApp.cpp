@@ -284,7 +284,7 @@ namespace RTEGUI {
 		}
 		m_ActiveFileName.clear();
 		m_EditorManager->ClearCurrentSelection();
-		m_EditorManager->GetWorkspaceManager()->Clear();
+		m_EditorManager->GetWorkspaceManager()->ClearAllControls();
 		m_EditorManager->CreateRootControl();
 		m_EditorManager->UpdateCollectionBoxList();
 		m_EditorManager->UpdateCollectionBoxChildrenList(dynamic_cast<GUICollectionBox *>(m_EditorManager->GetRootControl()));
