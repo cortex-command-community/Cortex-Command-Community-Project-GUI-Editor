@@ -64,6 +64,13 @@ namespace RTE {
 		void Create(GUIManager *manager);
 #pragma endregion
 
+#pragma region Destruction
+		/// <summary>
+		/// 
+		/// </summary>
+		virtual ~GUIPanel() = default;
+#pragma endregion
+
 #pragma region Property Handling
 		/// <summary>
 		/// Loads the base data from a properties page

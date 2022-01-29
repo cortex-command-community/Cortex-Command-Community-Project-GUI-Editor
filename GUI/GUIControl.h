@@ -56,6 +56,11 @@ namespace RTE {
 
 #pragma region Destruction
 		/// <summary>
+		/// 
+		/// </summary>
+		virtual ~GUIControl() = default;
+
+		/// <summary>
 		/// Called when the control has been destroyed.
 		/// </summary>
 		virtual void Destroy() {}
