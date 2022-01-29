@@ -27,7 +27,8 @@ namespace RTE {
 
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
-			const std::string_view & GetControlType() const override { return c_ControlType; }
+			const std::string_view & GetControlType() const override { return c_ControlType; } \
+			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIPanel::GetRect(posX, posY, width, height); }
 #pragma endregion
 
 #pragma region Creation
@@ -160,7 +161,7 @@ namespace RTE {
 		/// <param name="posY"></param>
 		/// <param name="width">Size.</param>
 		/// <param name="height"></param>
-		void GetControlRect(int *posX, int *posY, int *width, int *height) const;
+		virtual void GetControlRect(int *posX, int *posY, int *width, int *height) const;
 #pragma endregion
 
 #pragma region
