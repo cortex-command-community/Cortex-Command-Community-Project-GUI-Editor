@@ -12,7 +12,7 @@ class GUIScrollbar : public GUIControl, public GUIScrollPanel {
 
 public:
 
-	GUIControlTypeGetter;
+	GUIControlOverrideMethods;
 	GUIPanelOverrideMethods;
 
 
@@ -114,15 +114,6 @@ public:
 // Arguments:       New size.
 
     void Resize(int Width, int Height) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
-
-    void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIScrollPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

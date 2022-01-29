@@ -25,8 +25,9 @@ public:
 
 
 #pragma region Global Macro Definitions
-	#define GUIControlTypeGetter \
-		const std::string_view & GetControlType() const override { return c_ControlType; };
+	#define GUIControlOverrideMethods \
+		const std::string_view & GetControlType() const override { return c_ControlType; } \
+		void GetControlRect(int *posX, int *posY, int *width, int *height) override { GUIPanel::GetRect(posX, posY, width, height); }
 #pragma endregion
 
 
@@ -195,13 +196,14 @@ public:
     virtual void Resize(int Width, int Height) {}
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Virtual Method:    GetControlRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
-
-    virtual void GetControlRect(int *X, int *Y, int *Width, int *Height);
+	/// <summary>
+	/// Gets the rectangle of the control.
+	/// </summary>
+	/// <param name="posX">Position.</param>
+	/// <param name="posY"></param>
+	/// <param name="width">Size.</param>
+	/// <param name="height"></param>
+    virtual void GetControlRect(int *posX, int *posY, int *width, int *height);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

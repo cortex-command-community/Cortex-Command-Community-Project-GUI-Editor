@@ -117,12 +117,12 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::GetControlRect(int *X, int *Y, int *Width, int *Height) {
+	void GUIControl::GetControlRect(int *posX, int *posY, int *width, int *height) {
 		// Zero the values for controls that don't override this
-		if (X) { *X = 0; }
-		if (Y) { *Y = 0; }
-		if (Width) { *Width = 0; }
-		if (Height) { *Height = 0; }
+		if (posX) { *posX = 0; }
+		if (posY) { *posY = 0; }
+		if (width) { *width = 0; }
+		if (height) { *height = 0; }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

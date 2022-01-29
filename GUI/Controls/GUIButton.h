@@ -12,7 +12,7 @@ class GUIButton : public GUIControl, public GUIPanel {
 
 public:
 
-	GUIControlTypeGetter;
+	GUIControlOverrideMethods;
 	GUIPanelOverrideMethods;
 
 
@@ -140,15 +140,6 @@ public:
 // Arguments:       KeyCode, Modifier.
 
 	void OnKeyDown(int KeyCode, int Modifier) override {}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
-
-	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

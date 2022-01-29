@@ -21,7 +21,7 @@ public:
         WaitAtEnd
     };
 
-	GUIControlTypeGetter;
+	GUIControlOverrideMethods;
 	GUIPanelOverrideMethods;
 
 
@@ -123,15 +123,6 @@ public:
 // Returns:         The new height in pixels.
 
     int ResizeHeightToFit();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetControlRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the rectangle of the control.
-// Arguments:       Position, Size.
-
-	void GetControlRect(int *X, int *Y, int *Width, int *Height) override { GUIPanel::GetRect(X, Y, Width, Height); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
