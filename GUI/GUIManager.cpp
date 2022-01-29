@@ -216,7 +216,7 @@ namespace RTE {
 				return;
 			}
 			// If the panel is not enabled, don't send it key events
-			if (!m_FocusPanel->IsEnabled()) {
+			if (!m_FocusPanel->_GetEnabled()) {
 				return;
 			}
 
