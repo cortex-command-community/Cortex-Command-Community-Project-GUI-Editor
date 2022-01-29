@@ -58,7 +58,7 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		virtual ~GUIControl() = default;
+		//virtual ~GUIControl() = default;
 
 		/// <summary>
 		/// Called when the control has been destroyed.
