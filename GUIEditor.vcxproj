@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;DEBUG_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -85,7 +85,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -145,16 +145,16 @@
     <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
-    <ClCompile Include="GUI\GUIListPanel.cpp" />
     <ClCompile Include="GUI\GUIManager.cpp" />
-    <ClCompile Include="GUI\GUIPanel.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
     <ClCompile Include="GUI\GUIReader.cpp" />
-    <ClCompile Include="GUI\GUIScrollPanel.cpp" />
     <ClCompile Include="GUI\GUISkin.cpp" />
-    <ClCompile Include="GUI\GUITextPanel.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\GUIWriter.cpp" />
+    <ClCompile Include="GUI\Panels\GUIListPanel.cpp" />
+    <ClCompile Include="GUI\Panels\GUIPanel.cpp" />
+    <ClCompile Include="GUI\Panels\GUIScrollPanel.cpp" />
+    <ClCompile Include="GUI\Panels\GUITextPanel.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="System\Wrappers\AllegroScreen.cpp" />
@@ -193,16 +193,16 @@
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
-    <ClInclude Include="GUI\GUIListPanel.h" />
     <ClInclude Include="GUI\GUIManager.h" />
-    <ClInclude Include="GUI\GUIPanel.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
     <ClInclude Include="GUI\GUIReader.h" />
-    <ClInclude Include="GUI\GUIScrollPanel.h" />
     <ClInclude Include="GUI\GUISkin.h" />
-    <ClInclude Include="GUI\GUITextPanel.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\GUIWriter.h" />
+    <ClInclude Include="GUI\Panels\GUIListPanel.h" />
+    <ClInclude Include="GUI\Panels\GUIPanel.h" />
+    <ClInclude Include="GUI\Panels\GUIScrollPanel.h" />
+    <ClInclude Include="GUI\Panels\GUITextPanel.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="System\Wrappers\AllegroInput.h" />
     <ClInclude Include="System\Wrappers\AllegroScreen.h" />

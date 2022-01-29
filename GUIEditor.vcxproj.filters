@@ -24,6 +24,9 @@
     <Filter Include="System\Wrappers">
       <UniqueIdentifier>{1b25b727-3fa0-45de-83e8-a280cc37a265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI\Panels">
+      <UniqueIdentifier>{eb988d77-a72a-4355-84e7-3288f01f9637}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -42,25 +45,13 @@
     <ClCompile Include="GUI\GUIInput.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUIListPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUIManager.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIPanel.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GUIProperties.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUIScrollPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUISkin.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUITextPanel.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GUIUtil.cpp">
@@ -141,6 +132,18 @@
     <ClCompile Include="System\Wrappers\AllegroScreen.cpp">
       <Filter>System\Wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Panels\GUIListPanel.cpp">
+      <Filter>GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panels\GUIPanel.cpp">
+      <Filter>GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panels\GUIScrollPanel.cpp">
+      <Filter>GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panels\GUITextPanel.cpp">
+      <Filter>GUI\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -167,25 +170,13 @@
     <ClInclude Include="GUI\GUIInput.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\GUIListPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\GUIManager.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIPanel.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIProperties.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\GUIScrollPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\GUISkin.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUITextPanel.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIUtil.h">
@@ -277,6 +268,18 @@
     </ClInclude>
     <ClInclude Include="GUI\GUIConstants.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Panels\GUIListPanel.h">
+      <Filter>GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Panels\GUIPanel.h">
+      <Filter>GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Panels\GUIScrollPanel.h">
+      <Filter>GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Panels\GUITextPanel.h">
+      <Filter>GUI\Panels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
