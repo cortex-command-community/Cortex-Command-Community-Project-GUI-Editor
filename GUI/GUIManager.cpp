@@ -5,32 +5,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIManager::GUIManager(GUIInput *input) {
-		m_Input = input;
-		m_MouseEnabled = true;
-
-		Clear();
-
-		// Maximum time allowed between two clicks for a double click
-		// In milliseconds
-		//m_DoubleClickTime = GetDoubleClickTime(); // Use windows' system value
-		m_DoubleClickTime = 500;
-		//m_DoubleClickSize = GetSystemMetrics(SM_CXDOUBLECLK)/2; // Use windows' system value
-		m_DoubleClickSize = 2;
-		m_DoubleClickButtons = GUIPanel::MOUSE_NONE;
-
-		m_pTimer = new Timer();
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIManager::~GUIManager() {
-		delete m_pTimer;
-		m_pTimer = nullptr;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIManager::Clear() {
 		m_PanelList.clear();
 		m_CapturedPanel = nullptr;
@@ -51,6 +25,70 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIManager::Create(GUIInput *input) {
+		m_Input = input;
+
+		// Maximum time allowed between two clicks for a double click
+		// In milliseconds
+		//m_DoubleClickTime = GetDoubleClickTime(); // Use windows' system value
+		m_DoubleClickTime = 500;
+		//m_DoubleClickSize = GetSystemMetrics(SM_CXDOUBLECLK)/2; // Use windows' system value
+		m_DoubleClickSize = 2;
+		m_DoubleClickButtons = GUIPanel::MOUSE_NONE;
+
+		m_Timer = new Timer();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIManager::Destroy() {
+		delete m_Timer;
+		m_Timer = nullptr;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIManager::SetFocus(GUIPanel *Pan) {
+		// Send the LoseFocus event to the old panel (if there is one)
+		if (m_FocusPanel) { m_FocusPanel->OnLoseFocus(); }
+
+		m_FocusPanel = Pan;
+
+		// Send the GainFocus event to the new panel
+		if (m_FocusPanel) { m_FocusPanel->OnGainFocus(); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIManager::CaptureMouse(GUIPanel *Panel) {
+		GUIAssert(Panel, "");
+
+		// Release any old capture
+		ReleaseMouse();
+
+		// Setup the new capture
+		m_CapturedPanel = Panel;
+		m_CapturedPanel->SetCaptureState(true);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIManager::ReleaseMouse() {
+		if (m_CapturedPanel) { m_CapturedPanel->SetCaptureState(false); }
+		m_CapturedPanel = nullptr;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay) {
+		GUIAssert(Pan, "");
+		m_HoverTrack = Enabled;
+		m_HoverPanel = Pan;
+		if (m_HoverTrack) { m_HoverTime = m_Timer->GetElapsedRealTimeMS() + ((float)Delay / 1000.0F); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void GUIManager::AddPanel(GUIPanel *panel) {
 		if (panel) {
 			int Z = 0;
@@ -60,13 +98,54 @@ namespace RTE {
 				const GUIPanel *p = m_PanelList.at(m_PanelList.size() - 1);
 				Z = p->GetZPos() + 1;
 			}
-
 			// Setup the panel
 			panel->Setup(this, Z);
 
 			// Add the panel to the list
 			m_PanelList.push_back(panel);
 		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIManager::MouseInRect(const GUIRect *Rect, int X, int Y) const {
+		if (!Rect) {
+			return false;
+		}
+		if (X >= Rect->left && X <= Rect->right && Y >= Rect->top && Y <= Rect->bottom) {
+			return true;
+		}
+		return false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	GUIPanel * GUIManager::FindTopPanel(int X, int Y) {
+		std::vector<GUIPanel *>::reverse_iterator it;
+
+		for (it = m_PanelList.rbegin(); it != m_PanelList.rend(); it++) {
+			if (GUIPanel *P = *it) {
+				if (GUIPanel *CurPanel = P->TopPanelUnderPoint(X, Y)) {
+					return CurPanel;
+				}
+			}
+		}
+		// No panel found
+		return nullptr;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	GUIPanel * GUIManager::FindBottomPanel(int X, int Y) {
+		for (std::vector<GUIPanel *>::iterator it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
+			if (GUIPanel *P = *it) {
+				if (GUIPanel *CurPanel = P->BottomPanelUnderPoint(X, Y)) {
+					return CurPanel;
+				}
+			}
+		}
+		// No panel found
+		return nullptr;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +169,7 @@ namespace RTE {
 		int Modifier = GUIInput::KeyModifiers::ModNone;
 		int Mod = GUIPanel::MouseModifiers::MODI_NONE;
 
-		float CurTime = m_pTimer->GetElapsedRealTimeMS();
+		float CurTime = m_Timer->GetElapsedRealTimeMS();
 
 		// Build the modifier state
 		Modifier = m_Input->GetKeyModifier();
@@ -120,20 +199,14 @@ namespace RTE {
 
 			// Build the states
 			for (i = 0; i < 3; i++) {
-				if (MouseButtons[i] == GUIInput::InputEvents::Released)
-					Released |= 1 << i;
-				if (MouseButtons[i] == GUIInput::InputEvents::Pushed)
-					Pushed |= 1 << i;
-				if (MouseButtons[i] == GUIInput::InputEvents::Repeat)
-					Repeated |= 1 << i;
-				if (MouseStates[i] == GUIInput::InputStates::Down)
-					Buttons |= 1 << i;
+				if (MouseButtons[i] == GUIInput::InputEvents::Released) { Released |= 1 << i; }
+				if (MouseButtons[i] == GUIInput::InputEvents::Pushed) { Pushed |= 1 << i; }
+				if (MouseButtons[i] == GUIInput::InputEvents::Repeat) { Repeated |= 1 << i; }
+				if (MouseStates[i] == GUIInput::InputStates::Down) { Buttons |= 1 << i; }
 			}
 
 			// Mouse Up
-			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && CurPanel) {
-				CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod);
-			}
+			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && CurPanel) { CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod); }
 
 			// Double click (on the mouse up)
 			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIPanel::MouseButtons::MOUSE_NONE) {
@@ -160,18 +233,14 @@ namespace RTE {
 				}
 
 				// Setup the double click rectangle
-				if (m_DoubleClickButtons == GUIPanel::MouseButtons::MOUSE_NONE) {
-					SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize);
-				}
+				if (m_DoubleClickButtons == GUIPanel::MouseButtons::MOUSE_NONE) { SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize); }
 
 				// OnMouseDown event
 				if (CurPanel) { CurPanel->OnMouseDown(MouseX, MouseY, Pushed, Mod); }
 			}
 
 			// Mouse move
-			if ((DeltaX != 0 || DeltaY != 0) && CurPanel) {
-				CurPanel->OnMouseMove(MouseX, MouseY, Buttons, Mod);
-			}
+			if ((DeltaX != 0 || DeltaY != 0) && CurPanel) { CurPanel->OnMouseMove(MouseX, MouseY, Buttons, Mod); }
 
 			// Mouse Hover
 			if (m_HoverTrack && m_HoverTime < CurTime) {
@@ -183,7 +252,6 @@ namespace RTE {
 					m_HoverPanel->OnMouseHover(MouseX, MouseY, Buttons, Mod);
 				}
 			}
-
 
 			// Mouse enter & leave
 			bool Enter = false;
@@ -219,8 +287,6 @@ namespace RTE {
 			if (!m_FocusPanel->_GetEnabled()) {
 				return;
 			}
-
-
 			for (i = 1; i < 256; i++) {
 				switch (KeyboardBuffer[i]) {
 					// KeyDown & KeyPress
@@ -257,95 +323,5 @@ namespace RTE {
 			// Draw the panel
 			if (p->_GetVisible()) { p->Draw(Screen); }
 		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIManager::CaptureMouse(GUIPanel *Panel) {
-		GUIAssert(Panel, "");
-
-		// Release any old capture
-		ReleaseMouse();
-
-		// Setup the new capture
-		m_CapturedPanel = Panel;
-		m_CapturedPanel->SetCaptureState(true);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIManager::ReleaseMouse() {
-		if (m_CapturedPanel) { m_CapturedPanel->SetCaptureState(false); }
-
-		m_CapturedPanel = nullptr;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIPanel * GUIManager::FindBottomPanel(int X, int Y) {
-		std::vector<GUIPanel *>::iterator it;
-
-		for (it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
-			GUIPanel *P = *it;
-			if (P) {
-				GUIPanel *CurPanel = P->BottomPanelUnderPoint(X, Y);
-				if (CurPanel) {
-					return CurPanel;
-				}
-			}
-		}
-		// No panel found
-		return nullptr;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIPanel * GUIManager::FindTopPanel(int X, int Y) {
-		std::vector<GUIPanel *>::reverse_iterator it;
-
-		for (it = m_PanelList.rbegin(); it != m_PanelList.rend(); it++) {
-			GUIPanel *P = *it;
-			if (P) {
-				GUIPanel *CurPanel = P->TopPanelUnderPoint(X, Y);
-				if (CurPanel) {
-					return CurPanel;
-				}
-			}
-		}
-		// No panel found
-		return nullptr;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool GUIManager::MouseInRect(const GUIRect *Rect, int X, int Y) {
-		if (!Rect) {
-			return false;
-		}
-		if (X >= Rect->left && X <= Rect->right && Y >= Rect->top && Y <= Rect->bottom) {
-			return true;
-		}
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay) {
-		GUIAssert(Pan, "");
-		m_HoverTrack = Enabled;
-		m_HoverPanel = Pan;
-		if (m_HoverTrack) { m_HoverTime = m_pTimer->GetElapsedRealTimeMS() + ((float)Delay / 1000.0F); }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIManager::SetFocus(GUIPanel *Pan) {
-		// Send the LoseFocus event to the old panel (if there is one)
-		if (m_FocusPanel) { m_FocusPanel->OnLoseFocus(); }
-
-		m_FocusPanel = Pan;
-
-		// Send the GainFocus event to the new panel
-		if (m_FocusPanel) { m_FocusPanel->OnGainFocus(); }
 	}
 }

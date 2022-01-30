@@ -3,188 +3,170 @@
 
 namespace RTE {
 
-class Timer;
+	class Timer;
 
-/// <summary>
-/// The main manager that handles all the panels and inputs.
-/// </summary>
-class GUIManager {
+	/// <summary>
+	/// The main manager that handles all the panels and inputs.
+	/// </summary>
+	class GUIManager {
 
-public:
+	public:
 
+#pragma region Creation
+		/// <summary>
+		/// Constructor method used to instantiate a GUIManager object in system memory.
+		/// </summary>
+		/// <param name="input">Input interface.</param>
+		explicit GUIManager(GUIInput *input) { Clear(); Create(input); }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIManager
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIManager object in system
-//                  memory.
-// Arguments:       Input Interface
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input">Input interface.</param>
+		void Create(GUIInput *input);
+#pragma endregion
 
-    explicit GUIManager(GUIInput *input);
+#pragma region Destruction
+		/// <summary>
+		/// Destructor method used to clean up a GUIManager object.
+		/// </summary>
+		~GUIManager() { Destroy(); }
 
+		/// <summary>
+		/// Frees all the allocated resources.
+		/// </summary>
+		void Destroy();
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Destructor:      GUIManager
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destructor method used to clean up a GUIManager object.
-// Arguments:       None.
+		/// <summary>
+		/// 
+		/// </summary>
+		void Reset() { Clear(); }
+#pragma endregion
 
-    ~GUIManager();
+#pragma region Getters and Setters
+		/// <summary>
+		/// Gets the input controller object.
+		/// </summary>
+		/// <returns></returns>
+		GUIInput * GetInputController() { return m_Input; }
 
+		/// <summary>
+		/// Gets a unique ID for a panel.
+		/// </summary>
+		/// <returns></returns>
+		int GetPanelID() { return m_UniqueIDCount++; }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Clear
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Clears the manager.
-// Arguments:       None.
+		/// <summary>
+		/// Give focus to a panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		void SetFocus(GUIPanel *panel);
 
-    void Clear();
+		/// <summary>
+		/// Enables and disables the mouse completely for this.
+		/// </summary>
+		/// <param name="enable">Enable.</param>
+		void EnableMouse(bool enable = true) { m_MouseEnabled = enable; }
+#pragma endregion
 
+#pragma region Concrete Methods
+		/// <summary>
+		/// Sets up capturing a mouse for a panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		void CaptureMouse(GUIPanel *panel);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          AddPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Adds a panel to the list.
-// Arguments:       Pointer to a panel.
+		/// <summary>
+		/// Releases a mouse capture.
+		/// </summary>
+		void ReleaseMouse();
 
-    void AddPanel(GUIPanel *panel);
+		/// <summary>
+		/// Sets up the manager to enable/disable hover tracking of this panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		/// <param name="enabled">Enabled.</param>
+		/// <param name="delay">Delay (milliseconds).</param>
+		void TrackMouseHover(GUIPanel *panel, bool enabled, int delay);
 
+		/// <summary>
+		/// Adds a panel to the list.
+		/// </summary>
+		/// <param name="panel">Pointer to a panel.</param>
+		void AddPanel(GUIPanel *panel);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Update
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Updates the GUI.
-// Arguments:       Whether keyboard events should be ignored or not. Used to avoid conflicts when custom keyboard handling for GUI elements is preset.
+		/// <summary>
+		/// Updates the GUI.
+		/// </summary>
+		/// <param name="ignoreKeyboardEvents">Whether keyboard events should be ignored or not. Used to avoid conflicts when custom keyboard handling for GUI elements is preset.</param>
+		void Update(bool ignoreKeyboardEvents = false);
 
-    void Update(bool ignoreKeyboardEvents = false);
+		/// <summary>
+		/// Draw all the panels
+		/// </summary>
+		/// <param name="targetScreen">Screen.</param>
+		void Draw(GUIScreen *targetScreen);
+#pragma endregion
 
+	private:
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Draw
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Draw all the panels
-// Arguments:       Screen.
+		std::vector<GUIPanel *> m_PanelList;
+		GUIPanel *m_CapturedPanel;
+		GUIPanel *m_FocusPanel;
+		GUIPanel *m_MouseOverPanel;
 
-    void Draw(GUIScreen *Screen);
+		GUIInput *m_Input;
+		bool m_MouseEnabled;
+		int m_OldMouseX;
+		int m_OldMouseY;
 
+		int m_DoubleClickTime;
+		int m_DoubleClickSize;
+		int m_DoubleClickButtons;
+		float m_LastMouseDown[3];
+		GUIRect m_DoubleClickRect;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          EnableMouse
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Enables and disables the mouse completely for this.
-// Arguments:       Enable?
+		bool m_HoverTrack;
+		GUIPanel *m_HoverPanel;
+		float m_HoverTime;
 
-    void EnableMouse(bool enable = true) { m_MouseEnabled = enable; }
+		int m_UniqueIDCount;
 
+		Timer *m_Timer;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CaptureMouse
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets up capturing a mouse for a panel.
-// Arguments:       Panel.
+		/// <summary>
+		/// Checks if the mouse point is inside a rectangle.
+		/// </summary>
+		/// <param name="rect">Rectangle</param>
+		/// <param name="mousePosX">Mouse position.</param>
+		/// <param name="mousePosY"></param>
+		/// <returns></returns>
+		bool MouseInRect(const GUIRect *rect, int mousePosX, int mousePosY) const;
 
-    void CaptureMouse(GUIPanel *Panel);
+		/// <summary>
+		/// Goes through the panel list and selects the topmost ('last', render wise) panel on a specific point.
+		/// </summary>
+		/// <param name="pointX">Mouse Position.</param>
+		/// <param name="pointY"></param>
+		/// <returns></returns>
+		GUIPanel * FindTopPanel(int pointX, int pointY);
 
+		/// <summary>
+		/// Goes through the panel list and selects the bottommost ('first', render wise) panel on a specific point.
+		/// </summary>
+		/// <param name="pointX">Mouse Position.</param>
+		/// <param name="pointY"></param>
+		/// <returns></returns>
+		GUIPanel * FindBottomPanel(int pointX, int pointY);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ReleaseMouse
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Releases a mouse capture.
-// Arguments:       None.
+		/// <summary>
+		/// Clears all the member variables of this GUIManager.
+		/// </summary>
+		void Clear();
 
-    void ReleaseMouse();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetPanelID
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets a unique ID for a panel.
-// Arguments:       None.
-
-	int GetPanelID() { return m_UniqueIDCount++; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetInputController
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the input controller object
-// Arguments:       None.
-
-    GUIInput * GetInputController() { return m_Input; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          TrackMouseHover
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets up the manager to enable/disable hover tracking of this panel
-// Arguments:       Panel, Enabled, Delay (milliseconds)
-
-    void TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetFocus
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Give focus to a panel.
-// Arguments:       Panel.
-
-    void SetFocus(GUIPanel *Pan);
-
-
-private:
-
-	std::vector<GUIPanel *> m_PanelList;
-	GUIPanel *m_CapturedPanel;
-	GUIPanel *m_FocusPanel;
-	GUIPanel *m_MouseOverPanel;
-
-	GUIInput *m_Input;
-	bool m_MouseEnabled;
-	int m_OldMouseX;
-	int m_OldMouseY;
-
-	int m_DoubleClickTime;
-	int m_DoubleClickSize;
-	int m_DoubleClickButtons;
-	float m_LastMouseDown[3];
-	GUIRect m_DoubleClickRect;
-
-	bool m_HoverTrack;
-	GUIPanel *m_HoverPanel;
-	float m_HoverTime;
-
-	int m_UniqueIDCount;
-
-	Timer *m_pTimer;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          FindBottomPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Goes through the panel list and selects the bottommost
-//                  ('first', render wise) panel on a specific point.
-// Arguments:       Mouse Position.
-
-    GUIPanel *FindBottomPanel(int X, int Y);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          FindTopPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Goes through the panel list and selects the topmost ('last', render
-//                  wise) panel on a specific point.
-// Arguments:       Mouse Position.
-
-    GUIPanel *FindTopPanel(int X, int Y);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          MouseInRect
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Checks if the mouse point is inside a rectangle.
-// Arguments:       Rectangle, Mouse position.
-
-    bool MouseInRect(const GUIRect *Rect, int X, int Y);
-
-};
+		// Disallow the use of some implicit methods.
+		GUIManager(const GUIManager &reference) = delete;
+		GUIManager & operator=(const GUIManager &rhs) = delete;
+	};
 };
 #endif

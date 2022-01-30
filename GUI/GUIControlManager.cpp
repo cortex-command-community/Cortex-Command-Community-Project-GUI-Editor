@@ -332,7 +332,7 @@ namespace RTE {
 			delete C;
 		}
 		m_ControlList.clear();
-		m_GUIManager->Clear();
+		m_GUIManager->Reset();
 
 		for (std::vector<GUIEvent *>::iterator ite = m_EventQueue.begin(); ite != m_EventQueue.end(); ite++) {
 			GUIEvent *E = *ite;
