@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollbar::GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIScrollPanel(Manager) {
+	GUIScrollbar::GUIScrollbar(GUIControlManager *ControlManager) : GUIControl(), GUIScrollPanel(ControlManager) {
 		m_ControlManager = ControlManager;
 	}
 

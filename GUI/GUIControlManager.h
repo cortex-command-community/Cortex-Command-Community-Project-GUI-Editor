@@ -3,6 +3,7 @@
 
 namespace RTE {
 
+	class Timer;
 	class GUIWriter;
 
 	/// <summary>
@@ -75,10 +76,10 @@ namespace RTE {
 
 #pragma region Getters and Setters
 		/// <summary>
-		/// Gets the control manager.
+		/// Gets the input controller object.
 		/// </summary>
-		/// <returns>The manager, ownership is NOT transferred!</returns>
-		GUIManager * GetManager() { return m_GUIManager; }
+		/// <returns></returns>
+		GUIInput * GetInputController() { return m_Input; }
 
 		/// <summary>
 		/// Gets the GUIScreen that this GUIControlManager is drawing itself to.
@@ -109,7 +110,13 @@ namespace RTE {
 		/// Enables and disables the mouse completely for this.
 		/// </summary>
 		/// <param name="enable">Enable.</param>
-		void EnableMouse(bool enable = true) const { m_GUIManager->EnableMouse(enable); }
+		void EnableMouse(bool enable = true) { m_MouseEnabled = enable; }
+
+		/// <summary>
+		/// Give focus to a panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		void SetFocus(GUIPanel *panel);
 
 		/// <summary>
 		/// Sets the absolute position of this entire GUI on the screen. This is useful if the UI's are being drawn in a different area of the screen than the top left corner.
@@ -118,6 +125,12 @@ namespace RTE {
 		/// <param name="posX">The position.</param>
 		/// <param name="posY"></param>
 		void SetPosOnScreen(int posX, int posY) const { m_Input->SetMouseOffset(-posX, -posY); }
+
+		/// <summary>
+		/// Gets a unique ID for a panel.
+		/// </summary>
+		/// <returns></returns>
+		int GetPanelID() { return m_UniqueIDCount++; }
 #pragma endregion
 
 #pragma region 
@@ -175,6 +188,33 @@ namespace RTE {
 		/// Clears all the controls.
 		/// </summary>
 		void ClearAllControls();
+
+		/// <summary>
+		/// Adds a panel to the list.
+		/// </summary>
+		/// <param name="panel">Pointer to a panel.</param>
+		void AddPanel(GUIPanel *panel);
+#pragma endregion
+
+#pragma region
+		/// <summary>
+		/// Sets up capturing a mouse for a panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		void CaptureMouse(GUIPanel *panel);
+
+		/// <summary>
+		/// Releases a mouse capture.
+		/// </summary>
+		void ReleaseMouse();
+
+		/// <summary>
+		/// Sets up the manager to enable/disable hover tracking of this panel.
+		/// </summary>
+		/// <param name="panel">Panel.</param>
+		/// <param name="enabled">Enabled.</param>
+		/// <param name="delay">Delay (milliseconds).</param>
+		void TrackMouseHover(GUIPanel *panel, bool enabled, int delay);
 #pragma endregion
 
 #pragma region Concrete Methods
@@ -199,13 +239,13 @@ namespace RTE {
 		/// <summary>
 		/// Draws the GUI to the back buffer.
 		/// </summary>
-		void Draw() const { m_GUIManager->Draw(m_Screen); }
+		void Draw() { Draw(m_Screen); }
 
 		/// <summary>
 		/// Draws the GUI to the back buffer.
 		/// </summary>
 		/// <param name="targetScreen">The GUIScreen to draw to, overriding the one passed in on construction.</param>
-		void Draw(GUIScreen *targetScreen) const { m_GUIManager->Draw(targetScreen); }
+		void Draw(GUIScreen *targetScreen);
 #pragma endregion
 
 	private:
@@ -213,12 +253,57 @@ namespace RTE {
 		GUIScreen *m_Screen; // Not owned.
 		GUIInput *m_Input; // Not owned.
 		GUISkin *m_Skin;
-		GUIManager *m_GUIManager;
 
 		std::vector<GUIControl *> m_ControlList;
 		std::vector<GUIEvent *> m_EventQueue;
 
 		int m_CursorType;
+
+		Timer *m_Timer;
+
+		int m_UniqueIDCount;
+		bool m_HoverTrack;
+		GUIPanel *m_HoverPanel;
+		float m_HoverTime;
+		std::vector<GUIPanel *> m_PanelList;
+		GUIPanel *m_CapturedPanel;
+		GUIPanel *m_FocusPanel;
+		GUIPanel *m_MouseOverPanel;
+
+		bool m_MouseEnabled;
+		int m_OldMouseX;
+		int m_OldMouseY;
+
+		int m_DoubleClickTime;
+		int m_DoubleClickSize;
+		int m_DoubleClickButtons;
+		float m_LastMouseDown[3];
+		GUIRect m_DoubleClickRect;
+
+		/// <summary>
+		/// Checks if the mouse point is inside a rectangle.
+		/// </summary>
+		/// <param name="rect">Rectangle</param>
+		/// <param name="mousePosX">Mouse position.</param>
+		/// <param name="mousePosY"></param>
+		/// <returns></returns>
+		bool MouseInRect(const GUIRect *rect, int mousePosX, int mousePosY) const;
+
+		/// <summary>
+		/// Goes through the panel list and selects the topmost ('last', render wise) panel on a specific point.
+		/// </summary>
+		/// <param name="pointX">Mouse Position.</param>
+		/// <param name="pointY"></param>
+		/// <returns></returns>
+		GUIPanel * FindTopPanel(int pointX, int pointY);
+
+		/// <summary>
+		/// Goes through the panel list and selects the bottommost ('first', render wise) panel on a specific point.
+		/// </summary>
+		/// <param name="pointX">Mouse Position.</param>
+		/// <param name="pointY"></param>
+		/// <returns></returns>
+		GUIPanel * FindBottomPanel(int pointX, int pointY);
 
 		/// <summary>
 		/// Add a new event to the queue.

@@ -9,7 +9,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIButton::GUIButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUIButton::GUIButton(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_DrawBitmap = nullptr;
 		m_ControlManager = ControlManager;
 		m_Pushed = false;
@@ -46,7 +46,7 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		if (!m_Text) {
-			m_Text = std::make_unique<GUILabel>(m_Manager, m_ControlManager);
+			m_Text = std::make_unique<GUILabel>(m_ControlManager);
 			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
 			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);
@@ -79,7 +79,7 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		if (!m_Text) {
-			m_Text = std::make_unique<GUILabel>(m_Manager, m_ControlManager);
+			m_Text = std::make_unique<GUILabel>(m_ControlManager);
 			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
 			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);

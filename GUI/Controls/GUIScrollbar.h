@@ -21,9 +21,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUIScrollbar object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUIScrollbar(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUIScrollbar(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

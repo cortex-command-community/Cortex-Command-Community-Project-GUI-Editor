@@ -5,7 +5,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollPanel::GUIScrollPanel(GUIManager *Manager) : GUIPanel(Manager) {
+	GUIScrollPanel::GUIScrollPanel(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
 		m_Skin = nullptr;
 		m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
 		m_ButtonSize = 17;
@@ -21,7 +21,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollPanel::GUIScrollPanel() : GUIPanel() {
+	GUIScrollPanel::GUIScrollPanel() : GUIPanel(m_Manager) {
 		m_Skin = nullptr;
 		m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
 		m_ButtonSize = 17;

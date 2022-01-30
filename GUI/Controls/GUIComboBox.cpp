@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIComboBox::GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUIComboBox::GUIComboBox(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_ControlManager = ControlManager;
 		m_DrawBitmap = nullptr;
 		m_OldSelection = 0;
@@ -16,13 +16,13 @@ namespace RTE {
 		m_DropDownStyle = DropDownStyles::DropDownList;
 
 		// Create the listpanel
-		m_ListPanel = new GUIListPanel(Manager);
+		m_ListPanel = new GUIListPanel(ControlManager);
 
 		// Create the textpanel
-		m_TextPanel = new GUITextPanel(Manager);
+		m_TextPanel = new GUITextPanel(ControlManager);
 
 		// Create the button
-		m_Button = new GUIComboBoxButton(Manager);
+		m_Button = new GUIComboBoxButton(ControlManager);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,7 +463,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIComboBoxButton::GUIComboBoxButton(GUIManager *Manager) : GUIPanel(Manager) {
+	GUIComboBoxButton::GUIComboBoxButton(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
 		m_DrawBitmap = nullptr;
 		m_Pushed = false;
 	}

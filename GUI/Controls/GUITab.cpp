@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITab::GUITab(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUITab::GUITab(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_Image = nullptr;
 		m_ControlManager = ControlManager;
 		m_Selected = false;

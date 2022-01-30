@@ -30,7 +30,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPanel::Create(GUIManager *manager) {
+	void GUIPanel::Create(GUIControlManager *manager) {
 		m_Manager = manager;
 		m_Font = nullptr;
 		m_FontColor = 0;
@@ -192,7 +192,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPanel::Setup(GUIManager *manager, int ZPos) {
+	void GUIPanel::Setup(GUIControlManager *manager, int ZPos) {
 		m_Manager = manager;
 		m_ZPos = ZPos;
 

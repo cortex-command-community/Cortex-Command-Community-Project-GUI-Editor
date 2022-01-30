@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIRadioButton::GUIRadioButton(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUIRadioButton::GUIRadioButton(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_Image = nullptr;
 		m_ControlManager = ControlManager;
 		m_Checked = false;

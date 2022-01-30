@@ -19,9 +19,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUIProgressBar object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUIProgressBar(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUIProgressBar(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListBox::GUIListBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIListPanel(Manager) {
+	GUIListBox::GUIListBox(GUIControlManager *ControlManager) : GUIControl(), GUIListPanel(ControlManager) {
 		m_ControlManager = ControlManager;
 	}
 

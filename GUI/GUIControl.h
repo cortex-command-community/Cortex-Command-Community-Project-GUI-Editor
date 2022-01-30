@@ -121,7 +121,7 @@ namespace RTE {
 		/// Returns the panel of the control.
 		/// </summary>
 		/// <returns>0 if the control does not have a panel, otherwise the topmost panel.</returns>
-		virtual GUIPanel * GetPanel() { return m_Panel.get(); }
+		virtual GUIPanel * GetPanel() { return nullptr; }
 
 		/// <summary>
 		/// Gets the parent of this control.

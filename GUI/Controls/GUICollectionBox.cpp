@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUICollectionBox::GUICollectionBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUICollectionBox::GUICollectionBox(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_Background = nullptr;
 		m_ControlManager = ControlManager;
 		m_DrawBackground = true;

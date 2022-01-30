@@ -31,9 +31,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUISlider object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUISlider(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUISlider(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

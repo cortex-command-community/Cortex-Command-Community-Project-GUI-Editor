@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextBox::GUITextBox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(Manager) {
+	GUITextBox::GUITextBox(GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(ControlManager) {
 		m_ControlManager = ControlManager;
 		m_DrawBitmap = nullptr;
 		m_HAlignment = GUIFont::HAlignment::Left;

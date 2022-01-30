@@ -145,7 +145,6 @@
     <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
-    <ClCompile Include="GUI\GUIManager.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
     <ClCompile Include="GUI\GUIReader.cpp" />
     <ClCompile Include="GUI\GUISkin.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
-    <ClInclude Include="GUI\GUIManager.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
     <ClInclude Include="GUI\GUIReader.h" />
     <ClInclude Include="GUI\GUISkin.h" />

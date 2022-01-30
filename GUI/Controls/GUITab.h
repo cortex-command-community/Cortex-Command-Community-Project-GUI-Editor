@@ -19,9 +19,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUITab object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUITab(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUITab(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

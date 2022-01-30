@@ -18,58 +18,58 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlFactory::CreateControl(GUIManager *Manager, GUIControlManager *ControlManager, const std::string &ControlName) {
+	GUIControl * GUIControlFactory::CreateControl(GUIControlManager *ControlManager, const std::string &ControlName) {
 		// Button
 		if (ControlName == "BUTTON") {
-			return new GUIButton(Manager, ControlManager);
+			return new GUIButton(ControlManager);
 		}
 		// Listbox
 		if (ControlName == "LISTBOX") {
-			return new GUIListBox(Manager, ControlManager);
+			return new GUIListBox(ControlManager);
 		}
 		// Checkbox
 		if (ControlName == "CHECKBOX") {
-			return new GUICheckbox(Manager, ControlManager);
+			return new GUICheckbox(ControlManager);
 		}
 		// RadioButton
 		if (ControlName == "RADIOBUTTON") {
-			return new GUIRadioButton(Manager, ControlManager);
+			return new GUIRadioButton(ControlManager);
 		}
 		// Tab
 		if (ControlName == "TAB") {
-			return new GUITab(Manager, ControlManager);
+			return new GUITab(ControlManager);
 		}
 		// CollectionBox
 		if (ControlName == "COLLECTIONBOX") {
-			return new GUICollectionBox(Manager, ControlManager);
+			return new GUICollectionBox(ControlManager);
 		}
 		// ProgressBar
 		if (ControlName == "PROGRESSBAR") {
-			return new GUIProgressBar(Manager, ControlManager);
+			return new GUIProgressBar(ControlManager);
 		}
 		// Slider
 		if (ControlName == "SLIDER") {
-			return new GUISlider(Manager, ControlManager);
+			return new GUISlider(ControlManager);
 		}
 		// TextBox
 		if (ControlName == "TEXTBOX") {
-			return new GUITextBox(Manager, ControlManager);
+			return new GUITextBox(ControlManager);
 		}
 		// Label
 		if (ControlName == "LABEL") {
-			return new GUILabel(Manager, ControlManager);
+			return new GUILabel(ControlManager);
 		}
 		// Scrollbar
 		if (ControlName == "SCROLLBAR") {
-			return new GUIScrollbar(Manager, ControlManager);
+			return new GUIScrollbar(ControlManager);
 		}
 		// ComboBox
 		if (ControlName == "COMBOBOX") {
-			return new GUIComboBox(Manager, ControlManager);
+			return new GUIComboBox(ControlManager);
 		}
 		// PropertyPage
 		if (ControlName == "PROPERTYPAGE") {
-			return new GUIPropertyPage(Manager, ControlManager);
+			return new GUIPropertyPage(ControlManager);
 		}
 		// Not Found
 		return nullptr;

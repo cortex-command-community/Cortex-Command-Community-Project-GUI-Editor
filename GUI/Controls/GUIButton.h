@@ -21,9 +21,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUIButton object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUIButton(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUIButton(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

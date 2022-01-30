@@ -5,7 +5,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextPanel::GUITextPanel(GUIManager *Manager) : GUIPanel(Manager) {
+	GUITextPanel::GUITextPanel(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
 		m_Font = nullptr;
 		m_CursorX = m_CursorY = 0;
 		m_CursorIndex = 0;
@@ -30,7 +30,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextPanel::GUITextPanel() : GUIPanel() {
+	GUITextPanel::GUITextPanel() : GUIPanel(m_Manager) {
 		m_Font = nullptr;
 		m_Text = "";
 		m_CursorX = m_CursorY = 0;

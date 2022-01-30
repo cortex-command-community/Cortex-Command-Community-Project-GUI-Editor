@@ -26,7 +26,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    explicit GUITextPanel(GUIManager *Manager);
+    explicit GUITextPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

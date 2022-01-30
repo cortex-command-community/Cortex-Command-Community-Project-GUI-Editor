@@ -5,7 +5,7 @@
 
 namespace RTE {
 
-	class GUIManager;
+	class GUIControlManager;
 
 	/// <summary>
 	/// A rectangle 'window' in the GUI that receives mouse and keyboard events.
@@ -55,13 +55,13 @@ namespace RTE {
 		/// Constructor method used to instantiate a GUIPanel object in system memory.
 		/// </summary>
 		/// <param name="manager">Manager.</param>
-		explicit GUIPanel(GUIManager *manager) { Clear(); Create(manager); }
+		explicit GUIPanel(GUIControlManager *manager) { Clear(); Create(manager); }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="manager">Manager.</param>
-		void Create(GUIManager *manager);
+		void Create(GUIControlManager *manager);
 #pragma endregion
 
 #pragma region Destruction
@@ -263,7 +263,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="manager">Pointer to the manager to use.</param>
 		/// <param name="zPos">ZPosition.</param>
-		void Setup(GUIManager *manager, int zPos);
+		void Setup(GUIControlManager *manager, int zPos);
 
 		/// <summary>
 		/// Recursively goes up the tree from to check the first panel under a point.
@@ -463,7 +463,7 @@ namespace RTE {
 		bool m_Enabled;
 		bool m_GotFocus;
 		bool m_Captured;
-		GUIManager *m_Manager;
+		GUIControlManager *m_Manager;
 		GUIPanel *m_Parent;
 
 		GUIFont *m_Font;

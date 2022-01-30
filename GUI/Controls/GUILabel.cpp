@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUILabel::GUILabel(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUILabel::GUILabel(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_ControlManager = ControlManager;
 		m_Font = nullptr;
 		m_FontColor = 0;

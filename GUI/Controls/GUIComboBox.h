@@ -33,9 +33,9 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Constructor method used to instantiate a GUIComboBox object in
 //                  system memory.
-// Arguments:       GUIManager, GUIControlManager.
+// Arguments:       GUIControlManager.
 
-    GUIComboBox(GUIManager *Manager, GUIControlManager *ControlManager);
+    GUIComboBox(GUIControlManager *ControlManager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    explicit GUIComboBoxButton(GUIManager *Manager);
+    explicit GUIComboBoxButton(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

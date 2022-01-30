@@ -47,7 +47,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    GUIListPanel(GUIManager *Manager);
+    GUIListPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

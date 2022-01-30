@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUISlider::GUISlider(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUISlider::GUISlider(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_DrawBitmap = nullptr;
 		m_KnobImage = nullptr;
 		m_ControlManager = ControlManager;

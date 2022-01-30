@@ -31,7 +31,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    explicit GUIScrollPanel(GUIManager *Manager);
+    explicit GUIScrollPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

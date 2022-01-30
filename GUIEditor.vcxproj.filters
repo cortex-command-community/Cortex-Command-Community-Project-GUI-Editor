@@ -45,9 +45,6 @@
     <ClCompile Include="GUI\GUIInput.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUIManager.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUIProperties.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIInput.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIManager.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIProperties.h">

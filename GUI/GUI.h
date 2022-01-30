@@ -15,7 +15,6 @@
 #include "GUIFont.h"
 #include "GUISkin.h"
 #include "GUIPanel.h"
-#include "GUIManager.h"
 #include "GUIUtil.h"
 #include "GUIControl.h"
 #include "GUIEvent.h"

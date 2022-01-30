@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListPanel::GUIListPanel(GUIManager *Manager) : GUIPanel(Manager) {
+	GUIListPanel::GUIListPanel(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
 		m_BaseBitmap = nullptr;
 		m_DrawBitmap = nullptr;
 		m_FrameBitmap = nullptr;
@@ -36,7 +36,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListPanel::GUIListPanel() : GUIPanel() {
+	GUIListPanel::GUIListPanel() : GUIPanel(m_Manager) {
 		m_BaseBitmap = nullptr;
 		m_DrawBitmap = nullptr;
 		m_FrameBitmap = nullptr;

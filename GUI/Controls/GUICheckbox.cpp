@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUICheckbox::GUICheckbox(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUICheckbox::GUICheckbox(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_Image = nullptr;
 		m_ControlManager = ControlManager;
 		m_Check = State::Unchecked;

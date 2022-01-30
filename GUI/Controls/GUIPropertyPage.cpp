@@ -7,7 +7,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPropertyPage::GUIPropertyPage(GUIManager *Manager, GUIControlManager *ControlManager) : GUIControl(), GUIPanel(Manager) {
+	GUIPropertyPage::GUIPropertyPage(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
 		m_DrawBitmap = nullptr;
 		m_ControlManager = ControlManager;
 		m_Font = nullptr;
