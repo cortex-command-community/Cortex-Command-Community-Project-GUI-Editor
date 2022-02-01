@@ -12,7 +12,7 @@ class Entity;
 /// <summary>
 /// A listbox panel class used for controls requiring a listbox.
 /// </summary>
-class GUIListPanel : public GUIPanel {
+class GUIListPanel : public GUIControlBase {
 
 public:
 
@@ -38,16 +38,6 @@ public:
         ~Item() { delete m_pBitmap; m_pBitmap = nullptr; }
 
     };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIListPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIListPanel object in
-//                  system memory.
-// Arguments:       GUIManager.
-
-    GUIListPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +225,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

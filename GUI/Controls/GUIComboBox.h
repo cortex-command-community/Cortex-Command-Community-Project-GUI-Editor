@@ -11,7 +11,7 @@ class GUIComboBoxButton;
 /// <summary>
 /// A ComboBox control class.
 /// </summary>
-class GUIComboBox : public GUIControl, public GUIPanel {
+class GUIComboBox : public GUIControlBase {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Public member variable, method and friend function declarations
@@ -24,8 +24,8 @@ public:
         DropDownList,
     };
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -279,42 +279,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetVisible
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the visibility of the control.
-// Arguments:       Visible.
-
-	void SetVisible(bool Visible) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetVisible
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the visibility of the control.
-// Arguments:       None.
-
-	bool GetVisible() override { return _GetVisible(); }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetEnabled
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the enabled state of the control.
-// Arguments:       Enabled.
-
-    void SetEnabled(bool Enabled) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          GetEnabled
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Gets the enabled state of the control.
-// Arguments:       None.
-
-	bool GetEnabled() override { return _GetEnabled(); }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Method:          GetText
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     Gets text (only if style is DropDown).
@@ -349,7 +313,7 @@ public:
 // Arguments:       None.
 // Returns:         Whether this is currently dropped down and showing the list.
 
-    bool IsDropped() { return m_ListPanel->_GetVisible(); }
+    bool IsDropped() { return m_ListPanel->GetVisible(); }
 
 private:
 
@@ -371,7 +335,7 @@ private:
 /// <summary>
 /// A ComboBoxButton control class.
 /// </summary>
-class GUIComboBoxButton : public GUIPanel {
+class GUIComboBoxButton : public GUIControlBase {
 
 public:
 

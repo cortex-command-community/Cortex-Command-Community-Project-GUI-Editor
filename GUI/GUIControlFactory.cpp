@@ -18,7 +18,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlFactory::CreateControl(GUIControlManager *ControlManager, const std::string &ControlName) {
+	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *ControlManager, const std::string &ControlName) {
 		// Button
 		if (ControlName == "BUTTON") {
 			return new GUIButton(ControlManager);

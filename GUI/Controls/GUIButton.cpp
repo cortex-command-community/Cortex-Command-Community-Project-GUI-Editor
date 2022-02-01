@@ -9,9 +9,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIButton::GUIButton(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
+	GUIButton::GUIButton(GUIControlManager *ControlManager) : GUIControlBase() {
 		m_DrawBitmap = nullptr;
-		m_ControlManager = ControlManager;
+		m_OwningManager = ControlManager;
 		m_Pushed = false;
 		m_Over = false;
 		m_Text = nullptr;
@@ -22,7 +22,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 10;
@@ -46,13 +46,13 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		if (!m_Text) {
-			m_Text = std::make_unique<GUILabel>(m_ControlManager);
+			m_Text = std::make_unique<GUILabel>(m_OwningManager);
 			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
 			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
-			GUIPanel::AddChild(m_Text.get());
+			//GUIControlBase::AddChild(m_Text.get());
 		}
 		if (!m_Icon) { m_Icon = std::make_unique<AllegroBitmap>(); }
 		if (!m_BorderSizes) { m_BorderSizes = std::make_unique<GUIRect>(); }
@@ -61,7 +61,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 10;
@@ -72,20 +72,20 @@ namespace RTE {
 		m_DefHeight = 40;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the button isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		if (!m_Text) {
-			m_Text = std::make_unique<GUILabel>(m_ControlManager);
+			m_Text = std::make_unique<GUILabel>(m_OwningManager);
 			m_Text->SetHAlignment(GUIFont::HAlignment::Centre);
 			m_Text->SetVAlignment(GUIFont::VAlignment::Top);
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
-			GUIPanel::AddChild(m_Text.get());
+			//GUIControlBase::AddChild(m_Text.get());
 		}
 		if (!m_Icon) { m_Icon = std::make_unique<AllegroBitmap>(); }
 		if (!m_BorderSizes) { m_BorderSizes = std::make_unique<GUIRect>(); }
@@ -116,7 +116,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+		GUIControlBase::ChangeSkin(Skin);
 
 		// Build the button bitmap
 		BuildBitmap();
@@ -236,13 +236,13 @@ namespace RTE {
 
 		m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, &Rect);
 
-		GUIPanel::Draw(Screen);
+		GUIControlBase::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
 			SetPushed(true);
 			CaptureMouse();
 
@@ -291,14 +291,14 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnGainFocus() {
-		GUIPanel::OnGainFocus();
+		GUIControlBase::OnGainFocus();
 		m_Text->ActivateDeactivateOverflowScroll(true);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnLoseFocus() {
-		GUIPanel::OnLoseFocus();
+		GUIControlBase::OnLoseFocus();
 		if (!m_Over && !m_Pushed) {
 			m_Text->ActivateDeactivateOverflowScroll(false);
 			BuildBitmap();
@@ -308,7 +308,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 
@@ -341,7 +341,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIPanel::SetSize(Width, Height);
+		GUIControlBase::SetSize(Width, Height);
 
 		BuildBitmap();
 	}
@@ -408,7 +408,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		std::string text;
 		m_Properties.GetPropertyValue("Text", &text);

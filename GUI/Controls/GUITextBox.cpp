@@ -7,8 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextBox::GUITextBox(GUIControlManager *ControlManager) : GUIControl(), GUITextPanel(ControlManager) {
-		m_ControlManager = ControlManager;
+	GUITextBox::GUITextBox(GUIControlManager *ControlManager) : GUITextPanel() {
+		m_OwningManager = ControlManager;
 		m_DrawBitmap = nullptr;
 		m_HAlignment = GUIFont::HAlignment::Left;
 		m_VAlignment = GUIFont::VAlignment::Top;
@@ -17,7 +17,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -39,7 +39,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -50,7 +50,7 @@ namespace RTE {
 		m_DefHeight = 16;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 		GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
 
 		// Make sure the textbox isn't too small
@@ -84,7 +84,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+		GUIControlBase::ChangeSkin(Skin);
 
 		// Free any old bitmap
 		if (m_DrawBitmap) {
@@ -135,7 +135,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextBox::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
+	void GUITextBox::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
 		// Clicked
 		if (Code == GUIEventCode::Clicked) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Data); }
 
@@ -149,7 +149,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		bool numericOnly = GetNumericOnly();
 		m_Properties.GetPropertyValue("NumericOnly", &numericOnly);

@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A text panel class.
 /// </summary>
-class GUITextPanel : public GUIPanel {
+class GUITextPanel : public GUIControlBase {
 
 public:
 
@@ -17,16 +17,6 @@ public:
         Changed,
         Enter
     };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUITextPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUITextPanel object in
-//                  system memory.
-// Arguments:       GUIManager.
-
-    explicit GUITextPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -7,14 +7,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListBox::GUIListBox(GUIControlManager *ControlManager) : GUIControl(), GUIListPanel(ControlManager) {
-		m_ControlManager = ControlManager;
+	GUIListBox::GUIListBox(GUIControlManager *ControlManager) : GUIListPanel() {
+		m_OwningManager = ControlManager;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 50;
@@ -40,7 +40,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 100;
@@ -51,7 +51,7 @@ namespace RTE {
 		m_DefHeight = 100;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the listbox isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -85,8 +85,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
-		if (Source->GetPanelID() == GetPanelID()) {
+	void GUIListBox::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+		if (Source->GetUniqueID() == GetUniqueID()) {
 			if (Code == GUIEventCode::MouseMove) {
 				AddEvent(GUIEventType::Notification, GUIEventCode::MouseMove, Data);
 			} else if (Code == GUIEventCode::MouseEnter) {
@@ -112,7 +112,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		bool Multi = false;
 		m_Properties.GetPropertyValue("MultiSelect", &Multi);

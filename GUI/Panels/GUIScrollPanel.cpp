@@ -5,23 +5,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollPanel::GUIScrollPanel(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
-		m_Skin = nullptr;
-		m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
-		m_ButtonSize = 17;
-		m_MinimumKnobSize = 9;
-		m_SmallChange = 1;
-		m_ButtonPushed[0] = m_ButtonPushed[1] = false;
-		m_GrabbedKnob = false;
-		m_GrabbedBackg = false;
-		m_RebuildSize = true;
-		m_RebuildKnob = true;
-		m_ValueResolution = 1;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIScrollPanel::GUIScrollPanel() : GUIPanel(m_Manager) {
+	GUIScrollPanel::GUIScrollPanel() : GUIControlBase() {
 		m_Skin = nullptr;
 		m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
 		m_ButtonSize = 17;
@@ -523,7 +507,7 @@ namespace RTE {
 
 	void GUIScrollPanel::OnMouseHover(int X, int Y, int Buttons, int Modifier) {
 		// Ignore if the left mouse button is not down
-		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT)) {
+		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -612,7 +596,7 @@ namespace RTE {
 			return;
 		}
 
-		GUIPanel::SetSize(Width, Height);
+		GUIControlBase::SetSize(Width, Height);
 
 		// Rebuild the bitmaps
 		m_RebuildSize = true;

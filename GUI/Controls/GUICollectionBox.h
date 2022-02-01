@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A collection box control class that contains child controls.
 /// </summary>
-class GUICollectionBox : public GUIControl, public GUIPanel {
+class GUICollectionBox : public GUIControlBase {
 
 public:
 
@@ -17,8 +17,8 @@ public:
         Panel
     };
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

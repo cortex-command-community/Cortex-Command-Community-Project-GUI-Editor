@@ -53,7 +53,7 @@ namespace RTE {
 
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
-			const std::string_view & GetControlType() const override { return c_ControlType; } \
+			const std::string_view GetControlType() const override { return c_ControlType; } \
 			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIControlBase::GetRect(posX, posY, width, height); }
 #pragma endregion
 
@@ -147,7 +147,11 @@ namespace RTE {
 
 
 
-
+		/// <summary>
+		/// Gets the children list.
+		/// </summary>
+		/// <returns></returns>
+		std::vector<GUIControlBase *> * GetChildren() { return &m_ChildControls; }
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -673,7 +677,7 @@ namespace RTE {
 		///
 		/// </summary>
 		/// <returns></returns>
-		virtual const std::string_view & GetControlType() const = 0;
+		virtual const std::string_view GetControlType() const { return ""; }
 #pragma endregion
 
 	protected:

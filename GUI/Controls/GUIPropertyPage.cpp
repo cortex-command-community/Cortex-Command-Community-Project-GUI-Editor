@@ -7,9 +7,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPropertyPage::GUIPropertyPage(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
+	GUIPropertyPage::GUIPropertyPage(GUIControlManager *ControlManager) : GUIControlBase() {
 		m_DrawBitmap = nullptr;
-		m_ControlManager = ControlManager;
+		m_OwningManager = ControlManager;
 		m_Font = nullptr;
 		m_VertScroll = nullptr;
 		m_FontColor = 0;
@@ -21,7 +21,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 50;
@@ -45,26 +45,26 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Create the vertical scrollbar
-		m_VertScroll = new GUIScrollPanel(m_Manager);
+		m_VertScroll = new GUIScrollPanel();
 
 		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
 		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
-		m_VertScroll->_SetVisible(false);
+		m_VertScroll->SetVisible(false);
 		m_VertScroll->SetValue(0);
 		m_VertScroll->SetSignalTarget(this);
 
-		GUIPanel::AddChild(m_VertScroll);
+		//GUIControlBase::AddChild(m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
 		int Spacer = 0;
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel(m_Manager);
+			GUITextPanel *T = new GUITextPanel();
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
-			T->_SetVisible(false);
+			T->SetVisible(false);
 			T->SetSignalTarget(this);
-			GUIPanel::AddChild(T);
+			//GUIControlBase::AddChild(T);
 
 			m_TextPanelList.push_back(T);
 		}
@@ -73,7 +73,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 50;
@@ -84,33 +84,33 @@ namespace RTE {
 		m_DefHeight = 100;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the control isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Create the vertical scrollbar
-		m_VertScroll = new GUIScrollPanel(m_Manager);
+		m_VertScroll = new GUIScrollPanel();
 
 		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
 		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
-		m_VertScroll->_SetVisible(false);
+		m_VertScroll->SetVisible(false);
 		m_VertScroll->SetValue(0);
 		m_VertScroll->SetSignalTarget(this);
 
-		GUIPanel::AddChild(m_VertScroll);
+		//GUIControlBase::AddChild(m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
 		int Spacer = 0;
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel(m_Manager);
+			GUITextPanel *T = new GUITextPanel();
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
-			T->_SetVisible(false);
+			T->SetVisible(false);
 			T->SetSignalTarget(this);
-			GUIPanel::AddChild(T);
+			//GUIControlBase::AddChild(T);
 
 			m_TextPanelList.push_back(T);
 		}
@@ -137,7 +137,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+		GUIControlBase::ChangeSkin(Skin);
 
 		// Change the skin of the text panels
 		for (GUITextPanel *textPanel : m_TextPanelList) {
@@ -210,13 +210,13 @@ namespace RTE {
 		}
 		Screen->GetBitmap()->DrawRectangle(m_X + m_Width / 2, m_Y + 1, 0, Y - m_Y - Spacer * 2, m_LineColor, false);
 
-		GUIPanel::Draw(Screen);
+		GUIControlBase::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
 			// Push the button down
 			//m_Pushed = true;
 			//CaptureMouse();
@@ -229,7 +229,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 	}
@@ -241,7 +241,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIPanel::SetSize(Width, Height);
+		GUIControlBase::SetSize(Width, Height);
 
 		// TODO: Alter text panels
 
@@ -257,11 +257,11 @@ namespace RTE {
 		// Update the text panels
 		for (int i = 0; i < m_TextPanelList.size(); i++) {
 			GUITextPanel *T = m_TextPanelList.at(i);
-			T->_SetVisible(false);
+			T->SetVisible(false);
 			T->SetText("");
 
 			if (i < m_PageValues.GetPropertyCount()) {
-				T->_SetVisible(true);
+				T->SetVisible(true);
 				std::string Name;
 				std::string Value;
 				if (m_PageValues.GetProperty(i, &Name, &Value)) { T->SetText(Value); }
@@ -271,7 +271,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPropertyPage::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
+	void GUIPropertyPage::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		bool TextSignal = false;
@@ -281,7 +281,7 @@ namespace RTE {
 		for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
 			const GUITextPanel *T = *it;
 
-			if (Source->GetPanelID() == T->GetPanelID()) {
+			if (Source->GetUniqueID() == T->GetUniqueID()) {
 				TextSignal = true;
 
 				// Change event. Do not update properties
@@ -332,7 +332,7 @@ namespace RTE {
 		std::vector<GUITextPanel *>::iterator it;
 		for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
 			GUITextPanel *T = *it;
-			T->_SetVisible(false);
+			T->SetVisible(false);
 		}
 	}
 
@@ -344,7 +344,7 @@ namespace RTE {
 			const GUITextPanel *T = *it;
 
 			// Visible & has focus??
-			if (T->_GetVisible() && T->HasFocus()) {
+			if (T->GetVisible() && T->HasFocus()) {
 				return true;
 			}
 		}

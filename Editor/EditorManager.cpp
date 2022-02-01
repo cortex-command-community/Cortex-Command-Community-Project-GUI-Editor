@@ -36,7 +36,7 @@ namespace RTEGUI {
 
 		GUICollectionBox *elementPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("NewElementPanel", "COLLECTIONBOX", editorControls, 5, 25, 260, 105));
 		elementPanel->SetDrawType(GUICollectionBox::DrawType::Panel);
-		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelXPos() + 5, elementPanel->GetRelYPos() - 20, 100, 20));
+		GUILabel *newElementLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("NewElementLabel", "LABEL", editorControls, elementPanel->GetRelPosX() + 5, elementPanel->GetRelPosY() - 20, 100, 20));
 		newElementLabel->SetText("Add New Element :");
 
 		GUIButton *elementButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("C_COLLECTIONBOX", "BUTTON", elementPanel, 5, 5, 80, 20));
@@ -66,18 +66,18 @@ namespace RTEGUI {
 
 		GUILabel *gridSizeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("GridSizeLabel", "LABEL", editorControls, 10, 135, 90, 15));
 		gridSizeLabel->SetText("Grid/Nudge Size :");
-		GUITextBox *gridSizeTextbox = dynamic_cast<GUITextBox *>(m_EditorControlManager->AddControl("GridSizeTextBox", "TEXTBOX", editorControls, gridSizeLabel->GetRelXPos() + 90, gridSizeLabel->GetRelYPos(), 30, 15));
+		GUITextBox *gridSizeTextbox = dynamic_cast<GUITextBox *>(m_EditorControlManager->AddControl("GridSizeTextBox", "TEXTBOX", editorControls, gridSizeLabel->GetRelPosX() + 90, gridSizeLabel->GetRelPosY(), 30, 15));
 		gridSizeTextbox->SetText(std::to_string(EditorSelection::s_SnapGridSize));
 
-		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("SnapCheckBox", "CHECKBOX", editorControls, gridSizeLabel->GetRelXPos() + 130, gridSizeLabel->GetRelYPos(), 75, 15));
+		GUICheckbox *snapCheckbox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("SnapCheckBox", "CHECKBOX", editorControls, gridSizeLabel->GetRelPosX() + 130, gridSizeLabel->GetRelPosY(), 75, 15));
 		snapCheckbox->SetText("Snap to Grid");
 		snapCheckbox->SetCheck(GUICheckbox::Checked);
 
-		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelXPos() + 85, snapCheckbox->GetRelYPos(), 75, 15));
+		GUICheckbox *zoomCheckBox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("ZoomCheckBox", "CHECKBOX", editorControls, snapCheckbox->GetRelPosX() + 85, snapCheckbox->GetRelPosY(), 75, 15));
 		zoomCheckBox->SetText("Zoom");
 		zoomCheckBox->SetCheck(GUICheckbox::State::Unchecked);
 
-		GUICollectionBox *propertyPagePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("PropertyPagePanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, editorControls->GetYPos() + editorControls->GetHeight() + 10, 270, 340));
+		GUICollectionBox *propertyPagePanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("PropertyPagePanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, editorControls->GetPosY() + editorControls->GetHeight() + 10, 270, 340));
 		propertyPagePanel->SetDrawType(GUICollectionBox::DrawType::Panel);
 
 		GUILabel *propertyPageLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("PropertyPageLabel", "LABEL", propertyPagePanel, 10, 5, 110, 20));
@@ -99,7 +99,7 @@ namespace RTEGUI {
 
 		GUILabel *controlsInCollectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxListLabel", "LABEL", listsPanel, 10, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 110, 20));
 		controlsInCollectionBoxListLabel->SetText("Container Elements :");
-		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", listsPanel, 5, controlsInCollectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetRelYPos() + 235, 260, 220)));
+		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", listsPanel, 5, controlsInCollectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetRelPosY() + 235, 260, 220)));
 		m_ControlsInCollectionBoxList->SetMouseScrolling(true);
 
 		// Create the workspace area showing the editing box
@@ -168,7 +168,7 @@ namespace RTEGUI {
 		std::string controlClass = editorEvent.GetOrigin()->GetName().substr(2, std::string::npos);
 		std::string controlName = GenerateControlName(controlClass);
 
-		GUIControl *parent = m_RootControl;
+		GUIControlBase *parent = m_RootControl;
 
 		// If the focused control is a container set it as parent so controls are added to it
 		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->IsContainer()) { parent = s_SelectionInfo.GetControl(); }
@@ -192,7 +192,7 @@ namespace RTEGUI {
 			newControlName = s_SelectionCopyInfo.Name + " - copy " + std::to_string(i);
 			// Check if this name exists
 			bool found = false;
-			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+			for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
 				if (control->GetName() == newControlName) {
 					found = true;
 					break;
@@ -204,7 +204,7 @@ namespace RTEGUI {
 		}
 		int offset = 10;
 
-		GUIControl *createdControl = nullptr;
+		GUIControlBase *createdControl = nullptr;
 		createdControl = m_WorkspaceManager->AddControl(newControlName, s_SelectionCopyInfo.Class, s_SelectionCopyInfo.Parent, s_SelectionCopyInfo.PosX + offset, s_SelectionCopyInfo.PosY + offset, s_SelectionCopyInfo.Width, s_SelectionCopyInfo.Height);
 		s_SelectionCopyInfo.PosX += offset;
 		s_SelectionCopyInfo.PosY += offset;
@@ -213,7 +213,7 @@ namespace RTEGUI {
 		createdControl->StoreProperties();
 		properties.OverwriteProperties(s_SelectionCopyInfo.Properties, true);
 		properties.SetPropertyValue("Name", newControlName);
-		createdControl->GetPanel()->BuildProperties(&properties);
+		createdControl->BuildProperties(&properties);
 		createdControl->ApplyProperties(&properties);
 		m_PropertyPage->SetPropertyValues(&properties);
 
@@ -232,7 +232,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::RemoveControl(GUIControl *controlToRemove) const {
+	void EditorManager::RemoveControl(GUIControlBase *controlToRemove) const {
 		m_WorkspaceManager->RemoveControl(controlToRemove->GetName(), true);
 		if (controlToRemove->GetControlType() == "COLLECTIONBOX") {
 			ClearCurrentSelection();
@@ -254,7 +254,7 @@ namespace RTEGUI {
 
 			// Check if this name exists
 			bool found = false;
-			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+			for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
 				if (control->GetName() == controlName) {
 					found = true;
 					break;
@@ -272,7 +272,7 @@ namespace RTEGUI {
 	void EditorManager::SelectActiveControlFromParentList() const {
 		if (const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected()) {
 			// Try to find the box of that name, and select it
-			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
+			GUIControlBase *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
 			if (control) {
 				// If the selected item is the root control don't grab it but proceed to populate the children list from it
 				if (selectedItem->m_Name == m_RootControl->GetName()) {
@@ -299,7 +299,7 @@ namespace RTEGUI {
 	void EditorManager::SelectActiveControlFromChildrenList() const {
 		if (const GUIListPanel::Item *selectedItem = m_ControlsInCollectionBoxList->GetSelected()) {
 			// Try to find the control of that name, and select it
-			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
+			GUIControlBase *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
 			if (control) {
 				s_SelectionInfo.ReleaseAnyGrabs();
 				s_SelectionInfo.SetControl(control);
@@ -315,7 +315,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::SelectActiveControlInParentList(GUIControl *control) const {
+	void EditorManager::SelectActiveControlInParentList(GUIControlBase *control) const {
 		// Check if this is selected in the editor and select it in the list too
 		for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
 			if (listEntry->m_Name.substr(listEntry->m_Name.find_first_not_of('\t'), std::string::npos) == control->GetName()) {
@@ -329,7 +329,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::SelectActiveControlInChildrenList(GUIControl *control) const {
+	void EditorManager::SelectActiveControlInChildrenList(GUIControlBase *control) const {
 		// Check if this is selected in the editor and select it's parent in the parent list and then select it in the children list
 		SelectActiveControlInParentList(control->GetParent());
 		for (const GUIListBox::Item *listEntry : *m_ControlsInCollectionBoxList->GetItemList()) {
@@ -352,13 +352,13 @@ namespace RTEGUI {
 		// Lambda expression to recursively add lower-level CollectionBoxes belonging to the higher-level CollectionBoxes
 		std::function<void(GUICollectionBox *, const std::string &)> recursiveAddItem = [&recursiveAddItem, this](GUICollectionBox *control, const std::string &indent) {
 			m_CollectionBoxList->AddItem(indent + control->GetName());
-			for (GUIControl *childControl : *control->GetChildren()) {
+			for (GUIControlBase *childControl : *control->GetChildren()) {
 				if ((control = dynamic_cast<GUICollectionBox *>(childControl))) { recursiveAddItem(control, indent + "\t"); }
 			}
 		};
 
 		GUICollectionBox *collectionBox = nullptr;
-		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
+		for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
 		}
 
@@ -380,7 +380,7 @@ namespace RTEGUI {
 		m_ControlsInCollectionBoxList->ClearList();
 
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
-		for (GUIControl *control : *collectionBox->GetChildren()) {
+		for (GUIControlBase *control : *collectionBox->GetChildren()) {
 			if (control->GetControlType() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
 			// Check if this is selected in the editor, and if so, select it in the list too
 			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(-1); }
@@ -395,7 +395,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * EditorManager::ControlUnderMouse(GUIControl *control, int mousePosX, int mousePosY) {
+	GUIControlBase * EditorManager::ControlUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY) {
 		int controlPosX;
 		int controlPosY;
 		int controlWidth;
@@ -406,8 +406,8 @@ namespace RTEGUI {
 		}
 
 		// Check children. Check in reverse because top most visible control is last in the list.
-		for (std::vector<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
-			GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
+		for (std::vector<GUIControlBase *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
+			GUIControlBase *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
 			if (childControl) {
 				return childControl;
 			}
@@ -417,7 +417,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int EditorManager::HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const {
+	int EditorManager::HandleUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY) const {
 		int controlPosX;
 		int controlPosY;
 		int controlWidth;
@@ -462,15 +462,15 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::StoreCurrentSelectionCopyInfo() const {
-		GUIControl *selectedControl = s_SelectionInfo.GetControl();
+		GUIControlBase *selectedControl = s_SelectionInfo.GetControl();
 		if (selectedControl) {
 			s_SelectionCopyInfo = {
 				selectedControl->GetName(),
 				std::string(selectedControl->GetControlType()),
-				selectedControl->GetPanel()->GetRelXPos(),
-				selectedControl->GetPanel()->GetRelYPos(),
-				selectedControl->GetPanel()->GetWidth(),
-				selectedControl->GetPanel()->GetHeight(),
+				selectedControl->GetRelPosX(),
+				selectedControl->GetRelPosY(),
+				selectedControl->GetWidth(),
+				selectedControl->GetHeight(),
 				selectedControl->GetParent(),
 				selectedControl->GetProperties()
 			};
@@ -498,14 +498,14 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorManager::UpdateControlProperties(GUIControl *control, bool manualEdit) const {
+	bool EditorManager::UpdateControlProperties(GUIControlBase *control, bool manualEdit) const {
 		bool result = false;
 		if (control) {
 			if (manualEdit) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }
 			control->StoreProperties();
 			GUIProperties properties;
 			properties.OverwriteProperties(control->GetProperties(), true);
-			control->GetPanel()->BuildProperties(&properties);
+			control->BuildProperties(&properties);
 			m_PropertyPage->SetPropertyValues(&properties);
 			result = true;
 		}

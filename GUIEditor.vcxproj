@@ -140,7 +140,6 @@
     <ClCompile Include="GUI\Controls\GUISlider.cpp" />
     <ClCompile Include="GUI\Controls\GUITab.cpp" />
     <ClCompile Include="GUI\Controls\GUITextBox.cpp" />
-    <ClCompile Include="GUI\GUIControl.cpp" />
     <ClCompile Include="GUI\GUIControlBase.cpp" />
     <ClCompile Include="GUI\GUIControlFactory.cpp" />
     <ClCompile Include="GUI\GUIControlManager.cpp" />
@@ -152,7 +151,6 @@
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\GUIWriter.cpp" />
     <ClCompile Include="GUI\Panels\GUIListPanel.cpp" />
-    <ClCompile Include="GUI\Panels\GUIPanel.cpp" />
     <ClCompile Include="GUI\Panels\GUIScrollPanel.cpp" />
     <ClCompile Include="GUI\Panels\GUITextPanel.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
@@ -186,7 +184,6 @@
     <ClInclude Include="GUI\Controls\GUITextBox.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\GUIConstants.h" />
-    <ClInclude Include="GUI\GUIControl.h" />
     <ClInclude Include="GUI\GUIControlBase.h" />
     <ClInclude Include="GUI\GUIControlFactory.h" />
     <ClInclude Include="GUI\GUIControlManager.h" />
@@ -200,7 +197,6 @@
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\GUIWriter.h" />
     <ClInclude Include="GUI\Panels\GUIListPanel.h" />
-    <ClInclude Include="GUI\Panels\GUIPanel.h" />
     <ClInclude Include="GUI\Panels\GUIScrollPanel.h" />
     <ClInclude Include="GUI\Panels\GUITextPanel.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />

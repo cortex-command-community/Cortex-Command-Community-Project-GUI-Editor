@@ -8,12 +8,12 @@ namespace RTE {
 /// <summary>
 /// A TextBox control class.
 /// </summary>
-class GUITextBox : public GUIControl, public GUITextPanel {
+class GUITextBox : public GUITextPanel {
 
 public:
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

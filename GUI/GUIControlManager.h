@@ -116,7 +116,7 @@ namespace RTE {
 		/// Give focus to a panel.
 		/// </summary>
 		/// <param name="panel">Panel.</param>
-		void SetFocus(GUIPanel *panel);
+		void SetFocus(GUIControlBase *panel);
 
 		/// <summary>
 		/// Sets the absolute position of this entire GUI on the screen. This is useful if the UI's are being drawn in a different area of the screen than the top left corner.
@@ -130,7 +130,7 @@ namespace RTE {
 		/// Gets a unique ID for a panel.
 		/// </summary>
 		/// <returns></returns>
-		int GetPanelID() { return m_UniqueIDCount++; }
+		int GetUniqueID() { return m_UniqueIDCount++; }
 #pragma endregion
 
 #pragma region 
@@ -138,8 +138,8 @@ namespace RTE {
 		/// Gets a control.
 		/// </summary>
 		/// <param name="name">Name.</param>
-		/// <returns>GUIControl class, or 0 if not found.</returns>
-		GUIControl * GetControl(const std::string_view &name);
+		/// <returns>GUIControlBaseclass, or 0 if not found.</returns>
+		GUIControlBase * GetControl(const std::string_view &name);
 
 		/// <summary>
 		/// Checks if a control is under a specific point.
@@ -149,13 +149,13 @@ namespace RTE {
 		/// <param name="parent">Parent to check under. Pass null to default to the root control.</param>
 		/// <param name="depth">How many levels of children under the parent to look at. If negative, goes as far as it can.</param>
 		/// <returns>GUIControl. NULL if no control under the point.</returns>
-		GUIControl * GetControlUnderPoint(int pointX, int pointY, GUIControl *parent = nullptr, int depth = -1);
+		GUIControlBase * GetControlUnderPoint(int pointX, int pointY, GUIControlBase *parent = nullptr, int depth = -1);
 
 		/// <summary>
 		/// Gets the control list.
 		/// </summary>
 		/// <returns>Pointer.</returns>
-		std::vector<GUIControl *> * GetControlList() { return &m_ControlList; }
+		std::vector<GUIControlBase *> * GetControlList() { return &m_ControlList; }
 
 		/// <summary>
 		/// Manually creates a control.
@@ -167,15 +167,15 @@ namespace RTE {
 		/// <param name="posY"></param>
 		/// <param name="width">Size.</param>
 		/// <param name="height"></param>
-		/// <returns>GUIControl class created. 0 if not created.</returns>
-		GUIControl * AddControl(const std::string &name, const std::string &type, GUIControl *parent, int posX, int posY, int width, int height);
+		/// <returns>GUIControlBaseclass created. 0 if not created.</returns>
+		GUIControlBase * AddControl(const std::string &name, const std::string &type, GUIControlBase *parent, int posX, int posY, int width, int height);
 
 		/// <summary>
 		/// Manually creates a control.
 		/// </summary>
 		/// <param name="properties">Properties.</param>
-		/// <returns>GUIControl class created. 0 if not created.</returns>
-		GUIControl * AddControl(GUIProperties *properties);
+		/// <returns>GUIControlBaseclass created. 0 if not created.</returns>
+		GUIControlBase * AddControl(GUIProperties *properties);
 
 		/// <summary>
 		/// Removes a control by name.
@@ -193,7 +193,7 @@ namespace RTE {
 		/// Adds a panel to the list.
 		/// </summary>
 		/// <param name="panel">Pointer to a panel.</param>
-		void AddPanel(GUIPanel *panel);
+		void AddPanel(GUIControlBase *panel);
 #pragma endregion
 
 #pragma region
@@ -201,7 +201,7 @@ namespace RTE {
 		/// Sets up capturing a mouse for a panel.
 		/// </summary>
 		/// <param name="panel">Panel.</param>
-		void CaptureMouse(GUIPanel *panel);
+		void CaptureMouse(GUIControlBase *panel);
 
 		/// <summary>
 		/// Releases a mouse capture.
@@ -214,7 +214,7 @@ namespace RTE {
 		/// <param name="panel">Panel.</param>
 		/// <param name="enabled">Enabled.</param>
 		/// <param name="delay">Delay (milliseconds).</param>
-		void TrackMouseHover(GUIPanel *panel, bool enabled, int delay);
+		void TrackMouseHover(GUIControlBase *panel, bool enabled, int delay);
 #pragma endregion
 
 #pragma region Concrete Methods
@@ -254,7 +254,7 @@ namespace RTE {
 		GUIInput *m_Input; // Not owned.
 		GUISkin *m_Skin;
 
-		std::vector<GUIControl *> m_ControlList;
+		std::vector<GUIControlBase *> m_ControlList;
 		std::vector<GUIEvent *> m_EventQueue;
 
 		int m_CursorType;
@@ -263,12 +263,12 @@ namespace RTE {
 
 		int m_UniqueIDCount;
 		bool m_HoverTrack;
-		GUIPanel *m_HoverPanel;
+		GUIControlBase *m_HoverPanel;
 		float m_HoverTime;
-		std::vector<GUIPanel *> m_PanelList;
-		GUIPanel *m_CapturedPanel;
-		GUIPanel *m_FocusPanel;
-		GUIPanel *m_MouseOverPanel;
+		std::vector<GUIControlBase *> m_PanelList;
+		GUIControlBase *m_CapturedPanel;
+		GUIControlBase *m_FocusPanel;
+		GUIControlBase *m_MouseOverPanel;
 
 		bool m_MouseEnabled;
 		int m_OldMouseX;
@@ -295,7 +295,7 @@ namespace RTE {
 		/// <param name="pointX">Mouse Position.</param>
 		/// <param name="pointY"></param>
 		/// <returns></returns>
-		GUIPanel * FindTopPanel(int pointX, int pointY);
+		GUIControlBase * FindTopPanel(int pointX, int pointY);
 
 		/// <summary>
 		/// Goes through the panel list and selects the bottommost ('first', render wise) panel on a specific point.
@@ -303,7 +303,7 @@ namespace RTE {
 		/// <param name="pointX">Mouse Position.</param>
 		/// <param name="pointY"></param>
 		/// <returns></returns>
-		GUIPanel * FindBottomPanel(int pointX, int pointY);
+		GUIControlBase * FindBottomPanel(int pointX, int pointY);
 
 		/// <summary>
 		/// Add a new event to the queue.

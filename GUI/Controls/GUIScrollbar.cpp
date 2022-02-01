@@ -7,14 +7,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollbar::GUIScrollbar(GUIControlManager *ControlManager) : GUIControl(), GUIScrollPanel(ControlManager) {
-		m_ControlManager = ControlManager;
+	GUIScrollbar::GUIScrollbar(GUIControlManager *ControlManager) : GUIScrollPanel() {
+		m_OwningManager = ControlManager;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 9;
@@ -41,7 +41,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 9;
@@ -53,7 +53,7 @@ namespace RTE {
 		m_DefHeight = 12;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the scrollpanel isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -65,11 +65,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollbar::ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) {
+	void GUIScrollbar::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		// Should be our scroll panel
-		if (Source->GetPanelID() == GetPanelID() && Code == GUIEventCode::ChangeValue) {
+		if (Source->GetUniqueID() == GetUniqueID() && Code == GUIEventCode::ChangeValue) {
 			AddEvent(GUIEventType::Notification, GUIEventCode::ChangeValue);
 		}
 	}
@@ -116,7 +116,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		GUIScrollPanel::LoadProps(&m_Properties);
 

@@ -30,9 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="GUI\GUIControl.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GUIControlFactory.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -132,9 +129,6 @@
     <ClCompile Include="GUI\Panels\GUIListPanel.cpp">
       <Filter>GUI\Panels</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Panels\GUIPanel.cpp">
-      <Filter>GUI\Panels</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\Panels\GUIScrollPanel.cpp">
       <Filter>GUI\Panels</Filter>
     </ClCompile>
@@ -150,9 +144,6 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUI.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIControl.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUIControlFactory.h">
@@ -267,9 +258,6 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Panels\GUIListPanel.h">
-      <Filter>GUI\Panels</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Panels\GUIPanel.h">
       <Filter>GUI\Panels</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Panels\GUIScrollPanel.h">

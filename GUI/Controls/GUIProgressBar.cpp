@@ -7,10 +7,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIProgressBar::GUIProgressBar(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
+	GUIProgressBar::GUIProgressBar(GUIControlManager *ControlManager) : GUIControlBase() {
 		m_DrawBitmap = nullptr;
 		m_IndicatorImage = nullptr;
-		m_ControlManager = ControlManager;
+		m_OwningManager = ControlManager;
 		m_Spacing = 0;
 		m_Value = 0;
 		m_Minimum = 0;
@@ -20,7 +20,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -47,7 +47,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -58,7 +58,7 @@ namespace RTE {
 		m_DefHeight = 20;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the control isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -94,7 +94,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+		GUIControlBase::ChangeSkin(Skin);
 
 		// Build the progressbar bitmap
 		BuildBitmap();
@@ -192,7 +192,7 @@ namespace RTE {
 
 		Screen->GetBitmap()->SetClipRect(nullptr);
 
-		GUIPanel::Draw(Screen);
+		GUIControlBase::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIPanel::SetSize(Width, Height);
+		GUIControlBase::SetSize(Width, Height);
 
 		// Rebuild the bitmap
 		BuildBitmap();
@@ -240,7 +240,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		m_Properties.GetPropertyValue("Minimum", &m_Minimum);
 		m_Properties.GetPropertyValue("Maximum", &m_Maximum);

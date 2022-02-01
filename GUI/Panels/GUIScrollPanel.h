@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A scrollbar panel class used for controls requiring a scrollbar.
 /// </summary>
-class GUIScrollPanel : public GUIPanel {
+class GUIScrollPanel : public GUIControlBase {
 
 public:
 
@@ -22,16 +22,6 @@ public:
         KnobStates,
         Back
     };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIScrollPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIScrollPanel object in
-//                  system memory.
-// Arguments:       GUIManager.
-
-    explicit GUIScrollPanel(GUIControlManager *Manager);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

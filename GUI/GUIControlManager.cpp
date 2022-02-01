@@ -57,7 +57,7 @@ namespace RTE {
 		m_DoubleClickTime = 500;
 		//m_DoubleClickSize = GetSystemMetrics(SM_CXDOUBLECLK)/2; // Use windows' system value
 		m_DoubleClickSize = 2;
-		m_DoubleClickButtons = GUIPanel::MOUSE_NONE;
+		m_DoubleClickButtons = GUIControlBase::MOUSE_NONE;
 
 		m_Timer = new Timer();
 
@@ -150,8 +150,8 @@ namespace RTE {
 	bool GUIControlManager::Save(GUIWriter *writer) {
 		GUIAssert(writer, "");
 
-		for (std::vector<GUIControl *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-			GUIControl *C = *it;
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+			GUIControlBase *C = *it;
 			C->Save(writer);
 			// Separate controls by one line
 			writer->NewLine();
@@ -174,7 +174,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::SetFocus(GUIPanel *Pan) {
+	void GUIControlManager::SetFocus(GUIControlBase *Pan) {
 		// Send the LoseFocus event to the old panel (if there is one)
 		if (m_FocusPanel) { m_FocusPanel->OnLoseFocus(); }
 
@@ -198,12 +198,12 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPanel * GUIControlManager::FindTopPanel(int X, int Y) {
-		std::vector<GUIPanel *>::reverse_iterator it;
+	GUIControlBase * GUIControlManager::FindTopPanel(int X, int Y) {
+		std::vector<GUIControlBase *>::reverse_iterator it;
 
 		for (it = m_PanelList.rbegin(); it != m_PanelList.rend(); it++) {
-			if (GUIPanel *P = *it) {
-				if (GUIPanel *CurPanel = P->TopPanelUnderPoint(X, Y)) {
+			if (GUIControlBase *P = *it) {
+				if (GUIControlBase *CurPanel = P->TopPanelUnderPoint(X, Y)) {
 					return CurPanel;
 				}
 			}
@@ -214,10 +214,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPanel * GUIControlManager::FindBottomPanel(int X, int Y) {
-		for (std::vector<GUIPanel *>::iterator it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
-			if (GUIPanel *P = *it) {
-				if (GUIPanel *CurPanel = P->BottomPanelUnderPoint(X, Y)) {
+	GUIControlBase * GUIControlManager::FindBottomPanel(int X, int Y) {
+		for (std::vector<GUIControlBase *>::iterator it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
+			if (GUIControlBase *P = *it) {
+				if (GUIControlBase *CurPanel = P->BottomPanelUnderPoint(X, Y)) {
 					return CurPanel;
 				}
 			}
@@ -235,9 +235,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::GetControl(const std::string_view &Name) {
-		for (std::vector<GUIControl *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-			GUIControl *C = *it;
+	GUIControlBase * GUIControlManager::GetControl(const std::string_view &Name) {
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+			GUIControlBase *C = *it;
 			if (C->GetName().compare(Name) == 0) {
 				return C;
 			}
@@ -248,7 +248,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *parent, int depth) {
+	GUIControlBase * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControlBase *parent, int depth) {
 		// Default to the root object if no parent specified
 		if (!parent) { parent = m_ControlList.front(); }
 		if (!parent) {
@@ -269,16 +269,16 @@ namespace RTE {
 		}
 
 		// Check children
-		std::vector<GUIControl *> *List = parent->GetChildren();
+		std::vector<GUIControlBase *> *List = parent->GetChildren();
 
 		GUIAssert(List, "");
 
 		// Control the depth. If negative, it'll go forever
 		if (depth != 0) {
-			for (std::vector<GUIControl *>::reverse_iterator it = List->rbegin(); it != List->rend(); it++) {
+			for (std::vector<GUIControlBase *>::reverse_iterator it = List->rbegin(); it != List->rend(); it++) {
 				// Only check visible controls
 				if ((*it)->GetVisible()) {
-					GUIControl *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
+					GUIControlBase *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
 					if (C) {
 						return C;
 					}
@@ -291,28 +291,28 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::AddControl(const std::string &Name, const std::string &Type, GUIControl *Parent, int X, int Y, int Width, int Height) {
+	GUIControlBase * GUIControlManager::AddControl(const std::string &Name, const std::string &Type, GUIControlBase *Parent, int X, int Y, int Width, int Height) {
 		// Skip if we already have a control of this name
 		if (GetControl(Name)) {
 			return nullptr;
 		}
 		// Create the control
-		GUIControl *Control = GUIControlFactory::CreateControl(this, Type);
+		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type);
 		if (!Control) {
 			return nullptr;
 		}
 		Control->Create(Name, X, Y, Width, Height);
 		Control->ChangeSkin(m_Skin);
 
-		GUIPanel *Pan = nullptr;
+		GUIControlBase *Pan = nullptr;
 		if (Parent) {
-			Pan = Parent->GetPanel();
-			Parent->AddChild(Control);
+			//Pan = Parent->GetPanel();
+			//Parent->AddChild(Control);
 		}
 		if (Pan) {
-			Pan->AddChild(Control->GetPanel());
+			//Pan->AddChild(Control->GetPanel());
 		} else {
-			AddPanel(Control->GetPanel());
+			//AddPanel(Control->GetPanel());
 		}
 		// Add the control to the list
 		m_ControlList.push_back(Control);
@@ -325,7 +325,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::AddControl(GUIProperties *Property) {
+	GUIControlBase * GUIControlManager::AddControl(GUIProperties *Property) {
 		GUIAssert(Property, "");
 
 		// Get the control type and name
@@ -339,7 +339,7 @@ namespace RTE {
 			return nullptr;
 		}
 		// Create the control
-		GUIControl *Control = GUIControlFactory::CreateControl(this, Type);
+		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type);
 		if (!Control) {
 			return nullptr;
 		}
@@ -351,17 +351,17 @@ namespace RTE {
 		std::string Parent;
 		Property->GetPropertyValue("Parent", &Parent);
 
-		GUIControl *Par = GetControl(Parent);
-		GUIPanel *Pan = nullptr;
+		GUIControlBase *Par = GetControl(Parent);
+		GUIControlBase *Pan = nullptr;
 		if (Par && Parent.compare("None") != 0) {
-			Pan = Par->GetPanel();
-			Par->AddChild(Control);
+			//Pan = Par->GetPanel();
+			//Par->AddChild(Control);
 		}
 
 		if (Pan) {
-			Pan->AddChild(Control->GetPanel());
+			//Pan->AddChild(Control->GetPanel());
 		} else {
-			AddPanel(Control->GetPanel());
+			//AddPanel(Control->GetPanel());
 		}
 
 		// Add the control to the list
@@ -378,8 +378,8 @@ namespace RTE {
 	void GUIControlManager::RemoveControl(const std::string &Name, bool RemoveFromParent) {
 		// NOTE: We can't simply remove it because some controls need to remove extra panels and it's silly to add 'remove' to every control to remove their extra panels (ie. Combobox).
 		// Signals and stuff are also linked in so we just remove the controls from the list and not from memory.
-		for (std::vector<GUIControl *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-			GUIControl *C = *it;
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+			GUIControlBase *C = *it;
 			if (C->GetName().compare(Name) == 0) {
 
 				// Just remove it from the list
@@ -400,8 +400,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::ClearAllControls() {
-		for (std::vector<GUIControl *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-			GUIControl *C = *it;
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+			GUIControlBase *C = *it;
 			C->Destroy();
 			delete C;
 		}
@@ -417,13 +417,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::AddPanel(GUIPanel *panel) {
+	void GUIControlManager::AddPanel(GUIControlBase *panel) {
 		if (panel) {
 			int Z = 0;
 
 			// Get the last panel in the list
 			if (!m_PanelList.empty()) {
-				const GUIPanel *p = m_PanelList.at(m_PanelList.size() - 1);
+				const GUIControlBase *p = m_PanelList.at(m_PanelList.size() - 1);
 				Z = p->GetZPos() + 1;
 			}
 			// Setup the panel
@@ -436,7 +436,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::CaptureMouse(GUIPanel *Panel) {
+	void GUIControlManager::CaptureMouse(GUIControlBase *Panel) {
 		GUIAssert(Panel, "");
 
 		// Release any old capture
@@ -456,7 +456,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::TrackMouseHover(GUIPanel *Pan, bool Enabled, int Delay) {
+	void GUIControlManager::TrackMouseHover(GUIControlBase *Pan, bool Enabled, int Delay) {
 		GUIAssert(Pan, "");
 		m_HoverTrack = Enabled;
 		m_HoverPanel = Pan;
@@ -471,8 +471,8 @@ namespace RTE {
 		m_Skin->Load(SkinDir, SkinFilename);
 
 		// Go through every control and change its skin
-		for (std::vector<GUIControl *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
-			GUIControl *C = *it;
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
+			GUIControlBase *C = *it;
 			C->ChangeSkin(m_Skin);
 		}
 	}
@@ -493,21 +493,21 @@ namespace RTE {
 		int MouseButtons[3];
 		int MouseStates[3];
 		int MouseWheelChange = 0;
-		int Released = GUIPanel::MouseButtons::MOUSE_NONE;
-		int Pushed = GUIPanel::MouseButtons::MOUSE_NONE;
-		int Buttons = GUIPanel::MouseButtons::MOUSE_NONE;
-		int Repeated = GUIPanel::MouseButtons::MOUSE_NONE;
+		int Released = GUIControlBase::MouseButtons::MOUSE_NONE;
+		int Pushed = GUIControlBase::MouseButtons::MOUSE_NONE;
+		int Buttons = GUIControlBase::MouseButtons::MOUSE_NONE;
+		int Repeated = GUIControlBase::MouseButtons::MOUSE_NONE;
 		int Modifier = GUIInput::KeyModifiers::ModNone;
-		int Mod = GUIPanel::MouseModifiers::MODI_NONE;
+		int Mod = GUIControlBase::MouseModifiers::MODI_NONE;
 
 		float CurTime = m_Timer->GetElapsedRealTimeMS();
 
 		// Build the modifier state
 		Modifier = m_Input->GetKeyModifier();
-		if (Modifier & GUIInput::KeyModifiers::ModShift) { Mod |= GUIPanel::MouseModifiers::MODI_SHIFT; }
-		if (Modifier & GUIInput::KeyModifiers::ModCtrl) { Mod |= GUIPanel::MouseModifiers::MODI_CTRL; }
-		if (Modifier & GUIInput::KeyModifiers::ModAlt) { Mod |= GUIPanel::MouseModifiers::MODI_ALT; }
-		if (Modifier & GUIInput::KeyModifiers::ModCommand) { Mod |= GUIPanel::MouseModifiers::MODI_COMMAND; }
+		if (Modifier & GUIInput::KeyModifiers::ModShift) { Mod |= GUIControlBase::MouseModifiers::MODI_SHIFT; }
+		if (Modifier & GUIInput::KeyModifiers::ModCtrl) { Mod |= GUIControlBase::MouseModifiers::MODI_CTRL; }
+		if (Modifier & GUIInput::KeyModifiers::ModAlt) { Mod |= GUIControlBase::MouseModifiers::MODI_ALT; }
+		if (Modifier & GUIInput::KeyModifiers::ModCommand) { Mod |= GUIControlBase::MouseModifiers::MODI_COMMAND; }
 
 		// Get the mouse data
 		if (m_MouseEnabled) {
@@ -523,7 +523,7 @@ namespace RTE {
 
 			// Panels that have captured the mouse get the events over anything else
 			// Regardless where the mouse currently is
-			GUIPanel *CurPanel = m_CapturedPanel;
+			GUIControlBase *CurPanel = m_CapturedPanel;
 
 			// Find the lowest panel in the tree that the mouse is over
 			if (!CurPanel) { CurPanel = FindTopPanel(MouseX, MouseY); }
@@ -537,18 +537,18 @@ namespace RTE {
 			}
 
 			// Mouse Up
-			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && CurPanel) { CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod); }
+			if (Released != GUIControlBase::MouseButtons::MOUSE_NONE && CurPanel) { CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod); }
 
 			// Double click (on the mouse up)
-			if (Released != GUIPanel::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIPanel::MouseButtons::MOUSE_NONE) {
+			if (Released != GUIControlBase::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIControlBase::MouseButtons::MOUSE_NONE) {
 				if (CurPanel) { CurPanel->OnDoubleClick(MouseX, MouseY, m_DoubleClickButtons, Mod); }
 				m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0f;
 			}
 
 			// Mouse Down
-			if (Pushed != GUIPanel::MouseButtons::MOUSE_NONE) {
+			if (Pushed != GUIControlBase::MouseButtons::MOUSE_NONE) {
 				// Double click settings
-				m_DoubleClickButtons = GUIPanel::MouseButtons::MOUSE_NONE;
+				m_DoubleClickButtons = GUIControlBase::MouseButtons::MOUSE_NONE;
 
 				// Check for a double click
 				for (i = 0; i < 3; i++) {
@@ -557,14 +557,14 @@ namespace RTE {
 							m_DoubleClickButtons |= (1 << i);
 						} else {
 							// Setup the first click
-							m_DoubleClickButtons = GUIPanel::MouseButtons::MOUSE_NONE;
+							m_DoubleClickButtons = GUIControlBase::MouseButtons::MOUSE_NONE;
 							m_LastMouseDown[i] = CurTime;
 						}
 					}
 				}
 
 				// Setup the double click rectangle
-				if (m_DoubleClickButtons == GUIPanel::MouseButtons::MOUSE_NONE) { SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize); }
+				if (m_DoubleClickButtons == GUIControlBase::MouseButtons::MOUSE_NONE) { SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize); }
 
 				// OnMouseDown event
 				if (CurPanel) { CurPanel->OnMouseDown(MouseX, MouseY, Pushed, Mod); }
@@ -578,7 +578,7 @@ namespace RTE {
 				// Disable it (panel will have to re-enable it if it wants to continue)
 				m_HoverTrack = false;
 
-				if (m_HoverPanel && m_HoverPanel->PointInside(MouseX, MouseY)/*GetPanelID() == CurPanel->GetPanelID()*/) {
+				if (m_HoverPanel && m_HoverPanel->PointInside(MouseX, MouseY)/*GetUniqueID() == CurPanel->GetUniqueID()*/) {
 					// call the OnMouseHover event
 					m_HoverPanel->OnMouseHover(MouseX, MouseY, Buttons, Mod);
 				}
@@ -589,7 +589,7 @@ namespace RTE {
 			bool Leave = false;
 			if (!m_MouseOverPanel && CurPanel) { Enter = true; }
 			if (!CurPanel && m_MouseOverPanel) { Leave = true; }
-			if (m_MouseOverPanel && CurPanel && m_MouseOverPanel->GetPanelID() != CurPanel->GetPanelID()) {
+			if (m_MouseOverPanel && CurPanel && m_MouseOverPanel->GetUniqueID() != CurPanel->GetUniqueID()) {
 				Enter = true;
 				Leave = true;
 			}
@@ -615,7 +615,7 @@ namespace RTE {
 				return;
 			}
 			// If the panel is not enabled, don't send it key events
-			if (!m_FocusPanel->_GetEnabled()) {
+			if (!m_FocusPanel->GetEnabled()) {
 				return;
 			}
 			for (i = 1; i < 256; i++) {
@@ -646,13 +646,13 @@ namespace RTE {
 
 	void GUIControlManager::Draw(GUIScreen *Screen) {
 		// Go through drawing panels that are invalid
-		std::vector<GUIPanel *>::iterator it;
+		std::vector<GUIControlBase *>::iterator it;
 
 		for (it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
-			GUIPanel *p = *it;
+			GUIControlBase *p = *it;
 
 			// Draw the panel
-			if (p->_GetVisible()) { p->Draw(Screen); }
+			if (p->GetVisible()) { p->Draw(Screen); }
 		}
 	}
 

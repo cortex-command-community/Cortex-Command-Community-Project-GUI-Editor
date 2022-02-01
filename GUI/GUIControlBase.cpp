@@ -248,7 +248,7 @@ namespace RTE {
 			}
 
 			// Remove the child from any previous parent
-			//if (child->GetParentPanel()) { child->GetParentPanel()->GUIPanel::RemoveChild(child); }
+			//if (child->GetParentPanel()) { child->GetParentPanel()->GUIControlBase::RemoveChild(child); }
 
 			// Setup the inherited values
 			child->m_ParentControl = this;
@@ -443,16 +443,16 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPanel::BuildProperties(GUIProperties *properties) const {
+	void GUIControlBase::BuildProperties(GUIProperties *properties) const {
 		GUIAssert(properties, "");
 
 		// Subtract the position from the parent
 		int X = m_X;
 		int Y = m_Y;
 
-		if (m_Parent) {
-			X -= m_Parent->m_X;
-			Y -= m_Parent->m_Y;
+		if (m_ParentControl) {
+			X -= m_ParentControl->m_X;
+			Y -= m_ParentControl->m_Y;
 		}
 
 		properties->AddProperty("X", X);
@@ -467,16 +467,16 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIPanel::ToString() const {
+	std::string GUIControlBase::ToString() const {
 		std::string OutString = "";
 
 		// Subtract the position from the parent
 		int X = m_X;
 		int Y = m_Y;
 
-		if (m_Parent) {
-			X -= m_Parent->m_X;
-			Y -= m_Parent->m_Y;
+		if (m_ParentControl) {
+			X -= m_ParentControl->m_X;
+			Y -= m_ParentControl->m_Y;
 		}
 
 		OutString += WriteValue("X", X);
@@ -499,18 +499,18 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPanel::Setup(GUIControlManager *manager, int ZPos) {
-		m_Manager = manager;
+	void GUIControlBase::Setup(GUIControlManager *manager, int ZPos) {
+		m_OwningManager = manager;
 		m_ZPos = ZPos;
 
 		// Request a new ID
-		m_ID = m_Manager->GetPanelID();
+		m_UniqueID = m_OwningManager->GetUniqueID();
 
 		// Set the manager for all the children
 		int Z = 0;
-		std::vector<GUIPanel *>::iterator it;
-		for (it = m_Children.begin(); it != m_Children.end(); it++) {
-			GUIPanel *P = *it;
+		std::vector<GUIControlBase *>::iterator it;
+		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
+			GUIControlBase *P = *it;
 			if (P) {
 				Z++;
 				P->Setup(manager, Z);
@@ -522,7 +522,7 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::ApplyProperties(GUIProperties *properties) {
+	void GUIControlBase::ApplyProperties(GUIProperties *properties) {
 		GUIAssert(properties, "");
 
 		m_Properties.OverwriteProperties(properties);
@@ -539,16 +539,16 @@ namespace RTE {
 		properties->GetPropertyValue("Visible", &Visible);
 
 		// Adjust position from parent
-		GUIPanel *panel = GetPanel();
-		if (panel && panel->GetParentPanel()) {
-			int px;
-			int py;
-			int pw;
-			int ph;
-			panel->GetParentPanel()->GetRect(&px, &py, &pw, &ph);
-			X += px;
-			Y += py;
-		}
+		//GUIControlBase *panel = GetPanel();
+		//if (panel && panel->GetParentPanel()) {
+		//	int px;
+		//	int py;
+		//	int pw;
+		//	int ph;
+		//	panel->GetParentPanel()->GetRect(&px, &py, &pw, &ph);
+		//	X += px;
+		//	Y += py;
+		//}
 		SetEnabled(Enabled);
 
 		Move(X, Y);
@@ -557,7 +557,7 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::Save(GUIWriter *writer) {
+	bool GUIControlBase::Save(GUIWriter *writer) {
 		std::string OutString = "";
 		std::string Name;
 
@@ -578,16 +578,16 @@ namespace RTE {
 
 		// Parent
 		OutString += "Parent = ";
-		if (m_ControlParent) {
-			OutString += m_ControlParent->GetName();
+		if (m_ParentControl) {
+			OutString += m_ParentControl->GetName();
 		} else {
 			OutString += "None";
 		}
 		OutString += "\n";
 
 		// Get the main panel and write its location
-		GUIPanel *Pan = GetPanel();
-		if (Pan) { OutString.append(Pan->ToString()); }
+		//GUIControlBase *Pan = GetPanel();
+		//if (Pan) { OutString.append(Pan->ToString()); }
 
 		// Write out the properties
 		OutString.append(m_Properties.ToString());

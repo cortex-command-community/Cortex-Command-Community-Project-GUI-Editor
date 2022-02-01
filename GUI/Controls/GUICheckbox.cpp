@@ -7,9 +7,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUICheckbox::GUICheckbox(GUIControlManager *ControlManager) : GUIControl(), GUIPanel(ControlManager) {
+	GUICheckbox::GUICheckbox(GUIControlManager *ControlManager) : GUIControlBase() {
 		m_Image = nullptr;
-		m_ControlManager = ControlManager;
+		m_OwningManager = ControlManager;
 		m_Check = State::Unchecked;
 		m_Mouseover = false;
 	}
@@ -17,7 +17,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+		GUIControlBase::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -44,7 +44,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+		GUIControlBase::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -55,7 +55,7 @@ namespace RTE {
 		m_DefHeight = 16;
 
 		// Setup the panel
-		GUIPanel::LoadProperties(Props);
+		//GUIControlBase::LoadProperties(Props);
 
 		// Make sure the button isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -77,7 +77,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+		GUIControlBase::ChangeSkin(Skin);
 
 		// Build the checkbox bitmap
 		BuildBitmap();
@@ -174,13 +174,13 @@ namespace RTE {
 		}
 		Screen->GetBitmap()->SetClipRect(nullptr);
 
-		GUIPanel::Draw(Screen);
+		GUIControlBase::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
 			// Push the checkbox down
 			CaptureMouse();
 			SetFocus();
@@ -195,7 +195,7 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y) && Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) {
+		if (PointInside(X, Y) && Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
 			if (m_Check == State::Unchecked) {
 				m_Check = State::Checked;
 			} else {
@@ -235,7 +235,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICheckbox::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
+		GUIControlBase::ApplyProperties(Props);
 
 		m_Check = Unchecked;
 		std::string value;

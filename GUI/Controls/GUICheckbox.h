@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A checkbox control class.
 /// </summary>
-class GUICheckbox : public GUIControl, public GUIPanel {
+class GUICheckbox : public GUIControlBase {
 
 public:
 
@@ -17,8 +17,8 @@ public:
         Greycheck
     };
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUICheckbox
@@ -36,7 +36,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

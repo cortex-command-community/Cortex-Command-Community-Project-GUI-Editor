@@ -8,12 +8,12 @@ namespace RTE {
 /// <summary>
 /// A button control class.
 /// </summary>
-class GUIButton : public GUIControl, public GUIPanel {
+class GUIButton : public GUIControlBase {
 
 public:
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-	void Move(int X, int Y) override { GUIPanel::SetPositionAbs(X, Y); }
+	void Move(int X, int Y) override { GUIControlBase::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -5,32 +5,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextPanel::GUITextPanel(GUIControlManager *ControlManager) : GUIPanel(ControlManager) {
-		m_Font = nullptr;
-		m_CursorX = m_CursorY = 0;
-		m_CursorIndex = 0;
-		m_CursorColor = 0;
-		m_CursorBlinkCount = 0;
-
-		m_FontColor = 0;
-		m_FontSelectColor = 0;
-		m_StartIndex = 0;
-		m_GotSelection = false;
-		m_SelectedColorIndex = 0;
-		m_Locked = false;
-		m_WidthMargin = 3;
-		m_HeightMargin = 0;
-
-		m_MaxTextLength = 0;
-		m_NumericOnly = false;
-		m_MaxNumericValue = 0;
-	}
-
-	// TODO: Both constructors use a common clear function?? Same with other panels
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUITextPanel::GUITextPanel() : GUIPanel(m_Manager) {
+	GUITextPanel::GUITextPanel() : GUIControlBase() {
 		m_Font = nullptr;
 		m_Text = "";
 		m_CursorX = m_CursorY = 0;
@@ -59,7 +34,7 @@ namespace RTE {
 		m_Width = Width;
 		m_Height = Height;
 
-		GUIAssert(m_Manager, "");
+		GUIAssert(m_OwningManager, "");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +294,7 @@ namespace RTE {
 		SetFocus();
 		CaptureMouse();
 
-		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT)) {
+		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -329,7 +304,7 @@ namespace RTE {
 		std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
 		m_CursorIndex = m_Text.size();
 
-		if (!(Modifier & GUIPanel::MouseModifiers::MODI_SHIFT)) { m_GotSelection = false; }
+		if (!(Modifier & GUIControlBase::MouseModifiers::MODI_SHIFT)) { m_GotSelection = false; }
 
 		// Go through each character until we to the mouse point
 		int TX = m_X;
@@ -342,7 +317,7 @@ namespace RTE {
 		}
 
 		// Do a selection if holding the shift button
-		if (Modifier & GUIPanel::MouseModifiers::MODI_SHIFT)
+		if (Modifier & GUIControlBase::MouseModifiers::MODI_SHIFT)
 			DoSelection(OldIndex, m_CursorIndex);
 
 		// Update the text
@@ -352,7 +327,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIPanel::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 

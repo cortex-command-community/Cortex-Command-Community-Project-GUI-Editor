@@ -10,7 +10,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorSelection::GrabControl(GUIControl *control, int mousePosX, int mousePosY) {
+	void EditorSelection::GrabControl(GUIControlBase *control, int mousePosX, int mousePosY) {
 		m_Control = control;
 		m_GrabbingControl = true;
 		m_GrabbingHandle = false;
@@ -62,7 +62,7 @@ namespace RTEGUI {
 		int parentWidth = 0;
 		int parentHeight = 0;
 		m_Control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
-		GUIControl *parent = m_Control->GetParent();
+		GUIControlBase *parent = m_Control->GetParent();
 		parent->GetControlRect(&parentPosX, &parentPosY, &parentWidth, &parentHeight);
 
 		int minSize = 10;

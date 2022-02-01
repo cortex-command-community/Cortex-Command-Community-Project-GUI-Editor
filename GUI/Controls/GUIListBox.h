@@ -8,12 +8,12 @@ namespace RTE {
 /// <summary>
 /// A ListBox control class.
 /// </summary>
-class GUIListBox : public GUIControl, public GUIListPanel {
+class GUIListBox : public GUIListPanel {
 
 public:
 
-	GUIControlOverrideMethods;
-	GUIPanelOverrideMethods;
+	//GUIControlOverrideMethods;
+	//GUIControlOverrideMethods;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIListBox
@@ -31,7 +31,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIPanel *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

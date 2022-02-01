@@ -23,7 +23,7 @@ namespace RTE {
 		/// <param name="eventType">Event type.</param>
 		/// <param name="eventCode">Msg.</param>
 		/// <param name="eventData">Data.</param>
-		GUIEvent(GUIControl *eventOrigin, GUIEventType eventType, GUIEventCode eventCode, int eventData = 0) : m_Origin(eventOrigin), m_Type(eventType), m_Code(eventCode), m_Data(eventData) {}
+		GUIEvent(GUIControlBase *eventOrigin, GUIEventType eventType, GUIEventCode eventCode, int eventData = 0) : m_Origin(eventOrigin), m_Type(eventType), m_Code(eventCode), m_Data(eventData) {}
 #pragma endregion
 
 #pragma region Getters
@@ -31,7 +31,7 @@ namespace RTE {
 		/// Gets the event control.
 		/// </summary>
 		/// <returns></returns>
-		GUIControl * GetOrigin() const { return m_Origin; }
+		GUIControlBase * GetOrigin() const { return m_Origin; }
 
 		/// <summary>
 		/// Gets the event type.
@@ -54,7 +54,7 @@ namespace RTE {
 
 	private:
 
-		GUIControl *m_Origin = nullptr;
+		GUIControlBase *m_Origin = nullptr;
 		GUIEventType m_Type = GUIEventType::NoEvent;
 		GUIEventCode m_Code = GUIEventCode::NoNotification;
 		int m_Data = 0;
