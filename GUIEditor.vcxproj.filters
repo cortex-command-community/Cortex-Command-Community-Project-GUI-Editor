@@ -141,6 +141,9 @@
     <ClCompile Include="GUI\Panels\GUITextPanel.cpp">
       <Filter>GUI\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\GUIControlBase.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Panels\GUITextPanel.h">
       <Filter>GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIControlBase.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
