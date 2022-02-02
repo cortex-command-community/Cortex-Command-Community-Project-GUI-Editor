@@ -189,13 +189,13 @@ private:
 
 	static const std::string_view c_ControlType;
 
-    GUIBitmap *m_DrawBitmap;
-    GUIBitmap *m_IndicatorImage;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	GUIBitmap *m_IndicatorImage = nullptr;
 
-    int m_Minimum;
-    int m_Maximum;
-    int m_Value;
-    int m_Spacing;
+	int m_Minimum = 0;
+	int m_Maximum = 100;
+	int m_Value = 0;
+	int m_Spacing = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap

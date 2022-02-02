@@ -7,13 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUICollectionBox::GUICollectionBox(GUIControlManager *ControlManager) : GUIControlBase() {
-		m_Background = nullptr;
+	GUICollectionBox::GUICollectionBox(GUIControlManager *ControlManager) {
 		m_OwningManager = ControlManager;
-		m_DrawBackground = true;
-		m_DrawType = DrawType::Color;
-		m_DrawColor = 0;
-		m_DrawBitmap = nullptr;
 
 		m_IsContainer = true; // We are a container
 	}

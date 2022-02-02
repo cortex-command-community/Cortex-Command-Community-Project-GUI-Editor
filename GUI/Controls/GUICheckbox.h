@@ -186,12 +186,12 @@ private:
 
 	static const std::string_view c_ControlType;
 
-	GUIBitmap *m_Image;
+	GUIBitmap *m_Image = nullptr;
 	GUIRect m_ImageRects[4];
-
-	int m_Check;
 	std::string m_Text;
-	int m_Mouseover;
+
+	int m_Check = State::Unchecked;
+	bool m_Mouseover = false;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap

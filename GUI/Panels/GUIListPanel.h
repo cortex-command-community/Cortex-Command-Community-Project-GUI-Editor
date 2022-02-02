@@ -17,27 +17,19 @@ class GUIListPanel : public GUIControlBase {
 public:
 
     // Item structure
-    struct Item
-    {
-        int                m_ID;
-        std::string        m_Name;
-        // Extra text field displayed right-justified in the item
-        std::string        m_RightText;
-        // Extra index for special indexing or reference that the item is associated with. Menu-specific
-        int                 m_ExtraIndex;
-        bool            m_Selected;
-        // Can contain a bitmap to display in the list
-        // This is OWNED
-        GUIBitmap       *m_pBitmap;
-        // Extra data associated with the item
-        // This is NOT OWNED
-        const Entity          *m_pEntity;
-        int             m_Height;
+	struct Item {
+		int m_ID = 0;
+		std::string m_Name;
+		std::string m_RightText; // Extra text field displayed right-justified in the item
+		int m_ExtraIndex = 0; // Extra index for special indexing or reference that the item is associated with. Menu-specific
+		bool m_Selected = false;
+		GUIBitmap *m_pBitmap = nullptr; // Can contain a bitmap to display in the list. This is OWNED
+		const Entity *m_pEntity = nullptr; // Extra data associated with the item. This is NOT OWNED
+		int m_Height = 0;;
 
-        Item() { m_pBitmap = nullptr; m_pEntity = nullptr; m_Height = 0; }
-        ~Item() { delete m_pBitmap; m_pBitmap = nullptr; }
+		~Item() { delete m_pBitmap; m_pBitmap = nullptr; }
 
-    };
+	};
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +39,7 @@ public:
 //                  system memory.
 // Arguments:       None.
 
-    GUIListPanel();
+	GUIListPanel() = default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -527,37 +519,35 @@ protected:
 
 private:
 
-	GUISkin *m_Skin;
-	GUIBitmap *m_BaseBitmap;
-	GUIBitmap *m_DrawBitmap;
-	GUIBitmap *m_FrameBitmap;
-	int m_FontSelectColor;
+	GUIBitmap *m_BaseBitmap = nullptr;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	GUIBitmap *m_FrameBitmap = nullptr;
 
-	bool m_UpdateLocked;
+	bool m_UpdateLocked = false;
 
-	GUIScrollPanel *m_HorzScroll;
-	GUIScrollPanel *m_VertScroll;
-	bool m_HorzScrollEnabled;
-	bool m_VertScrollEnabled;
-	int m_ScrollBarThickness; //!< The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.
-	int m_ScrollBarPadding; //!< The padding around the scrollbars, in pixels. Used to better size and position scrollbars within panel bounds, allowing to not overdraw on panel borders.
+	GUIScrollPanel *m_HorzScroll = nullptr;
+	GUIScrollPanel *m_VertScroll = nullptr;
+	bool m_HorzScrollEnabled = true;
+	bool m_VertScrollEnabled = true;
+	int m_ScrollBarThickness = 17; //!< The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.
+	int m_ScrollBarPadding = 0; //!< The padding around the scrollbars, in pixels. Used to better size and position scrollbars within panel bounds, allowing to not overdraw on panel borders.
 
-	bool m_CapturedHorz;
-	bool m_CapturedVert;
-	bool m_ExternalCapture;
+	bool m_CapturedHorz = false;
+	bool m_CapturedVert = false;
+	bool m_ExternalCapture = false;
 
-	int m_LargestWidth;
-	bool m_MultiSelect;
-	bool m_HotTracking;
-	int m_LastSelected;
-	bool m_LoopSelectionScroll; //!< Whether the list panel scrolls in a loop or not, while scrolling the selection list (as opposed to the scrollbar).
-	bool m_MouseScroll; //!< Whether the list panel enables scrolling with the mouse scroll wheel.
+	int m_LargestWidth = 0;
+	bool m_MultiSelect = false;
+	bool m_HotTracking = false;
+	int m_LastSelected = -1;
+	bool m_LoopSelectionScroll = false;; //!< Whether the list panel scrolls in a loop or not, while scrolling the selection list (as opposed to the scrollbar).
+	bool m_MouseScroll = false;; //!< Whether the list panel enables scrolling with the mouse scroll wheel.
 
-	bool m_AlternateDrawMode; // This draws items differently, not with boxes etc.
+	bool m_AlternateDrawMode = false; // This draws items differently, not with boxes etc.
 
 	std::vector<Item *> m_Items;
 	std::vector<Item *> m_SelectedList;
-	int m_SelectedColorIndex;
+	int m_SelectedColorIndex = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildDrawBitmap

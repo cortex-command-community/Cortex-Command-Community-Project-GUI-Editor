@@ -26,7 +26,7 @@ public:
 //                  system memory.
 // Arguments:       None.
 
-    GUITextPanel();
+	GUITextPanel() = default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -249,37 +249,35 @@ public:
 
 private:
 
-	int m_FontSelectColor;
-
 	std::string m_Text;
 	std::string m_RightText; // Appears right-justified in the text field
-	bool m_Focus;
-	bool m_Locked;
+	bool m_Focus = false;
+	bool m_Locked = false;
 
 	// The distance from the side and top of the text box, to the side and top of the first line of text
-	int m_WidthMargin;
-	int m_HeightMargin;
+	int m_WidthMargin = 3;
+	int m_HeightMargin = 0;
 
 	// Cursor
-	int m_CursorX;
-	int m_CursorY;
-	int m_CursorIndex;
-	int m_CursorColor;
-	int m_CursorBlinkCount; // Hacky way to make cursor blink without a timer
+	int m_CursorX = 0;
+	int m_CursorY = 0;
+	int m_CursorIndex = 0;
+	int m_CursorColor = 0;
+	int m_CursorBlinkCount = 0; // Hacky way to make cursor blink without a timer
 
-	int m_StartIndex;
+	int m_StartIndex = 0;
 
 	// Selection
-	bool m_GotSelection;
-	int m_StartSelection;
-	int m_EndSelection;
-	int m_SelectedColorIndex;
-	int m_SelectionX;
-	int m_SelectionWidth;
+	bool m_GotSelection = false;
+	int m_StartSelection = 0;
+	int m_EndSelection = 0;
+	int m_SelectedColorIndex = 0;
+	int m_SelectionX = 0;
+	int m_SelectionWidth = 0;
 
-	int m_MaxTextLength; //!< The maximum length of the text this text panel can contain.
-	bool m_NumericOnly; //!< Whether this text panel only accepts numeric symbols.
-	int m_MaxNumericValue; //!< The maximum numeric value when in numeric only mode. 0 means no maximum value.
+	int m_MaxTextLength = 0; //!< The maximum length of the text this text panel can contain.
+	bool m_NumericOnly = false; //!< Whether this text panel only accepts numeric symbols.
+	int m_MaxNumericValue = 0; //!< The maximum numeric value when in numeric only mode. 0 means no maximum value.
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          UpdateText

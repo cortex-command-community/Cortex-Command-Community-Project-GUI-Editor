@@ -7,40 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListPanel::GUIListPanel() : GUIControlBase() {
-		m_BaseBitmap = nullptr;
-		m_DrawBitmap = nullptr;
-		m_FrameBitmap = nullptr;
-		m_Font = nullptr;
-		m_Items.clear();
-		m_SelectedList.clear();
-		m_UpdateLocked = false;
-		m_LargestWidth = 0;
-		m_MultiSelect = false;
-		m_LastSelected = -1;
-		m_FontColor = 0;
-		m_FontSelectColor = 0;
-		m_SelectedColorIndex = 0;
-		m_CapturedHorz = false;
-		m_CapturedVert = false;
-		m_ExternalCapture = false;
-		m_HotTracking = false;
-		m_HorzScrollEnabled = true;
-		m_VertScrollEnabled = true;
-		m_ScrollBarThickness = 17;
-		m_ScrollBarPadding = 0;
-		m_AlternateDrawMode = false;
-		m_LoopSelectionScroll = false;
-		m_MouseScroll = false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIListPanel::Create(int X, int Y, int Width, int Height) {
-		m_X = X;
-		m_Y = Y;
-		m_Width = Width;
-		m_Height = Height;
+		GUIControlBase::Create("", X, Y, Width, Height);
 
 		GUIAssert(m_OwningManager, "");
 

@@ -202,12 +202,12 @@ private:
 
 	static const std::string_view c_ControlType;
 
-    GUIBitmap *m_DrawBitmap;
-    int m_LineColor;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	int m_LineColor = 0;
 
     GUIProperties m_PageValues;
     std::vector<GUITextPanel *> m_TextPanelList;
-    GUIScrollPanel *m_VertScroll;
+	GUIScrollPanel *m_VertScroll = nullptr;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// Method:          BuildBitmap

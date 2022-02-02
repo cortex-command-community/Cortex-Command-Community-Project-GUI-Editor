@@ -1,12 +1,14 @@
 #ifndef _GUISLIDER_
 #define _GUISLIDER_
 
+#include "GUIScrollPanel.h"
+
 namespace RTE {
 
 /// <summary>
 /// A slider control class.
 /// </summary>
-class GUISlider : public GUIControlBase {
+class GUISlider : public GUIScrollPanel {
 
 public:
 
@@ -254,24 +256,17 @@ private:
 
 	static const std::string_view c_ControlType;
 
-	GUIBitmap *m_DrawBitmap;
-	GUIBitmap *m_KnobImage;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	GUIBitmap *m_KnobImage = nullptr;
 
 	// Properties
-	int m_Orientation;
-	int m_TickDirection;
-	int m_Minimum;
-	int m_Maximum;
-	int m_Value;
-	int m_ValueResolution;
+	int m_Orientation = Orientation::Horizontal;
+	int m_TickDirection = TickDirection::BottomRight;
+
 
 	// Internal variables
-	int m_KnobPosition;
-	int m_KnobSize;
-	bool m_KnobGrabbed;
-	int m_KnobGrabPos;
-	int m_EndThickness;
-	int m_OldValue;
+	int m_EndThickness = 0;
+	int m_OldValue = 0;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

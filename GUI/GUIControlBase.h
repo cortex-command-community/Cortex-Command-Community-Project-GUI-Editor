@@ -61,7 +61,7 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		GUIControlBase() { Clear(); }
+		GUIControlBase() = default;
 
 		/// <summary>
 		/// Called when the control has been created.
@@ -682,44 +682,45 @@ namespace RTE {
 
 	protected:
 
-		GUIControlManager *m_OwningManager; //!< Not owned, owns this!
+		GUIControlManager *m_OwningManager = nullptr; //!< Not owned, owns this!
 
 
-		GUISkin *m_Skin;
+		GUISkin *m_Skin = nullptr;
 
-		int m_UniqueID;
+		int m_UniqueID = -1;
 
-		bool m_Enabled;
-		bool m_Visible;
-
-
-		int m_X; // absolute coordinates
-		int m_Y;
-		int m_Width;
-		int m_Height;
+		bool m_Enabled = true;
+		bool m_Visible = true;
 
 
+		int m_X = 0; // absolute coordinates
+		int m_Y = 0;
+		int m_Width = 0;
+		int m_Height = 0;
 
-		bool m_GotFocus;
-		bool m_Captured;
 
-		GUIControlBase *m_ParentControl; //!< Not owned!
 
-		GUIFont *m_Font;
-		int m_FontColor;
-		int m_FontShadow;
-		int m_FontKerning;
+		bool m_GotFocus = false;
+		bool m_Captured = false;
+
+		GUIControlBase *m_ParentControl = nullptr; //!< Not owned!
+
+		GUIFont *m_Font = nullptr;
+		int m_FontColor = 0;
+		int m_FontSelectColor = 0;
+		int m_FontShadow = 0;
+		int m_FontKerning = 1;
 
 		GUIProperties m_Properties;
 		std::vector<GUIControlBase *> m_ChildControls;
 
-		bool m_IsContainer;
+		bool m_IsContainer = false;
 
 		// For the GUI editor
-		int m_MinWidth;
-		int m_MinHeight;
-		int m_DefWidth;
-		int m_DefHeight;
+		int m_MinWidth = 0;
+		int m_MinHeight = 0;
+		int m_DefWidth = 0;
+		int m_DefHeight = 0;
 
 		/// <summary>
 		/// Sets up the manager to enable/disable hover tracking of this panel.
@@ -751,14 +752,9 @@ namespace RTE {
 		GUIRect m_Rect;
 
 
-		int m_ZPos;
+		int m_ZPos = 0;
 
-		GUIControlBase *m_SignalTarget;
-
-		/// <summary>
-		/// Clears all the member variables of this GUIControlBase, effectively resetting the members of this abstraction level only.
-		/// </summary>
-		void Clear();
+		GUIControlBase *m_SignalTarget = nullptr;
 	};
 }
 #endif

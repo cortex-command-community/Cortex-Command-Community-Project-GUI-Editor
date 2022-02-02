@@ -5,35 +5,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextPanel::GUITextPanel() : GUIControlBase() {
-		m_Font = nullptr;
-		m_Text = "";
-		m_CursorX = m_CursorY = 0;
-		m_CursorIndex = 0;
-		m_CursorColor = 0;
-		m_CursorBlinkCount = 0;
-		m_FontColor = 0;
-		m_FontSelectColor = 0;
-		m_StartIndex = 0;
-		m_GotSelection = false;
-		m_SelectedColorIndex = 0;
-		m_Locked = false;
-		m_WidthMargin = 3;
-		m_HeightMargin = 0;
-
-		m_MaxTextLength = 0;
-		m_NumericOnly = false;
-		m_MaxNumericValue = 0;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUITextPanel::Create(int X, int Y, int Width, int Height) {
-		m_X = X;
-		m_Y = Y;
-		m_Width = Width;
-		m_Height = Height;
-
+		GUIControlBase::Create("", X, Y, Width, Height);
 		GUIAssert(m_OwningManager, "");
 	}
 

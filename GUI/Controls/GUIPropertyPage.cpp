@@ -7,21 +7,17 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPropertyPage::GUIPropertyPage(GUIControlManager *ControlManager) : GUIControlBase() {
-		m_DrawBitmap = nullptr;
+	GUIPropertyPage::GUIPropertyPage(GUIControlManager *ControlManager) {
 		m_OwningManager = ControlManager;
-		m_Font = nullptr;
-		m_VertScroll = nullptr;
-		m_FontColor = 0;
-		m_LineColor = 0;
-		m_PageValues.ClearProperties();
-		m_TextPanelList.clear();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControlBase::Create(Name, X, Y, Width, Height);
+
+		m_PageValues.ClearProperties();
+		m_TextPanelList.clear();
 
 		// Minimum size of the control
 		m_MinWidth = 50;

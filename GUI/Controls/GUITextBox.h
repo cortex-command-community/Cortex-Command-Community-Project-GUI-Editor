@@ -119,9 +119,9 @@ private:
 
 	static const std::string_view c_ControlType;
 
-    GUIBitmap *m_DrawBitmap;
-    int m_HAlignment;
-    int m_VAlignment;
+	GUIBitmap *m_DrawBitmap = nullptr;
+    int m_HAlignment = GUIFont::HAlignment::Left;
+    int m_VAlignment = GUIFont::VAlignment::Top;
 };
 };
 #endif

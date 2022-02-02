@@ -31,7 +31,7 @@ public:
 //                  system memory.
 // Arguments:       None.
 
-    GUIScrollPanel();
+	GUIScrollPanel() = default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -230,6 +230,31 @@ public:
 
 protected:
 
+	// User attributes
+	int m_Orientation = Orientation::Horizontal;
+	int m_Minimum = 0;
+	int m_Maximum = 100;
+	int m_Value = 0;
+	int m_PageSize = 1;
+	int m_SmallChange = 1;
+	int m_ValueResolution = 1; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
+
+	int m_KnobPosition = 0;
+	GUIBitmap *m_DrawBitmap[3];
+
+	// Internal attributes
+	bool m_RebuildSize = true;
+	bool m_RebuildKnob = true;
+	int m_ButtonSize = 17;
+	int m_MinimumKnobSize = 9;
+
+	int m_KnobLength = 0;
+	bool m_ButtonPushed[2]; // flase;
+	bool m_GrabbedKnob = false;
+	bool m_GrabbedBackg = false;
+	int m_GrabbedPos = 0;
+	int m_GrabbedSide = 0;
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          LoadProps
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -257,31 +282,6 @@ protected:
     void BuildBitmap(bool UpdateSize, bool UpdateKnob);
 
 private:
-
-	GUISkin *m_Skin;
-	GUIBitmap *m_DrawBitmap[3];
-
-	// User attributes
-	int m_Orientation;
-	int m_Minimum;
-	int m_Maximum;
-	int m_Value;
-	int m_PageSize;
-	int m_SmallChange;
-
-	// Internal attributes
-	bool m_RebuildSize;
-	bool m_RebuildKnob;
-	int m_ButtonSize;
-	int m_MinimumKnobSize;
-	int m_KnobPosition;
-	int m_KnobLength;
-	bool m_ButtonPushed[2];
-	bool m_GrabbedKnob;
-	bool m_GrabbedBackg;
-	int m_GrabbedPos;
-	int m_GrabbedSide;
-	int m_ValueResolution; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildButton

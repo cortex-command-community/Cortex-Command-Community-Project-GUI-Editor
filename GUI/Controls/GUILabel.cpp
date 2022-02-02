@@ -7,10 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUILabel::GUILabel(GUIControlManager *ControlManager) : GUIControlBase() {
+	GUILabel::GUILabel(GUIControlManager *ControlManager) {
 		m_OwningManager = ControlManager;
-		m_Font = nullptr;
-		m_FontColor = 0;
 		m_Text = "";
 		m_HAlignment = GUIFont::HAlignment::Left;
 		m_VAlignment = GUIFont::VAlignment::Middle;

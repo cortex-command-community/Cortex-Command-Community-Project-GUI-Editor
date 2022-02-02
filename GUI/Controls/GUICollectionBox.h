@@ -216,12 +216,12 @@ private:
 
 	static const std::string_view c_ControlType;
 
-	GUIBitmap *m_Background;
+	GUIBitmap *m_Background = nullptr;
 
-	bool m_DrawBackground;
-	int m_DrawType;
-	int m_DrawColor;
-	GUIBitmap *m_DrawBitmap;
+	bool m_DrawBackground = true;
+	int m_DrawType = DrawType::Color;
+	int m_DrawColor = 0;
+	GUIBitmap *m_DrawBitmap = nullptr;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap

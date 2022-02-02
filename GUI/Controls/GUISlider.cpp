@@ -7,19 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUISlider::GUISlider(GUIControlManager *ControlManager) : GUIControlBase() {
-		m_DrawBitmap = nullptr;
-		m_KnobImage = nullptr;
+	GUISlider::GUISlider(GUIControlManager *ControlManager) {
 		m_OwningManager = ControlManager;
-		m_Orientation = Orientation::Horizontal;
-		m_TickDirection = TickDirection::BottomRight;
-		m_KnobPosition = 0;
-		m_KnobSize = 0;
-		m_KnobGrabbed = false;
-		m_Minimum = 0;
-		m_Value = 0;
-		m_Maximum = 100;
-		m_ValueResolution = 1;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -280,24 +269,24 @@ namespace RTE {
 
 		if (m_Orientation == Orientation::Horizontal) {
 			if (X > m_X + m_EndThickness && X < m_X + m_Width - m_EndThickness) {
-				m_KnobGrabbed = true;
-				m_KnobPosition = X - m_X - (m_KnobSize / 2);
-				m_KnobGrabPos = X - (m_X + m_KnobPosition);
+				m_GrabbedKnob = true;
+				m_KnobPosition = X - m_X - (m_KnobLength / 2);
+				m_GrabbedPos = X - (m_X + m_KnobPosition);
 			}
 			Size = m_Width;
 		} else {
 			if (Y > m_Y + m_EndThickness && Y < m_Y + m_Height - m_EndThickness) {
-				m_KnobGrabbed = true;
-				m_KnobPosition = Y - m_Y - (m_KnobSize / 2);
-				m_KnobGrabPos = Y - (m_Y + m_KnobPosition);
+				m_GrabbedKnob = true;
+				m_KnobPosition = Y - m_Y - (m_KnobLength / 2);
+				m_GrabbedPos = Y - (m_Y + m_KnobPosition);
 			}
 			Size = m_Height;
 		}
 
-		m_KnobPosition = std::clamp(m_KnobPosition, m_EndThickness, Size - m_KnobSize - m_EndThickness);
+		m_KnobPosition = std::clamp(m_KnobPosition, m_EndThickness, Size - m_KnobLength - m_EndThickness);
 
 		// Calculate the new value
-		int Area = Size - m_KnobSize;
+		int Area = Size - m_KnobLength;
 		if (Area > 0) {
 			float p = (float)m_KnobPosition / (float)(Area);
 			int MaxRange = (m_Maximum - m_Minimum);
@@ -316,7 +305,7 @@ namespace RTE {
 	void GUISlider::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		ReleaseMouse();
 
-		m_KnobGrabbed = false;
+		m_GrabbedKnob = false;
 
 		// If the value has changed, add the "Changed" notification
 		if (m_Value != m_OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed); }
@@ -344,16 +333,16 @@ namespace RTE {
 		}
 
 		// Move the knob if it is grabbed
-		if (m_KnobGrabbed) {
-			int Delta = m_KnobGrabPos - (MousePos - KnobTop);
+		if (m_GrabbedKnob) {
+			int Delta = m_GrabbedPos - (MousePos - KnobTop);
 			m_KnobPosition -= Delta;
 
 			// Clamp the knob position
 			m_KnobPosition = std::max(m_KnobPosition, 0);
-			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobSize);
+			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobLength);
 
 			// Calculate the new value
-			int Area = Size - m_KnobSize;
+			int Area = Size - m_KnobLength;
 			if (Area > 0) {
 				float p = (float)m_KnobPosition / (float)(Area);
 				int MaxRange = (m_Maximum - m_Minimum);
@@ -366,7 +355,7 @@ namespace RTE {
 
 			// Clamp the knob position again for the graphics
 			m_KnobPosition = std::max(m_KnobPosition, m_EndThickness);
-			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobSize - m_EndThickness);
+			m_KnobPosition = std::min(m_KnobPosition, Size - m_KnobLength - m_EndThickness);
 
 			// If the value has changed, add the "Changed" notification
 			if (m_Value != m_OldValue) { AddEvent(GUIEventType::Notification, GUIEventCode::Changed); }
@@ -401,10 +390,10 @@ namespace RTE {
 
 		if (m_Maximum > m_Minimum) {
 			const bool horizontalOrientation = (m_Orientation == Orientation::Horizontal);
-			m_KnobSize = horizontalOrientation ? m_KnobImage->GetWidth() : m_KnobImage->GetHeight();
+			m_KnobLength = horizontalOrientation ? m_KnobImage->GetWidth() : m_KnobImage->GetHeight();
 			const int size = horizontalOrientation ? m_Width : m_Height;
 			const float valueRatio = static_cast<float>(m_Value - m_Minimum) / static_cast<float>(m_Maximum - m_Minimum);
-			m_KnobPosition = m_EndThickness + static_cast<int>(static_cast<float>(size - m_KnobSize - (m_EndThickness * 2)) * valueRatio);
+			m_KnobPosition = m_EndThickness + static_cast<int>(static_cast<float>(size - m_KnobLength - (m_EndThickness * 2)) * valueRatio);
 		}
 	}
 

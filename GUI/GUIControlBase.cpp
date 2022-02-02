@@ -6,47 +6,18 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::Clear() {
-		m_OwningManager = nullptr;
-
-		m_UniqueID = -1;
-
-		m_Skin = nullptr;
-
-		m_X = 0;
-		m_Y = 0;
-		m_Width = 0;
-		m_Height = 0;
-
-		m_GotFocus = false;
-		m_Captured = false;
-		m_Visible = true;
-		m_Enabled = true;
-
-		m_ParentControl = nullptr;
-
-
-		m_SignalTarget = this;
-		m_ZPos = 0;
-
-		m_Font = nullptr;
-		m_FontColor = 0;
-		m_FontShadow = 0;
-		m_FontKerning = 1;
-
-		m_Properties.ClearProperties();
-		m_ChildControls.clear();
-		m_IsContainer = false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIControlBase::Create(const std::string &name, int posX, int posY, int width, int height) {
+		m_ChildControls.clear();
 		m_Properties.ClearProperties();
 
 		m_Properties.AddProperty("Name", name);
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
+
+		m_X = posX;
+		m_Y = posY;
+		m_Width = width;
+		m_Height = height;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

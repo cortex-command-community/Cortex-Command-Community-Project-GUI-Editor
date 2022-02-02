@@ -5,37 +5,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIScrollPanel::GUIScrollPanel() : GUIControlBase() {
-		m_Skin = nullptr;
-		m_DrawBitmap[0] = m_DrawBitmap[1] = m_DrawBitmap[2] = nullptr;
-		m_ButtonSize = 17;
-		m_MinimumKnobSize = 9;
-		m_SmallChange = 1;
-		m_ButtonPushed[0] = m_ButtonPushed[1] = false;
-		m_GrabbedKnob = false;
-		m_GrabbedBackg = false;
-		m_RebuildSize = true;
-		m_RebuildKnob = true;
-		m_ValueResolution = 1;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIScrollPanel::Create(int X, int Y, int Width, int Height) {
-		m_X = X;
-		m_Y = Y;
-		m_Width = Width;
-		m_Height = Height;
-
-		m_Minimum = 0;
-		m_Maximum = 100;
-		m_Value = 0;
-		m_SmallChange = 1;
-		m_PageSize = 1;
-		m_Orientation = Horizontal;
-		m_GrabbedKnob = false;
-		m_GrabbedBackg = false;
-		m_ValueResolution = 1;
+		GUIControlBase::Create("", X, Y, Width, Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

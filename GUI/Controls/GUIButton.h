@@ -243,13 +243,13 @@ private:
 
 	static const std::string_view c_ControlType;
 
-	GUIBitmap *m_DrawBitmap;
+	GUIBitmap *m_DrawBitmap = nullptr;
 
-	bool m_Pushed;
-	bool m_Over;
-	std::unique_ptr<GUILabel> m_Text;
-	std::unique_ptr<GUIBitmap> m_Icon;
-	std::unique_ptr<GUIRect> m_BorderSizes;
+	bool m_Pushed = false;
+	bool m_Over = false;
+	std::unique_ptr<GUILabel> m_Text = nullptr;
+	std::unique_ptr<GUIBitmap> m_Icon = nullptr;
+	std::unique_ptr<GUIRect> m_BorderSizes = nullptr;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

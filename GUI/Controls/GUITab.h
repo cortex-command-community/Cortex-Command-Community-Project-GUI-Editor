@@ -171,11 +171,11 @@ private:
 
 	static const std::string_view c_ControlType;
 
-	GUIBitmap *m_Image;
+	GUIBitmap *m_Image = nullptr;
 	GUIRect m_ImageRects[4];
 
-	bool m_Selected;
-	int m_Mouseover;
+	bool m_Selected = false;
+	bool m_Mouseover = false;
 	std::string m_Text;
 
 //////////////////////////////////////////////////////////////////////////////////////////

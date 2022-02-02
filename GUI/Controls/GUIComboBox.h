@@ -319,16 +319,16 @@ private:
 
 	static const std::string_view c_ControlType;
 
-    GUIBitmap *m_DrawBitmap;
-    int m_OldSelection;
-    bool m_CreatedList;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	int m_OldSelection = 0;
+	bool m_CreatedList = false;
 
-    int m_DropHeight;
-    int m_DropDownStyle;
+	int m_DropHeight = 80;
+    int m_DropDownStyle = DropDownStyles::DropDownList;
 
-    GUITextPanel *m_TextPanel;
-    GUIListPanel *m_ListPanel;
-    GUIComboBoxButton *m_Button;
+	GUITextPanel *m_TextPanel = nullptr;
+	GUIListPanel *m_ListPanel = nullptr;
+	GUIComboBoxButton *m_Button = nullptr;
 };
 
 
@@ -346,7 +346,7 @@ public:
 //                  system memory.
 // Arguments:       GUIManager.
 
-    explicit GUIComboBoxButton(GUIControlManager *Manager);
+	explicit GUIComboBoxButton() = default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -413,8 +413,8 @@ public:
 
 private:
 
-    GUIBitmap *m_DrawBitmap;
-    bool m_Pushed;
+	GUIBitmap *m_DrawBitmap = nullptr;
+	bool m_Pushed = false;
 };
 };
 #endif

@@ -7,14 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIProgressBar::GUIProgressBar(GUIControlManager *ControlManager) : GUIControlBase() {
-		m_DrawBitmap = nullptr;
-		m_IndicatorImage = nullptr;
+	GUIProgressBar::GUIProgressBar(GUIControlManager *ControlManager) {
 		m_OwningManager = ControlManager;
-		m_Spacing = 0;
-		m_Value = 0;
-		m_Minimum = 0;
-		m_Maximum = 100;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
