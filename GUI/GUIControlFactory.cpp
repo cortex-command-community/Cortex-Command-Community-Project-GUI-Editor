@@ -18,60 +18,167 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *ControlManager, const std::string &ControlName) {
-		// Button
-		if (ControlName == "BUTTON") {
-			return new GUIButton(ControlManager);
+	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height) {
+		if (controlType == "BUTTON") {
+			GUIButton *newControl = new GUIButton(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Listbox
-		if (ControlName == "LISTBOX") {
-			return new GUIListBox(ControlManager);
+		if (controlType == "LISTBOX") {
+			GUIListBox *newControl = new GUIListBox(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Checkbox
-		if (ControlName == "CHECKBOX") {
-			return new GUICheckbox(ControlManager);
+		if (controlType == "CHECKBOX") {
+			GUICheckbox *newControl = new GUICheckbox(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// RadioButton
-		if (ControlName == "RADIOBUTTON") {
-			return new GUIRadioButton(ControlManager);
+		if (controlType == "RADIOBUTTON") {
+			GUIRadioButton *newControl = new GUIRadioButton(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Tab
-		if (ControlName == "TAB") {
-			return new GUITab(ControlManager);
+		if (controlType == "TAB") {
+			GUITab *newControl = new GUITab(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// CollectionBox
-		if (ControlName == "COLLECTIONBOX") {
-			return new GUICollectionBox(ControlManager);
+		if (controlType == "COLLECTIONBOX") {
+			GUICollectionBox *newControl = new GUICollectionBox(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// ProgressBar
-		if (ControlName == "PROGRESSBAR") {
-			return new GUIProgressBar(ControlManager);
+		if (controlType == "PROGRESSBAR") {
+			GUIProgressBar *newControl = new GUIProgressBar(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Slider
-		if (ControlName == "SLIDER") {
-			return new GUISlider(ControlManager);
+		if (controlType == "SLIDER") {
+			GUISlider *newControl = new GUISlider(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// TextBox
-		if (ControlName == "TEXTBOX") {
-			return new GUITextBox(ControlManager);
+		if (controlType == "TEXTBOX") {
+			GUITextBox *newControl = new GUITextBox(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Label
-		if (ControlName == "LABEL") {
-			return new GUILabel(ControlManager);
+		if (controlType == "LABEL") {
+			GUILabel *newControl = new GUILabel(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Scrollbar
-		if (ControlName == "SCROLLBAR") {
-			return new GUIScrollbar(ControlManager);
+		if (controlType == "SCROLLBAR") {
+			GUIScrollbar *newControl = new GUIScrollbar(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// ComboBox
-		if (ControlName == "COMBOBOX") {
-			return new GUIComboBox(ControlManager);
+		if (controlType == "COMBOBOX") {
+			GUIComboBox *newControl = new GUIComboBox(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// PropertyPage
-		if (ControlName == "PROPERTYPAGE") {
-			return new GUIPropertyPage(ControlManager);
+		if (controlType == "PROPERTYPAGE") {
+			GUIPropertyPage *newControl = new GUIPropertyPage(owningManager);
+			newControl->Create(name, posX, posY, width, height);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
 		}
-		// Not Found
+		return nullptr;
+	}
+
+	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference) {
+		if (controlType == "BUTTON") {
+			GUIButton *newControl = new GUIButton(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "LISTBOX") {
+			GUIListBox *newControl = new GUIListBox(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "CHECKBOX") {
+			GUICheckbox *newControl = new GUICheckbox(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "RADIOBUTTON") {
+			GUIRadioButton *newControl = new GUIRadioButton(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "TAB") {
+			GUITab *newControl = new GUITab(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "COLLECTIONBOX") {
+			GUICollectionBox *newControl = new GUICollectionBox(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "PROGRESSBAR") {
+			GUIProgressBar *newControl = new GUIProgressBar(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "SLIDER") {
+			GUISlider *newControl = new GUISlider(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "TEXTBOX") {
+			GUITextBox *newControl = new GUITextBox(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "LABEL") {
+			GUILabel *newControl = new GUILabel(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "SCROLLBAR") {
+			GUIScrollbar *newControl = new GUIScrollbar(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "COMBOBOX") {
+			GUIComboBox *newControl = new GUIComboBox(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
+		if (controlType == "PROPERTYPAGE") {
+			GUIPropertyPage *newControl = new GUIPropertyPage(owningManager);
+			newControl->Create(reference);
+			newControl->ChangeSkin(owningManager->GetSkin());
+			return newControl;
+		}
 		return nullptr;
 	}
 }

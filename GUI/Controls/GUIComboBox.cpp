@@ -50,7 +50,7 @@ namespace RTE {
 		m_TextPanel->SetVisible(true);
 		m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 		m_TextPanel->SetSignalTarget(this);
-		//GUIControlBase::AddChild(m_TextPanel);
+		AddChild(m_TextPanel);
 
 		// Create the listpanel
 		m_ListPanel->SetVisible(false);
@@ -62,7 +62,7 @@ namespace RTE {
 		// Create the button
 		m_Button->Create(m_Width - 17, 0, 17, m_Height);
 		m_Button->SetSignalTarget(this);
-		//GUIControlBase::AddChild(m_Button);
+		AddChild(m_Button);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ namespace RTE {
 		m_TextPanel->Create(0, 0, m_Width - 12, m_Height);
 		m_TextPanel->SetVisible(true);
 		m_TextPanel->SetSignalTarget(this);
-		//GUIControlBase::AddChild(m_TextPanel);
+		AddChild(m_TextPanel);
 
 		// Create the listpanel
 		m_ListPanel->SetVisible(false);
@@ -101,7 +101,7 @@ namespace RTE {
 		// Create the button
 		m_Button->Create(m_Width - 17, 0, 17, m_Height);
 		m_Button->SetSignalTarget(this);
-		//GUIControlBase::AddChild(m_Button);
+		AddChild(m_Button);
 
 		// Load the info
 		Props->GetPropertyValue("Dropheight", &m_DropHeight);

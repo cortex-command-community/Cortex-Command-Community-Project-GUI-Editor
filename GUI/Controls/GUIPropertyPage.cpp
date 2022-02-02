@@ -49,7 +49,7 @@ namespace RTE {
 		m_VertScroll->SetValue(0);
 		m_VertScroll->SetSignalTarget(this);
 
-		//GUIControlBase::AddChild(m_VertScroll);
+		AddChild(m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
@@ -57,10 +57,11 @@ namespace RTE {
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
 			GUITextPanel *T = new GUITextPanel();
+			T->SetOwningManager(m_OwningManager);
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
-			//GUIControlBase::AddChild(T);
+			AddChild(T);
 
 			m_TextPanelList.push_back(T);
 		}
@@ -95,7 +96,7 @@ namespace RTE {
 		m_VertScroll->SetValue(0);
 		m_VertScroll->SetSignalTarget(this);
 
-		//GUIControlBase::AddChild(m_VertScroll);
+		AddChild(m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
@@ -106,7 +107,7 @@ namespace RTE {
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
-			//GUIControlBase::AddChild(T);
+			AddChild(T);
 
 			m_TextPanelList.push_back(T);
 		}

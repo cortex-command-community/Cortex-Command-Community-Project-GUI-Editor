@@ -297,23 +297,21 @@ namespace RTE {
 			return nullptr;
 		}
 		// Create the control
-		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type);
+		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type, Name, X, Y, Width, Height);
 		if (!Control) {
 			return nullptr;
 		}
-		Control->Create(Name, X, Y, Width, Height);
-		Control->ChangeSkin(m_Skin);
 
-		GUIControlBase *Pan = nullptr;
+		//GUIControlBase *Pan = nullptr;
 		if (Parent) {
 			//Pan = Parent->GetPanel();
-			//Parent->AddChild(Control);
+			Parent->AddChild(Control);
 		}
-		if (Pan) {
+		//if (Pan) {
 			//Pan->AddChild(Control->GetPanel());
-		} else {
+		//} else {
 			//AddPanel(Control->GetPanel());
-		}
+		//}
 		// Add the control to the list
 		m_ControlList.push_back(Control);
 
@@ -339,13 +337,10 @@ namespace RTE {
 			return nullptr;
 		}
 		// Create the control
-		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type);
+		GUIControlBase *Control = GUIControlFactory::CreateControl(this, Type, Property);
 		if (!Control) {
 			return nullptr;
 		}
-
-		Control->Create(Property);
-		Control->ChangeSkin(m_Skin);
 
 		// Get the parent control
 		std::string Parent;
@@ -355,14 +350,14 @@ namespace RTE {
 		GUIControlBase *Pan = nullptr;
 		if (Par && Parent.compare("None") != 0) {
 			//Pan = Par->GetPanel();
-			//Par->AddChild(Control);
+			Par->AddChild(Control);
 		}
 
-		if (Pan) {
+		//if (Pan) {
 			//Pan->AddChild(Control->GetPanel());
-		} else {
+		//} else {
 			//AddPanel(Control->GetPanel());
-		}
+		//}
 
 		// Add the control to the list
 		m_ControlList.push_back(Control);

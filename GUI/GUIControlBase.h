@@ -395,18 +395,6 @@ namespace RTE {
 		/// <summary>
 		/// Removes a child based on name.
 		/// </summary>
-		/// <param name="child">Child Name.</param>
-		void RemoveChild(const GUIControlBase *child);
-
-		/// <summary>
-		/// Adds a child to this control
-		/// </summary>
-		/// <param name="control">Control.</param>
-		void AddChild(GUIControlBase *control);
-
-		/// <summary>
-		/// Removes a child based on name.
-		/// </summary>
 		/// <param name="name">Child Name.</param>
 		void RemoveChild(const std::string_view &name);
 
@@ -650,7 +638,7 @@ namespace RTE {
 
 
 
-
+		void SetOwningManager(GUIControlManager *newOwningManager) { m_OwningManager = newOwningManager; }
 
 
 

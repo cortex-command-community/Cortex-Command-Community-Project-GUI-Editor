@@ -29,8 +29,8 @@ namespace RTE {
 		m_VertScroll->SetValue(0);
 		m_VertScroll->SetSignalTarget(this);
 
-		//AddChild(m_HorzScroll);
-		//AddChild(m_VertScroll);
+		AddChild(m_HorzScroll);
+		AddChild(m_VertScroll);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

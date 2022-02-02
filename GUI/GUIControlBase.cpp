@@ -219,7 +219,7 @@ namespace RTE {
 			}
 
 			// Remove the child from any previous parent
-			//if (child->GetParentPanel()) { child->GetParentPanel()->GUIControlBase::RemoveChild(child); }
+			if (child->m_ParentControl) { child->m_ParentControl->RemoveChild(child->GetName()); }
 
 			// Setup the inherited values
 			child->m_ParentControl = this;
@@ -231,34 +231,6 @@ namespace RTE {
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControlBase::RemoveChild(const GUIControlBase *pChild) {
-		// Note: We do NOT free the children because they are still linked in through their controls. This merely removes the panel from the list.
-		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack
-		for (std::vector<GUIControlBase *>::iterator itr = m_ChildControls.begin(); itr != m_ChildControls.end(); itr++) {
-			const GUIControlBase *pPanel = *itr;
-			if (pPanel && pPanel == pChild) {
-				m_ChildControls.erase(itr);
-				break;
-			}
-		}
-	}
-
-
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControlBase::AddChild(GUIControlBase *control) {
-		GUIAssert(control, "");
-
-		// Remove the control from any previous parent
-		if (control->m_ParentControl) { control->m_ParentControl->GUIControlBase::RemoveChild(control->GetName()); }
-
-		control->m_ParentControl = this;
-		m_ChildControls.push_back(control);
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlBase::RemoveChild(const std::string_view &name) {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
@@ -272,7 +244,7 @@ namespace RTE {
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlBase::RemoveAllChildren() {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
