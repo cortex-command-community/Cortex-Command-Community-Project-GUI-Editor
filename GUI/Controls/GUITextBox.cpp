@@ -24,6 +24,12 @@ namespace RTE {
 		m_DefWidth = 60;
 		m_DefHeight = 16;
 
+		// Setup the panel
+		m_X = X;
+		m_Y = Y;
+		m_Width = m_DefWidth;
+		m_Height = m_DefHeight;
+
 		// Create the ListPanel
 		int w = m_DefWidth;
 		int h = m_DefHeight;

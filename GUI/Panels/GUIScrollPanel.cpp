@@ -7,6 +7,10 @@ namespace RTE {
 
 	void GUIScrollPanel::Create(int X, int Y, int Width, int Height) {
 		GUIControl::Create("", X, Y, Width, Height);
+
+		for (int i = 0; i < 3; ++i) {
+			m_DrawBitmap[i] = nullptr;
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

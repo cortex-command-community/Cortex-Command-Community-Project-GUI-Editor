@@ -478,16 +478,15 @@ namespace RTE {
 		properties->GetPropertyValue("Visible", &Visible);
 
 		// Adjust position from parent
-		//GUIControl *panel = GetPanel();
-		//if (panel && panel->GetParentPanel()) {
-		//	int px;
-		//	int py;
-		//	int pw;
-		//	int ph;
-		//	panel->GetParentPanel()->GetRect(&px, &py, &pw, &ph);
-		//	X += px;
-		//	Y += py;
-		//}
+		if (m_ParentControl) {
+			int px;
+			int py;
+			int pw;
+			int ph;
+			m_ParentControl->GetRect(&px, &py, &pw, &ph);
+			X += px;
+			Y += py;
+		}
 		SetEnabled(Enabled);
 
 		Move(X, Y);

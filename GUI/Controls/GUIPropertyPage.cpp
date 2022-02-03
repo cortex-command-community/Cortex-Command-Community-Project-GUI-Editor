@@ -42,6 +42,7 @@ namespace RTE {
 
 		// Create the vertical scrollbar
 		m_VertScroll = new GUIScrollPanel();
+		m_VertScroll->SetOwningManager(m_OwningManager);
 
 		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
 		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
@@ -89,6 +90,7 @@ namespace RTE {
 
 		// Create the vertical scrollbar
 		m_VertScroll = new GUIScrollPanel();
+		m_VertScroll->SetOwningManager(m_OwningManager);
 
 		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
 		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
@@ -104,6 +106,7 @@ namespace RTE {
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
 			GUITextPanel *T = new GUITextPanel();
+			T->SetOwningManager(m_OwningManager);
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);

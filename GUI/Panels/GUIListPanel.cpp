@@ -14,7 +14,9 @@ namespace RTE {
 
 		// Create the 2 scrollpanels
 		m_HorzScroll = new GUIScrollPanel();
+		m_HorzScroll->SetOwningManager(m_OwningManager);
 		m_VertScroll = new GUIScrollPanel();
+		m_VertScroll->SetOwningManager(m_OwningManager);
 
 		// Initial size & positions
 		m_HorzScroll->Create(0 + m_ScrollBarPadding, Height - m_ScrollBarThickness - m_ScrollBarPadding, Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
