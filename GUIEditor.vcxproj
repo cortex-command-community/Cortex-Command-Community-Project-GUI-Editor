@@ -140,7 +140,7 @@
     <ClCompile Include="GUI\Controls\GUISlider.cpp" />
     <ClCompile Include="GUI\Controls\GUITab.cpp" />
     <ClCompile Include="GUI\Controls\GUITextBox.cpp" />
-    <ClCompile Include="GUI\GUIControlBase.cpp" />
+    <ClCompile Include="GUI\GUIControl.cpp" />
     <ClCompile Include="GUI\GUIControlFactory.cpp" />
     <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
@@ -184,7 +184,7 @@
     <ClInclude Include="GUI\Controls\GUITextBox.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\GUIConstants.h" />
-    <ClInclude Include="GUI\GUIControlBase.h" />
+    <ClInclude Include="GUI\GUIControl.h" />
     <ClInclude Include="GUI\GUIControlFactory.h" />
     <ClInclude Include="GUI\GUIControlManager.h" />
     <ClInclude Include="GUI\GUIEvent.h" />

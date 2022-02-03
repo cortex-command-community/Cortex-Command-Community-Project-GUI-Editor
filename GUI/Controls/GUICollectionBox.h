@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A collection box control class that contains child controls.
 /// </summary>
-class GUICollectionBox : public GUIControlBase {
+class GUICollectionBox : public GUIControl {
 
 public:
 

@@ -96,13 +96,13 @@ namespace RTEGUI {
 		/// Gets the top level (root) Control of the workspace.
 		/// </summary>
 		/// <returns>Pointer to the RootControl GUIControl.</returns>
-		GUIControlBase * GetRootControl() const { return m_RootControl; }
+		GUIControl * GetRootControl() const { return m_RootControl; }
 
 		/// <summary>
 		/// Sets a GUIControlBaseto be used as top level (root) Control of the workspace.
 		/// </summary>
 		/// <param name="newRootControl">The GUIControlBaseto set as RootControl.</param>
-		void SetRootControl(GUIControlBase *newRootControl) { m_RootControl = newRootControl; }
+		void SetRootControl(GUIControl *newRootControl) { m_RootControl = newRootControl; }
 
 		/// <summary>
 		/// Gets the horizontal position of the workspace in the editor window.
@@ -164,7 +164,7 @@ namespace RTEGUI {
 		/// Remove a GUI element from the workspace.
 		/// </summary>
 		/// <param name="controlToRemove">The element to remove.</param>
-		void RemoveControl(GUIControlBase *controlToRemove) const;
+		void RemoveControl(GUIControl *controlToRemove) const;
 
 		/// <summary>
 		/// Generates a name for a new GUI element based on the element type.
@@ -189,12 +189,12 @@ namespace RTEGUI {
 		/// Find and set the currently selected entry in the parent list to match the current active selection in the workspace.
 		/// </summary>
 		/// <param name="control"></param>
-		void SelectActiveControlInParentList(GUIControlBase *control) const;
+		void SelectActiveControlInParentList(GUIControl *control) const;
 
 		/// <summary>
 		/// Find and set the currently selected entry in the children list to match the current active selection in the workspace.
 		/// </summary>
-		void SelectActiveControlInChildrenList(GUIControlBase *control) const;
+		void SelectActiveControlInChildrenList(GUIControl *control) const;
 
 		/// <summary>
 		/// Update and populate the parent CollectionBoxes list.
@@ -228,7 +228,7 @@ namespace RTEGUI {
 		/// <param name="mousePosX">The X position of the mouse.</param>
 		/// <param name="mousePosY">The Y position of the mouse.</param>
 		/// <returns>The GUIControlBasethat is under the mouse pointer, or nullptr if none.</returns>
-		GUIControlBase * ControlUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY);
+		GUIControl * ControlUnderMouse(GUIControl *control, int mousePosX, int mousePosY);
 
 		/// <summary>
 		/// Checks if a control's handle is under the mouse pointer.
@@ -237,7 +237,7 @@ namespace RTEGUI {
 		/// <param name="mousePosX">The X position of the mouse.</param>
 		/// <param name="mousePosY">The Y position of the mouse.</param>
 		/// <returns>The index of the handle that is under the mouse pointer, or -1 if none.</returns>
-		int HandleUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY) const;
+		int HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const;
 #pragma endregion
 
 #pragma region Selection Controls
@@ -264,7 +264,7 @@ namespace RTEGUI {
 		/// </summary>
 		/// <param name"control">The control to update properties for.</param>
 		/// <param name="manualEdit">Whether this update was triggered by manually editing values in the property page and pressing Enter.</param>
-		bool UpdateControlProperties(GUIControlBase *control, bool manualEdit = false) const;
+		bool UpdateControlProperties(GUIControl *control, bool manualEdit = false) const;
 #pragma endregion
 
 	private:
@@ -279,7 +279,7 @@ namespace RTEGUI {
 			int PosY = 0;
 			int Width = 0;
 			int Height = 0;
-			GUIControlBase *Parent = nullptr;
+			GUIControl *Parent = nullptr;
 			GUIProperties *Properties = nullptr;
 		};
 
@@ -297,7 +297,7 @@ namespace RTEGUI {
 
 		std::unique_ptr<GUIControlManager> m_WorkspaceManager = nullptr; //!< The GUIControlManager that handles the workspace.
 
-		GUIControlBase *m_RootControl = nullptr; //!< The top level (root) Control of the workspace.
+		GUIControl *m_RootControl = nullptr; //!< The top level (root) Control of the workspace.
 
 		int m_WorkspacePosX = 300; //!< Horizontal position of the workspace in the editor window.
 		int m_WorkspacePosY = 45; //!< Vertical position of the workspace in the editor window.

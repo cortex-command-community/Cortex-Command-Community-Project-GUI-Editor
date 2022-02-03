@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 9;
@@ -41,7 +41,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 9;
@@ -53,7 +53,7 @@ namespace RTE {
 		m_DefHeight = 12;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the scrollpanel isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -65,7 +65,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollbar::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+	void GUIScrollbar::ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		// Should be our scroll panel
@@ -116,7 +116,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollbar::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		GUIScrollPanel::LoadProps(&m_Properties);
 

@@ -12,7 +12,7 @@ class Entity;
 /// <summary>
 /// A listbox panel class used for controls requiring a listbox.
 /// </summary>
-class GUIListPanel : public GUIControlBase {
+class GUIListPanel : public GUIControl {
 
 public:
 
@@ -217,7 +217,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

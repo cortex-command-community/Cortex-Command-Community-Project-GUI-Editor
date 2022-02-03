@@ -21,7 +21,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 20;
@@ -48,7 +48,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 20;
@@ -59,7 +59,7 @@ namespace RTE {
 		m_DefHeight = 16;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the label isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -86,7 +86,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Load the font
 		std::string Filename;
@@ -104,7 +104,7 @@ namespace RTE {
 
 	void GUILabel::Draw(GUIScreen *Screen) {
 		Draw(Screen->GetBitmap());
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +197,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
 			CaptureMouse();
 			SetFocus();
 		}
@@ -207,7 +207,7 @@ namespace RTE {
 
 	void GUILabel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		// If the mouse is over the button, add the clicked notification to the event queue
-		if (PointInside(X, Y) && (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) && IsCaptured()) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
+		if (PointInside(X, Y) && (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) && IsCaptured()) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
 
 		ReleaseMouse();
 	}
@@ -219,14 +219,14 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	int GUILabel::ResizeHeightToFit() {
 		int newHeight = m_Font->CalculateHeight(m_Text, m_Width);
-		GUIControlBase::SetSize(m_Width, newHeight);
+		GUIControl::SetSize(m_Width, newHeight);
 
 		return newHeight;
 	}
@@ -291,7 +291,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		m_Properties.GetPropertyValue("Text", &m_Text);
 

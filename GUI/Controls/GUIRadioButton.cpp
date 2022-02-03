@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -41,7 +41,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -52,7 +52,7 @@ namespace RTE {
 		m_DefHeight = 16;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the button isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -66,7 +66,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Build the checkbox bitmap
 		BuildBitmap();
@@ -164,13 +164,13 @@ namespace RTE {
 		}
 		Screen->GetBitmap()->SetClipRect(nullptr);
 
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
 			// Push the checkbox down
 			CaptureMouse();
 			SetFocus();
@@ -185,7 +185,7 @@ namespace RTE {
 		ReleaseMouse();
 
 		// If the mouse is over the button, add the command to the event queue
-		if (PointInside(X, Y) && Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) { SetCheck(true); }
+		if (PointInside(X, Y) && Buttons & GUIControl::MouseButtons::MOUSE_LEFT) { SetCheck(true); }
 
 		AddEvent(GUIEventType::Notification, GUIEventCode::UnPushed);
 	}
@@ -197,7 +197,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		// Rebuild the bitmap
 		BuildBitmap();
@@ -229,11 +229,11 @@ namespace RTE {
 
 		// Go through all my RadioButton siblings and un-check them
 		if (m_ParentControl) {
-			std::vector<GUIControlBase *>::iterator it;
-			std::vector<GUIControlBase *> *Children = m_ParentControl->GetChildren();
+			std::vector<GUIControl *>::iterator it;
+			std::vector<GUIControl *> *Children = m_ParentControl->GetChildren();
 
 			for (it = Children->begin(); it != Children->end(); it++) {
-				GUIControlBase *C = *it;
+				GUIControl *C = *it;
 				if (C) {
 					// Make sure this is not me
 					//if (C->GetPanel() && GetPanel() && C->GetPanel()->GetUniqueID() == GetPanel()->GetUniqueID()) {
@@ -253,7 +253,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIRadioButton::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		m_Properties.GetPropertyValue("Text", &m_Text);
 		m_Properties.GetPropertyValue("Checked", &m_Checked);

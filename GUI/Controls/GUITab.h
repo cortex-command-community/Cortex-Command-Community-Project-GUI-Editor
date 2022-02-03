@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A tab control class.
 /// </summary>
-class GUITab : public GUIControlBase {
+class GUITab : public GUIControl {
 
 public:
 
@@ -101,7 +101,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override { GUIControlBase::SetPositionAbs(X, Y); }
+    void Move(int X, int Y) override { GUIControl::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

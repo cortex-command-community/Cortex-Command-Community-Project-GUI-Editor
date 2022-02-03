@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		m_PageValues.ClearProperties();
 		m_TextPanelList.clear();
@@ -70,7 +70,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 50;
@@ -81,7 +81,7 @@ namespace RTE {
 		m_DefHeight = 100;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the control isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -134,7 +134,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Change the skin of the text panels
 		for (GUITextPanel *textPanel : m_TextPanelList) {
@@ -207,13 +207,13 @@ namespace RTE {
 		}
 		Screen->GetBitmap()->DrawRectangle(m_X + m_Width / 2, m_Y + 1, 0, Y - m_Y - Spacer * 2, m_LineColor, false);
 
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
 			// Push the button down
 			//m_Pushed = true;
 			//CaptureMouse();
@@ -226,7 +226,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 	}
@@ -238,7 +238,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		// TODO: Alter text panels
 
@@ -268,7 +268,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPropertyPage::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+	void GUIPropertyPage::ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		bool TextSignal = false;

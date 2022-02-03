@@ -1,12 +1,12 @@
 #include "GUI.h"
 #include "GUIWriter.h"
-#include "GUIControlBase.h"
+#include "GUIControl.h"
 
 namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::Create(const std::string &name, int posX, int posY, int width, int height) {
+	void GUIControl::Create(const std::string &name, int posX, int posY, int width, int height) {
 		m_ChildControls.clear();
 		m_Properties.ClearProperties();
 
@@ -22,7 +22,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::Create(GUIProperties *reference) {
+	void GUIControl::Create(GUIProperties *reference) {
 		m_Properties.AddProperty("Name", "");
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
@@ -45,7 +45,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::CenterInParent(bool centerX, bool centerY) {
+	void GUIControl::CenterInParent(bool centerX, bool centerY) {
 		int newRelX = m_X - m_ParentControl->GetPosX();
 		int newRelY = m_Y - m_ParentControl->GetPosY();
 
@@ -59,14 +59,14 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::SetPositionAbs(int X, int Y, bool moveChildren) {
+	void GUIControl::SetPositionAbs(int X, int Y, bool moveChildren) {
 		int DX = X - m_X;
 		int DY = Y - m_Y;
 		m_X = X;
 		m_Y = Y;
 
 		if (moveChildren) {
-			for (GUIControlBase *childControl : m_ChildControls) {
+			for (GUIControl *childControl : m_ChildControls) {
 				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
 			}
 		}
@@ -74,7 +74,7 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::SetPositionRel(int X, int Y) {
+	void GUIControl::SetPositionRel(int X, int Y) {
 		X += m_ParentControl->GetPosX();
 		Y += m_ParentControl->GetPosY();
 		int DX = X - m_X;
@@ -82,18 +82,18 @@ namespace RTE {
 		m_X = X;
 		m_Y = Y;
 
-		for (GUIControlBase *childControl : m_ChildControls) {
+		for (GUIControl *childControl : m_ChildControls) {
 			childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
 		}
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::MoveRelative(int dX, int dY) {
+	void GUIControl::MoveRelative(int dX, int dY) {
 		m_X += dX;
 		m_Y += dY;
 
-		for (GUIControlBase *childControl : m_ChildControls) {
+		for (GUIControl *childControl : m_ChildControls) {
 			childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
 		}
 	}
@@ -101,7 +101,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIControlBase::GetName() const {
+	std::string GUIControl::GetName() const {
 		std::string name;
 		m_Properties.GetPropertyValue("Name", &name);
 		return name;
@@ -109,7 +109,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int GUIControlBase::GetAnchor() {
+	int GUIControl::GetAnchor() {
 		int Anchor = 0;
 		std::string Value[4];
 
@@ -131,7 +131,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIControlBase::GetToolTip() const {
+	std::string GUIControl::GetToolTip() const {
 		std::string tip;
 		m_Properties.GetPropertyValue("ToolTip", &tip);
 		return tip;
@@ -141,14 +141,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::SetFocus() {
+	void GUIControl::SetFocus() {
 		m_OwningManager->SetFocus(this);
 	}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
+	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
 		m_OwningManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
 	}
 
@@ -157,14 +157,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIRect * GUIControlBase::GetRect() {
+	GUIRect * GUIControl::GetRect() {
 		SetRect(&m_Rect, m_X, m_Y, m_X + m_Width, m_Y + m_Height);
 		return &m_Rect;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::GetRect(int *posX, int *posY, int *width, int *height) const {
+	void GUIControl::GetRect(int *posX, int *posY, int *width, int *height) const {
 		if (posX) { *posX = m_X; }
 		if (posY) { *posY = m_Y; }
 		if (width) { *width = m_Width; }
@@ -173,7 +173,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::GetControlRect(int *posX, int *posY, int *width, int *height) const {
+	void GUIControl::GetControlRect(int *posX, int *posY, int *width, int *height) const {
 		// Zero the values for controls that don't override this
 		if (posX) { *posX = 0; }
 		if (posY) { *posY = 0; }
@@ -184,13 +184,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::CaptureMouse() {
+	void GUIControl::CaptureMouse() {
 		m_OwningManager->CaptureMouse(this);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::ReleaseMouse() {
+	void GUIControl::ReleaseMouse() {
 		m_OwningManager->ReleaseMouse();
 	}
 
@@ -200,7 +200,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::AddChild(GUIControlBase *child, bool convertToAbsolutePos) {
+	void GUIControl::AddChild(GUIControl *child, bool convertToAbsolutePos) {
 		if (child) {
 			// Convert the child's coordinates into absolute coordinates
 			if (convertToAbsolutePos) {
@@ -214,7 +214,7 @@ namespace RTE {
 
 			int zPos = 0;
 			if (!m_ChildControls.empty()) {
-				const GUIControlBase *lastChild = m_ChildControls.back();
+				const GUIControl *lastChild = m_ChildControls.back();
 				zPos = lastChild->GetZPos() + 1;
 			}
 
@@ -232,11 +232,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::RemoveChild(const std::string_view &name) {
+	void GUIControl::RemoveChild(const std::string_view &name) {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (std::vector<GUIControlBase *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			const GUIControlBase *C = *it;
+		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
+			const GUIControl *C = *it;
 			if (C && C->GetName().compare(name) == 0) {
 				m_ChildControls.erase(it);
 				break;
@@ -246,10 +246,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::RemoveAllChildren() {
+	void GUIControl::RemoveAllChildren() {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (const GUIControlBase *control : m_ChildControls) {
+		for (const GUIControl *control : m_ChildControls) {
 			if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
 		}
 		m_ChildControls.clear();
@@ -258,14 +258,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::ChangeZPosition(int changeType) {
+	void GUIControl::ChangeZPosition(int changeType) {
 		if (!m_ParentControl) {
 			return;
 		}
 		int Index = -1;
 
 		// Find the child in our children list
-		std::vector<GUIControlBase *>::iterator it;
+		std::vector<GUIControl *>::iterator it;
 		int Count = 0;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++, Count++) {
 			if (GetUniqueID() == this->GetUniqueID()) {
@@ -279,13 +279,13 @@ namespace RTE {
 		}
 		switch (changeType) {
 			// Put the child at the end of the list
-			case GUIControlBase::ZChange::TopMost:
+			case GUIControl::ZChange::TopMost:
 				m_ChildControls.erase(m_ChildControls.begin() + Index);
 				m_ChildControls.push_back(this);
 				break;
 
 				// Put the child at the start of the list
-			case GUIControlBase::ZChange::BottomMost:
+			case GUIControl::ZChange::BottomMost:
 				m_ChildControls.erase(m_ChildControls.begin() + Index);
 				m_ChildControls.insert(m_ChildControls.begin(), this);
 				break;
@@ -295,20 +295,20 @@ namespace RTE {
 		// Go through and re-order the Z positions
 		Count = 0;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++, Count++) {
-			GUIControlBase *P = *it;
+			GUIControl *P = *it;
 			if (P) { P->SetZPos(Count); }
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::TrackMouseHover(bool Enabled, int Delay) {
+	void GUIControl::TrackMouseHover(bool Enabled, int Delay) {
 		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlBase::PointInside(int X, int Y) {
+	bool GUIControl::PointInside(int X, int Y) {
 		// Can't be inside an invisible panel
 		if (!m_Visible) {
 			return false;
@@ -326,7 +326,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControlBase * GUIControlBase::TopPanelUnderPoint(int x, int y) {
+	GUIControl * GUIControl::TopPanelUnderPoint(int x, int y) {
 		if (!PointInside(x, y)) {
 			return nullptr;
 		}
@@ -336,10 +336,10 @@ namespace RTE {
 		}
 
 		// Go through the children
-		GUIControlBase *CurPanel = nullptr;
-		std::vector<GUIControlBase *>::reverse_iterator it;
+		GUIControl *CurPanel = nullptr;
+		std::vector<GUIControl *>::reverse_iterator it;
 		for (it = m_ChildControls.rbegin(); it != m_ChildControls.rend(); it++) {
-			GUIControlBase *P = *it;
+			GUIControl *P = *it;
 			if (P) {
 				CurPanel = P->TopPanelUnderPoint(x, y);
 				if (CurPanel != nullptr) {
@@ -354,7 +354,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControlBase * GUIControlBase::BottomPanelUnderPoint(int x, int y) {
+	GUIControl * GUIControl::BottomPanelUnderPoint(int x, int y) {
 		if (!PointInside(x, y)) {
 			return nullptr;
 		}
@@ -364,10 +364,10 @@ namespace RTE {
 		}
 
 		// Go through the children
-		GUIControlBase *CurPanel = nullptr;
+		GUIControl *CurPanel = nullptr;
 		;
-		for (std::vector<GUIControlBase *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControlBase *P = *it;
+		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
+			GUIControl *P = *it;
 			if (P) {
 				CurPanel = P->BottomPanelUnderPoint(x, y);
 				if (CurPanel != nullptr) {
@@ -382,7 +382,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::BuildProperties(GUIProperties *properties) const {
+	void GUIControl::BuildProperties(GUIProperties *properties) const {
 		GUIAssert(properties, "");
 
 		// Subtract the position from the parent
@@ -406,7 +406,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIControlBase::ToString() const {
+	std::string GUIControl::ToString() const {
 		std::string OutString = "";
 
 		// Subtract the position from the parent
@@ -438,7 +438,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::Setup(GUIControlManager *manager, int ZPos) {
+	void GUIControl::Setup(GUIControlManager *manager, int ZPos) {
 		m_OwningManager = manager;
 		m_ZPos = ZPos;
 
@@ -447,9 +447,9 @@ namespace RTE {
 
 		// Set the manager for all the children
 		int Z = 0;
-		std::vector<GUIControlBase *>::iterator it;
+		std::vector<GUIControl *>::iterator it;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControlBase *P = *it;
+			GUIControl *P = *it;
 			if (P) {
 				Z++;
 				P->Setup(manager, Z);
@@ -461,7 +461,7 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::ApplyProperties(GUIProperties *properties) {
+	void GUIControl::ApplyProperties(GUIProperties *properties) {
 		GUIAssert(properties, "");
 
 		m_Properties.OverwriteProperties(properties);
@@ -478,7 +478,7 @@ namespace RTE {
 		properties->GetPropertyValue("Visible", &Visible);
 
 		// Adjust position from parent
-		//GUIControlBase *panel = GetPanel();
+		//GUIControl *panel = GetPanel();
 		//if (panel && panel->GetParentPanel()) {
 		//	int px;
 		//	int py;
@@ -496,7 +496,7 @@ namespace RTE {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlBase::Save(GUIWriter *writer) {
+	bool GUIControl::Save(GUIWriter *writer) {
 		std::string OutString = "";
 		std::string Name;
 
@@ -525,7 +525,7 @@ namespace RTE {
 		OutString += "\n";
 
 		// Get the main panel and write its location
-		//GUIControlBase *Pan = GetPanel();
+		//GUIControl *Pan = GetPanel();
 		//if (Pan) { OutString.append(Pan->ToString()); }
 
 		// Write out the properties
@@ -549,11 +549,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlBase::Draw(GUIScreen *targetScreen) {
+	void GUIControl::Draw(GUIScreen *targetScreen) {
 		GUIRect *clippingRect = GetRect();
 		targetScreen->GetBitmap()->AddClipRect(clippingRect);
 
-		for (GUIControlBase *childControl : m_ChildControls) {
+		for (GUIControl *childControl : m_ChildControls) {
 			if (childControl->GetVisible()) {
 				// Re-set the clipping rect since the last child has messed with it.
 				targetScreen->GetBitmap()->SetClipRect(clippingRect);

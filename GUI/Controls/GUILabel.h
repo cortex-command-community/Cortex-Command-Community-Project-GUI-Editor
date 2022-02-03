@@ -10,7 +10,7 @@ namespace RTE {
 /// <summary>
 /// A label control class.
 /// </summary>
-class GUILabel : public GUIControlBase {
+class GUILabel : public GUIControl {
 
 public:
 
@@ -101,7 +101,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-	void Move(int X, int Y) override { GUIControlBase::SetPositionAbs(X, Y); }
+	void Move(int X, int Y) override { GUIControl::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

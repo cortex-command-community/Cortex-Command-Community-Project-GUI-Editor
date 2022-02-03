@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -34,7 +34,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -45,7 +45,7 @@ namespace RTE {
 		m_DefHeight = 16;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 		GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
 
 		// Make sure the textbox isn't too small
@@ -79,7 +79,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Free any old bitmap
 		if (m_DrawBitmap) {
@@ -130,7 +130,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextBox::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+	void GUITextBox::ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) {
 		// Clicked
 		if (Code == GUIEventCode::Clicked) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Data); }
 
@@ -144,7 +144,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextBox::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		bool numericOnly = GetNumericOnly();
 		m_Properties.GetPropertyValue("NumericOnly", &numericOnly);

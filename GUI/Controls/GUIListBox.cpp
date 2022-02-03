@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 50;
@@ -40,7 +40,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 100;
@@ -51,7 +51,7 @@ namespace RTE {
 		m_DefHeight = 100;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the listbox isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -85,7 +85,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+	void GUIListBox::ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) {
 		if (Source->GetUniqueID() == GetUniqueID()) {
 			if (Code == GUIEventCode::MouseMove) {
 				AddEvent(GUIEventType::Notification, GUIEventCode::MouseMove, Data);
@@ -112,7 +112,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		bool Multi = false;
 		m_Properties.GetPropertyValue("MultiSelect", &Multi);

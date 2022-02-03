@@ -86,7 +86,7 @@ namespace RTEGUI {
 			}
 			// Check if mouse clicked on a control
 			if (!currentSelection.IsGrabbingControl() && !currentSelection.IsGrabbingHandle()) {
-				GUIControlBase *clickedControl = m_EditorManager->ControlUnderMouse(m_EditorManager->GetRootControl(), mousePosX, mousePosY);
+				GUIControl *clickedControl = m_EditorManager->ControlUnderMouse(m_EditorManager->GetRootControl(), mousePosX, mousePosY);
 				if (clickedControl && clickedControl != m_EditorManager->GetRootControl()) {
 					currentSelection.GrabControl(clickedControl, mousePosX, mousePosY);
 
@@ -306,7 +306,7 @@ namespace RTEGUI {
 			m_EditorManager->GetWorkspaceManager()->Load(newFilename, addControls);
 			m_ActiveFileName = newFilename;
 
-			GUIControlBase *newRootControl = m_EditorManager->GetWorkspaceManager()->GetControlList()->front();
+			GUIControl *newRootControl = m_EditorManager->GetWorkspaceManager()->GetControlList()->front();
 			newRootControl->Move(m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY());
 			newRootControl->StoreProperties();
 

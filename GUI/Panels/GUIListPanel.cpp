@@ -8,7 +8,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::Create(int X, int Y, int Width, int Height) {
-		GUIControlBase::Create("", X, Y, Width, Height);
+		GUIControl::Create("", X, Y, Width, Height);
 
 		GUIAssert(m_OwningManager, "");
 
@@ -337,7 +337,7 @@ namespace RTE {
 		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
 		// Draw any children
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +358,7 @@ namespace RTE {
 		// Give this panel focus
 		SetFocus();
 
-		if ((Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) && PointInside(X, Y)) {
+		if ((Buttons & GUIControl::MouseButtons::MOUSE_LEFT) && PointInside(X, Y)) {
 			SelectItem(X, Y, Modifier);
 			SendSignal(GUIEventCode::MouseDown, Buttons);
 		} else {
@@ -831,7 +831,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::OnGainFocus() {
-		GUIControlBase::OnGainFocus();
+		GUIControl::OnGainFocus();
 
 		BuildBitmap(false, true);
 	}
@@ -839,14 +839,14 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::OnLoseFocus() {
-		GUIControlBase::OnLoseFocus();
+		GUIControl::OnLoseFocus();
 
 		BuildBitmap(false, true);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListPanel::ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) {
+	void GUIListPanel::ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) {
 		// ChangeValue signal from scrollpanels?
 		GUIAssert(Source, "");
 
@@ -1067,7 +1067,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::SetSize(int Width, int Height) {
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		// Adjust the scrollbar positions & sizes
 		m_HorzScroll->SetPositionAbs(m_X, m_Y + m_Height - 17);
@@ -1085,7 +1085,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::SetPositionAbs(int X, int Y) {
-		GUIControlBase::SetPositionAbs(X, Y);
+		GUIControl::SetPositionAbs(X, Y);
 
 		// Adjust the scrollbar positions
 		m_HorzScroll->SetPositionAbs(X, Y + m_Height - 17);

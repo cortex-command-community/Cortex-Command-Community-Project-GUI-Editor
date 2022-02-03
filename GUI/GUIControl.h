@@ -11,7 +11,7 @@ namespace RTE {
 	/// <summary>
 	/// 
 	/// </summary>
-	class GUIControlBase {
+	class GUIControl {
 
 	public:
 
@@ -54,14 +54,14 @@ namespace RTE {
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
 			const std::string_view GetControlType() const override { return c_ControlType; } \
-			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIControlBase::GetRect(posX, posY, width, height); }
+			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIControl::GetRect(posX, posY, width, height); }
 #pragma endregion
 
 #pragma region Creation
 		/// <summary>
 		/// 
 		/// </summary>
-		GUIControlBase() = default;
+		GUIControl() = default;
 
 		/// <summary>
 		/// Called when the control has been created.
@@ -84,7 +84,7 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		virtual ~GUIControlBase() = default;
+		virtual ~GUIControl() = default;
 
 		/// <summary>
 		/// Called when the control has been destroyed.
@@ -151,7 +151,7 @@ namespace RTE {
 		/// Gets the children list.
 		/// </summary>
 		/// <returns></returns>
-		std::vector<GUIControlBase *> * GetChildren() { return &m_ChildControls; }
+		std::vector<GUIControl *> * GetChildren() { return &m_ChildControls; }
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -160,7 +160,7 @@ namespace RTE {
 		/// Gets the parent of this control.
 		/// </summary>
 		/// <returns></returns>
-		GUIControlBase * GetParent() { return m_ParentControl; }
+		GUIControl * GetParent() { return m_ParentControl; }
 
 
 		/// <summary>
@@ -390,7 +390,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="child">Pointer to the panel to add.</param>
 		/// <param name="convertToAbsolutePos"></param>
-		void AddChild(GUIControlBase *child, bool convertToAbsolutePos = true);
+		void AddChild(GUIControl *child, bool convertToAbsolutePos = true);
 
 		/// <summary>
 		/// Removes a child based on name.
@@ -419,7 +419,7 @@ namespace RTE {
 		/// Sets the target panel to receive signals.
 		/// </summary>
 		/// <param name="target">Target panel.</param>
-		void SetSignalTarget(GUIControlBase *target) { if (target) { m_SignalTarget = target; } }
+		void SetSignalTarget(GUIControl *target) { if (target) { m_SignalTarget = target; } }
 
 		/// <summary>
 		/// Called when receiving a signal.
@@ -427,7 +427,7 @@ namespace RTE {
 		/// <param name="signalSource">Signal source.</param>
 		/// <param name="eventCode">Signal code.</param>
 		/// <param name="eventData">Signal data.</param>
-		virtual void ReceiveSignal(GUIControlBase *signalSource, GUIEventCode eventCode, int eventData) {}
+		virtual void ReceiveSignal(GUIControl *signalSource, GUIEventCode eventCode, int eventData) {}
 
 		/// <summary>
 		/// Called when the panel gains focus.
@@ -595,7 +595,7 @@ namespace RTE {
 		/// <param name="posX">X, Y Coordinates of point.</param>
 		/// <param name="posY"></param>
 		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
-		GUIControlBase * TopPanelUnderPoint(int posX, int posY);
+		GUIControl * TopPanelUnderPoint(int posX, int posY);
 
 		/// <summary>
 		/// Recursively goes down the tree to check the last panel under a point
@@ -603,7 +603,7 @@ namespace RTE {
 		/// <param name="posX">X, Y Coordinates of point.</param>
 		/// <param name="posY"></param>
 		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
-		GUIControlBase * BottomPanelUnderPoint(int posX, int posY);
+		GUIControl * BottomPanelUnderPoint(int posX, int posY);
 
 
 #pragma endregion
@@ -691,7 +691,7 @@ namespace RTE {
 		bool m_GotFocus = false;
 		bool m_Captured = false;
 
-		GUIControlBase *m_ParentControl = nullptr; //!< Not owned!
+		GUIControl *m_ParentControl = nullptr; //!< Not owned!
 
 		GUIFont *m_Font = nullptr;
 		int m_FontColor = 0;
@@ -700,7 +700,7 @@ namespace RTE {
 		int m_FontKerning = 1;
 
 		GUIProperties m_Properties;
-		std::vector<GUIControlBase *> m_ChildControls;
+		std::vector<GUIControl *> m_ChildControls;
 
 		bool m_IsContainer = false;
 
@@ -742,7 +742,7 @@ namespace RTE {
 
 		int m_ZPos = 0;
 
-		GUIControlBase *m_SignalTarget = nullptr;
+		GUIControl *m_SignalTarget = nullptr;
 	};
 }
 #endif

@@ -37,13 +37,13 @@ namespace RTEGUI {
 		/// Gets the GUI element that is currently selected by this.
 		/// </summary>
 		/// <returns>Pointer to the GUIControlBasethat is selected by this.</returns>
-		GUIControlBase * GetControl() const { return m_Control; }
+		GUIControl * GetControl() const { return m_Control; }
 
 		/// <summary>
 		/// Sets the GUI element this is currently selected by this.
 		/// </summary>
 		/// <param name="newControl">The GUIControlBaseto set as selected by this.</param>
-		void SetControl(GUIControlBase *newControl) { m_Control = newControl; }
+		void SetControl(GUIControl *newControl) { m_Control = newControl; }
 #pragma endregion
 
 #pragma region Grabbing and Releasing
@@ -55,7 +55,7 @@ namespace RTEGUI {
 		/// <summary>
 		/// Sets the GUI element as the current grab.
 		/// </summary>
-		void GrabControl(GUIControlBase *control, int mousePosX, int mousePosY);
+		void GrabControl(GUIControl *control, int mousePosX, int mousePosY);
 
 		/// <summary>
 		/// Gets whether the GUI element is grabbed or not.
@@ -160,7 +160,7 @@ namespace RTEGUI {
 
 	private:
 
-		GUIControlBase *m_Control = nullptr;
+		GUIControl *m_Control = nullptr;
 
 		bool m_GrabbingControl = false; //!< Indicates the element itself is grabbed by the mouse.
 		bool m_GrabbingHandle = false; //!< Indicates a resize handle is grabbed by the mouse.

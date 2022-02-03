@@ -15,7 +15,7 @@
 #include "GUIFont.h"
 #include "GUISkin.h"
 #include "GUIUtil.h"
-#include "GUIControlBase.h"
+#include "GUIControl.h"
 #include "GUIEvent.h"
 #include "GUIControlFactory.h"
 #include "GUIControlManager.h"

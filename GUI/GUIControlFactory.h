@@ -18,9 +18,9 @@ public:
 // Description:     Method used for creating controls
 // Arguments:       Control Type Name.
 
-    static GUIControlBase * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height);
+    static GUIControl * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height);
 
-	static GUIControlBase * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference);
+	static GUIControl * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference);
 
 };
 };

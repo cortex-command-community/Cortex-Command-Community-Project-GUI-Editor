@@ -93,7 +93,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

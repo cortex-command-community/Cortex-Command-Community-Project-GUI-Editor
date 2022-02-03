@@ -6,7 +6,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::Create(int X, int Y, int Width, int Height) {
-		GUIControlBase::Create("", X, Y, Width, Height);
+		GUIControl::Create("", X, Y, Width, Height);
 		GUIAssert(m_OwningManager, "");
 	}
 
@@ -267,7 +267,7 @@ namespace RTE {
 		SetFocus();
 		CaptureMouse();
 
-		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT)) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -277,7 +277,7 @@ namespace RTE {
 		std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
 		m_CursorIndex = m_Text.size();
 
-		if (!(Modifier & GUIControlBase::MouseModifiers::MODI_SHIFT)) { m_GotSelection = false; }
+		if (!(Modifier & GUIControl::MouseModifiers::MODI_SHIFT)) { m_GotSelection = false; }
 
 		// Go through each character until we to the mouse point
 		int TX = m_X;
@@ -290,7 +290,7 @@ namespace RTE {
 		}
 
 		// Do a selection if holding the shift button
-		if (Modifier & GUIControlBase::MouseModifiers::MODI_SHIFT)
+		if (Modifier & GUIControl::MouseModifiers::MODI_SHIFT)
 			DoSelection(OldIndex, m_CursorIndex);
 
 		// Update the text
@@ -300,7 +300,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUITextPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
 			return;
 		}
 

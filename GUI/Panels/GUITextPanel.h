@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A text panel class.
 /// </summary>
-class GUITextPanel : public GUIControlBase {
+class GUITextPanel : public GUIControl {
 
 public:
 

@@ -16,7 +16,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 10;
@@ -43,7 +43,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 10;
@@ -54,7 +54,7 @@ namespace RTE {
 		m_DefHeight = 100;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the box isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -84,7 +84,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Build the panel bitmap
 		BuildBitmap();
@@ -128,7 +128,7 @@ namespace RTE {
 				}
 			}
 		}
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,9 +149,9 @@ namespace RTE {
 		m_Y = Y;
 
 		// Go through all my children moving them
-		std::vector<GUIControlBase *>::iterator it;
+		std::vector<GUIControl *>::iterator it;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControlBase *C = *it;
+			GUIControl *C = *it;
 			int CX;
 			int CY;
 			int CW;
@@ -172,9 +172,9 @@ namespace RTE {
 		m_Height = Height;
 
 		// Go through all my children moving them
-		std::vector<GUIControlBase *>::iterator it;
+		std::vector<GUIControl *>::iterator it;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControlBase *C = *it;
+			GUIControl *C = *it;
 			int CX, CY, CW, CH;
 			int Anchor = C->GetAnchor();
 
@@ -186,8 +186,8 @@ namespace RTE {
 			int H = CH;
 
 			// Attached to Right and/or Bottom edges
-			if ((Anchor & GUIControlBase::Anchor::AnchorRight) && !(Anchor & GUIControlBase::Anchor::AnchorLeft)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
-			if ((Anchor & GUIControlBase::Anchor::AnchorBottom) && !(Anchor & GUIControlBase::Anchor::AnchorTop)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
+			if ((Anchor & GUIControl::Anchor::AnchorRight) && !(Anchor & GUIControl::Anchor::AnchorLeft)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
+			if ((Anchor & GUIControl::Anchor::AnchorBottom) && !(Anchor & GUIControl::Anchor::AnchorTop)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
 
 			if (DX != CX || DY != CY) { C->Move(DX, DY); }
 
@@ -195,8 +195,8 @@ namespace RTE {
 			CY -= m_Y;
 
 			// Attached to opposing edges
-			if (Anchor & GUIControlBase::Anchor::AnchorLeft && Anchor & GUIControlBase::Anchor::AnchorRight) { W = (m_Width - (OldWidth - (CX + CW))) - CX; }
-			if (Anchor & GUIControlBase::Anchor::AnchorTop && Anchor & GUIControlBase::Anchor::AnchorBottom) { H = (m_Height - (OldHeight - (CY + CH))) - CY; }
+			if (Anchor & GUIControl::Anchor::AnchorLeft && Anchor & GUIControl::Anchor::AnchorRight) { W = (m_Width - (OldWidth - (CX + CW))) - CX; }
+			if (Anchor & GUIControl::Anchor::AnchorTop && Anchor & GUIControl::Anchor::AnchorBottom) { H = (m_Height - (OldHeight - (CY + CH))) - CY; }
 
 			if (W != CW || H != CH) { C->Resize(W, H); }
 		}
@@ -223,7 +223,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		// Get the values
 		m_Properties.GetPropertyValue("DrawBackground", &m_DrawBackground);

@@ -11,7 +11,7 @@ class GUIComboBoxButton;
 /// <summary>
 /// A ComboBox control class.
 /// </summary>
-class GUIComboBox : public GUIControlBase {
+class GUIComboBox : public GUIControl {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Public member variable, method and friend function declarations
@@ -107,7 +107,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +334,7 @@ private:
 /// <summary>
 /// A ComboBoxButton control class.
 /// </summary>
-class GUIComboBoxButton : public GUIControlBase {
+class GUIComboBoxButton : public GUIControl {
 
 public:
 

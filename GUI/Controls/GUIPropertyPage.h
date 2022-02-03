@@ -9,7 +9,7 @@ namespace RTE {
 /// <summary>
 /// A property page control class.
 /// </summary>
-class GUIPropertyPage : public GUIControlBase {
+class GUIPropertyPage : public GUIControl {
 
 public:
 
@@ -131,7 +131,7 @@ public:
 // Description:     Called when the control needs to be moved.
 // Arguments:       New position.
 
-    void Move(int X, int Y) override { GUIControlBase::SetPositionAbs(X, Y); }
+    void Move(int X, int Y) override { GUIControl::SetPositionAbs(X, Y); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ public:
 // Description:     Called when receiving a signal.
 // Arguments:       Signal source, Signal code, Signal data.
 
-    void ReceiveSignal(GUIControlBase *Source, GUIEventCode Code, int Data) override;
+    void ReceiveSignal(GUIControl *Source, GUIEventCode Code, int Data) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

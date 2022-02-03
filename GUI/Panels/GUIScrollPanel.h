@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A scrollbar panel class used for controls requiring a scrollbar.
 /// </summary>
-class GUIScrollPanel : public GUIControlBase {
+class GUIScrollPanel : public GUIControl {
 
 public:
 

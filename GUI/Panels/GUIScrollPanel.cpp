@@ -6,7 +6,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollPanel::Create(int X, int Y, int Width, int Height) {
-		GUIControlBase::Create("", X, Y, Width, Height);
+		GUIControl::Create("", X, Y, Width, Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -478,7 +478,7 @@ namespace RTE {
 
 	void GUIScrollPanel::OnMouseHover(int X, int Y, int Buttons, int Modifier) {
 		// Ignore if the left mouse button is not down
-		if (!(Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT)) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT)) {
 			return;
 		}
 
@@ -567,7 +567,7 @@ namespace RTE {
 			return;
 		}
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		// Rebuild the bitmaps
 		m_RebuildSize = true;

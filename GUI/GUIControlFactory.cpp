@@ -18,7 +18,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height) {
+	GUIControl * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height) {
 		if (controlType == "BUTTON") {
 			GUIButton *newControl = new GUIButton(owningManager);
 			newControl->Create(name, posX, posY, width, height);
@@ -100,7 +100,7 @@ namespace RTE {
 		return nullptr;
 	}
 
-	GUIControlBase * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference) {
+	GUIControl * GUIControlFactory::CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference) {
 		if (controlType == "BUTTON") {
 			GUIButton *newControl = new GUIButton(owningManager);
 			newControl->Create(reference);

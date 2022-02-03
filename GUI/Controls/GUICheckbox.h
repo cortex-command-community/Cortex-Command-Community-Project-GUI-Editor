@@ -6,7 +6,7 @@ namespace RTE {
 /// <summary>
 /// A checkbox control class.
 /// </summary>
-class GUICheckbox : public GUIControlBase {
+class GUICheckbox : public GUIControl {
 
 public:
 

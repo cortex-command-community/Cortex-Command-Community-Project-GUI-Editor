@@ -168,7 +168,7 @@ namespace RTEGUI {
 		std::string controlClass = editorEvent.GetOrigin()->GetName().substr(2, std::string::npos);
 		std::string controlName = GenerateControlName(controlClass);
 
-		GUIControlBase *parent = m_RootControl;
+		GUIControl *parent = m_RootControl;
 
 		// If the focused control is a container set it as parent so controls are added to it
 		if (s_SelectionInfo.GetControl() && s_SelectionInfo.GetControl()->IsContainer()) { parent = s_SelectionInfo.GetControl(); }
@@ -192,7 +192,7 @@ namespace RTEGUI {
 			newControlName = s_SelectionCopyInfo.Name + " - copy " + std::to_string(i);
 			// Check if this name exists
 			bool found = false;
-			for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
+			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
 				if (control->GetName() == newControlName) {
 					found = true;
 					break;
@@ -204,7 +204,7 @@ namespace RTEGUI {
 		}
 		int offset = 10;
 
-		GUIControlBase *createdControl = nullptr;
+		GUIControl *createdControl = nullptr;
 		createdControl = m_WorkspaceManager->AddControl(newControlName, s_SelectionCopyInfo.Class, s_SelectionCopyInfo.Parent, s_SelectionCopyInfo.PosX + offset, s_SelectionCopyInfo.PosY + offset, s_SelectionCopyInfo.Width, s_SelectionCopyInfo.Height);
 		s_SelectionCopyInfo.PosX += offset;
 		s_SelectionCopyInfo.PosY += offset;
@@ -232,7 +232,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::RemoveControl(GUIControlBase *controlToRemove) const {
+	void EditorManager::RemoveControl(GUIControl *controlToRemove) const {
 		m_WorkspaceManager->RemoveControl(controlToRemove->GetName(), true);
 		if (controlToRemove->GetControlType() == "COLLECTIONBOX") {
 			ClearCurrentSelection();
@@ -254,7 +254,7 @@ namespace RTEGUI {
 
 			// Check if this name exists
 			bool found = false;
-			for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
+			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
 				if (control->GetName() == controlName) {
 					found = true;
 					break;
@@ -272,7 +272,7 @@ namespace RTEGUI {
 	void EditorManager::SelectActiveControlFromParentList() const {
 		if (const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected()) {
 			// Try to find the box of that name, and select it
-			GUIControlBase *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
+			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
 			if (control) {
 				// If the selected item is the root control don't grab it but proceed to populate the children list from it
 				if (selectedItem->m_Name == m_RootControl->GetName()) {
@@ -299,7 +299,7 @@ namespace RTEGUI {
 	void EditorManager::SelectActiveControlFromChildrenList() const {
 		if (const GUIListPanel::Item *selectedItem = m_ControlsInCollectionBoxList->GetSelected()) {
 			// Try to find the control of that name, and select it
-			GUIControlBase *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
+			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
 			if (control) {
 				s_SelectionInfo.ReleaseAnyGrabs();
 				s_SelectionInfo.SetControl(control);
@@ -315,7 +315,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::SelectActiveControlInParentList(GUIControlBase *control) const {
+	void EditorManager::SelectActiveControlInParentList(GUIControl *control) const {
 		// Check if this is selected in the editor and select it in the list too
 		for (const GUIListBox::Item *listEntry : *m_CollectionBoxList->GetItemList()) {
 			if (listEntry->m_Name.substr(listEntry->m_Name.find_first_not_of('\t'), std::string::npos) == control->GetName()) {
@@ -329,7 +329,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorManager::SelectActiveControlInChildrenList(GUIControlBase *control) const {
+	void EditorManager::SelectActiveControlInChildrenList(GUIControl *control) const {
 		// Check if this is selected in the editor and select it's parent in the parent list and then select it in the children list
 		SelectActiveControlInParentList(control->GetParent());
 		for (const GUIListBox::Item *listEntry : *m_ControlsInCollectionBoxList->GetItemList()) {
@@ -352,13 +352,13 @@ namespace RTEGUI {
 		// Lambda expression to recursively add lower-level CollectionBoxes belonging to the higher-level CollectionBoxes
 		std::function<void(GUICollectionBox *, const std::string &)> recursiveAddItem = [&recursiveAddItem, this](GUICollectionBox *control, const std::string &indent) {
 			m_CollectionBoxList->AddItem(indent + control->GetName());
-			for (GUIControlBase *childControl : *control->GetChildren()) {
+			for (GUIControl *childControl : *control->GetChildren()) {
 				if ((control = dynamic_cast<GUICollectionBox *>(childControl))) { recursiveAddItem(control, indent + "\t"); }
 			}
 		};
 
 		GUICollectionBox *collectionBox = nullptr;
-		for (GUIControlBase *control : *m_WorkspaceManager->GetControlList()) {
+		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
 		}
 
@@ -380,7 +380,7 @@ namespace RTEGUI {
 		m_ControlsInCollectionBoxList->ClearList();
 
 		// Go through all the top-level (directly under root) controls and add only the CollectionBoxes to the list here
-		for (GUIControlBase *control : *collectionBox->GetChildren()) {
+		for (GUIControl *control : *collectionBox->GetChildren()) {
 			if (control->GetControlType() != "COLLECTIONBOX") { m_ControlsInCollectionBoxList->AddItem(control->GetName()); }
 			// Check if this is selected in the editor, and if so, select it in the list too
 			if (collectionBox == s_SelectionInfo.GetControl()) { m_ControlsInCollectionBoxList->SetSelectedIndex(-1); }
@@ -395,7 +395,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControlBase * EditorManager::ControlUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY) {
+	GUIControl * EditorManager::ControlUnderMouse(GUIControl *control, int mousePosX, int mousePosY) {
 		int controlPosX;
 		int controlPosY;
 		int controlWidth;
@@ -406,8 +406,8 @@ namespace RTEGUI {
 		}
 
 		// Check children. Check in reverse because top most visible control is last in the list.
-		for (std::vector<GUIControlBase *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
-			GUIControlBase *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
+		for (std::vector<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
+			GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
 			if (childControl) {
 				return childControl;
 			}
@@ -417,7 +417,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int EditorManager::HandleUnderMouse(GUIControlBase *control, int mousePosX, int mousePosY) const {
+	int EditorManager::HandleUnderMouse(GUIControl *control, int mousePosX, int mousePosY) const {
 		int controlPosX;
 		int controlPosY;
 		int controlWidth;
@@ -462,7 +462,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::StoreCurrentSelectionCopyInfo() const {
-		GUIControlBase *selectedControl = s_SelectionInfo.GetControl();
+		GUIControl *selectedControl = s_SelectionInfo.GetControl();
 		if (selectedControl) {
 			s_SelectionCopyInfo = {
 				selectedControl->GetName(),
@@ -498,7 +498,7 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool EditorManager::UpdateControlProperties(GUIControlBase *control, bool manualEdit) const {
+	bool EditorManager::UpdateControlProperties(GUIControl *control, bool manualEdit) const {
 		bool result = false;
 		if (control) {
 			if (manualEdit) { control->ApplyProperties(m_PropertyPage->GetPropertyValues()); }

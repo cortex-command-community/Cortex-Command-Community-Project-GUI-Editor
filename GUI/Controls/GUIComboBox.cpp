@@ -25,7 +25,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -70,7 +70,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 30;
@@ -80,7 +80,7 @@ namespace RTE {
 		m_DefWidth = 60;
 		m_DefHeight = 20;
 
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the textbox isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -162,7 +162,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Free any old bitmap
 		if (m_DrawBitmap) {
@@ -194,12 +194,12 @@ namespace RTE {
 		// If selected item has a bitmap AND no text to show, just show the bitmap as the selected thing
 		if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, nullptr); }
 
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::ReceiveSignal(GUIControlBase * Source, GUIEventCode Code, int Data) {
+	void GUIComboBox::ReceiveSignal(GUIControl * Source, GUIEventCode Code, int Data) {
 		GUIAssert(Source, "");
 
 		int sourcePanelID = Source->GetUniqueID();
@@ -216,7 +216,7 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(GUIControlBase::ZChange::TopMost);
+				m_ListPanel->ChangeZPosition(GUIControl::ZChange::TopMost);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
@@ -226,7 +226,7 @@ namespace RTE {
 		} else if (sourcePanelID == m_TextPanel->GetUniqueID()) {
 			// Textbox
 			// MouseDown
-			if (Code == GUIEventCode::MouseDown && m_DropDownStyle == DropDownStyles::DropDownList && Data & GUIControlBase::MouseButtons::MOUSE_LEFT) {
+			if (Code == GUIEventCode::MouseDown && m_DropDownStyle == DropDownStyles::DropDownList && Data & GUIControl::MouseButtons::MOUSE_LEFT) {
 				// Drop
 				m_ListPanel->SetVisible(true);
 				m_ListPanel->SetFocus();
@@ -236,7 +236,7 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(GUIControlBase::ZChange::TopMost);
+				m_ListPanel->ChangeZPosition(GUIControl::ZChange::TopMost);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
@@ -304,7 +304,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::Move(int X, int Y) {
-		GUIControlBase::SetPositionAbs(X, Y);
+		GUIControl::SetPositionAbs(X, Y);
 
 		m_ListPanel->SetPositionAbs(m_X, m_Y + m_Height);
 	}
@@ -317,7 +317,7 @@ namespace RTE {
 		Height = std::max(Height, m_MinHeight);
 		Height = std::min(Height, 20);
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		m_TextPanel->SetSize(m_Width - 12, m_Height);
 		m_TextPanel->SetPositionAbs(m_X, m_Y);
@@ -426,7 +426,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBox::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		m_Properties.GetPropertyValue("Dropheight", &m_DropHeight);
 		m_DropHeight = std::max(m_DropHeight, 20);
@@ -506,7 +506,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBoxButton::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIControlBase::MouseButtons::MOUSE_LEFT) {
+		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
 			m_Pushed = true;
 			SendSignal(GUIEventCode::Clicked, Buttons);
 		}

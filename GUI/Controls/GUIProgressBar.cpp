@@ -14,7 +14,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControlBase::Create(Name, X, Y, Width, Height);
+		GUIControl::Create(Name, X, Y, Width, Height);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -41,7 +41,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::Create(GUIProperties *Props) {
-		GUIControlBase::Create(Props);
+		GUIControl::Create(Props);
 
 		// Minimum size of the control
 		m_MinWidth = 40;
@@ -52,7 +52,7 @@ namespace RTE {
 		m_DefHeight = 20;
 
 		// Setup the panel
-		//GUIControlBase::LoadProperties(Props);
+		//GUIControl::LoadProperties(Props);
 
 		// Make sure the control isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
@@ -88,7 +88,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::ChangeSkin(GUISkin *Skin) {
-		GUIControlBase::ChangeSkin(Skin);
+		GUIControl::ChangeSkin(Skin);
 
 		// Build the progressbar bitmap
 		BuildBitmap();
@@ -186,7 +186,7 @@ namespace RTE {
 
 		Screen->GetBitmap()->SetClipRect(nullptr);
 
-		GUIControlBase::Draw(Screen);
+		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ namespace RTE {
 		Width = std::max(Width, m_MinWidth);
 		Height = std::max(Height, m_MinHeight);
 
-		GUIControlBase::SetSize(Width, Height);
+		GUIControl::SetSize(Width, Height);
 
 		// Rebuild the bitmap
 		BuildBitmap();
@@ -234,7 +234,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::ApplyProperties(GUIProperties *Props) {
-		GUIControlBase::ApplyProperties(Props);
+		GUIControl::ApplyProperties(Props);
 
 		m_Properties.GetPropertyValue("Minimum", &m_Minimum);
 		m_Properties.GetPropertyValue("Maximum", &m_Maximum);
