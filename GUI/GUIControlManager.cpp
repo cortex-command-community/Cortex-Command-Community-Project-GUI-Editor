@@ -16,7 +16,6 @@ namespace RTE {
 
 		m_CursorType = CursorType::Pointer;
 
-		m_PanelList.clear();
 		m_CapturedPanel = nullptr;
 		m_MouseOverPanel = nullptr;
 		m_FocusPanel = nullptr;
@@ -201,7 +200,7 @@ namespace RTE {
 	GUIControlBase * GUIControlManager::FindTopPanel(int X, int Y) {
 		std::vector<GUIControlBase *>::reverse_iterator it;
 
-		for (it = m_PanelList.rbegin(); it != m_PanelList.rend(); it++) {
+		for (it = m_ControlList.rbegin(); it != m_ControlList.rend(); it++) {
 			if (GUIControlBase *P = *it) {
 				if (GUIControlBase *CurPanel = P->TopPanelUnderPoint(X, Y)) {
 					return CurPanel;
@@ -215,7 +214,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUIControlBase * GUIControlManager::FindBottomPanel(int X, int Y) {
-		for (std::vector<GUIControlBase *>::iterator it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
+		for (std::vector<GUIControlBase *>::iterator it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
 			if (GUIControlBase *P = *it) {
 				if (GUIControlBase *CurPanel = P->BottomPanelUnderPoint(X, Y)) {
 					return CurPanel;
@@ -301,17 +300,19 @@ namespace RTE {
 		if (!Control) {
 			return nullptr;
 		}
-
-		//GUIControlBase *Pan = nullptr;
 		if (Parent) {
-			//Pan = Parent->GetPanel();
+			int Z = 0;
+
+			// Get the last panel in the list
+			if (!m_ControlList.empty()) {
+				const GUIControlBase *p = m_ControlList.at(m_ControlList.size() - 1);
+				Z = p->GetZPos() + 1;
+			}
+			// Setup the panel
+			Control->Setup(this, Z);
+
 			Parent->AddChild(Control);
 		}
-		//if (Pan) {
-			//Pan->AddChild(Control->GetPanel());
-		//} else {
-			//AddPanel(Control->GetPanel());
-		//}
 		// Add the control to the list
 		m_ControlList.push_back(Control);
 
@@ -347,17 +348,20 @@ namespace RTE {
 		Property->GetPropertyValue("Parent", &Parent);
 
 		GUIControlBase *Par = GetControl(Parent);
-		GUIControlBase *Pan = nullptr;
 		if (Par && Parent.compare("None") != 0) {
-			//Pan = Par->GetPanel();
+
+			int Z = 0;
+
+			// Get the last panel in the list
+			if (!m_ControlList.empty()) {
+				const GUIControlBase *p = m_ControlList.at(m_ControlList.size() - 1);
+				Z = p->GetZPos() + 1;
+			}
+			// Setup the panel
+			Control->Setup(this, Z);
+
 			Par->AddChild(Control);
 		}
-
-		//if (Pan) {
-			//Pan->AddChild(Control->GetPanel());
-		//} else {
-			//AddPanel(Control->GetPanel());
-		//}
 
 		// Add the control to the list
 		m_ControlList.push_back(Control);
@@ -401,32 +405,12 @@ namespace RTE {
 			delete C;
 		}
 		m_ControlList.clear();
-		m_PanelList.clear();
 
 		for (std::vector<GUIEvent *>::iterator ite = m_EventQueue.begin(); ite != m_EventQueue.end(); ite++) {
 			GUIEvent *E = *ite;
 			if (E) { delete E; }
 		}
 		m_EventQueue.clear();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControlManager::AddPanel(GUIControlBase *panel) {
-		if (panel) {
-			int Z = 0;
-
-			// Get the last panel in the list
-			if (!m_PanelList.empty()) {
-				const GUIControlBase *p = m_PanelList.at(m_PanelList.size() - 1);
-				Z = p->GetZPos() + 1;
-			}
-			// Setup the panel
-			panel->Setup(this, Z);
-
-			// Add the panel to the list
-			m_PanelList.push_back(panel);
-		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -643,7 +627,7 @@ namespace RTE {
 		// Go through drawing panels that are invalid
 		std::vector<GUIControlBase *>::iterator it;
 
-		for (it = m_PanelList.begin(); it != m_PanelList.end(); it++) {
+		for (it = m_ControlList.begin(); it != m_ControlList.end(); it++) {
 			GUIControlBase *p = *it;
 
 			// Draw the panel

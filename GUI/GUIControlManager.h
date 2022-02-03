@@ -10,7 +10,7 @@ namespace RTE {
 	/// A class used to manage the GUI as a whole and provide the interface between the GUI and the rest of the system.
 	/// </summary>
 	class GUIControlManager {
-		friend class GUIControl;
+		friend class GUIControlBase;
 
 	public:
 
@@ -188,12 +188,6 @@ namespace RTE {
 		/// Clears all the controls.
 		/// </summary>
 		void ClearAllControls();
-
-		/// <summary>
-		/// Adds a panel to the list.
-		/// </summary>
-		/// <param name="panel">Pointer to a panel.</param>
-		void AddPanel(GUIControlBase *panel);
 #pragma endregion
 
 #pragma region
@@ -265,7 +259,6 @@ namespace RTE {
 		bool m_HoverTrack;
 		GUIControlBase *m_HoverPanel;
 		float m_HoverTime;
-		std::vector<GUIControlBase *> m_PanelList;
 		GUIControlBase *m_CapturedPanel;
 		GUIControlBase *m_FocusPanel;
 		GUIControlBase *m_MouseOverPanel;

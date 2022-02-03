@@ -24,8 +24,7 @@ public:
         BottomRight
     };
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

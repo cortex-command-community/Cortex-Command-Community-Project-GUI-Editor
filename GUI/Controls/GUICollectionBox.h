@@ -17,8 +17,7 @@ public:
         Panel
     };
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

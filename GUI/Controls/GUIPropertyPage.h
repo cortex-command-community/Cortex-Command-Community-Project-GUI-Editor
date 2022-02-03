@@ -13,8 +13,7 @@ class GUIPropertyPage : public GUIControlBase {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

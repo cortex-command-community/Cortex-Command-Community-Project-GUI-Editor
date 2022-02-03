@@ -10,8 +10,7 @@ class GUIRadioButton : public GUIControlBase {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

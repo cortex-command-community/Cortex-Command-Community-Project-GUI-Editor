@@ -24,8 +24,7 @@ public:
         DropDownList,
     };
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

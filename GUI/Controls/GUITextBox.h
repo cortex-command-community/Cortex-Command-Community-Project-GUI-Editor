@@ -12,8 +12,7 @@ class GUITextBox : public GUITextPanel {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

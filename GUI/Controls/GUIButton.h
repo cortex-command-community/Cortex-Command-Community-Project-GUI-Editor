@@ -12,8 +12,7 @@ class GUIButton : public GUIControlBase {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

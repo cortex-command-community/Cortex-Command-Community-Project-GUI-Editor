@@ -10,8 +10,7 @@ class GUIProgressBar : public GUIControlBase {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

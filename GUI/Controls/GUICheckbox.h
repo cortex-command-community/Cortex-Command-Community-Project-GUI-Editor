@@ -17,8 +17,7 @@ public:
         Greycheck
     };
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUICheckbox

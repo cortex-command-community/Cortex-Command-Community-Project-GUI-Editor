@@ -12,9 +12,11 @@ namespace RTE {
 
 		// Create the listpanel
 		m_ListPanel = new GUIListPanel();
+		m_ListPanel->SetOwningManager(ControlManager);
 
 		// Create the textpanel
 		m_TextPanel = new GUITextPanel();
+		m_TextPanel->SetOwningManager(ControlManager);
 
 		// Create the button
 		m_Button = new GUIComboBoxButton();

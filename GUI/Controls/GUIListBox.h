@@ -12,8 +12,7 @@ class GUIListBox : public GUIListPanel {
 
 public:
 
-	//GUIControlOverrideMethods;
-	//GUIControlOverrideMethods;
+	GUIControlOverrideMethods;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Constructor:     GUIListBox
