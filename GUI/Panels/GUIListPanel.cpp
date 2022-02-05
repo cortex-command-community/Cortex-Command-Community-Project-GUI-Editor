@@ -12,25 +12,21 @@ namespace RTE {
 
 		GUIAssert(m_OwningManager, "");
 
-		// Create the 2 scrollpanels
-		m_HorzScroll = new GUIScrollPanel(m_OwningManager);
-		m_VertScroll = new GUIScrollPanel(m_OwningManager);
-
 		// Initial size & positions
-		m_HorzScroll->Create(0 + m_ScrollBarPadding, Height - m_ScrollBarThickness - m_ScrollBarPadding, Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
-		m_HorzScroll->SetOrientation(GUIScrollPanel::Horizontal);
-		m_HorzScroll->SetVisible(false);
-		m_HorzScroll->SetValue(0);
-		m_HorzScroll->SetSignalTarget(this);
+		m_HorzScroll.Create(0 + m_ScrollBarPadding, Height - m_ScrollBarThickness - m_ScrollBarPadding, Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
+		m_HorzScroll.SetOrientation(GUIScrollPanel::Horizontal);
+		m_HorzScroll.SetVisible(false);
+		m_HorzScroll.SetValue(0);
+		m_HorzScroll.SetSignalTarget(this);
 
-		m_VertScroll->Create(Width - m_ScrollBarThickness - m_ScrollBarPadding, 0 + m_ScrollBarPadding, m_ScrollBarThickness, Height - (m_ScrollBarPadding * 2));
-		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
-		m_VertScroll->SetVisible(false);
-		m_VertScroll->SetValue(0);
-		m_VertScroll->SetSignalTarget(this);
+		m_VertScroll.Create(Width - m_ScrollBarThickness - m_ScrollBarPadding, 0 + m_ScrollBarPadding, m_ScrollBarThickness, Height - (m_ScrollBarPadding * 2));
+		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.SetVisible(false);
+		m_VertScroll.SetValue(0);
+		m_VertScroll.SetSignalTarget(this);
 
-		AddChild(m_HorzScroll);
-		AddChild(m_VertScroll);
+		AddChild(&m_HorzScroll);
+		AddChild(&m_VertScroll);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,20 +41,8 @@ namespace RTE {
 		}
 		m_Items.clear();
 
-
-		// Destroy the horizontal scroll panel
-		if (m_HorzScroll) {
-			m_HorzScroll->Destroy();
-			delete m_HorzScroll;
-			m_HorzScroll = nullptr;
-		}
-
-		// Destroy the vertical scroll panel
-		if (m_VertScroll) {
-			m_VertScroll->Destroy();
-			delete m_VertScroll;
-			m_VertScroll = nullptr;
-		}
+		m_HorzScroll.Destroy();
+		m_VertScroll.Destroy();
 
 		// Destroy the drawing bitmap
 		if (m_FrameBitmap) {
@@ -140,8 +124,8 @@ namespace RTE {
 		m_Skin = Skin;
 
 		// Set the scrollpanel's skins
-		m_HorzScroll->ChangeSkin(Skin);
-		m_VertScroll->ChangeSkin(Skin);
+		m_HorzScroll.ChangeSkin(Skin);
+		m_VertScroll.ChangeSkin(Skin);
 
 		// Adjust the scrollbars
 		AdjustScrollbars();
@@ -226,10 +210,10 @@ namespace RTE {
 		std::vector<Item *>::iterator it;
 		int Count = 0;
 		int Height = m_Height;
-		if (m_HorzScroll->GetVisible()) { Height -= m_HorzScroll->GetHeight(); }
+		if (m_HorzScroll.GetVisible()) { Height -= m_HorzScroll.GetHeight(); }
 
-		int x = m_HorzScroll->GetValue();
-		int y = 1 + (m_VertScroll->GetVisible() ? -m_VertScroll->GetValue() : 0);
+		int x = m_HorzScroll.GetValue();
+		int y = 1 + (m_VertScroll.GetVisible() ? -m_VertScroll.GetValue() : 0);
 		int stackHeight = 0;
 		int thirdWidth = m_Width / 3;
 
@@ -237,7 +221,7 @@ namespace RTE {
 		for (it = m_Items.begin(); it != m_Items.end(); it++, Count++) {
 			stackHeight += GetItemHeight(*it);
 			// Only draw the items after the scroll value
-			if (m_VertScroll->GetVisible() && stackHeight < m_VertScroll->GetValue()) {
+			if (m_VertScroll.GetVisible() && stackHeight < m_VertScroll.GetValue()) {
 				y += GetItemHeight(*it);
 				continue;
 			}
@@ -278,19 +262,19 @@ namespace RTE {
 
 				// Selected item
 				if (I->m_Selected && m_GotFocus) {
-					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + 1, m_SelectedColorIndex);
-					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + itemHeight, m_SelectedColorIndex);
+					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + 1, m_SelectedColorIndex);
+					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + itemHeight, m_SelectedColorIndex);
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
 					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth);
 				} else {
 					// Unselected
 					// TODO: Don't hardcode unselected color index
-					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + 1, 144);
-					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() + 2 : 5), y + itemHeight, 144);
+					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + 1, 144);
+					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + itemHeight, 144);
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
 					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth, m_FontShadow);
 				}
 
@@ -310,13 +294,13 @@ namespace RTE {
 
 				if (I->m_Selected && m_GotFocus) {
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right);
+					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right);
 					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name);
 				} else {
 					// Unselected
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll->GetVisible() ? m_VertScroll->GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
 					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name, m_FontShadow);
 				}
 
@@ -346,12 +330,12 @@ namespace RTE {
 		m_ExternalCapture = IsCaptured();
 
 		// Over a scrollbar
-		if (m_VertScroll->GetVisible() && m_VertScroll->PointInside(X, Y)) {
-			m_VertScroll->OnMouseDown(X, Y, Buttons, Modifier);
+		if (m_VertScroll.GetVisible() && m_VertScroll.PointInside(X, Y)) {
+			m_VertScroll.OnMouseDown(X, Y, Buttons, Modifier);
 			return;
 		}
-		if (m_HorzScroll->GetVisible() && m_HorzScroll->PointInside(X, Y)) {
-			m_HorzScroll->OnMouseDown(X, Y, Buttons, Modifier);
+		if (m_HorzScroll.GetVisible() && m_HorzScroll.PointInside(X, Y)) {
+			m_HorzScroll.OnMouseDown(X, Y, Buttons, Modifier);
 			return;
 		}
 
@@ -372,7 +356,7 @@ namespace RTE {
 	void GUIListPanel::OnMouseWheelChange(int x, int y, int modifier, int mouseWheelChange) {
 		if (!m_MouseScroll) {
 			return;
-		} else if (m_VertScroll->GetVisible() && m_VertScroll->PointInside(x, y)) {
+		} else if (m_VertScroll.GetVisible() && m_VertScroll.PointInside(x, y)) {
 			ScrollBarScrolling(mouseWheelChange);
 		} else if (PointInsideList(x, y) && !m_MultiSelect) {
 			SelectionListScrolling(mouseWheelChange);
@@ -406,22 +390,22 @@ namespace RTE {
 		}
 
 		int Height = m_Height;
-		if (m_HorzScroll->GetVisible()) { Height -= m_HorzScroll->GetHeight(); }
+		if (m_HorzScroll.GetVisible()) { Height -= m_HorzScroll.GetHeight(); }
 
 		int y = m_Y + 1;
-		if (m_VertScroll->GetVisible())
-			y -= m_VertScroll->GetValue();
+		if (m_VertScroll.GetVisible())
+			y -= m_VertScroll.GetValue();
 		int Count = 0;
 		//int stackHeight = 0;
 		for (it = m_Items.begin(); it != m_Items.end(); it++, Count++) {
 			/*
 			stackHeight += GetItemHeight(*it);
 			// Only check the items after the scroll value
-			if (m_VertScroll->GetVisible() && m_VertScroll->GetValue() > y) {
+			if (m_VertScroll.GetVisible() && m_VertScroll.GetValue() > y) {
 				y += GetItemHeight(*it);
 				continue;
 			}
-			if (Count < m_VertScroll->GetValue()) {continue;}
+			if (Count < m_VertScroll.GetValue()) {continue;}
 			*/
 			Item *I = *it;
 
@@ -500,9 +484,9 @@ namespace RTE {
 
 	void GUIListPanel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		if (m_CapturedVert) {
-			m_VertScroll->OnMouseUp(X, Y, Buttons, Modifier);
+			m_VertScroll.OnMouseUp(X, Y, Buttons, Modifier);
 		} else if (m_CapturedHorz) {
-			m_HorzScroll->OnMouseUp(X, Y, Buttons, Modifier);
+			m_HorzScroll.OnMouseUp(X, Y, Buttons, Modifier);
 		} else {
 			if (PointInside(X, Y)) {
 				//SendSignal(Select, 0);
@@ -516,9 +500,9 @@ namespace RTE {
 
 	void GUIListPanel::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
 		if (m_CapturedVert) {
-			m_VertScroll->OnMouseMove(X, Y, Buttons, Modifier);
+			m_VertScroll.OnMouseMove(X, Y, Buttons, Modifier);
 		} else if (m_CapturedHorz) {
-			m_HorzScroll->OnMouseMove(X, Y, Buttons, Modifier);
+			m_HorzScroll.OnMouseMove(X, Y, Buttons, Modifier);
 		} else if (PointInsideList(X, Y)) {
 			// Using Hot-Tracking
 			if (m_HotTracking && GetItem(X, Y) != nullptr && (GetItem(X, Y) != GetSelected())) { SelectItem(X, Y, Modifier); }
@@ -544,12 +528,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::ScrollToItem(Item *pItem) {
-		if (pItem && m_VertScroll->GetVisible()) {
+		if (pItem && m_VertScroll.GetVisible()) {
 			int stackHeight = GetStackHeight(pItem);
 			int itemHeight = GetItemHeight(pItem);
 			// Adjust the vertical scroll bar to show the specified item
-			if (stackHeight < m_VertScroll->GetValue()) { m_VertScroll->SetValue(stackHeight); }
-			if (stackHeight + itemHeight > m_VertScroll->GetValue() + m_VertScroll->GetPageSize()) { m_VertScroll->SetValue(stackHeight + itemHeight - m_VertScroll->GetPageSize()); }
+			if (stackHeight < m_VertScroll.GetValue()) { m_VertScroll.SetValue(stackHeight); }
+			if (stackHeight + itemHeight > m_VertScroll.GetValue() + m_VertScroll.GetPageSize()) { m_VertScroll.SetValue(stackHeight + itemHeight - m_VertScroll.GetPageSize()); }
 		}
 		BuildBitmap(false, true);
 	}
@@ -557,21 +541,21 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::ScrollUp() {
-		if (m_VertScroll->GetVisible()) { m_VertScroll->SetValue(m_VertScroll->GetValue() - 20); }
+		if (m_VertScroll.GetVisible()) { m_VertScroll.SetValue(m_VertScroll.GetValue() - 20); }
 		BuildBitmap(false, true);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::ScrollDown() {
-		if (m_VertScroll->GetVisible()) {
+		if (m_VertScroll.GetVisible()) {
 			int scrollValueToAdd = 20;
 			if (!m_Items.empty()) {
 				RTE::GUIListPanel::Item *item = m_Items.back();
-				int maximumScrollDistance = GetStackHeight(item) + GetItemHeight(item) - (m_VertScroll->GetPageSize() + m_VertScroll->GetValue());
+				int maximumScrollDistance = GetStackHeight(item) + GetItemHeight(item) - (m_VertScroll.GetPageSize() + m_VertScroll.GetValue());
 				scrollValueToAdd = std::clamp(maximumScrollDistance, 0, scrollValueToAdd);
 			}
-			m_VertScroll->SetValue(m_VertScroll->GetValue() + scrollValueToAdd);
+			m_VertScroll.SetValue(m_VertScroll.GetValue() + scrollValueToAdd);
 		}
 		BuildBitmap(false, true);
 	}
@@ -579,14 +563,14 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::ScrollTo(int position) {
-		if (m_VertScroll->GetVisible()) {
-			m_VertScroll->SetValue(position);
+		if (m_VertScroll.GetVisible()) {
+			m_VertScroll.SetValue(position);
 
 			//TODO this was copied from MaxShadow's work. I'm not quite sure of the point of it tbh.
 			if (!m_Items.empty()) {
 				RTE::GUIListPanel::Item *item = m_Items.back();
 				int allItemsHeight = GetStackHeight(item) + GetItemHeight(item);
-				if (position + m_VertScroll->GetPageSize() > allItemsHeight) { m_VertScroll->SetValue(allItemsHeight - m_VertScroll->GetPageSize()); }
+				if (position + m_VertScroll.GetPageSize() > allItemsHeight) { m_VertScroll.SetValue(allItemsHeight - m_VertScroll.GetPageSize()); }
 			}
 		}
 		BuildBitmap(false, true);
@@ -604,7 +588,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListPanel::ScrollToTop() {
-		m_VertScroll->SetValue(0);
+		m_VertScroll.SetValue(0);
 		BuildBitmap(false, true);
 	}
 
@@ -612,7 +596,7 @@ namespace RTE {
 
 	void GUIListPanel::ScrollToBottom() {
 		if (m_Items.empty()) {
-			m_VertScroll->SetValue(0);
+			m_VertScroll.SetValue(0);
 		} else {
 			ScrollToItem(m_Items.back());
 		}
@@ -626,16 +610,16 @@ namespace RTE {
 		Item* lastItem = GetItem(GetItemList()->size() - 1);
 		int avgItemHeight = static_cast<int>((GetStackHeight(lastItem) + GetItemHeight(lastItem)) / GetItemList()->size());
 		if (mouseWheelChange < 0) {
-			newValue = m_VertScroll->GetValue() - (mouseWheelChange * avgItemHeight);
-			int maxValue = GetStackHeight(lastItem) + GetItemHeight(lastItem) - m_VertScroll->GetPageSize();
+			newValue = m_VertScroll.GetValue() - (mouseWheelChange * avgItemHeight);
+			int maxValue = GetStackHeight(lastItem) + GetItemHeight(lastItem) - m_VertScroll.GetPageSize();
 			newValue = std::clamp(newValue, maxValue, 0);
 		} else {
-			newValue = m_VertScroll->GetValue() - (mouseWheelChange * avgItemHeight);
+			newValue = m_VertScroll.GetValue() - (mouseWheelChange * avgItemHeight);
 			if (newValue < 0) {
 				newValue = 0;
 			}
 		}
-		m_VertScroll->SetValue(newValue);
+		m_VertScroll.SetValue(newValue);
 		BuildBitmap(false, true);
 	}
 
@@ -674,25 +658,25 @@ namespace RTE {
 		if (!m_Font) {
 			return;
 		}
-		if (!m_HorzScrollEnabled) { m_HorzScroll->SetVisible(false); }
-		if (!m_VertScrollEnabled) { m_VertScroll->SetVisible(false); }
+		if (!m_HorzScrollEnabled) { m_HorzScroll.SetVisible(false); }
+		if (!m_VertScrollEnabled) { m_VertScroll.SetVisible(false); }
 
 		// Re-adjust the scrollbar positions & sizes, just to be safe
-		m_HorzScroll->SetPositionAbs(m_X + m_ScrollBarPadding, m_Y + m_Height - m_ScrollBarThickness - m_ScrollBarPadding);
-		m_HorzScroll->SetSize(m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
-		m_VertScroll->SetPositionAbs(m_X + m_Width - m_ScrollBarThickness - m_ScrollBarPadding, m_Y + m_ScrollBarPadding);
-		m_VertScroll->SetSize(m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
+		m_HorzScroll.SetPositionAbs(m_X + m_ScrollBarPadding, m_Y + m_Height - m_ScrollBarThickness - m_ScrollBarPadding);
+		m_HorzScroll.SetSize(m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
+		m_VertScroll.SetPositionAbs(m_X + m_Width - m_ScrollBarThickness - m_ScrollBarPadding, m_Y + m_ScrollBarPadding);
+		m_VertScroll.SetSize(m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
 
 		// If there are items wider than the listpanel, make the horizontal scrollpanel visible
 		int Width = m_Width - 4;
-		if (m_VertScroll->GetVisible()) { Width -= m_VertScroll->GetWidth(); }
-		m_HorzScroll->SetVisible(false);
+		if (m_VertScroll.GetVisible()) { Width -= m_VertScroll.GetWidth(); }
+		m_HorzScroll.SetVisible(false);
 		if (m_LargestWidth > Width && m_HorzScrollEnabled) {
-			m_HorzScroll->SetVisible(true);
-			m_HorzScroll->SetMaximum(m_LargestWidth);
-			m_HorzScroll->SetMinimum(0);
-			m_HorzScroll->SetPageSize(Width);
-			m_HorzScroll->SetSmallChange(m_Font->CalculateWidth("W"));    // W is one of the largest characters
+			m_HorzScroll.SetVisible(true);
+			m_HorzScroll.SetMaximum(m_LargestWidth);
+			m_HorzScroll.SetMinimum(0);
+			m_HorzScroll.SetPageSize(Width);
+			m_HorzScroll.SetSmallChange(m_Font->CalculateWidth("W"));    // W is one of the largest characters
 		}
 
 		if (m_Items.size() > 0) {
@@ -700,7 +684,7 @@ namespace RTE {
 			int itemStackHeight = GetStackHeight();
 			int itemHeight = itemStackHeight / m_Items.size();
 
-			int Height = m_Height - (m_HorzScroll->GetVisible() ? m_HorzScroll->GetHeight() : 0);
+			int Height = m_Height - (m_HorzScroll.GetVisible() ? m_HorzScroll.GetHeight() : 0);
 			// TODO: remove the page subtraciton?
 					// Subtract the frame size
 			int Page = Height - 4;
@@ -708,41 +692,41 @@ namespace RTE {
 			Max = std::max(Max, 0);
 
 			// Setup the vertical scrollbar
-			m_VertScroll->SetPageSize(Page);
-			m_VertScroll->SetMaximum(Max);
-			m_VertScroll->SetMinimum(0);
-			//        m_VertScroll->SetSmallChange(itemHeight);
+			m_VertScroll.SetPageSize(Page);
+			m_VertScroll.SetMaximum(Max);
+			m_VertScroll.SetMinimum(0);
+			//        m_VertScroll.SetSmallChange(itemHeight);
 
 					// If there is too many items, make the scrollbar visible
-			m_VertScroll->SetVisible(false);
+			m_VertScroll.SetVisible(false);
 			if (itemStackHeight > Height && m_VertScrollEnabled) {
-				m_VertScroll->SetVisible(true);
+				m_VertScroll.SetVisible(true);
 
 				// Setup the horizontal scrollbar again because this scrollbar just became visible
 				// (Or still is visible)
-				Width = m_Width - 4 - m_VertScroll->GetWidth();
-				m_HorzScroll->SetVisible(false);
+				Width = m_Width - 4 - m_VertScroll.GetWidth();
+				m_HorzScroll.SetVisible(false);
 				if (m_LargestWidth > Width && m_HorzScrollEnabled) {
-					m_HorzScroll->SetVisible(true);
-					m_HorzScroll->SetMaximum(m_LargestWidth);
-					m_HorzScroll->SetMinimum(0);
-					m_HorzScroll->SetPageSize(Width);
-					m_HorzScroll->SetSmallChange(m_Font->CalculateWidth("W"));    // W is one of the largest characters
+					m_HorzScroll.SetVisible(true);
+					m_HorzScroll.SetMaximum(m_LargestWidth);
+					m_HorzScroll.SetMinimum(0);
+					m_HorzScroll.SetPageSize(Width);
+					m_HorzScroll.SetSmallChange(m_Font->CalculateWidth("W"));    // W is one of the largest characters
 				}
 			}
 		} else {
 			// No items, so no vert scroll bar
-			m_VertScroll->SetVisible(false);
+			m_VertScroll.SetVisible(false);
 		}
 
 		// If both scrollbars are visible, adjust the size so they don't intersect
-		if (m_VertScroll->GetVisible() && m_HorzScroll->GetVisible()) {
-			m_VertScroll->SetSize(m_VertScroll->GetWidth(), m_Height - m_HorzScroll->GetHeight() - (m_ScrollBarPadding * 2));
-			m_HorzScroll->SetSize(m_Width - m_VertScroll->GetWidth() - (m_ScrollBarPadding * 2), m_HorzScroll->GetHeight());
+		if (m_VertScroll.GetVisible() && m_HorzScroll.GetVisible()) {
+			m_VertScroll.SetSize(m_VertScroll.GetWidth(), m_Height - m_HorzScroll.GetHeight() - (m_ScrollBarPadding * 2));
+			m_HorzScroll.SetSize(m_Width - m_VertScroll.GetWidth() - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight());
 		} else {
 			// Normal size
-			if (m_VertScroll->GetVisible()) { m_VertScroll->SetSize(m_VertScroll->GetWidth(), m_Height - (m_ScrollBarPadding * 2)); }
-			if (m_HorzScroll->GetVisible()) { m_HorzScroll->SetSize(m_Width - (m_ScrollBarPadding * 2), m_HorzScroll->GetHeight()); }
+			if (m_VertScroll.GetVisible()) { m_VertScroll.SetSize(m_VertScroll.GetWidth(), m_Height - (m_ScrollBarPadding * 2)); }
+			if (m_HorzScroll.GetVisible()) { m_HorzScroll.SetSize(m_Width - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight()); }
 		}
 	}
 
@@ -778,12 +762,12 @@ namespace RTE {
 
 				// Page Up
 			case GUIInput::KeyboardKeys::KeyPageUp:
-				m_LastSelected -= m_VertScroll->GetPageSize();
+				m_LastSelected -= m_VertScroll.GetPageSize();
 				break;
 
 				// Page Down
 			case GUIInput::KeyboardKeys::KeyPageDown:
-				m_LastSelected += m_VertScroll->GetPageSize();
+				m_LastSelected += m_VertScroll.GetPageSize();
 				break;
 
 				// Different key
@@ -824,7 +808,7 @@ namespace RTE {
 	bool GUIListPanel::PointInsideList(int X, int Y) {
 		bool inside = PointInside(X, Y);
 		// Exclude the scrollbars if we are meant to
-		if (inside && m_HorzScroll->PointInside(X, Y) || m_VertScroll->PointInside(X, Y)) { inside = false; }
+		if (inside && m_HorzScroll.PointInside(X, Y) || m_VertScroll.PointInside(X, Y)) { inside = false; }
 		return inside;
 	}
 
@@ -852,16 +836,16 @@ namespace RTE {
 
 		int sourcePanelID = Source->GetUniqueID();
 
-		if ((sourcePanelID == m_VertScroll->GetUniqueID() || sourcePanelID == m_HorzScroll->GetUniqueID()) && Code == GUIEventCode::ChangeValue) {
+		if ((sourcePanelID == m_VertScroll.GetUniqueID() || sourcePanelID == m_HorzScroll.GetUniqueID()) && Code == GUIEventCode::ChangeValue) {
 			BuildBitmap(false, true);
-		} else if (sourcePanelID == m_VertScroll->GetUniqueID()) {
+		} else if (sourcePanelID == m_VertScroll.GetUniqueID()) {
 			// Vertical Scrollbar
 			if (Code == GUIEventCode::Grab) {
 				m_CapturedVert = true;
 			} else if (Code == GUIEventCode::Release) {
 				m_CapturedVert = false;
 			}
-		} else if (sourcePanelID == m_HorzScroll->GetUniqueID()) {
+		} else if (sourcePanelID == m_HorzScroll.GetUniqueID()) {
 			// Horizontal Scrollbar
 			if (Code == GUIEventCode::Grab) {
 				m_CapturedHorz = true;
@@ -913,10 +897,10 @@ namespace RTE {
 
 	GUIListPanel::Item * GUIListPanel::GetItem(int X, int Y) {
 		int Height = m_Height;
-		if (m_HorzScroll->GetVisible()) { Height -= m_HorzScroll->GetHeight(); }
+		if (m_HorzScroll.GetVisible()) { Height -= m_HorzScroll.GetHeight(); }
 
 		int y = m_Y + 1;
-		if (m_VertScroll->GetVisible()) { y -= m_VertScroll->GetValue(); }
+		if (m_VertScroll.GetVisible()) { y -= m_VertScroll.GetValue(); }
 		int Count = 0;
 		for (std::vector<Item *>::iterator it = m_Items.begin(); it != m_Items.end(); it++, Count++) {
 			Item *pItem = *it;
@@ -1070,10 +1054,10 @@ namespace RTE {
 		GUIControl::SetSize(Width, Height);
 
 		// Adjust the scrollbar positions & sizes
-		m_HorzScroll->SetPositionAbs(m_X, m_Y + m_Height - 17);
-		m_HorzScroll->SetSize(m_Width, 17);
-		m_VertScroll->SetPositionAbs(m_X + m_Width - 17, m_Y);
-		m_VertScroll->SetSize(17, m_Height);
+		m_HorzScroll.SetPositionAbs(m_X, m_Y + m_Height - 17);
+		m_HorzScroll.SetSize(m_Width, 17);
+		m_VertScroll.SetPositionAbs(m_X + m_Width - 17, m_Y);
+		m_VertScroll.SetSize(17, m_Height);
 
 		// Adjust the scrollbar values
 		AdjustScrollbars();
@@ -1088,8 +1072,8 @@ namespace RTE {
 		GUIControl::SetPositionAbs(X, Y);
 
 		// Adjust the scrollbar positions
-		m_HorzScroll->SetPositionAbs(X, Y + m_Height - 17);
-		m_VertScroll->SetPositionAbs(X + m_Width - 17, Y);
+		m_HorzScroll.SetPositionAbs(X, Y + m_Height - 17);
+		m_VertScroll.SetPositionAbs(X + m_Width - 17, Y);
 
 		// Adjust the scrollbar values
 		AdjustScrollbars();

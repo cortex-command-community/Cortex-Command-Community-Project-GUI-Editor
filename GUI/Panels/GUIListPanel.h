@@ -42,7 +42,8 @@ public:
 	/// Constructor method used to instantiate a GUIListPanel object in system memory.
 	/// </summary>
 	/// <param name="owningManager"></param>
-	explicit GUIListPanel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+	explicit GUIListPanel(GUIControlManager *owningManager) : m_HorzScroll(owningManager), m_VertScroll(owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 #pragma endregion
 
 
@@ -335,7 +336,7 @@ public:
 // Description:     Gets the scroll value, in pixels, of the vertical axis.
 // Arguments:       The scroll value in pixels.
 
-    int GetScrollVerticalValue() const { return m_VertScroll->GetValue(); }
+    int GetScrollVerticalValue() const { return m_VertScroll.GetValue(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -529,8 +530,8 @@ private:
 
 	bool m_UpdateLocked = false;
 
-	GUIScrollPanel *m_HorzScroll = nullptr;
-	GUIScrollPanel *m_VertScroll = nullptr;
+	GUIScrollPanel m_HorzScroll;
+	GUIScrollPanel m_VertScroll;
 	bool m_HorzScrollEnabled = true;
 	bool m_VertScrollEnabled = true;
 	int m_ScrollBarThickness = 17; //!< The thickness (width on vertical, height on horizontal) of the ListPanel's scroll bars, in pixels.

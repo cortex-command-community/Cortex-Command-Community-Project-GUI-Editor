@@ -20,7 +20,7 @@ public:
 	/// Constructor method used to instantiate a GUIPropertyPage object in system memory.
 	/// </summary>
 	/// <param name="owningManager">GUIControlManager.</param>
-	explicit GUIPropertyPage(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+	explicit GUIPropertyPage(GUIControlManager *owningManager) : m_VertScroll(owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ private:
 
     GUIProperties m_PageValues;
     std::vector<GUITextPanel *> m_TextPanelList;
-	GUIScrollPanel *m_VertScroll = nullptr;
+	GUIScrollPanel m_VertScroll;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// Method:          BuildBitmap

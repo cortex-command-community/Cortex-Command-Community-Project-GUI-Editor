@@ -6,7 +6,98 @@
 
 namespace RTE {
 
-class GUIComboBoxButton;
+
+
+	/// <summary>
+	/// A ComboBoxButton control class.
+	/// </summary>
+	class GUIComboBoxButton : public GUIControl {
+
+	public:
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Constructor:     GUIComboBoxButton
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Constructor method used to instantiate a GUIComboBoxButton object in
+		//                  system memory.
+		// Arguments:       GUIManager.
+
+		GUIComboBoxButton() = default;
+
+		explicit GUIComboBoxButton(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          ChangeSkin
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Called when the skin has been changed.
+		// Arguments:       New skin pointer.
+
+		void ChangeSkin(GUISkin *Skin);
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          Draw
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Draws the panel
+		// Arguments:       Screen class
+
+		void Draw(GUIScreen *Screen) override;
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          Create
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Create the panel.
+		// Arguments:       Position, Size.
+
+		void Create(int X, int Y, int Width, int Height);
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          Destroy
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Destroys the button.
+		// Arguments:       None.
+
+		void Destroy();
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          OnMouseDown
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Called when the mouse goes down on the panel
+		// Arguments:       Mouse Position, Mouse Buttons, Modifier.
+
+		void OnMouseDown(int X, int Y, int Buttons, int Modifier) override;
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          OnMouseUp
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Called when the mouse goes up on the panel
+		// Arguments:       Mouse Position, Mouse Buttons, Modifier.
+
+		void OnMouseUp(int X, int Y, int Buttons, int Modifier) override { m_Pushed = false; }
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Method:          SetPushed
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Description:     Sets the pushed state of the button.
+		// Arguments:       Pushed.
+
+		void SetPushed(bool Pushed) { m_Pushed = Pushed; }
+
+	private:
+
+		GUIBitmap *m_DrawBitmap = nullptr;
+		bool m_Pushed = false;
+	};
+
+
+
+
 
 /// <summary>
 /// A ComboBox control class.
@@ -31,7 +122,7 @@ public:
 	/// Constructor method used to instantiate a GUIComboBox object in system memory.
 	/// </summary>
 	/// <param name="owningManager">GUIControlManager.</param>
-	explicit GUIComboBox(GUIControlManager *owningManager) : m_TextPanel(GUITextPanel(owningManager)), m_ListPanel(GUIListPanel(owningManager)), m_Button(GUIComboBoxButton(owningManager)) { m_OwningManager = owningManager; }
+	explicit GUIComboBox(GUIControlManager *owningManager) : m_TextPanel(owningManager), m_ListPanel(owningManager), m_Button(owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +186,7 @@ public:
 // Arguments:       None.
 // Returns:         The ListPanel component of this ComboBox.
 
-    GUIListPanel * GetListPanel() { return m_ListPanel; }
+    GUIListPanel * GetListPanel() { return &m_ListPanel; }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +204,7 @@ public:
 // Description:     Locks the control from updating every time a new item is added.
 // Arguments:       None.
 
-	void BeginUpdate() { m_ListPanel->BeginUpdate(); }
+	void BeginUpdate() { m_ListPanel.BeginUpdate(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +214,7 @@ public:
 //                  Will automatically update the control.
 // Arguments:       None.
 
-	void EndUpdate() { m_ListPanel->EndUpdate(); }
+	void EndUpdate() { m_ListPanel.EndUpdate(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +241,7 @@ public:
 // Description:     Add an item to the list.
 // Arguments:       Name, Extra text, bitmap to show in the list, extra entity data
 
-	void AddItem(const std::string &Name, const std::string &ExtraText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = nullptr) { m_ListPanel->AddItem(Name, ExtraText, pBitmap, pEntity); }
+	void AddItem(const std::string &Name, const std::string &ExtraText = "", GUIBitmap *pBitmap = nullptr, const Entity *pEntity = nullptr) { m_ListPanel.AddItem(Name, ExtraText, pBitmap, pEntity); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +268,7 @@ public:
 // Description:     Get the item count.
 // Arguments:       None.
 
-	int GetCount() { return m_ListPanel->GetItemList()->size(); }
+	int GetCount() { return m_ListPanel.GetItemList()->size(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +277,7 @@ public:
 // Description:     Get the index of the selected item.
 // Arguments:       None.
 
-	int GetSelectedIndex() { return m_ListPanel->GetSelectedIndex(); }
+	int GetSelectedIndex() { return m_ListPanel.GetSelectedIndex(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +316,7 @@ public:
 // Arguments:       Index.
 // Returns:         Pointer to the item structure. 0 if the index was invalid.
 
-	GUIListPanel::Item * GetItem(int Index) { return m_ListPanel->GetItem(Index); }
+	GUIListPanel::Item * GetItem(int Index) { return m_ListPanel.GetItem(Index); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +400,7 @@ public:
 // Arguments:       None.
 // Returns:         Whether this is currently dropped down and showing the list.
 
-    bool IsDropped() { return m_ListPanel->GetVisible(); }
+    bool IsDropped() { return m_ListPanel.GetVisible(); }
 
 private:
 
@@ -322,95 +413,9 @@ private:
 	int m_DropHeight = 80;
     int m_DropDownStyle = DropDownStyles::DropDownList;
 
-	GUITextPanel *m_TextPanel = nullptr;
-	GUIListPanel *m_ListPanel = nullptr;
-	GUIComboBoxButton *m_Button = nullptr;
-};
-
-
-/// <summary>
-/// A ComboBoxButton control class.
-/// </summary>
-class GUIComboBoxButton : public GUIControl {
-
-public:
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIComboBoxButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIComboBoxButton object in
-//                  system memory.
-// Arguments:       GUIManager.
-
-	explicit GUIComboBoxButton() = default;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          ChangeSkin
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the skin has been changed.
-// Arguments:       New skin pointer.
-
-    void ChangeSkin(GUISkin *Skin);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Draw
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Draws the panel
-// Arguments:       Screen class
-
-    void Draw(GUIScreen *Screen) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Create the panel.
-// Arguments:       Position, Size.
-
-    void Create(int X, int Y, int Width, int Height);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Destroy
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Destroys the button.
-// Arguments:       None.
-
-    void Destroy();
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseDown
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse goes down on the panel
-// Arguments:       Mouse Position, Mouse Buttons, Modifier.
-
-    void OnMouseDown(int X, int Y, int Buttons, int Modifier) override;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          OnMouseUp
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the mouse goes up on the panel
-// Arguments:       Mouse Position, Mouse Buttons, Modifier.
-
-	void OnMouseUp(int X, int Y, int Buttons, int Modifier) override { m_Pushed = false; }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          SetPushed
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Sets the pushed state of the button.
-// Arguments:       Pushed.
-
-	void SetPushed(bool Pushed) { m_Pushed = Pushed; }
-
-private:
-
-	GUIBitmap *m_DrawBitmap = nullptr;
-	bool m_Pushed = false;
+	GUITextPanel m_TextPanel;
+	GUIListPanel m_ListPanel;
+	GUIComboBoxButton m_Button;
 };
 };
 #endif

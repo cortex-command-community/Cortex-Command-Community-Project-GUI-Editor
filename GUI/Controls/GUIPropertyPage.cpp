@@ -35,24 +35,20 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Create the vertical scrollbar
-		m_VertScroll = new GUIScrollPanel();
-		m_VertScroll->SetOwningManager(m_OwningManager);
+		m_VertScroll.Create(m_Width - 12, 0, 12, m_Height);
+		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.SetVisible(false);
+		m_VertScroll.SetValue(0);
+		m_VertScroll.SetSignalTarget(this);
 
-		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
-		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
-		m_VertScroll->SetVisible(false);
-		m_VertScroll->SetValue(0);
-		m_VertScroll->SetSignalTarget(this);
-
-		AddChild(m_VertScroll);
+		AddChild(&m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
 		int Spacer = 0;
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel();
-			T->SetOwningManager(m_OwningManager);
+			GUITextPanel *T = new GUITextPanel(m_OwningManager);
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
@@ -83,24 +79,20 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Create the vertical scrollbar
-		m_VertScroll = new GUIScrollPanel();
-		m_VertScroll->SetOwningManager(m_OwningManager);
+		m_VertScroll.Create(m_Width - 12, 0, 12, m_Height);
+		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.SetVisible(false);
+		m_VertScroll.SetValue(0);
+		m_VertScroll.SetSignalTarget(this);
 
-		m_VertScroll->Create(m_Width - 12, 0, 12, m_Height);
-		m_VertScroll->SetOrientation(GUIScrollPanel::Vertical);
-		m_VertScroll->SetVisible(false);
-		m_VertScroll->SetValue(0);
-		m_VertScroll->SetSignalTarget(this);
-
-		AddChild(m_VertScroll);
+		AddChild(&m_VertScroll);
 
 		// Create the text panels
 		int H = 16;
 		int Spacer = 0;
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel();
-			T->SetOwningManager(m_OwningManager);
+			GUITextPanel *T = new GUITextPanel(m_OwningManager);
 			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
@@ -119,13 +111,7 @@ namespace RTE {
 			delete m_DrawBitmap;
 			m_DrawBitmap = nullptr;
 		}
-
-		// Free the vertical scrollbar
-		if (m_VertScroll) {
-			m_VertScroll->Destroy();
-			delete m_VertScroll;
-			m_VertScroll = nullptr;
-		}
+		m_VertScroll.Destroy();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
