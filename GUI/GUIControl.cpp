@@ -302,7 +302,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::TrackMouseHover(bool Enabled, int Delay) {
+	void GUIControl::TrackMouseHover(bool Enabled, float Delay) {
 		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
 	}
 

@@ -25,7 +25,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIControlManager object in system memory.
 		/// </summary>
-		GUIControlManager() { Clear(); }
+		GUIControlManager() = default;
 
 		/// <summary>
 		/// Creates the data for the control manager.
@@ -96,9 +96,9 @@ namespace RTE {
 		/// <summary>
 		/// Gets an event from the queue.
 		/// </summary>
-		/// <param name="event">Pointer to variable receiving the Event.</param>
+		/// <param name="eventPtr">Pointer to variable receiving the Event.</param>
 		/// <returns>Returns true when an event was grabbed. Returns false when there was no more events in the queue OR the Event pointer is 0.</returns>
-		bool GetEvent(GUIEvent *event);
+		bool GetEvent(GUIEvent *eventPtr);
 
 		/// <summary>
 		/// Sets the cursor type.
@@ -115,8 +115,8 @@ namespace RTE {
 		/// <summary>
 		/// Give focus to a panel.
 		/// </summary>
-		/// <param name="panel">Panel.</param>
-		void SetFocus(GUIControl *panel);
+		/// <param name="newFocusedControl">Control.</param>
+		void SetFocus(GUIControl *newFocusedControl);
 
 		/// <summary>
 		/// Sets the absolute position of this entire GUI on the screen. This is useful if the UI's are being drawn in a different area of the screen than the top left corner.
@@ -130,7 +130,7 @@ namespace RTE {
 		/// Gets a unique ID for a panel.
 		/// </summary>
 		/// <returns></returns>
-		int GetUniqueID() { return m_UniqueIDCount++; }
+		int GetUniqueID() { return m_UniqueIDCounter++; }
 #pragma endregion
 
 #pragma region 
@@ -208,7 +208,7 @@ namespace RTE {
 		/// <param name="panel">Panel.</param>
 		/// <param name="enabled">Enabled.</param>
 		/// <param name="delay">Delay (milliseconds).</param>
-		void TrackMouseHover(GUIControl *panel, bool enabled, int delay);
+		void TrackMouseHover(GUIControl *panel, bool enabled, float delay);
 #pragma endregion
 
 #pragma region Concrete Methods
@@ -244,33 +244,33 @@ namespace RTE {
 
 	private:
 
-		GUIScreen *m_Screen; // Not owned.
-		GUIInput *m_Input; // Not owned.
-		GUISkin *m_Skin;
+		GUIScreen *m_Screen = nullptr; // Not owned.
+		GUIInput *m_Input = nullptr; // Not owned.
+		GUISkin *m_Skin = nullptr;
 
 		std::vector<GUIControl *> m_ControlList;
 		std::vector<GUIEvent *> m_EventQueue;
 
-		int m_CursorType;
+		int m_CursorType = CursorType::Pointer;
 
-		Timer *m_Timer;
+		Timer *m_Timer = nullptr;
 
-		int m_UniqueIDCount;
-		bool m_HoverTrack;
-		GUIControl *m_HoverPanel;
-		float m_HoverTime;
-		GUIControl *m_CapturedPanel;
-		GUIControl *m_FocusPanel;
-		GUIControl *m_MouseOverPanel;
+		int m_UniqueIDCounter = 0;
+		bool m_HoverTrack = false;
+		float m_HoverTime = 0;
+		GUIControl *m_HoveredControl = nullptr;
+		GUIControl *m_CaptruredControl = nullptr;
+		GUIControl *m_FocusedControl = nullptr;
+		GUIControl *m_MousedOverControl = nullptr;
 
-		bool m_MouseEnabled;
-		int m_OldMouseX;
-		int m_OldMouseY;
+		bool m_MouseEnabled = true;
+		int m_OldMouseX = 0;
+		int m_OldMouseY = 0;
 
-		int m_DoubleClickTime;
-		int m_DoubleClickSize;
-		int m_DoubleClickButtons;
-		float m_LastMouseDown[3];
+		int m_DoubleClickTime = 0;
+		int m_DoubleClickSize = 0;
+		int m_DoubleClickButtons = 0;
+		float m_LastMouseDown[3]; // double click times - -99999.0F;
 		GUIRect m_DoubleClickRect;
 
 		/// <summary>
@@ -288,7 +288,7 @@ namespace RTE {
 		/// <param name="pointX">Mouse Position.</param>
 		/// <param name="pointY"></param>
 		/// <returns></returns>
-		GUIControl * FindTopPanel(int pointX, int pointY);
+		GUIControl * FindTopControl(int pointX, int pointY);
 
 		/// <summary>
 		/// Goes through the panel list and selects the bottommost ('first', render wise) panel on a specific point.
@@ -296,18 +296,13 @@ namespace RTE {
 		/// <param name="pointX">Mouse Position.</param>
 		/// <param name="pointY"></param>
 		/// <returns></returns>
-		GUIControl * FindBottomPanel(int pointX, int pointY);
+		GUIControl * FindBottomControl(int pointX, int pointY);
 
 		/// <summary>
 		/// Add a new event to the queue.
 		/// </summary>
 		/// <param name="event">Event point.</param>
 		void AddEvent(GUIEvent *event);
-
-		/// <summary>
-		/// Clears all the member variables of this GUIControlManager.
-		/// </summary>
-		void Clear();
 
 		// Disallow the use of some implicit methods.
 		GUIControlManager(const GUIControlManager &reference) = delete;

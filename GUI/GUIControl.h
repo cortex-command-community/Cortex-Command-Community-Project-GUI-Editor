@@ -715,7 +715,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="enabled">Enabled.</param>
 		/// <param name="delay">Delay (milliseconds).</param>
-		void TrackMouseHover(bool enabled, int delay);
+		void TrackMouseHover(bool enabled, float delay);
 
 #pragma region Property Handling
 		/// <summary>
