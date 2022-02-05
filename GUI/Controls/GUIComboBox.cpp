@@ -7,23 +7,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIComboBox::GUIComboBox(GUIControlManager *ControlManager) {
-		m_OwningManager = ControlManager;
-
-		// Create the listpanel
-		m_ListPanel = new GUIListPanel();
-		m_ListPanel->SetOwningManager(ControlManager);
-
-		// Create the textpanel
-		m_TextPanel = new GUITextPanel();
-		m_TextPanel->SetOwningManager(ControlManager);
-
-		// Create the button
-		m_Button = new GUIComboBoxButton();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIComboBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 

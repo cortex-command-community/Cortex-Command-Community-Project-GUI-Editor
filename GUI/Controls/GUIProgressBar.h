@@ -12,16 +12,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIProgressBar
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIProgressBar object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIProgressBar(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIProgressBar object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIProgressBar(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

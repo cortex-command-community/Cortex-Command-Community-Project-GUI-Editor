@@ -32,14 +32,18 @@ public:
 	};
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIListPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIListPanel object in
-//                  system memory.
-// Arguments:       None.
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIListPanel object in system memory.
+	/// </summary>
 	GUIListPanel() = default;
+
+	/// <summary>
+	/// Constructor method used to instantiate a GUIListPanel object in system memory.
+	/// </summary>
+	/// <param name="owningManager"></param>
+	explicit GUIListPanel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

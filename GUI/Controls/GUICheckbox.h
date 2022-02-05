@@ -19,15 +19,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUICheckbox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUICheckbox object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUICheckbox(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUICheckbox object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+    explicit GUICheckbox(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

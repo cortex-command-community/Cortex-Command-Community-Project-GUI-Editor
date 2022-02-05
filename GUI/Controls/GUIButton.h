@@ -14,15 +14,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIButton object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIButton(GUIControlManager *ControlManager);
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIButton object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIButton(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

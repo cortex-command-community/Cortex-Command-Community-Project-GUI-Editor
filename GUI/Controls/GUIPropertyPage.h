@@ -15,16 +15,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIPropertyPage
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIPropertyPage object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIPropertyPage(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIPropertyPage object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIPropertyPage(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

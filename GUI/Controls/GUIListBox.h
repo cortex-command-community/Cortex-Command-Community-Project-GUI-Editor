@@ -14,15 +14,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIListBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIListBox object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIListBox(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIListBox object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIListBox(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

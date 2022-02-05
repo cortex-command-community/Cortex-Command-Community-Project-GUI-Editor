@@ -19,14 +19,18 @@ public:
     };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUITextPanel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUITextPanel object in
-//                  system memory.
-// Arguments:       None.
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUITextPanel object in system memory.
+	/// </summary>
 	GUITextPanel() = default;
+
+	/// <summary>
+	/// Constructor method used to instantiate a GUITextPanel object in system memory.
+	/// </summary>
+	/// <param name="owningManager"></param>
+	explicit GUITextPanel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

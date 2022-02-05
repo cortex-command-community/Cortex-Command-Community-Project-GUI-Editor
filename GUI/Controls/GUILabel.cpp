@@ -7,19 +7,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUILabel::GUILabel(GUIControlManager *ControlManager) {
-		m_OwningManager = ControlManager;
-		m_Text = "";
-		m_HAlignment = GUIFont::HAlignment::Left;
-		m_VAlignment = GUIFont::VAlignment::Middle;
-		m_HorizontalOverflowScroll = false;
-		m_VerticalOverflowScroll = false;
-		m_OverflowScrollState = OverflowScrollState::Deactivated;
-		m_OverflowScrollTimer = Timer();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUILabel::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 

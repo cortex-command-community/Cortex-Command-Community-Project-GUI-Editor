@@ -589,9 +589,6 @@ namespace RTE {
 		virtual const std::string_view GetControlType() const { return ""; }
 #pragma endregion
 
-		// temp
-		void SetOwningManager(GUIControlManager *newOwningManager) { m_OwningManager = newOwningManager; }
-
 	protected:
 
 		GUIControlManager *m_OwningManager = nullptr; //!< Not owned, owns this!

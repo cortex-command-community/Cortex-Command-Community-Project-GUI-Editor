@@ -12,16 +12,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIRadioButton
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIRadioButton object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIRadioButton(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIRadioButton object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIRadioButton(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

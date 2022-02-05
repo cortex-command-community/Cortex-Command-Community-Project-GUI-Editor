@@ -14,16 +14,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUITextBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUITextBox object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUITextBox(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUITextBox object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUITextBox(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

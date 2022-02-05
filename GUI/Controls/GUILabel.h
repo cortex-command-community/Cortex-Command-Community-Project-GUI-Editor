@@ -23,16 +23,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUILabel
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUILabel object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUILabel(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUILabel object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUILabel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
@@ -251,13 +248,14 @@ private:
 
 	static const std::string_view c_ControlType;
 
-    std::string m_Text;
-    int m_HAlignment;
-    int m_VAlignment;
-    bool m_HorizontalOverflowScroll; //!< Note that horizontal overflow scrolling means text will always be on one line.
-    bool m_VerticalOverflowScroll;
-    OverflowScrollState m_OverflowScrollState;
-    Timer m_OverflowScrollTimer;
+    std::string m_Text = "";
+    int m_HAlignment = GUIFont::HAlignment::Left;
+    int m_VAlignment = GUIFont::VAlignment::Middle;
+    bool m_HorizontalOverflowScroll = false; //!< Note that horizontal overflow scrolling means text will always be on one line.
+    bool m_VerticalOverflowScroll = false;
+    OverflowScrollState m_OverflowScrollState = OverflowScrollState::Deactivated;
+
+	Timer m_OverflowScrollTimer = Timer();
 };
 };
 #endif

@@ -26,16 +26,13 @@ public:
 
 	GUIControlOverrideMethods;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIComboBox
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIComboBox object in
-//                  system memory.
-// Arguments:       GUIControlManager.
-
-    GUIComboBox(GUIControlManager *ControlManager);
-
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIComboBox object in system memory.
+	/// </summary>
+	/// <param name="owningManager">GUIControlManager.</param>
+	explicit GUIComboBox(GUIControlManager *owningManager) : m_TextPanel(GUITextPanel(owningManager)), m_ListPanel(GUIListPanel(owningManager)), m_Button(GUIComboBoxButton(owningManager)) { m_OwningManager = owningManager; }
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
