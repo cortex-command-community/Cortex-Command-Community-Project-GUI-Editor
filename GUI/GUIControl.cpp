@@ -41,63 +41,134 @@ namespace RTE {
 		m_Properties.OverwriteProperties(reference);
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::BuildProperties(GUIProperties *properties) const {
+		GUIAssert(properties, "");
+
+		// Subtract the position from the parent
+		int X = m_X;
+		int Y = m_Y;
+
+		if (m_ParentControl) {
+			X -= m_ParentControl->m_X;
+			Y -= m_ParentControl->m_Y;
+		}
+
+		properties->AddProperty("X", X);
+		properties->AddProperty("Y", Y);
+		properties->AddProperty("Width", m_Width);
+		properties->AddProperty("Height", m_Height);
+		properties->AddProperty("Visible", m_Visible);
+		properties->AddProperty("Enabled", m_Enabled);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::CenterInParent(bool centerX, bool centerY) {
-		int newRelX = m_X - m_ParentControl->GetPosX();
-		int newRelY = m_Y - m_ParentControl->GetPosY();
+	void GUIControl::ApplyProperties(GUIProperties *properties) {
+		GUIAssert(properties, "");
 
-		if (centerX) { newRelX = (m_ParentControl->GetWidth() / 2) - (GetWidth() / 2); }
-		if (centerY) { newRelY = (m_ParentControl->GetHeight() / 2) - (GetHeight() / 2); }
+		m_Properties.OverwriteProperties(properties);
 
-		SetPositionRel(newRelX, newRelY);
-	}
+		int X, Y;
+		int Width, Height;
+		bool Enabled;
+		bool Visible;
+		properties->GetPropertyValue("X", &X);
+		properties->GetPropertyValue("Y", &Y);
+		properties->GetPropertyValue("Width", &Width);
+		properties->GetPropertyValue("Height", &Height);
+		properties->GetPropertyValue("Enabled", &Enabled);
+		properties->GetPropertyValue("Visible", &Visible);
 
-
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::SetPositionAbs(int X, int Y, bool moveChildren) {
-		int DX = X - m_X;
-		int DY = Y - m_Y;
-		m_X = X;
-		m_Y = Y;
-
-		if (moveChildren) {
-			for (GUIControl *childControl : m_ChildControls) {
-				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
-			}
+		// Adjust position from parent
+		if (m_ParentControl) {
+			int px;
+			int py;
+			int pw;
+			int ph;
+			m_ParentControl->GetRect(&px, &py, &pw, &ph);
+			X += px;
+			Y += py;
 		}
+		SetEnabled(Enabled);
+
+		Move(X, Y);
+		Resize(Width, Height);
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::SetPositionRel(int X, int Y) {
-		X += m_ParentControl->GetPosX();
-		Y += m_ParentControl->GetPosY();
-		int DX = X - m_X;
-		int DY = Y - m_Y;
-		m_X = X;
-		m_Y = Y;
+	bool GUIControl::Save(GUIWriter *writer) {
+		std::string OutString = "";
+		std::string Name;
 
-		for (GUIControl *childControl : m_ChildControls) {
-			childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
+		// Get the control to store its properties
+		StoreProperties();
+
+		// Section Header
+		m_Properties.GetPropertyValue("Name", &Name);
+
+		OutString.append("[");
+		OutString.append(Name);
+		OutString.append("]\n");
+
+		// General control values
+		OutString.append("ControlType = ");
+		OutString += GetControlType();
+		OutString.append("\n");
+
+		// Parent
+		OutString += "Parent = ";
+		if (m_ParentControl) {
+			OutString += m_ParentControl->GetName();
+		} else {
+			OutString += "None";
 		}
+		OutString += "\n";
+
+		// Get the main panel and write its location
+		//GUIControl *Pan = GetPanel();
+		//if (Pan) { OutString.append(Pan->ToString()); }
+
+		// Write out the properties
+		OutString.append(m_Properties.ToString());
+
+		// Write to the writer class
+		*writer << OutString;
+
+		return true;
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::MoveRelative(int dX, int dY) {
-		m_X += dX;
-		m_Y += dY;
+	std::string GUIControl::ToString() const {
+		std::string OutString = "";
 
-		for (GUIControl *childControl : m_ChildControls) {
-			childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
+		// Subtract the position from the parent
+		int X = m_X;
+		int Y = m_Y;
+
+		if (m_ParentControl) {
+			X -= m_ParentControl->m_X;
+			Y -= m_ParentControl->m_Y;
 		}
+
+		OutString += WriteValue("X", X);
+		OutString += WriteValue("Y", Y);
+		OutString += WriteValue("Width", m_Width);
+		OutString += WriteValue("Height", m_Height);
+		OutString += WriteValue("Visible", m_Visible);
+		OutString += WriteValue("Enabled", m_Enabled);
+
+		return OutString;
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControl::SetFocus() {
+		m_OwningManager->SetFocus(this);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -137,23 +208,58 @@ namespace RTE {
 		return tip;
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::CenterInParent(bool centerX, bool centerY) {
+		int newRelX = m_X - m_ParentControl->GetPosX();
+		int newRelY = m_Y - m_ParentControl->GetPosY();
+
+		if (centerX) { newRelX = (m_ParentControl->GetWidth() / 2) - (GetWidth() / 2); }
+		if (centerY) { newRelY = (m_ParentControl->GetHeight() / 2) - (GetHeight() / 2); }
+
+		SetPositionRel(newRelX, newRelY);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::SetFocus() {
-		m_OwningManager->SetFocus(this);
-	}
+	void GUIControl::SetPositionAbs(int X, int Y, bool moveChildren) {
+		int DX = X - m_X;
+		int DY = Y - m_Y;
+		m_X = X;
+		m_Y = Y;
 
+		if (moveChildren) {
+			for (GUIControl *childControl : m_ChildControls) {
+				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
+			}
+		}
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
-		m_OwningManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
+	void GUIControl::SetPositionRel(int X, int Y) {
+		X += m_ParentControl->GetPosX();
+		Y += m_ParentControl->GetPosY();
+		int DX = X - m_X;
+		int DY = Y - m_Y;
+		m_X = X;
+		m_Y = Y;
+
+		for (GUIControl *childControl : m_ChildControls) {
+			childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
+		}
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::MoveRelative(int dX, int dY) {
+		m_X += dX;
+		m_Y += dY;
 
+		for (GUIControl *childControl : m_ChildControls) {
+			childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
+		}
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -180,81 +286,6 @@ namespace RTE {
 		if (width) { *width = 0; }
 		if (height) { *height = 0; }
 	}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::CaptureMouse() {
-		m_OwningManager->CaptureMouse(this);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::ReleaseMouse() {
-		m_OwningManager->ReleaseMouse();
-	}
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::AddChild(GUIControl *child, bool convertToAbsolutePos) {
-		if (child) {
-			// Convert the child's coordinates into absolute coordinates
-			if (convertToAbsolutePos) {
-				child->m_X += m_X;
-				child->m_Y += m_Y;
-			}
-
-			// Make sure the rectangle is valid
-			child->m_Width = std::max(child->m_Width, 0);
-			child->m_Height = std::max(child->m_Height, 0);
-
-			int zPos = 0;
-			if (!m_ChildControls.empty()) {
-				const GUIControl *lastChild = m_ChildControls.back();
-				zPos = lastChild->GetZPos() + 1;
-			}
-
-			// Remove the child from any previous parent
-			if (child->m_ParentControl) { child->m_ParentControl->RemoveChild(child->GetName()); }
-
-			// Setup the inherited values
-			child->m_ParentControl = this;
-			child->Setup(m_OwningManager, zPos);
-
-			// Add the child to the list
-			m_ChildControls.push_back(child);
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::RemoveChild(const std::string_view &name) {
-		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
-		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			const GUIControl *C = *it;
-			if (C && C->GetName().compare(name) == 0) {
-				m_ChildControls.erase(it);
-				break;
-			}
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::RemoveAllChildren() {
-		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
-		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (const GUIControl *control : m_ChildControls) {
-			if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
-		}
-		m_ChildControls.clear();
-	}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -302,12 +333,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::TrackMouseHover(bool Enabled, float Delay) {
-		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	bool GUIControl::PointInside(int X, int Y) {
 		// Can't be inside an invisible panel
 		if (!m_Visible) {
@@ -322,7 +347,6 @@ namespace RTE {
 		// Mouse is inside
 		return true;
 	}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -379,62 +403,37 @@ namespace RTE {
 		return this;
 	}
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::BuildProperties(GUIProperties *properties) const {
-		GUIAssert(properties, "");
+	void GUIControl::AddChild(GUIControl *child, bool convertToAbsolutePos) {
+		if (child) {
+			// Convert the child's coordinates into absolute coordinates
+			if (convertToAbsolutePos) {
+				child->m_X += m_X;
+				child->m_Y += m_Y;
+			}
 
-		// Subtract the position from the parent
-		int X = m_X;
-		int Y = m_Y;
+			// Make sure the rectangle is valid
+			child->m_Width = std::max(child->m_Width, 0);
+			child->m_Height = std::max(child->m_Height, 0);
 
-		if (m_ParentControl) {
-			X -= m_ParentControl->m_X;
-			Y -= m_ParentControl->m_Y;
+			int zPos = 0;
+			if (!m_ChildControls.empty()) {
+				const GUIControl *lastChild = m_ChildControls.back();
+				zPos = lastChild->GetZPos() + 1;
+			}
+
+			// Remove the child from any previous parent
+			if (child->m_ParentControl) { child->m_ParentControl->RemoveChild(child->GetName()); }
+
+			// Setup the inherited values
+			child->m_ParentControl = this;
+			child->Setup(m_OwningManager, zPos);
+
+			// Add the child to the list
+			m_ChildControls.push_back(child);
 		}
-
-		properties->AddProperty("X", X);
-		properties->AddProperty("Y", Y);
-		properties->AddProperty("Width", m_Width);
-		properties->AddProperty("Height", m_Height);
-		properties->AddProperty("Visible", m_Visible);
-		properties->AddProperty("Enabled", m_Enabled);
 	}
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	std::string GUIControl::ToString() const {
-		std::string OutString = "";
-
-		// Subtract the position from the parent
-		int X = m_X;
-		int Y = m_Y;
-
-		if (m_ParentControl) {
-			X -= m_ParentControl->m_X;
-			Y -= m_ParentControl->m_Y;
-		}
-
-		OutString += WriteValue("X", X);
-		OutString += WriteValue("Y", Y);
-		OutString += WriteValue("Width", m_Width);
-		OutString += WriteValue("Height", m_Height);
-		OutString += WriteValue("Visible", m_Visible);
-		OutString += WriteValue("Enabled", m_Enabled);
-
-		return OutString;
-	}
-
-
-
-
-
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -457,94 +456,54 @@ namespace RTE {
 		}
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::ApplyProperties(GUIProperties *properties) {
-		GUIAssert(properties, "");
-
-		m_Properties.OverwriteProperties(properties);
-
-		int X, Y;
-		int Width, Height;
-		bool Enabled;
-		bool Visible;
-		properties->GetPropertyValue("X", &X);
-		properties->GetPropertyValue("Y", &Y);
-		properties->GetPropertyValue("Width", &Width);
-		properties->GetPropertyValue("Height", &Height);
-		properties->GetPropertyValue("Enabled", &Enabled);
-		properties->GetPropertyValue("Visible", &Visible);
-
-		// Adjust position from parent
-		if (m_ParentControl) {
-			int px;
-			int py;
-			int pw;
-			int ph;
-			m_ParentControl->GetRect(&px, &py, &pw, &ph);
-			X += px;
-			Y += py;
+	void GUIControl::RemoveChild(const std::string_view &name) {
+		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
+		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
+		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
+			const GUIControl *C = *it;
+			if (C && C->GetName().compare(name) == 0) {
+				m_ChildControls.erase(it);
+				break;
+			}
 		}
-		SetEnabled(Enabled);
-
-		Move(X, Y);
-		Resize(Width, Height);
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::Save(GUIWriter *writer) {
-		std::string OutString = "";
-		std::string Name;
-
-		// Get the control to store its properties
-		StoreProperties();
-
-		// Section Header
-		m_Properties.GetPropertyValue("Name", &Name);
-
-		OutString.append("[");
-		OutString.append(Name);
-		OutString.append("]\n");
-
-		// General control values
-		OutString.append("ControlType = ");
-		OutString += GetControlType();
-		OutString.append("\n");
-
-		// Parent
-		OutString += "Parent = ";
-		if (m_ParentControl) {
-			OutString += m_ParentControl->GetName();
-		} else {
-			OutString += "None";
+	void GUIControl::RemoveAllChildren() {
+		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
+		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
+		for (const GUIControl *control : m_ChildControls) {
+			if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
 		}
-		OutString += "\n";
-
-		// Get the main panel and write its location
-		//GUIControl *Pan = GetPanel();
-		//if (Pan) { OutString.append(Pan->ToString()); }
-
-		// Write out the properties
-		OutString.append(m_Properties.ToString());
-
-		// Write to the writer class
-		*writer << OutString;
-
-		return true;
+		m_ChildControls.clear();
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
+		m_OwningManager->AddEvent(new GUIEvent(this, eventType, eventCode, eventData));
+	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::CaptureMouse() {
+		m_OwningManager->CaptureMouse(this);
+	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void GUIControl::ReleaseMouse() {
+		m_OwningManager->ReleaseMouse();
+	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
+	void GUIControl::TrackMouseHover(bool Enabled, float Delay) {
+		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

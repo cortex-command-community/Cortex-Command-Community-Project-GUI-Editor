@@ -99,19 +99,29 @@ namespace RTE {
 		/// <returns></returns>
 		GUIProperties * GetProperties() { return &m_Properties; }
 
-
-#pragma endregion
-
-
-
-
-#pragma region Property Handling
-
 		/// <summary>
 		/// Adds this panels properties to a properties class.
 		/// </summary>
 		/// <param name="properties">GUIProperties.</param>
 		void BuildProperties(GUIProperties *properties) const;
+
+		/// <summary>
+		/// Gets the control to store the values into properties.
+		/// </summary>
+		virtual void StoreProperties() {}
+
+		/// <summary>
+		/// Applies new properties to the control.
+		/// </summary>
+		/// <param name="properties">GUIProperties.</param>
+		virtual void ApplyProperties(GUIProperties *properties);
+
+		/// <summary>
+		/// Saves the control properties.
+		/// </summary>
+		/// <param name="writer">Writer.</param>
+		/// <returns>True if successful.</returns>
+		bool Save(GUIWriter *writer);
 
 		/// <summary>
 		/// Convert the properties in the panel to a string.
@@ -120,56 +130,24 @@ namespace RTE {
 		std::string ToString() const;
 #pragma endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma region Concrete Methods
-		/// <summary>
-		/// Sets up the panel for use with the manager.
-		/// </summary>
-		/// <param name="manager">Pointer to the manager to use.</param>
-		/// <param name="zPos">ZPosition.</param>
-		void Setup(GUIControlManager *manager, int zPos);
-
-
-
-		/// <summary>
-		/// Gets the children list.
-		/// </summary>
-		/// <returns></returns>
-		std::vector<GUIControl *> * GetChildren() { return &m_ChildControls; }
-#pragma endregion
-
 #pragma region Getters and Setters
-
 		/// <summary>
 		/// Gets the parent of this control.
 		/// </summary>
 		/// <returns></returns>
 		GUIControl * GetParent() { return m_ParentControl; }
 
+		/// <summary>
+		/// Gets the children list.
+		/// </summary>
+		/// <returns></returns>
+		std::vector<GUIControl *> * GetChildren() { return &m_ChildControls; }
 
 		/// <summary>
 		/// Gets the panel's ID.
 		/// </summary>
 		/// <returns></returns>
 		int GetUniqueID() const { return m_UniqueID; }
-
-
 
 		/// <summary>
 		/// Gets the enabled state of the panel.
@@ -195,14 +173,11 @@ namespace RTE {
 		/// <param name="visible">Visible.</param>
 		void SetVisible(bool visible) { m_Visible = visible; }
 
-
-
 		/// <summary>
 		/// Returns the IsContainer value.
 		/// </summary>
 		/// <returns></returns>
 		bool IsContainer() const { return m_IsContainer; }
-
 
 		/// <summary>
 		/// Gets the panel's captured state.
@@ -226,7 +201,6 @@ namespace RTE {
 		/// Sets the focus of this panel.
 		/// </summary>
 		void SetFocus();
-
 
 		/// <summary>
 		/// Gets the control's name.
@@ -252,12 +226,17 @@ namespace RTE {
 		/// <param name="toolTip">The new ToolTip for this.</param>
 		void SetToolTip(const std::string_view &toolTip) const { m_Properties.SetPropertyValue("ToolTip", toolTip); }
 
-
 		/// <summary>
 		/// Called when the skin has been changed.
 		/// </summary>
 		/// <param name="newSkin">New skin pointer.</param>
 		virtual void ChangeSkin(GUISkin *newSkin) { m_Skin = newSkin; }
+
+		/// <summary>
+		/// Sets the font this panel will be using
+		/// </summary>
+		/// <param name="newFont">The new font, ownership is NOT transferred!</param>
+		virtual void SetFont(GUIFont *newFont) { m_Font = newFont; }
 #pragma endregion
 
 #pragma region Positioning and Sizing
@@ -285,7 +264,6 @@ namespace RTE {
 		/// <returns></returns>
 		int GetRelPosY() const { return m_Y - m_ParentControl->GetPosY(); }
 
-
 		/// <summary>
 		/// Gets the width of the panel.
 		/// </summary>
@@ -305,6 +283,12 @@ namespace RTE {
 		/// <param name="newHeight">Height.</param>
 		virtual void SetSize(int newWidth, int newHeight) { m_Width = newWidth; m_Height = newHeight; }
 
+		/// <summary>
+		/// Called when the control needs to be resized.
+		/// </summary>
+		/// <param name="newWidth">New size.</param>
+		/// <param name="newHeight"></param>
+		virtual void Resize(int newWidth, int newHeight) {}
 
 		/// <summary>
 		/// Centers this in its parent, taking this' dimensions into consideration.
@@ -312,7 +296,6 @@ namespace RTE {
 		/// <param name="centerX">Which axis to center.</param>
 		/// <param name="centerY"></param>
 		virtual void CenterInParent(bool centerX, bool centerY);
-
 
 		/// <summary>
 		/// Adjusts the absolute position of the panel.
@@ -330,13 +313,18 @@ namespace RTE {
 		virtual void SetPositionRel(int newPosX, int newPosY);
 
 		/// <summary>
+		/// Called when the control needs to be moved.
+		/// </summary>
+		/// <param name="newPosX">New position.</param>
+		/// <param name="newPosY"></param>
+		virtual void Move(int newPosX, int newPosY) {}
+
+		/// <summary>
 		/// Moves the position of the panel by a relative amount.
 		/// </summary>
 		/// <param name="newPosX">X.</param>
 		/// <param name="newPosY">Y.</param>
 		virtual void MoveRelative(int newPosX, int newPosY);
-
-
 
 		/// <summary>
 		/// Gets the rectangle of the panel.
@@ -362,27 +350,48 @@ namespace RTE {
 		/// <param name="height"></param>
 		virtual void GetControlRect(int *posX, int *posY, int *width, int *height) const;
 
-
+		/// <summary>
+		/// Gets the Z index of the panel.
+		/// </summary>
+		/// <returns></returns>
+		int GetZPos() const { return m_ZPos; }
 
 		/// <summary>
-		/// Called when the control needs to be moved.
+		/// Sets the Z index of the panel.
 		/// </summary>
-		/// <param name="newPosX">New position.</param>
-		/// <param name="newPosY"></param>
-		virtual void Move(int newPosX, int newPosY) {}
+		/// <param name="newZ">ZPos.</param>
+		void SetZPos(int newZ) { m_ZPos = newZ; }
 
 		/// <summary>
-		/// Called when the control needs to be resized.
+		/// Changes the Z Position of the panel.
 		/// </summary>
-		/// <param name="newWidth">New size.</param>
-		/// <param name="newHeight"></param>
-		virtual void Resize(int newWidth, int newHeight) {}
+		/// <param name="type">Change type.</param>
+		void ChangeZPosition(int type);
 
+		/// <summary>
+		/// Checks if a point is inside the panel.
+		/// </summary>
+		/// <param name="posX">Coordinates of point.</param>
+		/// <param name="posY"></param>
+		/// <returns>A boolean of the check result.</returns>
+		virtual bool PointInside(int posX, int posY);
 
+		/// <summary>
+		/// Recursively goes up the tree from to check the first panel under a point.
+		/// </summary>
+		/// <param name="posX">X, Y Coordinates of point.</param>
+		/// <param name="posY"></param>
+		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
+		GUIControl * TopPanelUnderPoint(int posX, int posY);
+
+		/// <summary>
+		/// Recursively goes down the tree to check the last panel under a point
+		/// </summary>
+		/// <param name="posX">X, Y Coordinates of point.</param>
+		/// <param name="posY"></param>
+		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
+		GUIControl * BottomPanelUnderPoint(int posX, int posY);
 #pragma endregion
-
-
-
 
 #pragma region 
 		/// <summary>
@@ -391,6 +400,13 @@ namespace RTE {
 		/// <param name="child">Pointer to the panel to add.</param>
 		/// <param name="convertToAbsolutePos"></param>
 		void AddChild(GUIControl *child, bool convertToAbsolutePos = true);
+
+		/// <summary>
+		/// Sets up the panel for use with the manager.
+		/// </summary>
+		/// <param name="manager">Pointer to the manager to use.</param>
+		/// <param name="zPos">ZPosition.</param>
+		void Setup(GUIControlManager *manager, int zPos);
 
 		/// <summary>
 		/// Removes a child based on name.
@@ -404,22 +420,20 @@ namespace RTE {
 		void RemoveAllChildren();
 #pragma endregion
 
-
-
-
-
-#pragma region 
-		/// <summary>
-		/// Changes the Z Position of the panel.
-		/// </summary>
-		/// <param name="type">Change type.</param>
-		void ChangeZPosition(int type);
-
+#pragma region Event Handling
 		/// <summary>
 		/// Sets the target panel to receive signals.
 		/// </summary>
 		/// <param name="target">Target panel.</param>
 		void SetSignalTarget(GUIControl *target) { if (target) { m_SignalTarget = target; } }
+
+		/// <summary>
+		/// Add a new event to the queue.
+		/// </summary>
+		/// <param name="eventType">Type.</param>
+		/// <param name="eventCode">Message.</param>
+		/// <param name="eventData">Data.</param>
+		void AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData = 0);
 
 		/// <summary>
 		/// Called when receiving a signal.
@@ -430,6 +444,13 @@ namespace RTE {
 		virtual void ReceiveSignal(GUIControl *signalSource, GUIEventCode eventCode, int eventData) {}
 
 		/// <summary>
+		/// Sends a signal to the target.
+		/// </summary>
+		/// <param name="eventCode">Signal code.</param>
+		/// <param name="eventData">Data.</param>
+		void SendSignal(GUIEventCode eventCode, int eventData) { if (m_SignalTarget) { m_SignalTarget->ReceiveSignal(this, eventCode, eventData); } }
+
+		/// <summary>
 		/// Called when the panel gains focus.
 		/// </summary>
 		virtual void OnGainFocus() { m_GotFocus = true; }
@@ -438,11 +459,7 @@ namespace RTE {
 		/// Called when the panel looses focus.
 		/// </summary>
 		virtual void OnLoseFocus() { m_GotFocus = false; }
-
 #pragma endregion
-
-
-
 
 #pragma region Mouse Event Handling
 		/// <summary>
@@ -551,113 +568,17 @@ namespace RTE {
 		virtual void OnKeyPress(int keyCode, int modifier) {}
 #pragma endregion
 
-#pragma region Event Handling
-		/// <summary>
-		/// Sends a signal to the target.
-		/// </summary>
-		/// <param name="eventCode">Signal code.</param>
-		/// <param name="eventData">Data.</param>
-		void SendSignal(GUIEventCode eventCode, int eventData) { if (m_SignalTarget) { m_SignalTarget->ReceiveSignal(this, eventCode, eventData); } }
-#pragma endregion
-
-#pragma region Getters and Setters
-		/// <summary>
-		/// Gets the Z index of the panel.
-		/// </summary>
-		/// <returns></returns>
-		int GetZPos() const { return m_ZPos; }
-
-		/// <summary>
-		/// Sets the Z index of the panel.
-		/// </summary>
-		/// <param name="newZ">ZPos.</param>
-		void SetZPos(int newZ) { m_ZPos = newZ; }
-
-		/// <summary>
-		/// Sets the font this panel will be using
-		/// </summary>
-		/// <param name="newFont">The new font, ownership is NOT transferred!</param>
-		virtual void SetFont(GUIFont *newFont) { m_Font = newFont; }
-
-
-		/// <summary>
-		/// Checks if a point is inside the panel.
-		/// </summary>
-		/// <param name="posX">Coordinates of point.</param>
-		/// <param name="posY"></param>
-		/// <returns>A boolean of the check result.</returns>
-		virtual bool PointInside(int posX, int posY);
-
-
-		/// <summary>
-		/// Recursively goes up the tree from to check the first panel under a point.
-		/// </summary>
-		/// <param name="posX">X, Y Coordinates of point.</param>
-		/// <param name="posY"></param>
-		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
-		GUIControl * TopPanelUnderPoint(int posX, int posY);
-
-		/// <summary>
-		/// Recursively goes down the tree to check the last panel under a point
-		/// </summary>
-		/// <param name="posX">X, Y Coordinates of point.</param>
-		/// <param name="posY"></param>
-		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
-		GUIControl * BottomPanelUnderPoint(int posX, int posY);
-
-
-#pragma endregion
-
-
-#pragma region Property Handling
-		/// <summary>
-		/// Gets the control to store the values into properties.
-		/// </summary>
-		virtual void StoreProperties() {}
-
-		/// <summary>
-		/// Applies new properties to the control.
-		/// </summary>
-		/// <param name="properties">GUIProperties.</param>
-		virtual void ApplyProperties(GUIProperties *properties);
-
-		/// <summary>
-		/// Saves the control properties.
-		/// </summary>
-		/// <param name="writer">Writer.</param>
-		/// <returns>True if successful.</returns>
-		bool Save(GUIWriter *writer);
-#pragma endregion
-
 #pragma region Virtual Methods
-		/// <summary>
-		/// Called when the control is activated and ready for use.
-		/// </summary>
-		virtual void Activate() {}
-#pragma endregion
-
-
-
-		void SetOwningManager(GUIControlManager *newOwningManager) { m_OwningManager = newOwningManager; }
-
-
-
-
-#pragma region 
-		/// <summary>
-		/// Add a new event to the queue.
-		/// </summary>
-		/// <param name="eventType">Type.</param>
-		/// <param name="eventCode">Message.</param>
-		/// <param name="eventData">Data.</param>
-		void AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData = 0);
-
-
 		/// <summary>
 		/// Draws the panel.
 		/// </summary>
 		/// <param name="targetScreen">Screen class.</param>
 		virtual void Draw(GUIScreen *targetScreen);
+
+		/// <summary>
+		/// Called when the control is activated and ready for use.
+		/// </summary>
+		virtual void Activate() {}
 #pragma endregion
 
 #pragma region Class Info
@@ -668,11 +589,12 @@ namespace RTE {
 		virtual const std::string_view GetControlType() const { return ""; }
 #pragma endregion
 
+		// temp
+		void SetOwningManager(GUIControlManager *newOwningManager) { m_OwningManager = newOwningManager; }
+
 	protected:
 
 		GUIControlManager *m_OwningManager = nullptr; //!< Not owned, owns this!
-
-
 		GUISkin *m_Skin = nullptr;
 
 		int m_UniqueID = -1;
@@ -680,13 +602,10 @@ namespace RTE {
 		bool m_Enabled = true;
 		bool m_Visible = true;
 
-
 		int m_X = 0; // absolute coordinates
 		int m_Y = 0;
 		int m_Width = 0;
 		int m_Height = 0;
-
-
 
 		bool m_GotFocus = false;
 		bool m_Captured = false;
@@ -710,13 +629,6 @@ namespace RTE {
 		int m_DefWidth = 0;
 		int m_DefHeight = 0;
 
-		/// <summary>
-		/// Sets up the manager to enable/disable hover tracking of this panel.
-		/// </summary>
-		/// <param name="enabled">Enabled.</param>
-		/// <param name="delay">Delay (milliseconds).</param>
-		void TrackMouseHover(bool enabled, float delay);
-
 #pragma region Property Handling
 		/// <summary>
 		/// Writes a single value to string.
@@ -735,10 +647,16 @@ namespace RTE {
 		std::string WriteValue(const std::string &name, bool value) const { return (name + " = " + (value ? "True" : "False") + "\n"); }
 #pragma endregion
 
+		/// <summary>
+		/// Sets up the manager to enable/disable hover tracking of this panel.
+		/// </summary>
+		/// <param name="enabled">Enabled.</param>
+		/// <param name="delay">Delay (milliseconds).</param>
+		void TrackMouseHover(bool enabled, float delay);
+
 	private:
 
 		GUIRect m_Rect;
-
 
 		int m_ZPos = 0;
 
