@@ -74,11 +74,11 @@ namespace RTE {
 		Props->GetPropertyValue("Dropheight", &m_DropHeight);
 		m_DropHeight = std::max(m_DropHeight, 20);
 
-		std::string Val;
-		Props->GetPropertyValue("DropDownStyle", &Val);
-		if (stricmp(Val.c_str(), "DropDownList") == 0) {
+		std::string value;
+		Props->GetPropertyValue("DropDownStyle", &value);
+		if (value == "DropDownList") {
 			m_DropDownStyle = DropDownStyles::DropDownList;
-		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
+		} else if (value == "DropDown") {
 			m_DropDownStyle = DropDownStyles::DropDown;
 		}
 		m_TextPanel.SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
@@ -378,11 +378,11 @@ namespace RTE {
 		m_Properties.GetPropertyValue("Dropheight", &m_DropHeight);
 		m_DropHeight = std::max(m_DropHeight, 20);
 
-		std::string Val;
-		m_Properties.GetPropertyValue("DropDownStyle", &Val);
-		if (stricmp(Val.c_str(), "DropDownList") == 0) {
+		std::string value;
+		m_Properties.GetPropertyValue("DropDownStyle", &value);
+		if (value == "DropDownList") {
 			m_DropDownStyle = DropDownStyles::DropDownList;
-		} else if (stricmp(Val.c_str(), "DropDown") == 0) {
+		} else if (value == "DropDown") {
 			m_DropDownStyle = DropDownStyles::DropDown;
 		}
 		m_TextPanel.SetLocked(m_DropDownStyle == DropDownList);

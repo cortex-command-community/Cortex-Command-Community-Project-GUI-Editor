@@ -34,19 +34,19 @@ namespace RTE {
 
 
 		// Get the values
-		std::string ori;
-		Props->GetPropertyValue("Orientation", &ori);
-		if (stricmp(ori.c_str(), "horizontal") == 0) {
+		std::string orientation;
+		Props->GetPropertyValue("Orientation", &orientation);
+		if (orientation == "horizontal") {
 			m_Orientation = Orientation::Horizontal;
-		} else if (stricmp(ori.c_str(), "vertical") == 0) {
+		} else if (orientation == "vertical") {
 			m_Orientation = Orientation::Vertical;
 		}
 
 		std::string tick;
 		Props->GetPropertyValue("TickDirection", &tick);
-		if (stricmp(tick.c_str(), "TopLeft") == 0) {
+		if (tick == "TopLeft") {
 			m_TickDirection = TickDirection::TopLeft;
-		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
+		} else if (tick == "BottomRight") {
 			m_TickDirection = TickDirection::BottomRight;
 		}
 		Props->GetPropertyValue("Minimum", &m_Minimum);
@@ -455,19 +455,19 @@ namespace RTE {
 		GUIControl::ApplyProperties(Props);
 
 		// Get the values
-		std::string ori;
-		m_Properties.GetPropertyValue("Orientation", &ori);
-		if (stricmp(ori.c_str(), "horizontal") == 0) {
+		std::string orientation;
+		m_Properties.GetPropertyValue("Orientation", &orientation);
+		if (orientation == "horizontal") {
 			m_Orientation = Orientation::Horizontal;
-		} else if (stricmp(ori.c_str(), "vertical") == 0) {
+		} else if (orientation == "vertical") {
 			m_Orientation = Orientation::Vertical;
 		}
 
 		std::string tick;
 		m_Properties.GetPropertyValue("TickDirection", &tick);
-		if (stricmp(tick.c_str(), "TopLeft") == 0) {
+		if (tick == "TopLeft") {
 			m_TickDirection = TickDirection::TopLeft;
-		} else if (stricmp(tick.c_str(), "BottomRight") == 0) {
+		} else if (tick == "BottomRight") {
 			m_TickDirection = TickDirection::BottomRight;
 		}
 		m_Properties.GetPropertyValue("Minimum", &m_Minimum);

@@ -182,15 +182,15 @@ namespace RTE {
 
 	int GUIControl::GetAnchor() {
 		int Anchor = 0;
-		std::string Value[4];
+		std::string value[4];
 
-		int Count = m_Properties.GetPropertyValue("Anchor", Value, 4);
+		int Count = m_Properties.GetPropertyValue("Anchor", value, 4);
 
 		for (int i = 0; i < Count; i++) {
-			if (stricmp(Value[i].c_str(), "left") == 0) { Anchor |= Anchor::AnchorLeft; }
-			if (stricmp(Value[i].c_str(), "top") == 0) { Anchor |= Anchor::AnchorTop; }
-			if (stricmp(Value[i].c_str(), "right") == 0) { Anchor |= Anchor::AnchorRight; }
-			if (stricmp(Value[i].c_str(), "bottom") == 0) { Anchor |= Anchor::AnchorBottom; }
+			if (value[i] == "left") { Anchor |= Anchor::AnchorLeft; }
+			if (value[i] == "top") { Anchor |= Anchor::AnchorTop; }
+			if (value[i] == "right") { Anchor |= Anchor::AnchorRight; }
+			if (value[i] == "bottom") { Anchor |= Anchor::AnchorBottom; }
 		}
 
 		// The anchor cannot have both sides missing, so we default to Left, Top is that is the case

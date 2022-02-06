@@ -31,11 +31,11 @@ namespace RTE {
 	void GUIScrollPanel::LoadProps(GUIProperties *Props) {
 		GUIAssert(Props, "");
 
-		std::string Ori;
-		Props->GetPropertyValue("Orientation", &Ori);
+		std::string orientation;
+		Props->GetPropertyValue("Orientation", &orientation);
 
 		m_Orientation = Horizontal;
-		if (stricmp(Ori.c_str(), "Vertical") == 0) { m_Orientation = Orientation::Vertical; }
+		if (orientation == "Vertical") { m_Orientation = Orientation::Vertical; }
 
 		Props->GetPropertyValue("Minimum", &m_Minimum);
 		Props->GetPropertyValue("Maximum", &m_Maximum);

@@ -38,9 +38,9 @@ namespace RTE {
 		m_Check = State::Unchecked;
 		std::string value;
 		Props->GetPropertyValue("Checked", &value);
-		if (stricmp(value.c_str(), "Checked") == 0) {
+		if (value == "Checked") {
 			m_Check = State::Checked;
-		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
+		} else if (value == "Greycheck") {
 			m_Check = State::Greycheck;
 		}
 		Props->GetPropertyValue("Text", &m_Text);
@@ -212,9 +212,9 @@ namespace RTE {
 		m_Check = Unchecked;
 		std::string value;
 		m_Properties.GetPropertyValue("Checked", &value);
-		if (stricmp(value.c_str(), "Checked") == 0) {
+		if (value == "Checked") {
 			m_Check = State::Checked;
-		} else if (stricmp(value.c_str(), "Greycheck") == 0) {
+		} else if (value == "Greycheck") {
 			m_Check = State::Greycheck;
 		}
 		m_Properties.GetPropertyValue("Text", &m_Text);

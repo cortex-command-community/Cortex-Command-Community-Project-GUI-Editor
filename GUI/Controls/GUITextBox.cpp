@@ -36,14 +36,14 @@ namespace RTE {
 		// Alignment values - these don't affect anything as of yet
 		std::string alignString;
 		Props->GetPropertyValue("HAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "left") == 0) { m_HAlignment = GUIFont::HAlignment::Left; }
-		if (stricmp(alignString.c_str(), "centre") == 0 || stricmp(alignString.c_str(), "center") == 0) { m_HAlignment = GUIFont::HAlignment::Centre; }
-		if (stricmp(alignString.c_str(), "right") == 0) { m_HAlignment = GUIFont::HAlignment::Right; }
+		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (alignString == "centre" || alignString == "center") { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
 
 		Props->GetPropertyValue("VAlignment", &alignString);
-		if (stricmp(alignString.c_str(), "top") == 0) { m_VAlignment = GUIFont::VAlignment::Top; }
-		if (stricmp(alignString.c_str(), "middle") == 0) { m_VAlignment = GUIFont::VAlignment::Middle; }
-		if (stricmp(alignString.c_str(), "bottom") == 0) { m_VAlignment = GUIFont::VAlignment::Bottom; }
+		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

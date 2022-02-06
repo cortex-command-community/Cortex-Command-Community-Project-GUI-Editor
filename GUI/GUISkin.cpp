@@ -89,7 +89,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
+			if (p->GetName() == Section && p->GetPropertyValue(Variable, Value)) {
 				return true;
 			}
 		}
@@ -107,7 +107,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Array, MaxArraySize)) {
+			if (p->GetName() == Section && p->GetPropertyValue(Variable, Array, MaxArraySize)) {
 				return true;
 			}
 		}
@@ -125,7 +125,7 @@ namespace RTE {
 		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
 			GUIProperties *p = *it;
 
-			if (stricmp(p->GetName().c_str(), Section.c_str()) == 0 && p->GetPropertyValue(Variable, Value)) {
+			if (p->GetName() == Section && p->GetPropertyValue(Variable, Value)) {
 				return true;
 			}
 		}
@@ -187,7 +187,7 @@ namespace RTE {
 		for (it = m_ImageCache.begin(); it != m_ImageCache.end(); it++) {
 			GUIBitmap *Surf = *it;
 
-			if (stricmp(File.c_str(), Surf->GetDataPath().c_str()) == 0) {
+			if (File == Surf->GetDataPath()) {
 				return Surf;
 			}
 		}
@@ -211,7 +211,7 @@ namespace RTE {
 
 		for (it = m_FontCache.begin(); it != m_FontCache.end(); it++) {
 			GUIFont *F = *it;
-			if (stricmp(F->GetName().c_str(), Name.c_str()) == 0) {
+			if (F->GetName() == Name) {
 				return F;
 			}
 		}

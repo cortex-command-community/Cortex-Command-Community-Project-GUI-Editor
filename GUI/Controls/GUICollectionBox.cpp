@@ -35,13 +35,13 @@ namespace RTE {
 
 		// Get the values
 		Props->GetPropertyValue("DrawBackground", &m_DrawBackground);
-		std::string v;
-		Props->GetPropertyValue("DrawType", &v);
-		if (stricmp(v.c_str(), "Color") == 0) {
+		std::string value;
+		Props->GetPropertyValue("DrawType", &value);
+		if (value == "Color") {
 			m_DrawType = DrawType::Color;
-		} else if (stricmp(v.c_str(), "Image") == 0) {
+		} else if (value == "Image") {
 			m_DrawType = DrawType::Image;
-		} else if (stricmp(v.c_str(), "Panel") == 0) {
+		} else if (value == "Panel") {
 			m_DrawType = DrawType::Panel;
 		}
 		Props->GetPropertyValue("DrawColor", &m_DrawColor);
@@ -208,11 +208,11 @@ namespace RTE {
 
 		// Get the values
 		m_Properties.GetPropertyValue("DrawBackground", &m_DrawBackground);
-		std::string v;
-		m_Properties.GetPropertyValue("DrawType", &v);
-		if (stricmp(v.c_str(), "Color") == 0) {
+		std::string value;
+		m_Properties.GetPropertyValue("DrawType", &value);
+		if (value == "Color") {
 			m_DrawType = DrawType::Color;
-		} else if (stricmp(v.c_str(), "Image") == 0) {
+		} else if (value == "Image") {
 			m_DrawType = DrawType::Image;
 		}
 		m_Properties.GetPropertyValue("DrawColor", &m_DrawColor);
