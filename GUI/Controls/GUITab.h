@@ -20,6 +20,13 @@ public:
 	explicit GUITab(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUITab() override = default;
+#pragma endregion
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////

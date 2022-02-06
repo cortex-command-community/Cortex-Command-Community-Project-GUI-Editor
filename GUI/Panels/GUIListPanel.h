@@ -44,6 +44,12 @@ public:
 	/// <param name="owningManager"></param>
 	explicit GUIListPanel(GUIControlManager *owningManager) : m_HorzScroll(owningManager), m_VertScroll(owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
+
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUIListPanel() override;
 #pragma endregion
 
 
@@ -54,15 +60,6 @@ public:
 // Arguments:       Position, Size.
 
     void Create(int X, int Y, int Width, int Height);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Destroy
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the panel has been destroyed.
-// Arguments:       None.
-
-    void Destroy();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

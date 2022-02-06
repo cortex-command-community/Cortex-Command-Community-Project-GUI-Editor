@@ -22,6 +22,13 @@ public:
 	explicit GUIButton(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUIButton() override;
+#pragma endregion
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
@@ -30,15 +37,6 @@ public:
 // Arguments:       Name, Position.
 
     void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Destroy
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been destroyed.
-// Arguments:       None.
-
-    void Destroy() override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

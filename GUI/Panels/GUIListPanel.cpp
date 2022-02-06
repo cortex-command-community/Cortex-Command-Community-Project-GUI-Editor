@@ -31,7 +31,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListPanel::Destroy() {
+	GUIListPanel::~GUIListPanel() {
 		// Destroy the items
 		std::vector<Item *>::iterator it;
 
@@ -40,9 +40,6 @@ namespace RTE {
 			if (I) { delete I; }
 		}
 		m_Items.clear();
-
-		m_HorzScroll.Destroy();
-		m_VertScroll.Destroy();
 
 		// Destroy the drawing bitmap
 		if (m_FrameBitmap) {

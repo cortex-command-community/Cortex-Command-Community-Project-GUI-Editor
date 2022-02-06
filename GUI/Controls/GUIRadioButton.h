@@ -20,6 +20,13 @@ public:
 	explicit GUIRadioButton(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUIRadioButton() override = default;
+#pragma endregion
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -31,6 +31,13 @@ public:
 	explicit GUILabel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUILabel() override = default;
+#pragma endregion
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create
 //////////////////////////////////////////////////////////////////////////////////////////

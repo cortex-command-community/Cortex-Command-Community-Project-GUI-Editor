@@ -32,6 +32,13 @@ public:
 	explicit GUITextPanel(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
 #pragma endregion
 
+#pragma region Destruction
+	/// <summary>
+	/// 
+	/// </summary>
+	~GUITextPanel() override = default;
+#pragma endregion
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          Create

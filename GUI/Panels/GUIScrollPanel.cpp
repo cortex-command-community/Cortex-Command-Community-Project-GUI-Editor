@@ -15,7 +15,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollPanel::Destroy() {
+	GUIScrollPanel::~GUIScrollPanel() {
 		// Destroy the three bitmaps
 		for (int i = 0; i < 3; i++) {
 			if (m_DrawBitmap[i]) {

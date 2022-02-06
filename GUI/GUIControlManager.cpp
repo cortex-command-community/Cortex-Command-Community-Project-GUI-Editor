@@ -348,7 +348,6 @@ namespace RTE {
 
 	void GUIControlManager::ClearAllControls() {
 		for (GUIControl *control : m_ControlList) {
-			control->Destroy();
 			delete control;
 		}
 		m_ControlList.clear();

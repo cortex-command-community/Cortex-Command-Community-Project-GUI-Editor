@@ -63,7 +63,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIProgressBar::Destroy() {
+	GUIProgressBar::~GUIProgressBar() {
 		// Destroy the drawing bitmap
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();

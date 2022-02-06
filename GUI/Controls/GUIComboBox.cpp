@@ -104,10 +104,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::Destroy() {
-		m_ListPanel.Destroy();
-		m_Button.Destroy();
-
+	GUIComboBox::~GUIComboBox() {
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();
 			delete m_DrawBitmap;
@@ -482,7 +479,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBoxButton::Destroy() {
+	GUIComboBoxButton::~GUIComboBoxButton() {
 		// Free the drawing bitmap
 		if (m_DrawBitmap) {
 			m_DrawBitmap->Destroy();

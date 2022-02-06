@@ -68,7 +68,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::Destroy() {
+	GUICollectionBox::~GUICollectionBox() {
 		if (m_Background) {
 			m_Background->Destroy();
 			delete m_Background;
