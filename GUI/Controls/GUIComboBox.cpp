@@ -47,8 +47,6 @@ namespace RTE {
 	void GUIComboBox::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
 
-		//GUIControl::LoadProperties(Props);
-
 		// Make sure the textbox isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);

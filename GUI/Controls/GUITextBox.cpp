@@ -27,9 +27,6 @@ namespace RTE {
 
 	void GUITextBox::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Setup the panel
-		//GUIControl::LoadProperties(Props);
 		GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
 
 		// Make sure the textbox isn't too small

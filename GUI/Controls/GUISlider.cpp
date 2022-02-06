@@ -28,9 +28,6 @@ namespace RTE {
 	void GUISlider::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
 
-		// Setup the panel
-		//GUIControl::LoadProperties(Props);
-
 		// Make sure the button isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
