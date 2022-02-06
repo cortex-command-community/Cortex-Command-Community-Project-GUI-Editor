@@ -44,7 +44,7 @@ public:
 // Description:     Called when the control has been created.
 // Arguments:       Name, Position.
 
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1);
+    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

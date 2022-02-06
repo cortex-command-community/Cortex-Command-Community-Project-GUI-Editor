@@ -3,25 +3,20 @@
 
 namespace RTE {
 
-	class GUIProperties;
+	/// <summary>
+	/// A class used to create the different controls based on name.
+	/// </summary>
+	class GUIControlFactory {
 
-/// <summary>
-/// A class used to create the different controls based on name.
-/// </summary>
-class GUIControlFactory {
+	public:
 
-public:
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          CreateControl
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Method used for creating controls
-// Arguments:       Control Type Name.
-
-    static GUIControl * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, const std::string &name, int posX, int posY, int width, int height);
-
-	static GUIControl * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType, GUIProperties *reference);
-
-};
+		/// <summary>
+		/// Method used for creating controls.
+		/// </summary>
+		/// <param name="owningManager"></param>
+		/// <param name="controlType">Control Type Name.</param>
+		/// <returns></returns>
+		static GUIControl * CreateControl(GUIControlManager *owningManager, const std::string_view &controlType);
+	};
 };
 #endif

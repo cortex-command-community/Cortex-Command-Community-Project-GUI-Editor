@@ -17,7 +17,6 @@
 #include "GUIUtil.h"
 #include "GUIControl.h"
 #include "GUIEvent.h"
-#include "GUIControlFactory.h"
 #include "GUIControlManager.h"
 
 #ifndef GUI_STANDALONE

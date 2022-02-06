@@ -71,7 +71,7 @@ namespace RTE {
 		/// <param name="posY"></param>
 		/// <param name="width">Size.</param>
 		/// <param name="height"></param>
-		void Create(const std::string &name, int posX, int posY, int width = -1, int height = -1);
+		virtual void Create(const std::string &name, int posX, int posY, int width = -1, int height = -1);
 
 		/// <summary>
 		/// Called when the control has been created.

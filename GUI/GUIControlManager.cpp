@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "GUIReader.h"
 #include "GUIWriter.h"
+#include "GUIControlFactory.h"
 #include "Timer.h"
 
 namespace RTE {
@@ -244,10 +245,13 @@ namespace RTE {
 			return nullptr;
 		}
 		// Create the control
-		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type, Name, X, Y, Width, Height);
+		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type);
 		if (!newControl) {
 			return nullptr;
 		}
+		newControl->Create(Name, X, Y, Width, Height);
+		newControl->ChangeSkin(m_Skin);
+
 		if (Parent) {
 			int Z = 0;
 
@@ -286,10 +290,12 @@ namespace RTE {
 			return nullptr;
 		}
 		// Create the control
-		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type, Property);
+		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type);
 		if (!newControl) {
 			return nullptr;
 		}
+		newControl->Create(Property);
+		newControl->ChangeSkin(m_Skin);
 
 		// Get the parent control
 		std::string Parent;
