@@ -255,6 +255,11 @@ private:
 
 	static const std::string_view c_ControlType;
 
+	static constexpr int m_MinWidth = 20;
+	static constexpr int m_MinHeight = 10;
+	static constexpr int m_DefaultWidth = 30;
+	static constexpr int m_DefaultHeight = 16;
+
     std::string m_Text = "";
     int m_HAlignment = GUIFont::HAlignment::Left;
     int m_VAlignment = GUIFont::VAlignment::Middle;

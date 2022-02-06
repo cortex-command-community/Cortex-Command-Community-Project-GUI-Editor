@@ -397,6 +397,11 @@ private:
 
 	static const std::string_view c_ControlType;
 
+	static constexpr int m_MinWidth = 30;
+	static constexpr int m_MinHeight = 10;
+	static constexpr int m_DefaultWidth = 60;
+	static constexpr int m_DefaultHeight = 20;
+
 	GUIBitmap *m_DrawBitmap = nullptr;
 	int m_OldSelection = 0;
 	bool m_CreatedList = false;

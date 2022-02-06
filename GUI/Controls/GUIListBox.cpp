@@ -10,17 +10,9 @@ namespace RTE {
 	void GUIListBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 
-		// Minimum size of the control
-		m_MinWidth = 50;
-		m_MinHeight = 12;
-
-		// Default size of the control
-		m_DefWidth = 100;
-		m_DefHeight = 100;
-
 		// Create the ListPanel
-		int w = m_DefWidth;
-		int h = m_DefHeight;
+		int w = m_DefaultWidth;
+		int h = m_DefaultHeight;
 		if (Width != -1) { w = Width; }
 		if (Height != -1) { h = Height; }
 
@@ -35,14 +27,6 @@ namespace RTE {
 
 	void GUIListBox::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Minimum size of the control
-		m_MinWidth = 100;
-		m_MinHeight = 12;
-
-		// Default size of the control
-		m_DefWidth = 100;
-		m_DefHeight = 100;
 
 		// Setup the panel
 		//GUIControl::LoadProperties(Props);

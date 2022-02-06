@@ -10,19 +10,11 @@ namespace RTE {
 	void GUILabel::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 
-		// Minimum size of the control
-		m_MinWidth = 20;
-		m_MinHeight = 10;
-
-		// Default size of the control
-		m_DefWidth = 30;
-		m_DefHeight = 16;
-
 		// Setup the panel
 		m_X = X;
 		m_Y = Y;
-		m_Width = m_DefWidth;
-		m_Height = m_DefHeight;
+		m_Width = m_DefaultWidth;
+		m_Height = m_DefaultHeight;
 
 		if (Width != -1) { m_Width = Width; }
 		if (Height != -1) { m_Height = Height; }
@@ -36,14 +28,6 @@ namespace RTE {
 
 	void GUILabel::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Minimum size of the control
-		m_MinWidth = 20;
-		m_MinHeight = 10;
-
-		// Default size of the control
-		m_DefWidth = 30;
-		m_DefHeight = 16;
 
 		// Setup the panel
 		//GUIControl::LoadProperties(Props);

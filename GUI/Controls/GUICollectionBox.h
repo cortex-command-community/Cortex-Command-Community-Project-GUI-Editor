@@ -202,6 +202,11 @@ private:
 
 	static const std::string_view c_ControlType;
 
+	static constexpr int m_MinWidth = 10;
+	static constexpr int m_MinHeight = 10;
+	static constexpr int m_DefaultWidth = 100;
+	static constexpr int m_DefaultHeight = 100;
+
 	GUIBitmap *m_Background = nullptr;
 
 	bool m_DrawBackground = true;

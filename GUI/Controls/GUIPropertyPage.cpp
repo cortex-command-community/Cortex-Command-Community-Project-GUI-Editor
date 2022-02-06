@@ -13,19 +13,11 @@ namespace RTE {
 		m_PageValues.ClearProperties();
 		m_TextPanelList.clear();
 
-		// Minimum size of the control
-		m_MinWidth = 50;
-		m_MinHeight = 50;
-
-		// Default size of the control
-		m_DefWidth = 80;
-		m_DefHeight = 100;
-
 		// Setup the panel
 		m_X = X;
 		m_Y = Y;
-		m_Width = m_DefWidth;
-		m_Height = m_DefHeight;
+		m_Width = m_DefaultWidth;
+		m_Height = m_DefaultHeight;
 
 		if (Width != -1) { m_Width = Width; }
 		if (Height != -1) { m_Height = Height; }
@@ -62,14 +54,6 @@ namespace RTE {
 
 	void GUIPropertyPage::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Minimum size of the control
-		m_MinWidth = 50;
-		m_MinHeight = 50;
-
-		// Default size of the control
-		m_DefWidth = 80;
-		m_DefHeight = 100;
 
 		// Setup the panel
 		//GUIControl::LoadProperties(Props);

@@ -12,19 +12,11 @@ namespace RTE {
 	void GUIButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 
-		// Minimum size of the control
-		m_MinWidth = 10;
-		m_MinHeight = 10;
-
-		// Default size of the control
-		m_DefWidth = 60;
-		m_DefHeight = 40;
-
 		// Setup the panel
 		m_X = X;
 		m_Y = Y;
-		m_Width = m_DefWidth;
-		m_Height = m_DefHeight;
+		m_Width = m_DefaultWidth;
+		m_Height = m_DefaultHeight;
 
 		if (Width != -1) { m_Width = Width; }
 		if (Height != -1) { m_Height = Height; }
@@ -50,14 +42,6 @@ namespace RTE {
 
 	void GUIButton::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Minimum size of the control
-		m_MinWidth = 10;
-		m_MinHeight = 10;
-
-		// Default size of the control
-		m_DefWidth = 60;
-		m_DefHeight = 40;
 
 		// Setup the panel
 		//GUIControl::LoadProperties(Props);

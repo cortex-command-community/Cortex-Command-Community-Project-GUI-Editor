@@ -131,6 +131,10 @@ private:
 
 	static const std::string_view c_ControlType;
 
+	static constexpr int m_MinWidth = 9;
+	static constexpr int m_MinHeight = 9;
+	static constexpr int m_DefaultWidth = 50; // Note:: Default is Horizontal
+	static constexpr int m_DefaultHeight = 12;
 };
 };
 #endif

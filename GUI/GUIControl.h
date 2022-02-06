@@ -615,12 +615,6 @@ namespace RTE {
 
 		bool m_IsContainer = false;
 
-		// For the GUI editor
-		int m_MinWidth = 0;
-		int m_MinHeight = 0;
-		int m_DefWidth = 0;
-		int m_DefHeight = 0;
-
 #pragma region Property Handling
 		/// <summary>
 		/// Writes a single value to string.

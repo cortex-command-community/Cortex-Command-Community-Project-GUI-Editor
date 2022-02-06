@@ -10,18 +10,9 @@ namespace RTE {
 	void GUIScrollbar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
 		GUIControl::Create(Name, X, Y, Width, Height);
 
-		// Minimum size of the control
-		m_MinWidth = 9;
-		m_MinHeight = 9;
-
-		// Note:: Default is Horizontal
-		// Default size of the control
-		m_DefWidth = 50;
-		m_DefHeight = 12;
-
 		// Create the ListPanel
-		int w = m_DefWidth;
-		int h = m_DefHeight;
+		int w = m_DefaultWidth;
+		int h = m_DefaultHeight;
 		if (Width != -1) { w = Width; }
 		if (Height != -1) { h = Height; }
 
@@ -36,15 +27,6 @@ namespace RTE {
 
 	void GUIScrollbar::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
-
-		// Minimum size of the control
-		m_MinWidth = 9;
-		m_MinHeight = 9;
-
-		// Note:: Default is Horizontal
-		// Default size of the control
-		m_DefWidth = 50;
-		m_DefHeight = 12;
 
 		// Setup the panel
 		//GUIControl::LoadProperties(Props);

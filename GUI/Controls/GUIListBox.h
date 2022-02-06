@@ -104,6 +104,10 @@ private:
 
 	static const std::string_view c_ControlType;
 
+	static constexpr int m_MinWidth = 50;
+	static constexpr int m_MinHeight = 12;
+	static constexpr int m_DefaultWidth = 100;
+	static constexpr int m_DefaultHeight = 100;
 };
 };
 #endif
