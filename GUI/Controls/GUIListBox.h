@@ -58,7 +58,7 @@ public:
 // Description:     Called when the skin has been changed.
 // Arguments:       New skin pointer.
 
-	//void ChangeSkin(GUISkin *Skin) override { GUIListPanel::ChangeSkin(Skin); }
+	void ChangeSkin(GUISkin *Skin) override { GUIListPanel::ChangeSkin(Skin); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

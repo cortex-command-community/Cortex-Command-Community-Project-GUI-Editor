@@ -569,11 +569,6 @@ namespace RTE {
 		/// </summary>
 		/// <param name="targetScreen">Screen class.</param>
 		virtual void Draw(GUIScreen *targetScreen);
-
-		/// <summary>
-		/// Called when the control is activated and ready for use.
-		/// </summary>
-		virtual void Activate() {}
 #pragma endregion
 
 #pragma region Class Info

@@ -268,9 +268,6 @@ namespace RTE {
 		// Add the control to the list
 		m_ControlList.push_back(newControl);
 
-		// Ready
-		newControl->Activate();
-
 		return newControl;
 	}
 
@@ -319,9 +316,6 @@ namespace RTE {
 
 		// Add the control to the list
 		m_ControlList.push_back(newControl);
-
-		// Ready
-		newControl->Activate();
 
 		return newControl;
 	}
