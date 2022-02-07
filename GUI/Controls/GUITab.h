@@ -180,7 +180,7 @@ private:
 	static constexpr int m_DefaultHeight = 16;
 
 	GUIBitmap *m_Image = nullptr;
-	GUIRect m_ImageRects[4];
+	std::array<GUIRect, 4> m_ImageRects;
 
 	bool m_Selected = false;
 	bool m_Mouseover = false;

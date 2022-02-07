@@ -187,7 +187,8 @@ private:
 	static constexpr int m_DefaultHeight = 16;
 
 	GUIBitmap *m_Image = nullptr;
-	GUIRect m_ImageRects[4];
+
+	std::array<GUIRect, 4> m_ImageRects;
 	std::string m_Text;
 
 	int m_Check = State::Unchecked;

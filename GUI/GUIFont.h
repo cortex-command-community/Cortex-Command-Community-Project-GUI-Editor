@@ -186,7 +186,7 @@ private:
     int m_CurrentColor;
     GUIBitmap *m_CurrentBitmap;
     std::string m_Name;
-    Character m_Characters[256];
+    std::array<Character, 256> m_Characters;
 
     int m_CharIndexCap; // The highest index of valid characters that was read in from the file
 

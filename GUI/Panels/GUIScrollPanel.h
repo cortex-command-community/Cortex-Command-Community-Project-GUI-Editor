@@ -251,7 +251,7 @@ protected:
 	int m_MinimumKnobSize = 9;
 
 	int m_KnobLength = 0;
-	bool m_ButtonPushed[2]; // flase;
+	std::array<bool, 2> m_ButtonPushed = { false, false };
 	bool m_GrabbedKnob = false;
 	bool m_GrabbedBackg = false;
 	int m_GrabbedPos = 0;

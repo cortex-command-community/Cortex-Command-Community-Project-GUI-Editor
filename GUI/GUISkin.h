@@ -149,7 +149,7 @@ private:
 
     std::string m_Directory;
     GUIScreen *m_Screen;
-    GUIBitmap *m_MousePointers[3];
+	std::array<GUIBitmap *, 3> m_MousePointers = { nullptr, nullptr, nullptr };
 
     std::vector<GUIProperties *> m_PropList;
     std::vector<GUIBitmap *> m_ImageCache;

@@ -58,9 +58,6 @@ namespace RTE {
 			}
 		}
 
-		// Pre-calculate the character details
-		memset(m_Characters, 0, sizeof(Character) * 256);
-
 		int x = 1;
 		y = 0;
 		int charOnLine = 0;

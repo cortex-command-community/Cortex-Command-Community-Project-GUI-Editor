@@ -270,7 +270,7 @@ namespace RTE {
 		int m_DoubleClickTime = 0;
 		int m_DoubleClickSize = 0;
 		int m_DoubleClickButtons = 0;
-		float m_LastMouseDown[3]; // double click times - -99999.0F;
+		std::array<float, 3> m_LastMouseDown = { -99999.0F ,-99999.0F ,-99999.0F }; // double click times
 		GUIRect m_DoubleClickRect;
 
 		/// <summary>
