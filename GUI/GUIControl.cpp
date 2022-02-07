@@ -6,11 +6,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::Create(const std::string &name, int posX, int posY, int width, int height) {
+	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
 		m_ChildControls.clear();
 		m_Properties.ClearProperties();
 
-		m_Properties.AddProperty("Name", name);
+		m_Properties.AddProperty("Name", std::string(name));
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
 

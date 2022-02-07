@@ -7,21 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
-
-		// Setup the panel
-		m_X = X;
-		m_Y = Y;
-		m_Width = m_DefaultWidth;
-		m_Height = m_DefaultHeight;
-
-		if (Width != -1) { m_Width = Width; }
-		if (Height != -1) { m_Height = Height; }
-
-		// Make sure the textbox isn't too small
-		m_Width = std::max(m_Width, m_MinWidth);
-		m_Height = std::max(m_Height, m_MinHeight);
+	void GUIComboBox::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 
 		m_TextPanel.Create(0, 0, m_Width - 12, m_Height);
 		m_TextPanel.SetVisible(true);
@@ -29,14 +16,12 @@ namespace RTE {
 		m_TextPanel.SetSignalTarget(this);
 		AddChild(&m_TextPanel);
 
-		// Create the listpanel
 		m_ListPanel.SetVisible(false);
 		m_ListPanel.SetSignalTarget(this);
 		m_ListPanel.SetMultiSelect(false);
 		m_ListPanel.SetHotTracking(true);
 		m_ListPanel.EnableScrollbars(false, true);
 
-		// Create the button
 		m_Button.Create(m_Width - 17, 0, 17, m_Height);
 		m_Button.SetSignalTarget(this);
 		AddChild(&m_Button);

@@ -7,19 +7,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUISlider::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
-
-		// Setup the panel
-		m_X = X;
-		m_Y = Y;
-		m_Width = m_DefaultWidth;
-		m_Height = m_DefaultHeight;
-
-		if (Width != -1) { m_Width = Width; }
-		if (Height != -1) { m_Height = Height; }
-
-		// Re-Calculate the knob info
+	void GUISlider::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 		CalculateKnob();
 	}
 

@@ -20,6 +20,19 @@ public:
 	/// </summary>
 	/// <param name="owningManager">GUIControlManager.</param>
 	explicit GUIListBox(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+
+	/// <summary>
+	/// Called when the control has been created.
+	/// </summary>
+	/// <param name="name">Name.</param>
+	/// <param name="posX">Position.</param>
+	/// <param name="posY"></param>
+	/// <param name="width">Size.</param>
+	/// <param name="height"></param>
+	void Create(const std::string_view &name, int posX, int posY, int width = -1, int height = -1) override {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
+		GUIListPanel::Create(m_X, m_Y, m_Width, m_Height);
+	}
 #pragma endregion
 
 #pragma region Destruction
@@ -28,14 +41,6 @@ public:
 	/// </summary>
 	~GUIListBox() override = default;
 #pragma endregion
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been created.
-// Arguments:       Name, Position.
-
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +58,7 @@ public:
 // Description:     Called when the skin has been changed.
 // Arguments:       New skin pointer.
 
-	void ChangeSkin(GUISkin *Skin) override { GUIListPanel::ChangeSkin(Skin); }
+	//void ChangeSkin(GUISkin *Skin) override { GUIListPanel::ChangeSkin(Skin); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

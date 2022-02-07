@@ -7,24 +7,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollbar::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
-
-		// Create the ListPanel
-		int w = m_DefaultWidth;
-		int h = m_DefaultHeight;
-		if (Width != -1) { w = Width; }
-		if (Height != -1) { h = Height; }
-
-		// Make sure the scroll panel isn't too small
-		w = std::max(w, m_MinWidth);
-		h = std::max(h, m_MinHeight);
-
-		GUIScrollPanel::Create(X, Y, w, h);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIScrollbar::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
 

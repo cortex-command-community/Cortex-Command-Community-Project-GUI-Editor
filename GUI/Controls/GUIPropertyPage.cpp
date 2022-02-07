@@ -7,46 +7,29 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPropertyPage::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+	void GUIPropertyPage::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 
 		m_PageValues.ClearProperties();
 		m_TextPanelList.clear();
 
-		// Setup the panel
-		m_X = X;
-		m_Y = Y;
-		m_Width = m_DefaultWidth;
-		m_Height = m_DefaultHeight;
-
-		if (Width != -1) { m_Width = Width; }
-		if (Height != -1) { m_Height = Height; }
-
-		// Make sure the control isn't too small
-		m_Width = std::max(m_Width, m_MinWidth);
-		m_Height = std::max(m_Height, m_MinHeight);
-
-		// Create the vertical scrollbar
 		m_VertScroll.Create(m_Width - 12, 0, 12, m_Height);
 		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
-
 		AddChild(&m_VertScroll);
 
-		// Create the text panels
-		int H = 16;
-		int Spacer = 0;
-		int Size = m_Height / H;
-		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel(m_OwningManager);
-			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
-			T->SetVisible(false);
-			T->SetSignalTarget(this);
-			AddChild(T);
-
-			m_TextPanelList.push_back(T);
+		int spacer = 2;
+		int panelHeight = 16;
+		int panelCount = m_Height / panelHeight;
+		for (int i = 0; i < panelCount; ++i) {
+			GUITextPanel *textPanel = new GUITextPanel(m_OwningManager);
+			textPanel->Create(m_Width / 2, i * panelHeight + spacer, m_Width / 2, panelHeight);
+			textPanel->SetVisible(false);
+			textPanel->SetSignalTarget(this);
+			AddChild(textPanel);
+			m_TextPanelList.emplace_back(textPanel);
 		}
 	}
 

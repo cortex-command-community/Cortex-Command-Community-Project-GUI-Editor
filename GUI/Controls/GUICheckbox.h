@@ -25,6 +25,18 @@ public:
 	/// </summary>
 	/// <param name="owningManager">GUIControlManager.</param>
     explicit GUICheckbox(GUIControlManager *owningManager) { m_OwningManager = owningManager; }
+
+	/// <summary>
+	/// Called when the control has been created.
+	/// </summary>
+	/// <param name="name">Name.</param>
+	/// <param name="posX">Position.</param>
+	/// <param name="posY"></param>
+	/// <param name="width">Size.</param>
+	/// <param name="height"></param>
+	void Create(const std::string_view &name, int posX, int posY, int width = -1, int height = -1) override {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
+	}
 #pragma endregion
 
 #pragma region Destruction
@@ -33,14 +45,6 @@ public:
 	/// </summary>
 	~GUICheckbox() override = default;
 #pragma endregion
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Method:          Create
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Called when the control has been created.
-// Arguments:       Name, Position.
-
-    void Create(const std::string &Name, int X, int Y, int Width = -1, int Height = -1) override;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

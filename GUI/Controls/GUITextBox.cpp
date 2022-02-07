@@ -7,43 +7,32 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextBox::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
+	void GUITextBox::Create(GUIProperties *reference) {
+		GUIControl::Create(reference);
 
-		// Setup the panel
-		m_X = X;
-		m_Y = Y;
-		m_Width = m_DefaultWidth;
-		m_Height = m_DefaultHeight;
-
-		// Create the ListPanel
-		int w = m_DefaultWidth;
-		int h = m_DefaultHeight;
-		if (Width != -1) { w = Width; }
-		if (Height != -1) { h = Height; }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUITextBox::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
-		GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
-
-		// Make sure the textbox isn't too small
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 
-		// Alignment values - these don't affect anything as of yet
-		std::string alignString;
-		Props->GetPropertyValue("HAlignment", &alignString);
-		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
-		if (alignString == "centre" || alignString == "center") { m_HAlignment = GUIFont::HAlignment::Centre; }
-		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
+		GUITextPanel::Create(m_X, m_Y, m_Width, m_Height);
 
-		Props->GetPropertyValue("VAlignment", &alignString);
-		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
-		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
-		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
+		std::string alignString;
+		reference->GetPropertyValue("HAlignment", &alignString);
+		if (alignString == "left") {
+			m_HAlignment = GUIFont::HAlignment::Left;
+		} else if (alignString == "centre" || alignString == "center") {
+			m_HAlignment = GUIFont::HAlignment::Centre;
+		} else if (alignString == "right") {
+			m_HAlignment = GUIFont::HAlignment::Right;
+		}
+
+		reference->GetPropertyValue("VAlignment", &alignString);
+		if (alignString == "top") {
+			m_VAlignment = GUIFont::VAlignment::Top;
+		} else if (alignString == "middle") {
+			m_VAlignment = GUIFont::VAlignment::Middle;
+		} else if (alignString == "bottom") {
+			m_VAlignment = GUIFont::VAlignment::Bottom;
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

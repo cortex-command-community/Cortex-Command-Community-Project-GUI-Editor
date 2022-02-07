@@ -7,25 +7,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIRadioButton::Create(const std::string &Name, int X, int Y, int Width, int Height) {
-		GUIControl::Create(Name, X, Y, Width, Height);
-
-		// Setup the panel
-		m_X = X;
-		m_Y = Y;
-		m_Width = m_DefaultWidth;
-		m_Height = m_DefaultHeight;
-
-		if (Width != -1) { m_Width = Width; }
-		if (Height != -1) { m_Height = Height; }
-
-		// Make sure the button isn't too small
-		m_Width = std::max(m_Width, m_MinWidth);
-		m_Height = std::max(m_Height, m_MinHeight);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIRadioButton::Create(GUIProperties *Props) {
 		GUIControl::Create(Props);
 
