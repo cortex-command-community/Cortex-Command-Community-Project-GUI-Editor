@@ -117,6 +117,18 @@ namespace RTE {
 		void GetMousePosition(int *mousePosX, int *mousePosY) const;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetMousePosX() const { return m_MouseX + m_MouseOffsetX; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetMousePosY() const { return m_MouseY + m_MouseOffsetY; }
+
+		/// <summary>
 		/// Copies the mouse button states into an array.
 		/// </summary>
 		/// <param name="eventsArray"></param>

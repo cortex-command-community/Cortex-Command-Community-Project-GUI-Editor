@@ -5,350 +5,235 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUISkin::GUISkin(GUIScreen *Screen) {
-		m_Screen = Screen;
-		m_FontCache.clear();
-
-		m_MousePointers[0] = nullptr;
-		m_MousePointers[1] = nullptr;
-		m_MousePointers[2] = nullptr;
-
-		Clear();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUISkin::Clear() {
-		m_PropList.clear();
-		m_ImageCache.clear();
-		m_FontCache.clear();
-		m_Directory = "";
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool GUISkin::Load(const std::string &directory, const std::string &fileName) {
-		// Destroy any previous instances
+	bool GUISkin::Create(const std::string_view &directory, const std::string &fileName) {
 		Destroy();
 
-		m_Directory = directory;
+		m_SkinDirectory = directory;
 
 		GUIReader skinFile;
-		if (skinFile.Create((m_Directory + "/" + fileName).c_str()) == -1) {
+		if (skinFile.Create(m_SkinDirectory + "/" + fileName) == -1) {
 			return false;
 		}
-
-		// Go through the skin file adding the sections and properties
-		GUIProperties *CurProp = nullptr;
+		GUIProperties *currentSection = nullptr;
 
 		while (!skinFile.GetStream()->eof()) {
 			std::string line = skinFile.ReadLine();
-
-			if (line.empty()) {
-				continue;
-			}
-
-			// Is the line a section?
-			if (line.front() == '[' && line.back() == ']') {
-				GUIProperties *p = new GUIProperties(line.substr(1, line.size() - 2));
-				CurProp = p;
-				m_PropList.push_back(p);
-				continue;
-			}
-
-			// Is the line a valid property?
-			size_t Position = line.find('=');
-			if (Position != std::string::npos) {
-				// Break the line into variable & value, but only add a property if it belongs to a section
-				if (CurProp) {
-					// Grab the variable & value strings and trim them
-					std::string Name = skinFile.TrimString(line.substr(0, Position));
-					std::string Value = skinFile.TrimString(line.substr(Position + 1, std::string::npos));
-
-					// Add it to the current property
-					CurProp->AddProperty(Name, Value);
+			if (!line.empty()) {
+				if (line.front() == '[' && line.back() == ']') {
+					std::string sectionName = line.substr(1, line.size() - 2);
+					GUIProperties *section = new GUIProperties(sectionName);
+					m_Properties.try_emplace(sectionName, section);
+					currentSection = section;
+				} else {
+					size_t equalPos = line.find('=');
+					if (currentSection && equalPos != std::string::npos) {
+						std::string propName = skinFile.TrimString(line.substr(0, equalPos));
+						std::string propValue = skinFile.TrimString(line.substr(equalPos + 1, std::string::npos));
+						currentSection->AddProperty(propName, propValue);
+					}
 				}
-				continue;
 			}
 		}
-
-		// Load the mouse pointers
-		m_MousePointers[0] = LoadMousePointer("Mouse_Pointer");
-		m_MousePointers[1] = LoadMousePointer("Mouse_Text");
-		m_MousePointers[2] = LoadMousePointer("Mouse_HSize");
-
+		for (auto &[cursorType, cursorData] : m_MouseCursors) {
+			std::string bitmapFileName;
+			int maskColor;
+			if (GetValue(cursorData.first, "Filename", &bitmapFileName) && GetValue(cursorData.first, "ColorKeyIndex", &maskColor)) {
+				if (GUIBitmap *bitmap = CreateBitmap(bitmapFileName)) {
+					bitmap->SetColorKey(/*ConvertColor(ColorKey)*/);
+					cursorData.second = bitmap;
+				}
+			}
+		}
 		return true;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUISkin::GetValue(const std::string &Section, const std::string &Variable, std::string *Value) {
-		std::vector <GUIProperties *>::iterator it;
-
-		// Find the property
-		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
-			GUIProperties *p = *it;
-
-			if (p->GetName() == Section && p->GetPropertyValue(Variable, Value)) {
-				return true;
-			}
-		}
-
-		// Not found
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int GUISkin::GetValue(const std::string &Section, const std::string &Variable, int *Array, int MaxArraySize) {
-		std::vector <GUIProperties *>::iterator it;
-
-		// Find the property
-		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
-			GUIProperties *p = *it;
-
-			if (p->GetName() == Section && p->GetPropertyValue(Variable, Array, MaxArraySize)) {
-				return true;
-			}
-		}
-
-		// Not found
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool GUISkin::GetValue(const std::string &Section, const std::string &Variable, int *Value) {
-		std::vector <GUIProperties *>::iterator it;
-
-		// Find the property
-		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
-			GUIProperties *p = *it;
-
-			if (p->GetName() == Section && p->GetPropertyValue(Variable, Value)) {
-				return true;
-			}
-		}
-
-		// Not found
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUISkin::Destroy() {
-		std::vector <GUIProperties *>::iterator it;
-
-		// Free the properties
-		for (it = m_PropList.begin(); it != m_PropList.end(); it++) {
-			GUIProperties *p = *it;
-
-			if (p) { delete p; }
+		for (const auto &[propName, property] : m_Properties) {
+			delete property;
 		}
+		m_Properties.clear();
 
-		m_PropList.clear();
-
-		// Destroy the fonts in the list
-		std::vector<GUIFont *>::iterator itf;
-
-		for (itf = m_FontCache.begin(); itf != m_FontCache.end(); itf++) {
-			GUIFont *F = *itf;
-			if (F) {
-				F->Destroy();
-				delete F;
-			}
+		for (const auto &[fontName, font] : m_FontCache) {
+			font->Destroy();
+			delete font;
 		}
-
 		m_FontCache.clear();
 
+		for (const auto &[bitmapFileName, bitmap] : m_BitmapCache) {
+			delete bitmap;
+		}
+		m_BitmapCache.clear();
+	}
 
-		// Destroy the images in the image cache
-		std::vector<GUIBitmap *>::iterator iti;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		for (iti = m_ImageCache.begin(); iti != m_ImageCache.end(); iti++) {
-			GUIBitmap *Surf = *iti;
-			if (Surf) {
-				Surf->Destroy();
-				delete Surf;
+	GUIFont * GUISkin::GetFont(const std::string &fontName) {
+		if (std::unordered_map<std::string, GUIFont *>::iterator foundFont = m_FontCache.find(fontName); foundFont != m_FontCache.end()) {
+			return (*foundFont).second;
+		} else {
+			GUIFont *newFont = new GUIFont(fontName);
+			if (!newFont->Load(m_Screen, m_SkinDirectory + "/" + fontName)) {
+				delete newFont;
+				return nullptr;
+			}
+			m_FontCache.try_emplace(fontName, newFont);
+			return newFont;
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUISkin::GetValue(const std::string &sectionName, const std::string &propName, std::string *propValue) {
+		if (std::unordered_map<std::string, GUIProperties *>::iterator foundProp = m_Properties.find(sectionName); foundProp != m_Properties.end()) {
+			const GUIProperties *property = (*foundProp).second;
+			if (property->GetName() == sectionName && property->GetPropertyValue(propName, propValue)) {
+				return true;
 			}
 		}
-
-		m_ImageCache.clear();
+		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIBitmap * GUISkin::CreateBitmap(const std::string &Filename) {
-		// Add the filename onto the current directory
-		std::string File = m_Directory + "/" + Filename;
-
-		// Check if the image is in our cache
-		std::vector<GUIBitmap *>::iterator it;
-		for (it = m_ImageCache.begin(); it != m_ImageCache.end(); it++) {
-			GUIBitmap *Surf = *it;
-
-			if (File == Surf->GetDataPath()) {
-				return Surf;
+	bool GUISkin::GetValue(const std::string &sectionName, const std::string &propName, int *propValue) {
+		if (std::unordered_map<std::string, GUIProperties *>::iterator foundProp = m_Properties.find(sectionName); foundProp != m_Properties.end()) {
+			const GUIProperties *property = (*foundProp).second;
+			if (property->GetName() == sectionName && property->GetPropertyValue(propName, propValue)) {
+				return true;
 			}
 		}
-
-		// Not found in cache, so we create a new bitmap from the file
-		GUIBitmap *Bitmap = m_Screen->CreateBitmap(File);
-		if (!Bitmap) {
-			return nullptr;
-		}
-		// Add the new bitmap to the cache
-		m_ImageCache.push_back(Bitmap);
-
-		return Bitmap;
+		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIFont * GUISkin::GetFont(const std::string &Name) {
-		// Check if the font is already in the list
-		std::vector<GUIFont *>::iterator it;
-
-		for (it = m_FontCache.begin(); it != m_FontCache.end(); it++) {
-			GUIFont *F = *it;
-			if (F->GetName() == Name) {
-				return F;
+	int GUISkin::GetValue(const std::string &sectionName, const std::string &propName, int *propValueArray, int arraySize) {
+		if (std::unordered_map<std::string, GUIProperties *>::iterator foundProp = m_Properties.find(sectionName); foundProp != m_Properties.end()) {
+			GUIProperties *property = (*foundProp).second;
+			if (property->GetName() == sectionName && property->GetPropertyValue(propName, propValueArray, arraySize)) {
+				return true;
 			}
 		}
-
-		// Not found, so we create the font
-		GUIFont *Font = new GUIFont(Name);
-		if (!Font->Load(m_Screen, m_Directory + "/" + Name)) {
-			delete Font;
-			return nullptr;
-		}
-
-		m_FontCache.push_back(Font);
-
-		return Font;
+		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIBitmap * GUISkin::LoadMousePointer(const std::string &Section) {
-		std::string File;
-		int ColorKey;
-
-		if (!GetValue(Section, "Filename", &File)) {
+	GUIBitmap * GUISkin::CreateBitmap(const std::string &fileName) {
+		if (std::unordered_map<std::string, GUIBitmap *>::iterator foundBitmap = m_BitmapCache.find(fileName); foundBitmap != m_BitmapCache.end()) {
+			return (*foundBitmap).second;
+		} else {
+			if (GUIBitmap *newBitmap = m_Screen->CreateBitmap(m_SkinDirectory + "/" + fileName)) {
+				m_BitmapCache.try_emplace(fileName, newBitmap);
+				return newBitmap;
+			}
 			return nullptr;
 		}
-		if (!GetValue(Section, "ColorKeyIndex", &ColorKey)) {
-			return nullptr;
-		}
-		GUIBitmap *Bitmap = CreateBitmap(File);
-		if (!Bitmap) {
-			return nullptr;
-		}
-		Bitmap->SetColorKey(/*ConvertColor(ColorKey)*/);
-		return Bitmap;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUISkin::DrawMouse(int Image, int X, int Y) {
-		GUIAssert(Image >= 0 && Image <= 2, "");
-
-		if (m_MousePointers[Image]) { m_Screen->DrawBitmapTrans(m_MousePointers[Image], X - 1, Y - 1, nullptr); }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUISkin::BuildStandardRect(GUIBitmap *Dest, const std::string &Section, int X, int Y, int Width, int Height, bool buildBG, bool buildFrame, GUIRect *borderSizes) {
+	void GUISkin::BuildStandardRect(GUIBitmap *destBitmap, const std::string &sectionName, int posX, int posY, int width, int height, bool buildBG, bool buildFrame, GUIRect *borderSizes) {
+		// TODO: Figure out how to refactor and break this down. Also figure out a better name.
 		// Note: For a control to use a 'Standard Rect' it must use the 8 side names, a filler name and a filename property.
 
-		int VTopLeft[4];
-		int VTop[4];
-		int VTopRight[4];
-		int VLeft[4];
-		int VFiller[4];
-		int VRight[4];
-		int VBottomLeft[4];
-		int VBottom[4];
-		int VBottomRight[4];
-		int i;
-		int j;
-		GUIRect Rect;
-
-		// Load the filename
-		std::string Filename;
-		GetValue(Section, "Filename", &Filename);
-		GUIBitmap *SrcBitmap = CreateBitmap(Filename);
+		std::string bitmapFileName;
+		GetValue(sectionName, "Filename", &bitmapFileName);
+		GUIBitmap *srcBitmap = CreateBitmap(bitmapFileName);
 
 		// Set the color key to be the same color as the Top-Right hand corner pixel
-		SrcBitmap->SetColorKey(SrcBitmap->GetPixel(SrcBitmap->GetWidth() - 1, 0));
-		Dest->DrawRectangle(X, Y, Width, Height, SrcBitmap->GetPixel(SrcBitmap->GetWidth() - 1, 0), true);
-		Dest->SetColorKey(SrcBitmap->GetPixel(SrcBitmap->GetWidth() - 1, 0));
+		srcBitmap->SetColorKey(srcBitmap->GetPixel(srcBitmap->GetWidth() - 1, 0));
+		destBitmap->DrawRectangle(posX, posY, width, height, srcBitmap->GetPixel(srcBitmap->GetWidth() - 1, 0), true);
+		destBitmap->SetColorKey(srcBitmap->GetPixel(srcBitmap->GetWidth() - 1, 0));
 
-		GetValue(Section, "Filler", VFiller, 4);
-		GetValue(Section, "Top", VTop, 4);
-		GetValue(Section, "Right", VRight, 4);
-		GetValue(Section, "Bottom", VBottom, 4);
-		GetValue(Section, "Left", VLeft, 4);
-		GetValue(Section, "TopLeft", VTopLeft, 4);
-		GetValue(Section, "TopRight", VTopRight, 4);
-		GetValue(Section, "BottomRight", VBottomRight, 4);
-		GetValue(Section, "BottomLeft", VBottomLeft, 4);
+		std::array<int, 4> top = { 0, 0, 0, 0 };
+		GetValue(sectionName, "Top", top.data(), top.size());
+
+		std::array<int, 4> right = { 0, 0, 0, 0 };
+		GetValue(sectionName, "Right", right.data(), right.size());
+
+		std::array<int, 4> bottom = { 0, 0, 0, 0 };
+		GetValue(sectionName, "Bottom", bottom.data(), bottom.size());
+
+		std::array<int, 4> left = { 0, 0, 0, 0 };
+		GetValue(sectionName, "Left", left.data(), left.size());
+
+		int i = 0;
+		int j = 0;
+		GUIRect rect;
 
 		if (buildBG) {
+			std::array<int, 4> filler = { 0, 0, 0, 0 };
+			GetValue(sectionName, "Filler", filler.data(), filler.size());
+
 			// Use the filler first
-			SetRect(&Rect, VFiller[0], VFiller[1], VFiller[0] + VFiller[2], VFiller[1] + VFiller[3]);
+			SetRect(&rect, filler[0], filler[1], filler[0] + filler[2], filler[1] + filler[3]);
 			// Tile the filler across
-			for (j = Y + VTop[3]; j < Y + Height - VBottom[3]; j += VFiller[3]) {
-				for (i = X + VLeft[2]; i < X + Width - VRight[2]; i += VFiller[2]) {
-					SrcBitmap->DrawTrans(Dest, i, j, &Rect);
+			for (j = posY + top[3]; j < posY + height - bottom[3]; j += filler[3]) {
+				for (i = posX + left[2]; i < posX + width - right[2]; i += filler[2]) {
+					srcBitmap->DrawTrans(destBitmap, i, j, &rect);
 				}
 			}
 		}
 
 		if (buildFrame) {
+			std::array<int, 4> topLeft = { 0, 0, 0, 0 };
+			GetValue(sectionName, "TopLeft", topLeft.data(), topLeft.size());
+
+			std::array<int, 4> topRight = { 0, 0, 0, 0 };
+			GetValue(sectionName, "TopRight", topRight.data(), topRight.size());
+
+			std::array<int, 4> bottomRight = { 0, 0, 0, 0 };
+			GetValue(sectionName, "BottomRight", bottomRight.data(), bottomRight.size());
+
+			std::array<int, 4> bottomLeft = { 0, 0, 0, 0 };
+			GetValue(sectionName, "BottomLeft", bottomLeft.data(), bottomLeft.size());
+
 			// Tile the four sides first, then place the four corners last
 
 			// Tile the Top side
-			SetRect(&Rect, VTop[0], VTop[1], VTop[0] + VTop[2], VTop[1] + VTop[3]);
-			for (i = X + VTopLeft[2]; i <= X + Width - VTopRight[2]; i += VTop[2]) {
-				SrcBitmap->DrawTrans(Dest, i, Y, &Rect);
+			SetRect(&rect, top[0], top[1], top[0] + top[2], top[1] + top[3]);
+			for (i = posX + topLeft[2]; i <= posX + width - topRight[2]; i += top[2]) {
+				srcBitmap->DrawTrans(destBitmap, i, posY, &rect);
 			}
 
 			// Tile the Right side
-			SetRect(&Rect, VRight[0], VRight[1], VRight[0] + VRight[2], VRight[1] + VRight[3]);
-			for (j = Y + VTopRight[3]; j < Y + Height - VBottomRight[3]; j += VRight[3]) {
-				SrcBitmap->DrawTrans(Dest, X + Width - VRight[2], j, &Rect);
+			SetRect(&rect, right[0], right[1], right[0] + right[2], right[1] + right[3]);
+			for (j = posY + topRight[3]; j < posY + height - bottomRight[3]; j += right[3]) {
+				srcBitmap->DrawTrans(destBitmap, posX + width - right[2], j, &rect);
 			}
 
 			// Tile the Bottom side
-			SetRect(&Rect, VBottom[0], VBottom[1], VBottom[0] + VBottom[2], VBottom[1] + VBottom[3]);
-			for (i = X + VBottomLeft[2]; i < X + Width - VBottomRight[2]; i += VBottom[2]) {
-				SrcBitmap->DrawTrans(Dest, i, Y + Height - VBottom[3], &Rect);
+			SetRect(&rect, bottom[0], bottom[1], bottom[0] + bottom[2], bottom[1] + bottom[3]);
+			for (i = posX + bottomLeft[2]; i < posX + width - bottomRight[2]; i += bottom[2]) {
+				srcBitmap->DrawTrans(destBitmap, i, posY + height - bottom[3], &rect);
 			}
 
 			// Tile the Left side
-			SetRect(&Rect, VLeft[0], VLeft[1], VLeft[0] + VLeft[2], VLeft[1] + VLeft[3]);
-			for (j = Y + VTopLeft[3]; j < Y + Height - VBottomLeft[3]; j += VLeft[3]) {
-				SrcBitmap->DrawTrans(Dest, X, j, &Rect);
+			SetRect(&rect, left[0], left[1], left[0] + left[2], left[1] + left[3]);
+			for (j = posY + topLeft[3]; j < posY + height - bottomLeft[3]; j += left[3]) {
+				srcBitmap->DrawTrans(destBitmap, posX, j, &rect);
 			}
 
 			// Top-Left Corner
-			SetRect(&Rect, VTopLeft[0], VTopLeft[1], VTopLeft[0] + VTopLeft[2], VTopLeft[1] + VTopLeft[3]);
-			SrcBitmap->DrawTrans(Dest, X, Y, &Rect);
+			SetRect(&rect, topLeft[0], topLeft[1], topLeft[0] + topLeft[2], topLeft[1] + topLeft[3]);
+			srcBitmap->DrawTrans(destBitmap, posX, posY, &rect);
 
 			// Top-Right Corner
-			SetRect(&Rect, VTopRight[0], VTopRight[1], VTopRight[0] + VTopRight[2], VTopRight[1] + VTopRight[3]);
-			SrcBitmap->DrawTrans(Dest, X + Width - VTopRight[2], Y, &Rect);
+			SetRect(&rect, topRight[0], topRight[1], topRight[0] + topRight[2], topRight[1] + topRight[3]);
+			srcBitmap->DrawTrans(destBitmap, posX + width - topRight[2], posY, &rect);
 
 			// Bottom-Right Corner
-			SetRect(&Rect, VBottomRight[0], VBottomRight[1], VBottomRight[0] + VBottomRight[2], VBottomRight[1] + VBottomRight[3]);
-			SrcBitmap->DrawTrans(Dest, X + Width - VBottomRight[2], Y + Height - VBottomRight[3], &Rect);
+			SetRect(&rect, bottomRight[0], bottomRight[1], bottomRight[0] + bottomRight[2], bottomRight[1] + bottomRight[3]);
+			srcBitmap->DrawTrans(destBitmap, posX + width - bottomRight[2], posY + height - bottomRight[3], &rect);
 
 			// Bottom-Left Corner
-			SetRect(&Rect, VBottomLeft[0], VBottomLeft[1], VBottomLeft[0] + VBottomLeft[2], VBottomLeft[1] + VBottomLeft[3]);
-			SrcBitmap->DrawTrans(Dest, X, Y + Height - VBottomLeft[3], &Rect);
+			SetRect(&rect, bottomLeft[0], bottomLeft[1], bottomLeft[0] + bottomLeft[2], bottomLeft[1] + bottomLeft[3]);
+			srcBitmap->DrawTrans(destBitmap, posX, posY + height - bottomLeft[3], &rect);
 		}
 
-		if (borderSizes) { SetRect(borderSizes, VLeft[2], VTop[3], VRight[2], VBottom[3]); }
+		if (borderSizes) { SetRect(borderSizes, left[2], top[3], right[2], bottom[3]); }
 	}
 }

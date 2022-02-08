@@ -14,13 +14,6 @@ namespace RTE {
 
 	public:
 
-		// Cursor types
-		enum CursorType {
-			Pointer,
-			Text,
-			HorSize
-		};
-
 #pragma region Creation
 		/// <summary>
 		/// Constructor method used to instantiate a GUIControlManager object in system memory.
@@ -104,7 +97,7 @@ namespace RTE {
 		/// Sets the cursor type.
 		/// </summary>
 		/// <param name="cursorType">Cursor type.</param>
-		void SetCursor(int cursorType) { m_CursorType = cursorType; }
+		void SetCursor(MouseCursorType cursorType) { m_CursorType = cursorType; }
 
 		/// <summary>
 		/// Enables and disables the mouse completely for this.
@@ -251,7 +244,7 @@ namespace RTE {
 		std::vector<GUIControl *> m_ControlList;
 		std::vector<GUIEvent *> m_EventQueue;
 
-		int m_CursorType = CursorType::Pointer;
+		MouseCursorType m_CursorType = MouseCursorType::Pointer;
 
 		Timer *m_Timer = nullptr;
 

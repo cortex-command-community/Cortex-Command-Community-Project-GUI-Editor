@@ -18,7 +18,7 @@ namespace RTE {
 		if (!m_Skin) {
 			return false;
 		}
-		if (!m_Skin->Load(skinDir, skinFile)) {
+		if (!m_Skin->Create(skinDir, skinFile)) {
 			delete m_Skin;
 			m_Skin = nullptr;
 			return false;
@@ -392,7 +392,7 @@ namespace RTE {
 
 	void GUIControlManager::ChangeSkin(const std::string &SkinDir, const std::string &SkinFilename) {
 		m_Skin->Destroy();
-		m_Skin->Load(SkinDir, SkinFilename);
+		m_Skin->Create(SkinDir, SkinFilename);
 
 		for (GUIControl *control : m_ControlList) {
 			control->ChangeSkin(m_Skin);
@@ -575,22 +575,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::DrawMouse() {
-		int mousePosX;
-		int mousePosY;
-		m_Input->GetMousePosition(&mousePosX, &mousePosY);
-
-		switch (m_CursorType) {
-			case CursorType::Pointer:
-				m_Skin->DrawMouse(0, mousePosX, mousePosY);
-				break;
-			case CursorType::Text:
-				m_Skin->DrawMouse(1, mousePosX, mousePosY);
-				break;
-			case CursorType::HorSize:
-				m_Skin->DrawMouse(2, mousePosX, mousePosY);
-				break;
-			default:
-				break;
-		}
+		m_Screen->DrawBitmapTrans(m_Skin->GetMouseCursorBitmap(m_CursorType), m_Input->GetMousePosX() - 1, m_Input->GetMousePosY() - 1, nullptr);
 	}
 }

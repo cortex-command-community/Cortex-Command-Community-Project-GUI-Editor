@@ -3,6 +3,15 @@
 
 namespace RTE {
 
+#pragma region
+	enum MouseCursorType {
+		Pointer,
+		Text,
+		HorizSize,
+		MouseCursorTypeCount
+	};
+#pragma endregion
+
 #pragma region Event Constants
 	/// <summary>
 	/// Event Types
