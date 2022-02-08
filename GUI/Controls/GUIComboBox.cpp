@@ -71,31 +71,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIComboBox::~GUIComboBox() {
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIComboBox::ChangeSkin(GUISkin *Skin) {
 		GUIControl::ChangeSkin(Skin);
 
-		// Free any old bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
 		// Create a new bitmap
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 
 		// Build the background
-		m_Skin->BuildStandardRect(m_DrawBitmap, "TextBox", 0, 0, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "TextBox", 0, 0, m_Width, m_Height);
 
 		// Setup the skin in the panels too
 		m_TextPanel->ChangeSkin(Skin);
@@ -394,20 +377,12 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBoxButton::ChangeSkin(GUISkin *Skin) {
-		// Free any old bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
-		// Create a new bitmap. Same width, but double the height to allow for both up
-		// AND down states
-		m_DrawBitmap = Skin->CreateBitmap(m_Width, m_Height * 2);
+		// Create a new bitmap. Same width, but double the height to allow for both up AND down states
+		m_DrawBitmap.reset(Skin->CreateBitmap(m_Width, m_Height * 2));
 
 		// Create the button image
-		Skin->BuildStandardRect(m_DrawBitmap, "ComboBox_ButtonUp", 0, 0, m_Width, m_Height);
-		Skin->BuildStandardRect(m_DrawBitmap, "ComboBox_ButtonDown", 0, m_Height, m_Width, m_Height);
+		Skin->BuildStandardRect(m_DrawBitmap.get(), "ComboBox_ButtonUp", 0, 0, m_Width, m_Height);
+		Skin->BuildStandardRect(m_DrawBitmap.get(), "ComboBox_ButtonDown", 0, m_Height, m_Width, m_Height);
 
 		// Draw the arrow
 		std::string Filename;
@@ -427,9 +402,9 @@ namespace RTE {
 		Skin->GetValue("ComboBox_Arrow", "Rect", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 
-		Arrow->DrawTrans(m_DrawBitmap, (m_Width / 2) - (Values[2] / 2), (m_Height / 2) - (Values[3] / 2), &Rect);
+		Arrow->DrawTrans(m_DrawBitmap.get(), (m_Width / 2) - (Values[2] / 2), (m_Height / 2) - (Values[3] / 2), &Rect);
 
-		Arrow->DrawTrans(m_DrawBitmap, (m_Width / 2) - (Values[2] / 2) + 1, m_Height + (m_Height / 2) - (Values[3] / 2) + 1, &Rect);
+		Arrow->DrawTrans(m_DrawBitmap.get(), (m_Width / 2) - (Values[2] / 2) + 1, m_Height + (m_Height / 2) - (Values[3] / 2) + 1, &Rect);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -456,17 +431,6 @@ namespace RTE {
 		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
 			m_Pushed = true;
 			SendSignal(GUIEventCode::Clicked, Buttons);
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIComboBoxButton::~GUIComboBoxButton() {
-		// Free the drawing bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
 		}
 	}
 }

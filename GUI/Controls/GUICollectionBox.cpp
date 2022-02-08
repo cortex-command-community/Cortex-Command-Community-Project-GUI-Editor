@@ -36,11 +36,6 @@ namespace RTE {
 			delete m_Background;
 			m_Background = nullptr;
 		}
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,14 +50,10 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::BuildBitmap() {
-		// Free any old bitmap
-		delete m_DrawBitmap;
-
-		// Create a new bitmap.
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 
 		// Create the button image
-		m_Skin->BuildStandardRect(m_DrawBitmap, "CollectionBox_Panel", 0, 0, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "CollectionBox_Panel", 0, 0, m_Width, m_Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +77,7 @@ namespace RTE {
 				if (m_DrawBitmap) {
 					GUIRect Rect;
 					SetRect(&Rect, 0, 0, m_Width, m_Height);
-					Screen->DrawBitmapTrans(m_DrawBitmap, m_X, m_Y, &Rect);
+					Screen->DrawBitmapTrans(m_DrawBitmap.get(), m_X, m_Y, &Rect);
 				}
 			}
 		}
@@ -168,10 +159,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::SetDrawImage(GUIBitmap *Bitmap) {
-		// Free any old bitmap
-		delete m_DrawBitmap;
-
-		m_DrawBitmap = Bitmap;
+		m_DrawBitmap.reset(Bitmap);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

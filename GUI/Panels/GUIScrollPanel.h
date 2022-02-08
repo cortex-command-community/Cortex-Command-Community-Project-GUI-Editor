@@ -242,7 +242,7 @@ protected:
 	int m_ValueResolution = 1; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
 
 	int m_KnobPosition = 0;
-	std::array<GUIBitmap *, 3> m_DrawBitmap = { nullptr, nullptr, nullptr };
+	std::array<GUIBitmap *, 3> m_DrawBitmaps = { nullptr, nullptr, nullptr };
 
 	// Internal attributes
 	bool m_RebuildSize = true;

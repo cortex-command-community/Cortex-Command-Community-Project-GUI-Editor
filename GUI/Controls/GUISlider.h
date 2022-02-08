@@ -257,7 +257,6 @@ private:
 	static constexpr int m_DefaultWidth = 100;
 	static constexpr int m_DefaultHeight = 20;
 
-	GUIBitmap *m_DrawBitmap = nullptr;
 	GUIBitmap *m_KnobImage = nullptr;
 
 	// Properties

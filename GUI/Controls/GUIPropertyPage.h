@@ -37,7 +37,7 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	~GUIPropertyPage() override;
+	~GUIPropertyPage() override = default;
 #pragma endregion
 
 
@@ -203,7 +203,6 @@ private:
 	static constexpr int m_DefaultWidth = 80;
 	static constexpr int m_DefaultHeight = 100;
 
-	GUIBitmap *m_DrawBitmap = nullptr;
 	int m_LineColor = 0;
 
     GUIProperties m_PageValues;

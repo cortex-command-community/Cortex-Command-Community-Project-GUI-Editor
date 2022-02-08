@@ -37,32 +37,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUITextBox::~GUITextBox() {
-		// Destroy the draw bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUITextBox::ChangeSkin(GUISkin *Skin) {
 		GUIControl::ChangeSkin(Skin);
 
-		// Free any old bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
 		// Create a new bitmap
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 
 		// Build the background
-		m_Skin->BuildStandardRect(m_DrawBitmap, "TextBox", 0, 0, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "TextBox", 0, 0, m_Width, m_Height);
 
 		// Setup the skin in the panel too
 		GUITextPanel::ChangeSkin(Skin);

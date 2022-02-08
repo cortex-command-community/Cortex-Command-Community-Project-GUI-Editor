@@ -584,6 +584,8 @@ namespace RTE {
 		GUIControlManager *m_OwningManager = nullptr; //!< Not owned, owns this!
 		GUISkin *m_Skin = nullptr;
 
+		std::unique_ptr<GUIBitmap> m_DrawBitmap = nullptr;
+
 		int m_UniqueID = -1;
 
 		bool m_Enabled = true;

@@ -48,13 +48,6 @@ namespace RTE {
 			m_FrameBitmap = nullptr;
 		}
 
-		// Destroy the drawing bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
 		// Destroy the base bitmap
 		if (m_BaseBitmap) {
 			m_BaseBitmap->Destroy();
@@ -145,11 +138,6 @@ namespace RTE {
 				delete m_FrameBitmap;
 				m_FrameBitmap = nullptr;
 			}
-			if (m_DrawBitmap) {
-				m_DrawBitmap->Destroy();
-				delete m_DrawBitmap;
-				m_DrawBitmap = nullptr;
-			}
 			if (m_BaseBitmap) {
 				m_BaseBitmap->Destroy();
 				delete m_BaseBitmap;
@@ -160,7 +148,7 @@ namespace RTE {
 		// Create a new bitmap.
 		if (UpdateBase) {
 			m_FrameBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
-			m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+			m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 			m_BaseBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
 		}
 
@@ -191,12 +179,12 @@ namespace RTE {
 		}
 
 		if (UpdateText) {
-			m_BaseBitmap->Draw(m_DrawBitmap, 0, 0, nullptr);
+			m_BaseBitmap->Draw(m_DrawBitmap.get(), 0, 0, nullptr);
 
 			// Draw the text onto the drawing bitmap
 			BuildDrawBitmap();
 
-			m_FrameBitmap->DrawTrans(m_DrawBitmap, 0, 0, nullptr);
+			m_FrameBitmap->DrawTrans(m_DrawBitmap.get(), 0, 0, nullptr);
 		}
 	}
 
@@ -247,13 +235,13 @@ namespace RTE {
 				if (I->m_pBitmap) {
 					// If it was deemed too large, draw it scaled
 					if (bitmapWidth == thirdWidth) {
-						I->m_pBitmap->DrawTransScaled(m_DrawBitmap, 3 - x, bitmapY, bitmapWidth, bitmapHeight);
+						I->m_pBitmap->DrawTransScaled(m_DrawBitmap.get(), 3 - x, bitmapY, bitmapWidth, bitmapHeight);
 						// There's text to compete for space with
 					} else if (!I->m_Name.empty()) {
-						I->m_pBitmap->DrawTrans(m_DrawBitmap, ((thirdWidth / 2) - (bitmapWidth / 2)) - x + 2, bitmapY, nullptr);
+						I->m_pBitmap->DrawTrans(m_DrawBitmap.get(), ((thirdWidth / 2) - (bitmapWidth / 2)) - x + 2, bitmapY, nullptr);
 						// No text, just bitmap, so give it more room
 					} else {
-						I->m_pBitmap->DrawTrans(m_DrawBitmap, ((thirdWidth / 2) - (bitmapWidth / 2)) - x + 4, bitmapY, nullptr);
+						I->m_pBitmap->DrawTrans(m_DrawBitmap.get(), ((thirdWidth / 2) - (bitmapWidth / 2)) - x + 4, bitmapY, nullptr);
 					}
 				}
 
@@ -262,8 +250,8 @@ namespace RTE {
 					m_DrawBitmap->DrawLine(4, y + 1, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + 1, m_SelectedColorIndex);
 					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + itemHeight, m_SelectedColorIndex);
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
-					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth);
+					m_Font->DrawAligned(m_DrawBitmap.get(), x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap.get(), textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth);
 				} else {
 					// Unselected
 					// TODO: Don't hardcode unselected color index
@@ -271,8 +259,8 @@ namespace RTE {
 					m_DrawBitmap->DrawLine(4, y + itemHeight, m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() + 2 : 5), y + itemHeight, 144);
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
-					m_Font->DrawAligned(m_DrawBitmap, textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap.get(), x - 6 - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0) + m_Width, textY, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Middle, m_Width, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap.get(), textX, textY, I->m_Name, GUIFont::HAlignment::Left, GUIFont::VAlignment::Middle, mainTextWidth, m_FontShadow);
 				}
 
 				// Draw another line to make sure the last item has two
@@ -291,14 +279,14 @@ namespace RTE {
 
 				if (I->m_Selected && m_GotFocus) {
 					m_Font->SetColor(m_FontSelectColor);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right);
-					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name);
+					m_Font->DrawAligned(m_DrawBitmap.get(), x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right);
+					m_Font->Draw(m_DrawBitmap.get(), 4 - x, y, I->m_Name);
 				} else {
 					// Unselected
 					m_Font->SetColor(m_FontColor);
 					m_Font->SetKerning(m_FontKerning);
-					m_Font->DrawAligned(m_DrawBitmap, x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
-					m_Font->Draw(m_DrawBitmap, 4 - x, y, I->m_Name, m_FontShadow);
+					m_Font->DrawAligned(m_DrawBitmap.get(), x - 3 + m_Width - (m_VertScroll.GetVisible() ? m_VertScroll.GetWidth() : 0), y, I->m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
+					m_Font->Draw(m_DrawBitmap.get(), 4 - x, y, I->m_Name, m_FontShadow);
 				}
 
 				y += GetItemHeight(I);

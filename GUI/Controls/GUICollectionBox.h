@@ -143,7 +143,7 @@ public:
 // Description:     Gets the drawing image bitmap that is being drawn
 // Arguments:       Bitmap, ownership IS NOT transferred!
 
-    GUIBitmap * GetDrawImage() { return m_DrawBitmap; }
+    GUIBitmap * GetDrawImage() { return m_DrawBitmap.get(); }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +215,6 @@ private:
 	bool m_DrawBackground = true;
 	int m_DrawType = DrawType::Color;
 	int m_DrawColor = 0;
-	GUIBitmap *m_DrawBitmap = nullptr;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap

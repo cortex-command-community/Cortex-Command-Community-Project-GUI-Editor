@@ -38,7 +38,7 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		~GUIComboBoxButton() override;
+		~GUIComboBoxButton() override = default;
 #pragma endregion
 
 #pragma region Setters
@@ -85,7 +85,6 @@ namespace RTE {
 
 	private:
 
-		GUIBitmap *m_DrawBitmap = nullptr;
 		bool m_Pushed = false;
 	};
 
@@ -137,7 +136,7 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		~GUIComboBox() override;
+		~GUIComboBox() override = default;
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -367,7 +366,6 @@ namespace RTE {
 		static constexpr int m_DefaultWidth = 60;
 		static constexpr int m_DefaultHeight = 20;
 
-		GUIBitmap *m_DrawBitmap = nullptr;
 		int m_OldSelection = 0;
 		bool m_CreatedList = false;
 

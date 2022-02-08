@@ -25,24 +25,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIProgressBar::~GUIProgressBar() {
-		// Destroy the drawing bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
-		// Destroy the indicator bitmap
-		if (m_IndicatorImage) {
-			m_IndicatorImage->Destroy();
-			delete m_IndicatorImage;
-			m_IndicatorImage = nullptr;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIProgressBar::ChangeSkin(GUISkin *Skin) {
 		GUIControl::ChangeSkin(Skin);
 
@@ -53,23 +35,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProgressBar::BuildBitmap() {
-		// Free any old bitmaps
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-		if (m_IndicatorImage) {
-			m_IndicatorImage->Destroy();
-			delete m_IndicatorImage;
-			m_IndicatorImage = nullptr;
-		}
-
 		// Create a new bitmap.
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 
 		// Build the background
-		m_Skin->BuildStandardRect(m_DrawBitmap, "ProgressBar_Base", 0, 0, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "ProgressBar_Base", 0, 0, m_Width, m_Height);
 
 		// Build the indicator
 		std::string Filename;
@@ -83,7 +53,7 @@ namespace RTE {
 		m_Skin->GetValue("ProgressBar_Indicator", "Top", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 
-		m_IndicatorImage = m_Skin->CreateBitmap(Values[2], m_Height - 4);
+		m_IndicatorImage.reset(m_Skin->CreateBitmap(Values[2], m_Height - 4));
 		if (!m_IndicatorImage) {
 			return;
 		}
@@ -93,18 +63,18 @@ namespace RTE {
 
 		for (int y = 0; y < m_IndicatorImage->GetHeight(); y += Values[3]) {
 			for (int x = 0; x < m_IndicatorImage->GetWidth(); x += Values[2]) {
-				Src->Draw(m_IndicatorImage, x, y, &Rect);
+				Src->Draw(m_IndicatorImage.get(), x, y, &Rect);
 			}
 		}
 
 		// Draw the top & bottom pieces
 		m_Skin->GetValue("ProgressBar_Indicator", "Top", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
-		Src->Draw(m_IndicatorImage, 0, 0, &Rect);
+		Src->Draw(m_IndicatorImage.get(), 0, 0, &Rect);
 
 		m_Skin->GetValue("ProgressBar_Indicator", "Bottom", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
-		Src->Draw(m_IndicatorImage, 0, m_IndicatorImage->GetHeight() - Values[3], &Rect);
+		Src->Draw(m_IndicatorImage.get(), 0, m_IndicatorImage->GetHeight() - Values[3], &Rect);
 
 		m_Skin->GetValue("ProgressBar_Indicator", "Spacing", &m_Spacing);
 	}
@@ -113,7 +83,7 @@ namespace RTE {
 
 	void GUIProgressBar::Draw(GUIScreen *Screen) {
 		// Draw the base
-		Screen->DrawBitmap(m_DrawBitmap, m_X, m_Y, nullptr);
+		Screen->DrawBitmap(m_DrawBitmap.get(), m_X, m_Y, nullptr);
 
 		// Draw the indicators
 		if (!m_IndicatorImage) {

@@ -36,7 +36,7 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	~GUIProgressBar() override;
+	~GUIProgressBar() override = default;
 #pragma endregion
 
 
@@ -192,8 +192,7 @@ private:
 	static constexpr int m_DefaultWidth = 100;
 	static constexpr int m_DefaultHeight = 20;
 
-	GUIBitmap *m_DrawBitmap = nullptr;
-	GUIBitmap *m_IndicatorImage = nullptr;
+	std::unique_ptr<GUIBitmap> m_IndicatorImage = nullptr;
 
 	int m_Minimum = 0;
 	int m_Maximum = 100;

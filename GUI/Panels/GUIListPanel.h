@@ -522,7 +522,6 @@ protected:
 private:
 
 	GUIBitmap *m_BaseBitmap = nullptr;
-	GUIBitmap *m_DrawBitmap = nullptr;
 	GUIBitmap *m_FrameBitmap = nullptr;
 
 	bool m_UpdateLocked = false;

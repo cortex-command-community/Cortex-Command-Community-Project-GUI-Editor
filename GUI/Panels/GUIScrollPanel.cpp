@@ -9,7 +9,7 @@ namespace RTE {
 		GUIControl::Create("", X, Y, Width, Height);
 
 		for (int i = 0; i < 3; ++i) {
-			m_DrawBitmap[i] = nullptr;
+			m_DrawBitmaps[i] = nullptr;
 		}
 	}
 
@@ -18,10 +18,10 @@ namespace RTE {
 	GUIScrollPanel::~GUIScrollPanel() {
 		// Destroy the three bitmaps
 		for (int i = 0; i < 3; i++) {
-			if (m_DrawBitmap[i]) {
-				m_DrawBitmap[i]->Destroy();
-				delete m_DrawBitmap[i];
-				m_DrawBitmap[i] = nullptr;
+			if (m_DrawBitmaps[i]) {
+				m_DrawBitmaps[i]->Destroy();
+				delete m_DrawBitmaps[i];
+				m_DrawBitmaps[i] = nullptr;
 			}
 		}
 	}
@@ -69,21 +69,21 @@ namespace RTE {
 
 		// Free the old bitmaps
 		if (UpdateSize) {
-			if (m_DrawBitmap[ButtonStates]) {
-				m_DrawBitmap[ButtonStates]->Destroy();
-				delete m_DrawBitmap[ButtonStates];
-				m_DrawBitmap[ButtonStates] = nullptr;
+			if (m_DrawBitmaps[ButtonStates]) {
+				m_DrawBitmaps[ButtonStates]->Destroy();
+				delete m_DrawBitmaps[ButtonStates];
+				m_DrawBitmaps[ButtonStates] = nullptr;
 			}
-			if (m_DrawBitmap[Back]) {
-				m_DrawBitmap[Back]->Destroy();
-				delete m_DrawBitmap[Back];
-				m_DrawBitmap[Back] = nullptr;
+			if (m_DrawBitmaps[Back]) {
+				m_DrawBitmaps[Back]->Destroy();
+				delete m_DrawBitmaps[Back];
+				m_DrawBitmaps[Back] = nullptr;
 			}
 		}
-		if (UpdateKnob && m_DrawBitmap[KnobStates]) {
-			m_DrawBitmap[KnobStates]->Destroy();
-			delete m_DrawBitmap[KnobStates];
-			m_DrawBitmap[KnobStates] = nullptr;
+		if (UpdateKnob && m_DrawBitmaps[KnobStates]) {
+			m_DrawBitmaps[KnobStates]->Destroy();
+			delete m_DrawBitmaps[KnobStates];
+			m_DrawBitmaps[KnobStates] = nullptr;
 		}
 
 		// Calculate the knob size & position
@@ -94,17 +94,17 @@ namespace RTE {
 		if (m_Orientation == Orientation::Vertical) {
 			// Vertical
 			if (UpdateSize) {
-				m_DrawBitmap[ButtonStates] = m_Skin->CreateBitmap(m_Width * 2, m_ButtonSize * 2);
-				m_DrawBitmap[Back] = m_Skin->CreateBitmap(m_Width, m_Height);
+				m_DrawBitmaps[ButtonStates] = m_Skin->CreateBitmap(m_Width * 2, m_ButtonSize * 2);
+				m_DrawBitmaps[Back] = m_Skin->CreateBitmap(m_Width, m_Height);
 			}
-			if (UpdateKnob) { m_DrawBitmap[KnobStates] = m_Skin->CreateBitmap(m_Width * 2, m_KnobLength); }
+			if (UpdateKnob) { m_DrawBitmaps[KnobStates] = m_Skin->CreateBitmap(m_Width * 2, m_KnobLength); }
 		} else {
 			// Horizontal
 			if (UpdateSize) {
-				m_DrawBitmap[ButtonStates] = m_Skin->CreateBitmap(m_ButtonSize * 2, m_Height * 2);
-				m_DrawBitmap[Back] = m_Skin->CreateBitmap(m_Width, m_Height);
+				m_DrawBitmaps[ButtonStates] = m_Skin->CreateBitmap(m_ButtonSize * 2, m_Height * 2);
+				m_DrawBitmaps[Back] = m_Skin->CreateBitmap(m_Width, m_Height);
 			}
-			if (UpdateKnob) { m_DrawBitmap[KnobStates] = m_Skin->CreateBitmap(m_KnobLength, m_Height * 2); }
+			if (UpdateKnob) { m_DrawBitmaps[KnobStates] = m_Skin->CreateBitmap(m_KnobLength, m_Height * 2); }
 		}
 
 		// Update the buttons and the background
@@ -145,9 +145,9 @@ namespace RTE {
 
 	void GUIScrollPanel::BuildButton(const std::string &ArrowName, int Y, int Width, int Height) {
 		// Create the buttons
-		m_Skin->BuildStandardRect(m_DrawBitmap[ButtonStates], "ScrollButton_Up", 0, Y, Width, Height);
+		m_Skin->BuildStandardRect(m_DrawBitmaps[ButtonStates], "ScrollButton_Up", 0, Y, Width, Height);
 
-		m_Skin->BuildStandardRect(m_DrawBitmap[ButtonStates], "ScrollButton_Down", Width, Y, Width, Height);
+		m_Skin->BuildStandardRect(m_DrawBitmaps[ButtonStates], "ScrollButton_Down", Width, Y, Width, Height);
 
 		// Draw the arrows
 		int Values[4];
@@ -171,8 +171,8 @@ namespace RTE {
 		m_Skin->GetValue(ArrowName, "Rect", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 
-		Arrow->DrawTrans(m_DrawBitmap[ButtonStates], (Width / 2) - (Values[2] / 2), Y + (Height / 2) - (Values[3] / 2), &Rect);
-		Arrow->DrawTrans(m_DrawBitmap[ButtonStates], Width + (Width / 2) - (Values[2] / 2) + 1, Y + (Height / 2) - (Values[3] / 2) + 1, &Rect);
+		Arrow->DrawTrans(m_DrawBitmaps[ButtonStates], (Width / 2) - (Values[2] / 2), Y + (Height / 2) - (Values[3] / 2), &Rect);
+		Arrow->DrawTrans(m_DrawBitmaps[ButtonStates], Width + (Width / 2) - (Values[2] / 2) + 1, Y + (Height / 2) - (Values[3] / 2) + 1, &Rect);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ namespace RTE {
 		// Tile the filler
 		for (int y = 0; y < m_Height; y += Values[3]) {
 			for (int x = 0; x < m_Width; x += Values[2]) {
-				Background->Draw(m_DrawBitmap[Back], x, y, &Rect);
+				Background->Draw(m_DrawBitmaps[Back], x, y, &Rect);
 			}
 		}
 	}
@@ -202,7 +202,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIScrollPanel::BuildKnob(const std::string &Section, int X, int Y, int Width, int Height) {
-		if (m_DrawBitmap[KnobStates]) { m_Skin->BuildStandardRect(m_DrawBitmap[KnobStates], Section, X, Y, Width, Height); }
+		if (m_DrawBitmaps[KnobStates]) { m_Skin->BuildStandardRect(m_DrawBitmaps[KnobStates], Section, X, Y, Width, Height); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,24 +270,24 @@ namespace RTE {
 		GUIBitmap *Dest = Screen->GetBitmap();
 
 		// Draw the background
-		m_DrawBitmap[Back]->Draw(Dest, m_X, m_Y, nullptr);
+		m_DrawBitmaps[Back]->Draw(Dest, m_X, m_Y, nullptr);
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
 			// Top Button
 			int X = m_ButtonPushed[0] ? m_Width : 0;
 			SetRect(&Rect, X, 0, X + m_Width, m_ButtonSize);
-			m_DrawBitmap[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
 
 			// Bottom Button
 			X = m_ButtonPushed[1] ? m_Width : 0;
 			SetRect(&Rect, X, m_ButtonSize, X + m_Width, m_ButtonSize * 2);
-			m_DrawBitmap[ButtonStates]->Draw(Dest, m_X, (m_Y + m_Height) - m_ButtonSize, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, (m_Y + m_Height) - m_ButtonSize, &Rect);
 
 			// Knob
 			if (m_KnobLength > 0) {
 				SetRect(&Rect, 0, 0, m_Width, m_KnobLength);
-				m_DrawBitmap[KnobStates]->Draw(Dest, m_X, m_Y + m_ButtonSize + m_KnobPosition, &Rect);
+				m_DrawBitmaps[KnobStates]->Draw(Dest, m_X, m_Y + m_ButtonSize + m_KnobPosition, &Rect);
 			}
 		}
 
@@ -296,17 +296,17 @@ namespace RTE {
 			// Left Button
 			int X = m_ButtonPushed[0] ? m_ButtonSize : 0;
 			SetRect(&Rect, X, 0, X + m_ButtonSize, m_Height);
-			m_DrawBitmap[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
 
 			// Right Button
 			X = m_ButtonPushed[1] ? m_ButtonSize : 0;
 			SetRect(&Rect, X, m_Height, X + m_ButtonSize, m_Height * 2);
-			m_DrawBitmap[ButtonStates]->Draw(Dest, (m_X + m_Width) - m_ButtonSize, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, (m_X + m_Width) - m_ButtonSize, m_Y, &Rect);
 
 			// Knob
 			if (m_KnobLength > 0) {
 				SetRect(&Rect, 0, 0, m_KnobLength, m_Height);
-				m_DrawBitmap[KnobStates]->Draw(Dest, m_X + m_ButtonSize + m_KnobPosition, m_Y, &Rect);
+				m_DrawBitmaps[KnobStates]->Draw(Dest, m_X + m_ButtonSize + m_KnobPosition, m_Y, &Rect);
 			}
 		}
 	}

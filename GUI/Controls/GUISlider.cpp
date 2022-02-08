@@ -52,13 +52,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUISlider::~GUISlider() {
-		// Destroy the draw bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
 		// Destroy the knob image bitmap
 		if (m_KnobImage) {
 			m_KnobImage->Destroy();
@@ -80,11 +73,6 @@ namespace RTE {
 
 	void GUISlider::BuildBitmap() {
 		// Free any old bitmaps
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
 		if (m_KnobImage) {
 			m_KnobImage->Destroy();
 			delete m_KnobImage;
@@ -145,9 +133,9 @@ namespace RTE {
 		// Get the size of the middle bit for determining part of the bitmap size
 		m_Skin->GetValue(Section, "Middle", Values, 4);
 		if (m_Orientation == Orientation::Horizontal) {
-			m_DrawBitmap = m_Skin->CreateBitmap(m_Width, Values[3]);
+			m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, Values[3]));
 		} else {
-			m_DrawBitmap = m_Skin->CreateBitmap(Values[2], m_Height);
+			m_DrawBitmap.reset(m_Skin->CreateBitmap(Values[2], m_Height));
 		}
 
 		// Tile the line
@@ -155,18 +143,18 @@ namespace RTE {
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
 		if (m_Orientation == Orientation::Horizontal) {
 			for (int i = 0; i < m_Width; i += Values[2]) {
-				SrcImage->Draw(m_DrawBitmap, i, 0, &Rect);
+				SrcImage->Draw(m_DrawBitmap.get(), i, 0, &Rect);
 			}
 		} else {
 			for (int i = 0; i < m_Height; i += Values[3]) {
-				SrcImage->Draw(m_DrawBitmap, 0, i, &Rect);
+				SrcImage->Draw(m_DrawBitmap.get(), 0, i, &Rect);
 			}
 		}
 
 		// Draw the start
 		m_Skin->GetValue(Section, "Start", Values, 4);
 		SetRect(&Rect, Values[0], Values[1], Values[0] + Values[2], Values[1] + Values[3]);
-		SrcImage->Draw(m_DrawBitmap, 0, 0, &Rect);
+		SrcImage->Draw(m_DrawBitmap.get(), 0, 0, &Rect);
 
 		m_EndThickness = m_Orientation == Orientation::Horizontal ? Values[2] : Values[3];
 
@@ -180,7 +168,7 @@ namespace RTE {
 		} else {
 			Y = m_Height - Values[3];
 		}
-		SrcImage->Draw(m_DrawBitmap, X, Y, &Rect);
+		SrcImage->Draw(m_DrawBitmap.get(), X, Y, &Rect);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +184,7 @@ namespace RTE {
 		}
 
 		// Draw the base
-		Screen->DrawBitmap(m_DrawBitmap, m_X + X, m_Y + Y, nullptr);
+		Screen->DrawBitmap(m_DrawBitmap.get(), m_X + X, m_Y + Y, nullptr);
 
 		// Draw the indicator
 		if (!m_KnobImage) {

@@ -38,7 +38,7 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	~GUITextBox() override;
+	~GUITextBox() override = default;
 #pragma endregion
 
 
@@ -122,7 +122,6 @@ private:
 	static constexpr int m_DefaultWidth = 60;
 	static constexpr int m_DefaultHeight = 16;
 
-	GUIBitmap *m_DrawBitmap = nullptr;
     int m_HAlignment = GUIFont::HAlignment::Left;
     int m_VAlignment = GUIFont::VAlignment::Top;
 };

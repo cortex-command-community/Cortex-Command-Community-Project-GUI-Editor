@@ -60,17 +60,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIButton::~GUIButton() {
-		// Free the drawing bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIButton::ChangeSkin(GUISkin *Skin) {
 		GUIControl::ChangeSkin(Skin);
 
@@ -81,16 +70,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::BuildBitmap() {
-		// Free any old bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
-		// Create a new bitmap. Same width, but triple the height to allow for Up, Down
-		// and Over states
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height * 3);
+		// Create a new bitmap. Same width, but triple the height to allow for Up, Down and Over states
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height * 3));
 
 		// Pre-cache the font
 		std::string Filename;
@@ -108,10 +89,10 @@ namespace RTE {
 
 		// Create the button image
 		GUIRect buttonBorders;
-		m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Up", 0, 0, m_Width, m_Height, true, true, &buttonBorders);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "Button_Up", 0, 0, m_Width, m_Height, true, true, &buttonBorders);
 		SetRect(m_BorderSizes.get(), buttonBorders.left, buttonBorders.top, buttonBorders.right, buttonBorders.bottom);
-		m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Over", 0, m_Height, m_Width, m_Height);
-		m_Skin->BuildStandardRect(m_DrawBitmap, "Button_Down", 0, m_Height * 2, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "Button_Over", 0, m_Height, m_Width, m_Height);
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "Button_Down", 0, m_Height * 2, m_Width, m_Height);
 
 		//TODO this should be 1 pixel ideally, to give space between content and the border. However, the green skin, which this is primarly used for, has padding built-in and doesn't work properly without it.
 		const int buttonContentPadding = 0;
@@ -148,15 +129,15 @@ namespace RTE {
 		if (hasIcon) {
 			int iconXPos = (m_Width / 2) - static_cast<int>(static_cast<float>(m_Icon->GetWidth()) * iconStretchRatio / 2.0F);
 			if (iconStretchRatio == 1) {
-				m_Icon->DrawTrans(m_DrawBitmap, iconXPos, iconYPos, nullptr);
-				m_Icon->DrawTrans(m_DrawBitmap, iconXPos, m_Height + iconYPos, nullptr);
-				m_Icon->DrawTrans(m_DrawBitmap, iconXPos + 1, (m_Height * 2) + iconYPos + 1, nullptr);
+				m_Icon->DrawTrans(m_DrawBitmap.get(), iconXPos, iconYPos, nullptr);
+				m_Icon->DrawTrans(m_DrawBitmap.get(), iconXPos, m_Height + iconYPos, nullptr);
+				m_Icon->DrawTrans(m_DrawBitmap.get(), iconXPos + 1, (m_Height * 2) + iconYPos + 1, nullptr);
 			} else {
 				int scaledWidth = static_cast<int>(static_cast<float>(m_Icon->GetWidth()) * iconStretchRatio);
 				int scaledHeight = static_cast<int>(static_cast<float>(m_Icon->GetHeight()) * iconStretchRatio);
-				m_Icon->DrawTransScaled(m_DrawBitmap, iconXPos, iconYPos, scaledWidth, scaledHeight);
-				m_Icon->DrawTransScaled(m_DrawBitmap, iconXPos, m_Height + iconYPos, scaledWidth, scaledHeight);
-				m_Icon->DrawTransScaled(m_DrawBitmap, iconXPos + 1, (m_Height * 2) + iconYPos + 1, scaledWidth, scaledHeight);
+				m_Icon->DrawTransScaled(m_DrawBitmap.get(), iconXPos, iconYPos, scaledWidth, scaledHeight);
+				m_Icon->DrawTransScaled(m_DrawBitmap.get(), iconXPos, m_Height + iconYPos, scaledWidth, scaledHeight);
+				m_Icon->DrawTransScaled(m_DrawBitmap.get(), iconXPos + 1, (m_Height * 2) + iconYPos + 1, scaledWidth, scaledHeight);
 			}
 		}
 
@@ -168,11 +149,11 @@ namespace RTE {
 
 			int textXPos = m_BorderSizes->left + buttonContentPadding + 1;
 			m_Text->SetPositionAbs(textXPos, textYPos);
-			m_Text->Draw(m_DrawBitmap, false);
+			m_Text->Draw(m_DrawBitmap.get(), false);
 			m_Text->SetPositionAbs(textXPos, m_Height + textYPos);
-			m_Text->Draw(m_DrawBitmap, false);
+			m_Text->Draw(m_DrawBitmap.get(), false);
 			m_Text->SetPositionAbs(textXPos + 1, (m_Height * 2) + textYPos + 1);
-			m_Text->Draw(m_DrawBitmap, false);
+			m_Text->Draw(m_DrawBitmap.get(), false);
 		}
 	}
 

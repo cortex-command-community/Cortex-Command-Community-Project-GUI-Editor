@@ -68,17 +68,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIPropertyPage::~GUIPropertyPage() {
-		// Free the drawing bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIPropertyPage::ChangeSkin(GUISkin *Skin) {
 		GUIControl::ChangeSkin(Skin);
 
@@ -94,19 +83,10 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::BuildBitmap() {
-		// Free any old bitmap
-		if (m_DrawBitmap) {
-			m_DrawBitmap->Destroy();
-			delete m_DrawBitmap;
-			m_DrawBitmap = nullptr;
-		}
-
 		// Create a new bitmap.
-		m_DrawBitmap = m_Skin->CreateBitmap(m_Width, m_Height);
+		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
 
-		m_Skin->BuildStandardRect(m_DrawBitmap, "PropertyPage", 0, 0, m_Width, m_Height);
-
-
+		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "PropertyPage", 0, 0, m_Width, m_Height);
 
 		// Pre-cache the font
 		std::string Filename;
