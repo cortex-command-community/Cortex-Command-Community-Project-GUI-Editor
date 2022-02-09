@@ -124,9 +124,9 @@ namespace RTE {
 
 	bool GUIControlManager::GetEvent(GUIEvent *eventPtr) {
 		if (eventPtr && !m_EventQueue.empty()) {
-			*eventPtr = *m_EventQueue.back();
-			delete m_EventQueue.back();
-			m_EventQueue.pop_back();
+			*eventPtr = *m_EventQueue.front();
+			delete m_EventQueue.front();
+			m_EventQueue.pop_front();
 			return true;
 		}
 		return false;

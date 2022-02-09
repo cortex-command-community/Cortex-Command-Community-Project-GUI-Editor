@@ -242,7 +242,7 @@ namespace RTE {
 		GUISkin *m_Skin = nullptr;
 
 		std::vector<GUIControl *> m_ControlList;
-		std::vector<GUIEvent *> m_EventQueue;
+		std::deque<GUIEvent *> m_EventQueue;
 
 		MouseCursorType m_CursorType = MouseCursorType::Pointer;
 
