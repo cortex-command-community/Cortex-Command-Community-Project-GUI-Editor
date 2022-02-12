@@ -208,8 +208,7 @@ namespace RTE {
 		// ModKey-V (Paste)
 		if (asciiChar == 'v' && ModKey) {
 			RemoveSelectionText();
-			std::string Text = "";
-			GUIUtil::GetClipboardText(&Text);
+			std::string Text = GUIUtil::GetClipboardText();
 			m_Text.insert(m_CursorIndex, Text);
 			m_CursorIndex += Text.size();
 			UpdateText(true, true);
@@ -239,7 +238,7 @@ namespace RTE {
 		// Add valid ASCII characters
 		if (KeyCode >= minValidKeyCode && KeyCode <= maxValidKeyCode) {
 			RemoveSelectionText();
-			char buf[2] = { static_cast<char>(KeyCode), '\0' };
+			std::string buf = { static_cast<char>(KeyCode), '\0' };
 			if (m_MaxTextLength > 0 && m_Text.length() >= m_MaxTextLength) {
 				return;
 			}

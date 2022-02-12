@@ -29,29 +29,27 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIUtil::GetClipboardText(std::string *text) {
+	std::string GUIUtil::GetClipboardText() {
 #ifdef _WIN32
 		HANDLE clipboardDataHandle;
 		LPSTR clipboardData;
-		assert(text);
+		std::string clipboardText = "";
 
 		if (IsClipboardFormatAvailable(CF_TEXT) && OpenClipboard(nullptr)) {
 			clipboardDataHandle = GetClipboardData(CF_TEXT);
 			if (clipboardDataHandle) {
 				clipboardData = static_cast<LPSTR>(GlobalLock(clipboardDataHandle));
-				text->erase();
-				text->insert(0, clipboardData);
+				clipboardText = clipboardData;
 				CloseClipboard();
 
 				GlobalUnlock(clipboardDataHandle);
-				return true;
 			}
 			CloseClipboard();
 		}
 #elif __unix__
 		// TODO: Implement.
 #endif
-		return false;
+		return clipboardText;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

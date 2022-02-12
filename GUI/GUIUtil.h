@@ -20,9 +20,8 @@ namespace RTE {
 		/// <summary>
 		/// Gets the text from the clipboard.
 		/// </summary>
-		/// <param name="text">Pointer to string receiving the text.</param>
 		/// <returns>True if text was available in the clipboard.</returns>
-		static bool GetClipboardText(std::string *text);
+		static std::string GetClipboardText();
 
 		/// <summary>
 		/// Sets the text in the clipboard.

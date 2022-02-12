@@ -211,12 +211,6 @@ namespace RTE {
 		void SetToolTip(const std::string_view &toolTip) const { m_Properties.SetPropertyValue("ToolTip", toolTip); }
 
 		/// <summary>
-		/// Called when the skin has been changed.
-		/// </summary>
-		/// <param name="newSkin">New skin pointer.</param>
-		virtual void ChangeSkin(GUISkin *newSkin) { m_Skin = newSkin; }
-
-		/// <summary>
 		/// Sets the font this panel will be using
 		/// </summary>
 		/// <param name="newFont">The new font, ownership is NOT transferred!</param>
@@ -526,7 +520,7 @@ namespace RTE {
 		/// <param name="y">Mouse Y position.</param>
 		/// <param name="modifier">Activated modifier buttons.</param>
 		/// <param name="mouseWheelChange">The amount of wheel movement. Positive is scroll up, negative is scroll down.</param>
-		virtual void OnMouseWheelChange(int x, int y, int modifier, int mouseWheelChange) {}
+		virtual void OnMouseWheelChange(int mousePosX, int mousePosY, int modifier, int mouseWheelChange) {}
 #pragma endregion
 
 #pragma region Keyboard Event Handling
@@ -553,6 +547,12 @@ namespace RTE {
 #pragma endregion
 
 #pragma region Virtual Methods
+		/// <summary>
+		/// Called when the skin has been changed.
+		/// </summary>
+		/// <param name="newSkin">New skin pointer.</param>
+		virtual void ChangeSkin(GUISkin *newSkin) { m_Skin = newSkin; }
+
 		/// <summary>
 		/// Draws the panel.
 		/// </summary>
