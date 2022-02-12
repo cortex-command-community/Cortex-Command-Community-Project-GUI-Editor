@@ -14,13 +14,12 @@ namespace RTE {
 		m_Screen = guiScreen;
 		m_Input = guiInput;
 
-		m_Skin = new GUISkin(guiScreen);
-		if (!m_Skin) {
+		m_Skin = std::make_unique<GUISkin>(guiScreen);
+		if (!m_Skin.get()) {
 			return false;
 		}
 		if (!m_Skin->Create(skinDir, skinFile)) {
-			delete m_Skin;
-			m_Skin = nullptr;
+			m_Skin.reset();
 			return false;
 		}
 
@@ -40,14 +39,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::Destroy() {
-		// Free the skin
-		if (m_Skin) {
-			m_Skin->Destroy();
-			delete m_Skin;
-			m_Skin = nullptr;
-		}
-
-		// Destroy the controls & event queue
 		ClearAllControls();
 
 		delete m_Timer;
@@ -56,61 +47,51 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlManager::Load(const std::string &Filename, bool keepOld) {
+	bool GUIControlManager::LoadLayout(const std::string &fileName, bool keepOld) {
 		GUIReader reader;
-		if (reader.Create(Filename.c_str()) != 0) {
+		if (reader.Create(fileName) != 0) {
 			return false;
 		}
-		// Clear the current layout, IF directed to
-		if (!keepOld) { ClearAllControls(); }
+		std::vector<GUIProperties *> loadedControlProperties;
+		loadedControlProperties.reserve(50);
 
-		std::vector<GUIProperties *> ControlList;
-		ControlList.clear();
-
-		GUIProperties *CurProp = nullptr;
+		GUIProperties *currentSection = nullptr;
 
 		while (!reader.GetStream()->eof()) {
 			std::string line = reader.ReadLine();
-			if (line.empty()) {
-				continue;
-			}
-			// Is the line a section?
-			if (line.front() == '[' && line.back() == ']') {
-				GUIProperties *p = new GUIProperties(std::string_view(line).substr(1, line.size() - 2));
-				CurProp = p;
-				ControlList.push_back(p);
-				continue;
-			}
-			// Is the line a valid property?
-			size_t Position = line.find_first_of('=');
-			if (Position != std::string::npos) {
-				// Break the line into variable & value, but only add a property if controlItr belongs to a section
-				if (CurProp) { CurProp->AddProperty(reader.TrimString(line.substr(0, Position)), reader.TrimString(line.substr(Position + 1, std::string::npos))); }
-				continue;
+			if (!line.empty()) {
+				if (line.front() == '[' && line.back() == ']') {
+					GUIProperties *section = new GUIProperties(std::string_view(line).substr(1, line.size() - 2));
+					currentSection = section;
+					loadedControlProperties.emplace_back(section);
+				} else {
+					size_t equalPos = line.find_first_of('=');
+					if (currentSection && equalPos != std::string::npos) { currentSection->AddProperty(reader.TrimString(line.substr(0, equalPos)), reader.TrimString(line.substr(equalPos + 1, std::string::npos))); }
+				}
 			}
 		}
-		for (GUIProperties *property : ControlList) {
-			AddControl(property);
-			delete(property);
+		if (!keepOld) { ClearAllControls(); }
+		for (GUIProperties *controlProperties : loadedControlProperties) {
+			AddControl(controlProperties);
 		}
 		return true;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlManager::Save(const std::string &fileName) {
+	bool GUIControlManager::SaveLayout(const std::string &fileName) const {
 		GUIWriter writer;
 		if (writer.Create(fileName) != 0) {
 			return false;
 		}
-		bool Result = Save(&writer);
+		bool saveResult = SaveLayout(&writer);
 		writer.EndWrite();
-		return Result;
+		return saveResult;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlManager::Save(GUIWriter *writer) {
+	bool GUIControlManager::SaveLayout(GUIWriter *writer) const {
 		GUIAssert(writer, "");
 
 		for (GUIControl *control : m_ControlList) {
@@ -155,10 +136,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::FindTopControl(int X, int Y) {
+	GUIControl * GUIControlManager::FindTopControl(int pointX, int pointY) {
 		for (std::vector<GUIControl *>::reverse_iterator controlItr = m_ControlList.rbegin(); controlItr != m_ControlList.rend(); controlItr++) {
 			if (GUIControl *control = *controlItr) {
-				if (GUIControl *topControl = control->TopPanelUnderPoint(X, Y)) {
+				if (GUIControl *topControl = control->TopPanelUnderPoint(pointX, pointY)) {
 					return topControl;
 				}
 			}
@@ -168,9 +149,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::FindBottomControl(int X, int Y) {
+	GUIControl * GUIControlManager::FindBottomControl(int pointX, int pointY) {
 		for (GUIControl *control : m_ControlList) {
-			if (GUIControl *bottomPanel = control->BottomPanelUnderPoint(X, Y)) {
+			if (GUIControl *bottomPanel = control->BottomPanelUnderPoint(pointX, pointY)) {
 				return bottomPanel;
 			}
 		}
@@ -179,13 +160,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::AddEvent(GUIEvent *Event) {
-		if (Event) { m_EventQueue.emplace_back(Event); }
+	void GUIControlManager::AddEvent(GUIEvent *newEvent) {
+		if (newEvent) { m_EventQueue.emplace_back(newEvent); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::GetControl(const std::string_view &Name) {
+	GUIControl * GUIControlManager::GetControl(const std::string_view &Name) const {
 		for (GUIControl *control : m_ControlList) {
 			if (control->GetName() == Name) {
 				return control;
@@ -250,7 +231,7 @@ namespace RTE {
 			return nullptr;
 		}
 		newControl->Create(Name, X, Y, Width, Height);
-		newControl->ChangeSkin(m_Skin);
+		newControl->ChangeSkin(m_Skin.get());
 
 		if (Parent) {
 			int Z = 0;
@@ -292,7 +273,7 @@ namespace RTE {
 			return nullptr;
 		}
 		newControl->Create(Property);
-		newControl->ChangeSkin(m_Skin);
+		newControl->ChangeSkin(m_Skin.get());
 
 		// Get the parent control
 		std::string Parent;
@@ -395,7 +376,7 @@ namespace RTE {
 		m_Skin->Create(SkinDir, SkinFilename);
 
 		for (GUIControl *control : m_ControlList) {
-			control->ChangeSkin(m_Skin);
+			control->ChangeSkin(m_Skin.get());
 		}
 	}
 
@@ -403,178 +384,150 @@ namespace RTE {
 
 	void GUIControlManager::Update(bool ignoreKeyboardEvents) {
 		m_EventQueue.clear();
-
 		m_Input->Update();
 
-		// Mouse Events
-		int i;
-		int MouseX = 0;
-		int MouseY = 0;
-		int DeltaX;
-		int DeltaY;
-		int MouseButtons[3];
-		int MouseStates[3];
-		int MouseWheelChange = 0;
-		int Released = GUIControl::MouseButtons::MOUSE_NONE;
-		int Pushed = GUIControl::MouseButtons::MOUSE_NONE;
-		int Buttons = GUIControl::MouseButtons::MOUSE_NONE;
-		int Repeated = GUIControl::MouseButtons::MOUSE_NONE;
-		int Modifier = GUIInput::KeyModifiers::ModNone;
-		int Mod = GUIControl::MouseModifiers::MODI_NONE;
+		int keyModifier = m_Input->GetKeyModifier();
 
-		float CurTime = m_Timer->GetElapsedRealTimeMS();
+		if (m_MouseEnabled) { ProcessMouseInput(keyModifier); }
+		if (!ignoreKeyboardEvents && m_FocusedControl && m_FocusedControl->GetEnabled()) { ProcessKeyboardInput(keyModifier); }
 
-		// Build the modifier state
-		Modifier = m_Input->GetKeyModifier();
-		if (Modifier & GUIInput::KeyModifiers::ModShift) { Mod |= GUIControl::MouseModifiers::MODI_SHIFT; }
-		if (Modifier & GUIInput::KeyModifiers::ModCtrl) { Mod |= GUIControl::MouseModifiers::MODI_CTRL; }
-		if (Modifier & GUIInput::KeyModifiers::ModAlt) { Mod |= GUIControl::MouseModifiers::MODI_ALT; }
-		if (Modifier & GUIInput::KeyModifiers::ModCommand) { Mod |= GUIControl::MouseModifiers::MODI_COMMAND; }
+		m_Input->SetCurrentMousePosAsPrev();
+	}
 
-		// Get the mouse data
-		if (m_MouseEnabled) {
-			m_Input->GetMousePosition(&MouseX, &MouseY);
-			m_Input->GetMouseButtons(MouseButtons, MouseStates);
-			MouseWheelChange = m_Input->GetMouseWheelChange();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			// Calculate mouse movement
-			DeltaX = MouseX - m_OldMouseX;
-			DeltaY = MouseY - m_OldMouseY;
-			m_OldMouseX = MouseX;
-			m_OldMouseY = MouseY;
+	void GUIControlManager::ProcessMouseInput(int keyModifier) {
+		int mousePosX = m_Input->GetMousePosX();
+		int mousePosY = m_Input->GetMousePosY();
 
-			// Panels that have captured the mouse get the events over anything else
-			// Regardless where the mouse currently is
-			GUIControl *CurPanel = m_CaptruredControl;
+		// Panels that have captured the mouse get the events over anything else regardless where the mouse currently is
+		GUIControl *currentControl = m_CaptruredControl;
+		if (!currentControl) { currentControl = FindTopControl(mousePosX, mousePosY); }
 
-			// Find the lowest panel in the tree that the mouse is over
-			if (!CurPanel) { CurPanel = FindTopControl(MouseX, MouseY); }
+		float currentTime = static_cast<float>(m_Timer->GetElapsedRealTimeMS());
 
-			// Build the states
-			for (i = 0; i < 3; i++) {
-				if (MouseButtons[i] == GUIInput::InputEvents::Released) { Released |= 1 << i; }
-				if (MouseButtons[i] == GUIInput::InputEvents::Pushed) { Pushed |= 1 << i; }
-				if (MouseButtons[i] == GUIInput::InputEvents::Repeat) { Repeated |= 1 << i; }
-				if (MouseStates[i] == GUIInput::InputStates::Down) { Buttons |= 1 << i; }
-			}
+		std::array<int, 3> mouseButtonEvents;
+		std::array<int, 3> mouseButtonStates;
+		m_Input->GetMouseButtons(mouseButtonEvents.data(), mouseButtonStates.data());
 
-			// Mouse Up
-			if (Released != GUIControl::MouseButtons::MOUSE_NONE && CurPanel) { CurPanel->OnMouseUp(MouseX, MouseY, Released, Mod); }
-
-			// Double click (on the mouse up)
-			if (Released != GUIControl::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIControl::MouseButtons::MOUSE_NONE) {
-				if (CurPanel) { CurPanel->OnDoubleClick(MouseX, MouseY, m_DoubleClickButtons, Mod); }
-				m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0f;
-			}
-
-			// Mouse Down
-			if (Pushed != GUIControl::MouseButtons::MOUSE_NONE) {
-				// Double click settings
-				m_DoubleClickButtons = GUIControl::MouseButtons::MOUSE_NONE;
-
-				// Check for a double click
-				for (i = 0; i < 3; i++) {
-					if (Pushed & (1 << i)) {
-						if (CurTime - m_LastMouseDown[i] < (float)(m_DoubleClickTime) && MouseInRect(&m_DoubleClickRect, MouseX, MouseY)) {
-							m_DoubleClickButtons |= (1 << i);
-						} else {
-							// Setup the first click
-							m_DoubleClickButtons = GUIControl::MouseButtons::MOUSE_NONE;
-							m_LastMouseDown[i] = CurTime;
-						}
-					}
-				}
-
-				// Setup the double click rectangle
-				if (m_DoubleClickButtons == GUIControl::MouseButtons::MOUSE_NONE) { SetRect(&m_DoubleClickRect, MouseX - m_DoubleClickSize, MouseY - m_DoubleClickSize, MouseX + m_DoubleClickSize, MouseY + m_DoubleClickSize); }
-
-				// OnMouseDown event
-				if (CurPanel) { CurPanel->OnMouseDown(MouseX, MouseY, Pushed, Mod); }
-			}
-
-			// Mouse move
-			if ((DeltaX != 0 || DeltaY != 0) && CurPanel) { CurPanel->OnMouseMove(MouseX, MouseY, Buttons, Mod); }
-
-			// Mouse Hover
-			if (m_HoverTrack && m_HoverTime < CurTime) {
-				// Disable it (panel will have to re-enable it if it wants to continue)
-				m_HoverTrack = false;
-
-				if (m_HoveredControl && m_HoveredControl->PointInside(MouseX, MouseY)/*GetUniqueID() == topControl->GetUniqueID()*/) {
-					// call the OnMouseHover event
-					m_HoveredControl->OnMouseHover(MouseX, MouseY, Buttons, Mod);
-				}
-			}
-
-			// Mouse enter & leave
-			bool Enter = false;
-			bool Leave = false;
-			if (!m_MousedOverControl && CurPanel) { Enter = true; }
-			if (!CurPanel && m_MousedOverControl) { Leave = true; }
-			if (m_MousedOverControl && CurPanel && m_MousedOverControl->GetUniqueID() != CurPanel->GetUniqueID()) {
-				Enter = true;
-				Leave = true;
-			}
-
-			// OnMouseEnter
-			if (Enter && CurPanel) { CurPanel->OnMouseEnter(MouseX, MouseY, Buttons, Mod); }
-
-			// OnMouseLeave
-			if (Leave &&m_MousedOverControl) { m_MousedOverControl->OnMouseLeave(MouseX, MouseY, Buttons, Mod); }
-
-			if (MouseWheelChange &&CurPanel) { CurPanel->OnMouseWheelChange(MouseX, MouseY, Mod, MouseWheelChange); }
-
-			m_MousedOverControl = CurPanel;
+		int buttonReleased = GUIControl::MouseButtons::MOUSE_NONE;
+		int buttonPushed = GUIControl::MouseButtons::MOUSE_NONE;
+		int buttonDown = GUIControl::MouseButtons::MOUSE_NONE;
+		int buttonRepeated = GUIControl::MouseButtons::MOUSE_NONE;
+		for (int i = 0; i < 3; i++) {
+			if (mouseButtonEvents[i] == GUIInput::InputEvents::Released) { buttonReleased |= 1 << i; }
+			if (mouseButtonEvents[i] == GUIInput::InputEvents::Pushed) { buttonPushed |= 1 << i; }
+			if (mouseButtonEvents[i] == GUIInput::InputEvents::Repeat) { buttonRepeated |= 1 << i; }
+			if (mouseButtonStates[i] == GUIInput::InputStates::Down) { buttonDown |= 1 << i; }
 		}
 
-		if (!ignoreKeyboardEvents) {
-			// Keyboard Events
-			uint8_t KeyboardBuffer[256];
-			m_Input->GetKeyboardBuffer(KeyboardBuffer);
+		// Mouse Up
+		if (currentControl && buttonReleased != GUIControl::MouseButtons::MOUSE_NONE) { currentControl->OnMouseUp(mousePosX, mousePosY, buttonReleased, keyModifier); }
 
-			// If we don't have a panel with focus, just ignore keyboard events
-			if (!m_FocusedControl) {
-				return;
-			}
-			// If the panel is not enabled, don't send controlItr key events
-			if (!m_FocusedControl->GetEnabled()) {
-				return;
-			}
-			for (i = 1; i < 256; i++) {
-				switch (KeyboardBuffer[i]) {
-					// KeyDown & KeyPress
-					case GUIInput::InputEvents::Pushed:
-						m_FocusedControl->OnKeyDown(i, Mod);
-						m_FocusedControl->OnKeyPress(i, Mod);
-						break;
+		// Double click (on the mouse up)
+		if (buttonReleased != GUIControl::MouseButtons::MOUSE_NONE && m_DoubleClickButtons != GUIControl::MouseButtons::MOUSE_NONE) {
+			if (currentControl) { currentControl->OnDoubleClick(mousePosX, mousePosY, m_DoubleClickButtons, keyModifier); }
+			m_LastMouseDown[0] = m_LastMouseDown[1] = m_LastMouseDown[2] = -99999.0f;
+		}
 
-						// KeyUp
-					case GUIInput::InputEvents::Released:
-						m_FocusedControl->OnKeyUp(i, Mod);
-						break;
+		// Mouse Down
+		if (buttonPushed != GUIControl::MouseButtons::MOUSE_NONE) {
+			// Double click settings
+			m_DoubleClickButtons = GUIControl::MouseButtons::MOUSE_NONE;
 
-						// KeyPress
-					case GUIInput::InputEvents::Repeat:
-						m_FocusedControl->OnKeyPress(i, Mod);
-						break;
-					default:
-						break;
+			// Check for a double click
+			for (int i = 0; i < 3; i++) {
+				if (buttonPushed & (1 << i)) {
+					if (currentTime - m_LastMouseDown[i] < (float)(m_DoubleClickTime) && MouseInRect(&m_DoubleClickRect, mousePosX, mousePosY)) {
+						m_DoubleClickButtons |= (1 << i);
+					} else {
+						// Setup the first click
+						m_DoubleClickButtons = GUIControl::MouseButtons::MOUSE_NONE;
+						m_LastMouseDown[i] = currentTime;
+					}
 				}
+			}
+
+			// Setup the double click rectangle
+			if (m_DoubleClickButtons == GUIControl::MouseButtons::MOUSE_NONE) { SetRect(&m_DoubleClickRect, mousePosX - m_DoubleClickSize, mousePosY - m_DoubleClickSize, mousePosX + m_DoubleClickSize, mousePosY + m_DoubleClickSize); }
+
+			// OnMouseDown event
+			if (currentControl) { currentControl->OnMouseDown(mousePosX, mousePosY, buttonPushed, keyModifier); }
+		}
+
+		// Mouse move
+		if (currentControl && (m_Input->GetMouseMovementX() != 0 || m_Input->GetMouseMovementY() != 0)) { currentControl->OnMouseMove(mousePosX, mousePosY, buttonDown, keyModifier); }
+
+		// Mouse Hover
+		if (m_HoverTrack && m_HoverTime < currentTime) {
+			// Disable it (panel will have to re-enable it if it wants to continue)
+			m_HoverTrack = false;
+
+			if (m_HoveredControl && m_HoveredControl->PointInside(mousePosX, mousePosY)/*GetUniqueID() == topControl->GetUniqueID()*/) {
+				// call the OnMouseHover event
+				m_HoveredControl->OnMouseHover(mousePosX, mousePosY, buttonDown, keyModifier);
+			}
+		}
+
+		// Mouse enter & leave
+		bool mouseEnter = false;
+		bool mouseLeave = false;
+		if (!m_MousedOverControl && currentControl) { mouseEnter = true; }
+		if (!currentControl && m_MousedOverControl) { mouseLeave = true; }
+		if (m_MousedOverControl && currentControl && m_MousedOverControl->GetUniqueID() != currentControl->GetUniqueID()) {
+			mouseEnter = true;
+			mouseLeave = true;
+		}
+
+		// OnMouseEnter
+		if (mouseEnter && currentControl) { currentControl->OnMouseEnter(mousePosX, mousePosY, buttonDown, keyModifier); }
+
+		// OnMouseLeave
+		if (mouseLeave && m_MousedOverControl) { m_MousedOverControl->OnMouseLeave(mousePosX, mousePosY, buttonDown, keyModifier); }
+
+		int mouseWheelChange = m_Input->GetMouseWheelChange();
+		if (currentControl && mouseWheelChange != 0) {
+			currentControl->OnMouseWheelChange(mousePosX, mousePosY, keyModifier, mouseWheelChange);
+		}
+
+		m_MousedOverControl = currentControl;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControlManager::ProcessKeyboardInput(int keyModifier) {
+		std::array<uint8_t, 256> keyBuffer;
+		m_Input->GetKeyboardBuffer(keyBuffer.data());
+
+		for (int key = 1; key < keyBuffer.size(); ++key) {
+			switch (keyBuffer[key]) {
+				case GUIInput::InputEvents::Pushed:
+					m_FocusedControl->OnKeyDown(key, keyModifier);
+					m_FocusedControl->OnKeyPress(key, keyModifier);
+					break;
+				case GUIInput::InputEvents::Released:
+					m_FocusedControl->OnKeyUp(key, keyModifier);
+					break;
+				case GUIInput::InputEvents::Repeat:
+					m_FocusedControl->OnKeyPress(key, keyModifier);
+					break;
+				default:
+					break;
 			}
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::Draw(GUIScreen *Screen) {
+	void GUIControlManager::DrawMouse() const {
+		m_Screen->DrawBitmapTrans(m_Skin->GetMouseCursorBitmap(m_CursorType), m_Input->GetMousePosX() - 1, m_Input->GetMousePosY() - 1, nullptr);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUIControlManager::Draw(GUIScreen *Screen) const {
 		for (GUIControl *control : m_ControlList) {
 			if (control->GetVisible()) { control->Draw(Screen); }
 		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControlManager::DrawMouse() {
-		m_Screen->DrawBitmapTrans(m_Skin->GetMouseCursorBitmap(m_CursorType), m_Input->GetMousePosX() - 1, m_Input->GetMousePosY() - 1, nullptr);
 	}
 }

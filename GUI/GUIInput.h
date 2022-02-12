@@ -129,6 +129,35 @@ namespace RTE {
 		int GetMousePosY() const { return m_MouseY + m_MouseOffsetY; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetPrevMousePosX() const { return m_PreviousMouseX + m_MouseOffsetX; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetPrevMousePosY() const { return m_PreviousMouseY + m_MouseOffsetY; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void SetCurrentMousePosAsPrev() { m_PreviousMouseX = m_MouseX; m_PreviousMouseY = m_MouseY; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetMouseMovementX() const { return m_MouseX - m_PreviousMouseX; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		int GetMouseMovementY() const { return m_MouseY - m_PreviousMouseY; }
+
+		/// <summary>
 		/// Copies the mouse button states into an array.
 		/// </summary>
 		/// <param name="eventsArray"></param>
@@ -180,6 +209,8 @@ namespace RTE {
 
 		int m_MouseX;
 		int m_MouseY;
+		int m_PreviousMouseX;
+		int m_PreviousMouseY;
 		// These offset the mouse positions so that the cursor is shifted for all events
 		int m_MouseOffsetX;
 		int m_MouseOffsetY;

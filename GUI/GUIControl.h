@@ -36,17 +36,6 @@ namespace RTE {
 		};
 
 		/// <summary>
-		/// Mouse Modifiers
-		/// </summary>
-		enum MouseModifiers {
-			MODI_NONE = 0x00,
-			MODI_SHIFT = 0x01,
-			MODI_CTRL = 0x02,
-			MODI_ALT = 0x04,
-			MODI_COMMAND = 0x08
-		};
-
-		/// <summary>
 		/// Z Change
 		/// </summary>
 		enum ZChange { TopMost, BottomMost };

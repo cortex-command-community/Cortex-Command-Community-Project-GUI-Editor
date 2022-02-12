@@ -50,21 +50,21 @@ namespace RTE {
 		/// <param name="fileName">Filename.</param>
 		/// <param name="keepOld">Whether to NOT clear out the manager, but just add the controls loaded to the existing layout.</param>
 		/// <returns>True if successful.</returns>
-		bool Load(const std::string &fileName, bool keepOld = false);
+		bool LoadLayout(const std::string &fileName, bool keepOld = false);
 
 		/// <summary>
 		/// Saves the layout to a file.
 		/// </summary>
 		/// <param name="fileName">Filename.</param>
 		/// <returns>True if successful.</returns>
-		bool Save(const std::string &fileName);
+		bool SaveLayout(const std::string &fileName) const;
 
 		/// <summary>
 		/// Saves the layout to a Writer class.
 		/// </summary>
 		/// <param name="writer">Writer class.</param>
 		/// <returns>True if successful.</returns>
-		bool Save(GUIWriter *writer);
+		bool SaveLayout(GUIWriter *writer) const;
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -84,7 +84,7 @@ namespace RTE {
 		/// Gets the Skin object currently in use.
 		/// </summary>
 		/// <returns>A pointer to the currently used skin. Please don't mess it up.</returns>
-		GUISkin * GetSkin() { return m_Skin; }
+		GUISkin * GetSkin() { return m_Skin.get(); }
 
 		/// <summary>
 		/// Gets an event from the queue.
@@ -132,7 +132,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="name">Name.</param>
 		/// <returns>GUIControlBaseclass, or 0 if not found.</returns>
-		GUIControl * GetControl(const std::string_view &name);
+		GUIControl * GetControl(const std::string_view &name) const;
 
 		/// <summary>
 		/// Checks if a control is under a specific point.
@@ -221,25 +221,25 @@ namespace RTE {
 		/// <summary>
 		/// Draws the mouse.
 		/// </summary>
-		void DrawMouse();
+		void DrawMouse() const;
 
 		/// <summary>
 		/// Draws the GUI to the back buffer.
 		/// </summary>
-		void Draw() { Draw(m_Screen); }
+		void Draw() const { Draw(m_Screen); }
 
 		/// <summary>
 		/// Draws the GUI to the back buffer.
 		/// </summary>
 		/// <param name="targetScreen">The GUIScreen to draw to, overriding the one passed in on construction.</param>
-		void Draw(GUIScreen *targetScreen);
+		void Draw(GUIScreen *targetScreen) const;
 #pragma endregion
 
 	private:
 
 		GUIScreen *m_Screen = nullptr; // Not owned.
 		GUIInput *m_Input = nullptr; // Not owned.
-		GUISkin *m_Skin = nullptr;
+		std::unique_ptr<GUISkin> m_Skin = nullptr;
 
 		std::vector<GUIControl *> m_ControlList;
 		std::deque<GUIEvent *> m_EventQueue;
@@ -257,8 +257,6 @@ namespace RTE {
 		GUIControl *m_MousedOverControl = nullptr;
 
 		bool m_MouseEnabled = true;
-		int m_OldMouseX = 0;
-		int m_OldMouseY = 0;
 
 		int m_DoubleClickTime = 0;
 		int m_DoubleClickSize = 0;
@@ -295,7 +293,19 @@ namespace RTE {
 		/// Add a new event to the queue.
 		/// </summary>
 		/// <param name="event">Event point.</param>
-		void AddEvent(GUIEvent *event);
+		void AddEvent(GUIEvent *newEvent);
+
+#pragma region Update Breakdown
+		/// <summary>
+		/// 
+		/// </summary>
+		void ProcessMouseInput(int keyModifier);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void ProcessKeyboardInput(int keyModifier);
+#pragma endregion
 
 		// Disallow the use of some implicit methods.
 		GUIControlManager(const GUIControlManager &reference) = delete;

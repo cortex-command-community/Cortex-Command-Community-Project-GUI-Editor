@@ -303,7 +303,7 @@ namespace RTEGUI {
 		}
 		std::string newFilename;
 		if (EditorUtil::DisplayLoadFileDialogBox(newFilename, win_get_window())) {
-			m_EditorManager->GetWorkspaceManager()->Load(newFilename, addControls);
+			m_EditorManager->GetWorkspaceManager()->LoadLayout(newFilename, addControls);
 			m_ActiveFileName = newFilename;
 
 			GUIControl *newRootControl = m_EditorManager->GetWorkspaceManager()->GetControlList()->front();
@@ -332,7 +332,7 @@ namespace RTEGUI {
 		// Move the root object to top left corner before saving so it is displayed correctly in-game.
 		m_EditorManager->GetRootControl()->Move(0, 0);
 
-		m_EditorManager->GetWorkspaceManager()->Save(m_ActiveFileName);
+		m_EditorManager->GetWorkspaceManager()->SaveLayout(m_ActiveFileName);
 
 		// Move the root object back to the workspace position in the editor
 		m_EditorManager->GetRootControl()->Move(m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY());

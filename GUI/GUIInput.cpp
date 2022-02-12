@@ -7,6 +7,8 @@ namespace RTE {
 	void GUIInput::Clear() {
 		m_MouseX = 0;
 		m_MouseY = 0;
+		m_PreviousMouseX = 0;
+		m_PreviousMouseY = 0;
 		m_MouseOffsetX = 0;
 		m_MouseOffsetY = 0;
 		m_MouseWheelChange = 0;
