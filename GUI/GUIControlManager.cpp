@@ -49,7 +49,7 @@ namespace RTE {
 
 	bool GUIControlManager::LoadLayout(const std::string &fileName, bool keepOld) {
 		GUIReader reader;
-		if (reader.Create(fileName) != 0) {
+		if (!reader.Create(fileName)) {
 			return false;
 		}
 		std::vector<GUIProperties *> loadedControlProperties;
@@ -81,7 +81,7 @@ namespace RTE {
 
 	bool GUIControlManager::SaveLayout(const std::string &fileName) const {
 		GUIWriter writer;
-		if (writer.Create(fileName) != 0) {
+		if (!writer.Create(fileName)) {
 			return false;
 		}
 		bool saveResult = SaveLayout(&writer);

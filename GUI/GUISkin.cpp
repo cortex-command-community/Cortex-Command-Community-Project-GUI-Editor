@@ -11,7 +11,7 @@ namespace RTE {
 		m_SkinDirectory = directory;
 
 		GUIReader skinFile;
-		if (skinFile.Create(m_SkinDirectory + "/" + fileName) == -1) {
+		if (!skinFile.Create(m_SkinDirectory + "/" + fileName)) {
 			return false;
 		}
 		GUIProperties *currentSection = nullptr;

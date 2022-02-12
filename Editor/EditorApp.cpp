@@ -29,7 +29,7 @@ namespace RTEGUI {
 		clear_to_color(m_BackBuffer, 0);
 
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
-		m_Input = std::make_unique<AllegroInput>(-1);
+		m_Input = std::make_unique<AllegroInput>();
 
 		// Initialize the UI
 		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");

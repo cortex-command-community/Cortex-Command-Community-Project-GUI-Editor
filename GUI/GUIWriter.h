@@ -22,7 +22,7 @@ namespace RTE {
 		/// <param name="filename">Path to the file to open for writing. If the directory doesn't exist the stream will fail to open.</param>
 		/// <param name="append">Whether to append to the file if it exists, or to overwrite it.</param>
 		/// <returns>An error return value signaling success or any particular failure. Anything below 0 is an error signal.</returns>
-		int Create(const std::string &fileName, bool append = false);
+		bool Create(const std::string &fileName, bool append = false);
 #pragma endregion
 
 #pragma region Getters

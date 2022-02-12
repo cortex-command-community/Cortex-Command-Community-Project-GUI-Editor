@@ -21,7 +21,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="fileName">Path to the file to open for reading. If the file doesn't exist the stream will fail to open.</param>
 		/// <returns>An error return value signaling success or any particular failure.  Anything below 0 is an error signal.</returns>
-		int Create(const std::string &fileName);
+		bool Create(const std::string &fileName);
 #pragma endregion
 
 #pragma region Getters and Setters

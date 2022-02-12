@@ -5,18 +5,17 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	int GUIReader::Create(const std::string &fileName) {
+	bool GUIReader::Create(const std::string &fileName) {
 		m_FilePath = std::filesystem::path(fileName).generic_string();
 
 		if (m_FilePath.empty()) {
-			return -1;
+			return false;
 		}
 		// Extract the file name and module name from the path
 		m_FileName = m_FilePath.substr(m_FilePath.find_last_of("/\\") + 1);
 
 		m_Stream = std::make_unique<std::ifstream>(fileName);
-		return m_Stream->good() ? 0 : -1;
+		return m_Stream->good();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

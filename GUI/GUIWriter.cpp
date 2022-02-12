@@ -4,8 +4,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	int GUIWriter::Create(const std::string &fileName, bool append) {
+	bool GUIWriter::Create(const std::string &fileName, bool append) {
 		m_FilePath = fileName;
 
 		// Extract filename and folder path
@@ -14,11 +13,7 @@ namespace RTE {
 		m_FolderPath = m_FilePath.substr(0, slashPos + 1);
 
 		m_Stream = std::make_unique<std::ofstream>(fileName, append ? (std::ios::out | std::ios::app | std::ios::ate) : (std::ios::out | std::ios::trunc));
-
-		if (!m_Stream->good()) {
-			return -1;
-		}
-		return 0;
+		return m_Stream->good();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
