@@ -14,7 +14,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIWriter object in system memory. Create() should be called before using the object.
 		/// </summary>
-		GUIWriter() { Clear(); }
+		GUIWriter() = default;
 
 		/// <summary>
 		/// Makes the GUIWriter object ready for use.
@@ -123,18 +123,13 @@ namespace RTE {
 
 	protected:
 
-		std::unique_ptr<std::ofstream> m_Stream; //!< Stream used for writing to files.
-		std::string m_FilePath; //!< Currently used stream's filepath.
-		std::string m_FolderPath; //!< Only the path to the folder that we are writing a file in, excluding the filename.
-		std::string m_FileName; //!< Only the name of the currently read file, excluding the path.
-		int m_IndentCount; //!< Indentation counter.
+		std::unique_ptr<std::ofstream> m_Stream = nullptr; //!< Stream used for writing to files.
+		std::string m_FilePath = ""; //!< Currently used stream's filepath.
+		std::string m_FolderPath = ""; //!< Only the path to the folder that we are writing a file in, excluding the filename.
+		std::string m_FileName = ""; //!< Only the name of the currently read file, excluding the path.
+		int m_IndentCount = 0; //!< Indentation counter.
 
 	private:
-
-		/// <summary>
-		/// Clears all the member variables of this GUIWriter, effectively resetting the members of this abstraction level only.
-		/// </summary>
-		void Clear();
 
 		// Disallow the use of some implicit methods.
 		GUIWriter(const GUIWriter &reference) = delete;

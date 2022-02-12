@@ -5,16 +5,6 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIInput::Clear() {
-		m_MouseX = 0;
-		m_MouseY = 0;
-		m_PreviousMouseX = 0;
-		m_PreviousMouseY = 0;
-		m_MouseOffsetX = 0;
-		m_MouseOffsetY = 0;
-		m_MouseWheelChange = 0;
-		m_KeyModifier = KeyModifiers::ModNone;
-		m_KeyJoyMouseCursor = false;
-
 		memset(m_KeyboardBuffer, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
 		memset(m_ScanCodeState, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
 		memset(m_MouseButtonsEvents, 0, sizeof(int) * InputConstants::MouseButtonCount);

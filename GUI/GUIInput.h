@@ -207,19 +207,19 @@ namespace RTE {
 		int m_MouseButtonsEvents[InputConstants::MouseButtonCount];
 		int m_MouseButtonsStates[InputConstants::MouseButtonCount];
 
-		int m_MouseX;
-		int m_MouseY;
-		int m_PreviousMouseX;
-		int m_PreviousMouseY;
+		int m_MouseX = 0;
+		int m_MouseY = 0;
+		int m_PreviousMouseX = 0;
+		int m_PreviousMouseY = 0;
 		// These offset the mouse positions so that the cursor is shifted for all events
-		int m_MouseOffsetX;
-		int m_MouseOffsetY;
+		int m_MouseOffsetX = 0;
+		int m_MouseOffsetY = 0;
 
-		int	m_MouseWheelChange; //!< the amount and direction that the mouse wheel has moved.
+		int	m_MouseWheelChange = 0; //!< the amount and direction that the mouse wheel has moved.
 
-		int m_KeyModifier;
+		int m_KeyModifier = KeyModifiers::ModNone;
 
-		bool m_KeyJoyMouseCursor; //!< Whether the keyboard and joysticks also control the mouse.
+		bool m_KeyJoyMouseCursor = false; //!< Whether the keyboard and joysticks also control the mouse.
 
 	private:
 

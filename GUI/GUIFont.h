@@ -37,15 +37,13 @@ public:
         GUIBitmap    *m_Bitmap;
     } FontColor;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Constructor:     GUIFont
-//////////////////////////////////////////////////////////////////////////////////////////
-// Description:     Constructor method used to instantiate a GUIFont object in system
-//                  memory.
-// Arguments:       None.
-
-    explicit GUIFont(const std::string &Name);
+#pragma region Creation
+	/// <summary>
+	/// Constructor method used to instantiate a GUIFont object in system memory.
+	/// </summary>
+	/// <param name="name"></param>
+	explicit GUIFont(const std::string &name) : m_Name(name) {}
+#pragma endregion
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -177,21 +175,21 @@ public:
 
 private:
 
-    GUIBitmap *m_Font;
-    GUIScreen *m_Screen;
+	GUIBitmap *m_Font = nullptr;
+	GUIScreen *m_Screen = nullptr;
     std::vector<FontColor > m_ColorCache;
 
-    int m_FontHeight;
-    int m_MainColor;
-    int m_CurrentColor;
-    GUIBitmap *m_CurrentBitmap;
-    std::string m_Name;
+	int m_FontHeight = 0;
+	int m_MainColor = 15;
+	int m_CurrentColor = m_MainColor;
+	GUIBitmap *m_CurrentBitmap = nullptr;
+	std::string m_Name = "";
     std::array<Character, 256> m_Characters;
 
-    int m_CharIndexCap; // The highest index of valid characters that was read in from the file
+    int m_CharIndexCap = 256; // The highest index of valid characters that was read in from the file
 
-    int m_Kerning; // Spacing between characters
-    int m_Leading; // Spacing between lines
+    int m_Kerning = 0; // Spacing between characters
+    int m_Leading = 0; // Spacing between lines
 };
 };
 #endif

@@ -5,20 +5,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIReader::Clear() {
-		m_Stream = nullptr;
-		m_FilePath.clear();
-		m_CurrentLine = 1;
-		m_PreviousIndent = 0;
-		m_IndentDifference = 0;
-		m_ObjectEndings = 0;
-		m_EndOfStreams = false;
-		m_ReportTabs = "\t";
-		m_FileName.clear();
-		m_SkipIncludes = false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	int GUIReader::Create(const std::string &fileName) {
 		m_FilePath = std::filesystem::path(fileName).generic_string();

@@ -14,7 +14,7 @@ namespace RTE {
 		/// <summary>
 		/// Constructor method used to instantiate a GUIReader object in system memory. Create() should be called before using the object.
 		/// </summary>
-		GUIReader() { Clear(); }
+		GUIReader() = default;
 
 		/// <summary>
 		/// Makes the GUIReader object ready for use.
@@ -144,31 +144,31 @@ namespace RTE {
 			StreamInfo(std::ifstream *stream, const std::string &filePath, int currentLine, int prevIndent) : Stream(stream), FilePath(filePath), CurrentLine(currentLine), PreviousIndent(prevIndent) {}
 
 			// NOTE: These members are owned by the reader that owns this struct, so are not deleted when this is destroyed.
-			std::ifstream *Stream; //!< Currently used stream, is not on the StreamStack until a new stream is opened.
-			std::string FilePath; //!< Currently used stream's filepath.
-			int CurrentLine; //!< The line number the stream is on.
-			int PreviousIndent; //!< Count of tabs encountered on the last line DiscardEmptySpace() discarded.
+			std::ifstream *Stream = nullptr; //!< Currently used stream, is not on the StreamStack until a new stream is opened.
+			std::string FilePath = ""; //!< Currently used stream's filepath.
+			int CurrentLine = 0; //!< The line number the stream is on.
+			int PreviousIndent = 0; //!< Count of tabs encountered on the last line DiscardEmptySpace() discarded.
 		};
 
-		std::unique_ptr<std::ifstream> m_Stream; //!< Currently used stream, is not on the StreamStack until a new stream is opened.
+		std::unique_ptr<std::ifstream> m_Stream = nullptr; //!< Currently used stream, is not on the StreamStack until a new stream is opened.
 		std::stack<StreamInfo> m_StreamStack; //!< Stack of open streams in this GUIReader, each one representing a file opened to read from within another.
-		bool m_EndOfStreams; //!< All streams have been depleted.
+		bool m_EndOfStreams = false; //!< All streams have been depleted.
 
-		std::string m_FilePath; //!< Currently used stream's filepath.
-		std::string m_FileName; //!< Only the name of the currently read file, excluding the path.
+		std::string m_FilePath = ""; //!< Currently used stream's filepath.
+		std::string m_FileName = ""; //!< Only the name of the currently read file, excluding the path.
 
-		int m_PreviousIndent; //!< Count of tabs encountered on the last line DiscardEmptySpace() discarded.
-		int m_IndentDifference; //!< Difference in indentation from the last line to the current line.
-		std::string m_ReportTabs; //!< String containing the proper amount of tabs for the report.
+		int m_PreviousIndent = 0; //!< Count of tabs encountered on the last line DiscardEmptySpace() discarded.
+		int m_IndentDifference = 0; //!< Difference in indentation from the last line to the current line.
+		std::string m_ReportTabs = "\t"; //!< String containing the proper amount of tabs for the report.
 
-		int m_CurrentLine; //!< The line number the stream is on.
-		bool m_SkipIncludes; //!< Indicates whether reader should skip included files.
+		int m_CurrentLine = 0; //!< The line number the stream is on.
+		bool m_SkipIncludes = false;; //!< Indicates whether reader should skip included files.
 
 		/// <summary>
 		/// When NextProperty() has returned false, indicating that there were no more properties to read on that object,
 		/// this is incremented until it matches -m_IndentDifference, and then NextProperty will start returning true again.
 		/// </summary>
-		int m_ObjectEndings;
+		int m_ObjectEndings = 0;
 
 	private:
 
@@ -187,11 +187,6 @@ namespace RTE {
 		/// <returns>Whether there were any stream on the stack to resume.</returns>
 		bool EndIncludeFile();
 #pragma endregion
-
-		/// <summary>
-		/// Clears all the member variables of this GUIReader, effectively resetting the members of this abstraction level only.
-		/// </summary>
-		void Clear();
 
 		// Disallow the use of some implicit methods.
 		GUIReader(const GUIReader &reference) = delete;

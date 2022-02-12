@@ -15,13 +15,13 @@ namespace RTE {
 		/// Constructor method used to instantiate a GUIProperties object in system memory.
 		/// </summary>
 		/// <param name="name">Name of section.</param>
-		GUIProperties() : m_Name("") { Clear(); }
+		GUIProperties() = default;
 
 		/// <summary>
 		/// Constructor method used to instantiate a GUIProperties object in system memory.
 		/// </summary>
 		/// <param name="name">Name of section.</param>
-		explicit GUIProperties(const std::string_view &name) : m_Name(name) { Clear(); }
+		explicit GUIProperties(const std::string_view &name) : m_Name(name) {}
 #pragma endregion
 
 #pragma region Destruction
@@ -185,13 +185,8 @@ namespace RTE {
 			PropEntry(const std::string &name, const std::string &value) : Name(name), Value(value) {}
 		};
 
-		std::string m_Name;
+		std::string m_Name = "";
 		std::vector<PropEntry *> m_PropertyEntries;
-
-		/// <summary>
-		/// Clears all the member variables of this GUIProperties, effectively resetting the members of this abstraction level only.
-		/// </summary>
-		void Clear() { m_PropertyEntries.clear(); }
 
 		// Disallow the use of some implicit methods.
 		GUIProperties(const GUIProperties &reference) = delete;
