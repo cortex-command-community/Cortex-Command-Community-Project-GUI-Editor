@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "GUIPropertyPage.h"
+#include "GUITextBox.h"
 
 namespace RTE {
 
@@ -24,8 +25,8 @@ namespace RTE {
 		int panelHeight = 16;
 		int panelCount = m_Height / panelHeight;
 		for (int i = 0; i < panelCount; ++i) {
-			GUITextPanel *textPanel = new GUITextPanel(m_OwningManager);
-			textPanel->Create(m_Width / 2, i * panelHeight + spacer, m_Width / 2, panelHeight);
+			GUITextBox *textPanel = new GUITextBox(m_OwningManager);
+			textPanel->Create("", m_Width / 2, i * panelHeight + spacer, m_Width / 2, panelHeight);
 			textPanel->SetVisible(false);
 			textPanel->SetSignalTarget(this);
 			AddChild(textPanel);
@@ -56,8 +57,8 @@ namespace RTE {
 		int Spacer = 0;
 		int Size = m_Height / H;
 		for (int i = 0; i < Size; i++) {
-			GUITextPanel *T = new GUITextPanel(m_OwningManager);
-			T->Create(m_Width / 2, i*H + Spacer, m_Width / 2, H);
+			GUITextBox *T = new GUITextBox(m_OwningManager);
+			T->Create("", m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
 			AddChild(T);
@@ -72,7 +73,7 @@ namespace RTE {
 		GUIControl::ChangeSkin(Skin);
 
 		// Change the skin of the text panels
-		for (GUITextPanel *textPanel : m_TextPanelList) {
+		for (GUITextBox *textPanel : m_TextPanelList) {
 			textPanel->ChangeSkin(Skin);
 		}
 
@@ -179,7 +180,7 @@ namespace RTE {
 
 		// Update the text panels
 		for (int i = 0; i < m_TextPanelList.size(); i++) {
-			GUITextPanel *T = m_TextPanelList.at(i);
+			GUITextBox *T = m_TextPanelList.at(i);
 			T->SetVisible(false);
 			T->SetText("");
 
@@ -200,9 +201,9 @@ namespace RTE {
 		bool TextSignal = false;
 
 		// Is this a text panel?
-		std::vector<GUITextPanel *>::iterator it;
+		std::vector<GUITextBox *>::iterator it;
 		for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
-			const GUITextPanel *T = *it;
+			const GUITextBox *T = *it;
 
 			if (Source->GetUniqueID() == T->GetUniqueID()) {
 				TextSignal = true;
@@ -230,7 +231,7 @@ namespace RTE {
 		bool Changed = false;
 
 		for (int i = 0; i < m_TextPanelList.size(); i++) {
-			const GUITextPanel *T = m_TextPanelList.at(i);
+			const GUITextBox *T = m_TextPanelList.at(i);
 
 			if (i < m_PageValues.GetPropertyCount()) {
 				std::string Name;
@@ -252,9 +253,9 @@ namespace RTE {
 		m_PageValues.ClearProperties();
 
 		// Hide the text panels
-		std::vector<GUITextPanel *>::iterator it;
+		std::vector<GUITextBox *>::iterator it;
 		for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
-			GUITextPanel *T = *it;
+			GUITextBox *T = *it;
 			T->SetVisible(false);
 		}
 	}
@@ -262,9 +263,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIPropertyPage::HasTextFocus() {
-		std::vector<GUITextPanel *>::iterator it;
+		std::vector<GUITextBox *>::iterator it;
 		for (it = m_TextPanelList.begin(); it != m_TextPanelList.end(); it++) {
-			const GUITextPanel *T = *it;
+			const GUITextBox *T = *it;
 
 			// Visible & has focus??
 			if (T->GetVisible() && T->HasFocus()) {

@@ -1,7 +1,6 @@
 #ifndef _GUICOMBOBOX_
 #define _GUICOMBOBOX_
 
-//#include "GUITextPanel.h"
 #include "GUIListPanel.h"
 
 namespace RTE {

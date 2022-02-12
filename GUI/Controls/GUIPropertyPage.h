@@ -1,10 +1,11 @@
 #ifndef _GUIPROPERTYPAGE_
 #define _GUIPROPERTYPAGE_
 
-#include "GUITextPanel.h"
 #include "GUIScrollPanel.h"
 
 namespace RTE {
+
+	class GUITextBox;
 
 /// <summary>
 /// A property page control class.
@@ -206,7 +207,7 @@ private:
 	int m_LineColor = 0;
 
     GUIProperties m_PageValues;
-    std::vector<GUITextPanel *> m_TextPanelList;
+    std::vector<GUITextBox *> m_TextPanelList;
 	GUIScrollPanel m_VertScroll;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
