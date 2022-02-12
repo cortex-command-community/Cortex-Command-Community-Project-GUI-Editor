@@ -4,24 +4,9 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIInput::Clear() {
-		memset(m_KeyboardBuffer, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
-		memset(m_ScanCodeState, 0, sizeof(unsigned char) * InputConstants::KeyboardBufferSize);
-		memset(m_MouseButtonsEvents, 0, sizeof(int) * InputConstants::MouseButtonCount);
-		memset(m_MouseButtonsStates, 0, sizeof(int) * InputConstants::MouseButtonCount);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIInput::GetKeyboardBuffer(unsigned char *bufferArray) const {
-		if (bufferArray) { memcpy(bufferArray, m_KeyboardBuffer, sizeof(unsigned char) * InputConstants::KeyboardBufferSize); }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIInput::GetMouseButtons(int *eventsArray, int *statesArray) const {
-		if (eventsArray) { memcpy(eventsArray, m_MouseButtonsEvents, sizeof(int) * InputConstants::MouseButtonCount); }
-		if (statesArray) { memcpy(statesArray, m_MouseButtonsStates, sizeof(int) * InputConstants::MouseButtonCount); }
+		if (eventsArray) { memcpy(eventsArray, m_MouseButtonEvents.data(), sizeof(int) * MouseButtons::MouseButtonCount); }
+		if (statesArray) { memcpy(statesArray, m_MouseButtonStates.data(), sizeof(int) * MouseButtons::MouseButtonCount); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,5 +14,18 @@ namespace RTE {
 	void GUIInput::GetMousePosition(int *mousePosX, int *mousePosY) const {
 		if (mousePosX) { *mousePosX = (m_MouseX + m_MouseOffsetX); }
 		if (mousePosY) { *mousePosY = (m_MouseY + m_MouseOffsetY); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIInput::MouseIsInsideRect(const GUIRect *rect) const {
+		if (rect) {
+			int mousePosX = GetMousePosX();
+			int mousePosY = GetMousePosY();
+			if ((mousePosX >= rect->left) && (mousePosX <= rect->right) && (mousePosY >= rect->top) && (mousePosY <= rect->bottom)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

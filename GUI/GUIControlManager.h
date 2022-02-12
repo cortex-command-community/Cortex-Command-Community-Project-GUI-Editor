@@ -265,15 +265,6 @@ namespace RTE {
 		GUIRect m_DoubleClickRect;
 
 		/// <summary>
-		/// Checks if the mouse point is inside a rectangle.
-		/// </summary>
-		/// <param name="rect">Rectangle</param>
-		/// <param name="mousePosX">Mouse position.</param>
-		/// <param name="mousePosY"></param>
-		/// <returns></returns>
-		bool MouseInRect(const GUIRect *rect, int mousePosX, int mousePosY) const;
-
-		/// <summary>
 		/// Goes through the panel list and selects the topmost ('last', render wise) panel on a specific point.
 		/// </summary>
 		/// <param name="pointX">Mouse Position.</param>

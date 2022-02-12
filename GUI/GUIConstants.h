@@ -12,6 +12,10 @@ namespace RTE {
 	};
 #pragma endregion
 
+#pragma region Input Constants
+	static constexpr int c_KeyboardBufferSize = 256;
+#pragma endregion
+
 #pragma region Event Constants
 	/// <summary>
 	/// Event Types

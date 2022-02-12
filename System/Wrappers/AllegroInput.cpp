@@ -23,9 +23,6 @@ namespace RTE {
 		m_KeyTimer = std::make_unique<Timer>();
 		m_CursorAccelTimer = std::make_unique<Timer>();
 
-		memset(m_KeyboardBuffer, 0, sizeof(uint8_t) * GUIInput::InputConstants::KeyboardBufferSize);
-		memset(m_ScanCodeState, 0, sizeof(uint8_t) * GUIInput::InputConstants::KeyboardBufferSize);
-
 		m_KeyHoldDuration.fill(-1);
 	}
 
@@ -45,25 +42,25 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void AllegroInput::ConvertKeyEvent(int allegroKey, int guilibKey, float elapsedS) {
+	void AllegroInput::ConvertKeyEvent(int allegroKey, int guiKey, float elapsedS) {
 		if (key[allegroKey]) {
-			if (m_KeyHoldDuration.at(guilibKey) < 0) {
-				m_KeyboardBuffer[guilibKey] = GUIInput::InputEvents::Pushed;
-				m_KeyHoldDuration.at(guilibKey) = 0;
-			} else if (m_KeyHoldDuration.at(guilibKey) < m_KeyRepeatDelay) {
-				m_KeyboardBuffer[guilibKey] = GUIInput::InputEvents::None;
+			if (m_KeyHoldDuration.at(guiKey) < 0) {
+				m_KeyboardBuffer[guiKey] = GUIInput::InputEvents::Pushed;
+				m_KeyHoldDuration.at(guiKey) = 0;
+			} else if (m_KeyHoldDuration.at(guiKey) < m_KeyRepeatDelay) {
+				m_KeyboardBuffer[guiKey] = GUIInput::InputEvents::None;
 			} else {
-				m_KeyboardBuffer[guilibKey] = GUIInput::InputEvents::Repeat;
-				m_KeyHoldDuration.at(guilibKey) = 0;
+				m_KeyboardBuffer[guiKey] = GUIInput::InputEvents::Repeat;
+				m_KeyHoldDuration.at(guiKey) = 0;
 			}
-			m_KeyHoldDuration.at(guilibKey) += elapsedS;
+			m_KeyHoldDuration.at(guiKey) += elapsedS;
 		} else {
-			if (m_KeyHoldDuration.at(guilibKey) >= 0) {
-				m_KeyboardBuffer[guilibKey] = GUIInput::InputEvents::Released;
+			if (m_KeyHoldDuration.at(guiKey) >= 0) {
+				m_KeyboardBuffer[guiKey] = GUIInput::InputEvents::Released;
 			} else {
-				m_KeyboardBuffer[guilibKey] = GUIInput::InputEvents::None;
+				m_KeyboardBuffer[guiKey] = GUIInput::InputEvents::None;
 			}
-			m_KeyHoldDuration.at(guilibKey) = -1;
+			m_KeyHoldDuration.at(guiKey) = -1;
 		}
 	}
 
@@ -93,18 +90,19 @@ namespace RTE {
 
 	void AllegroInput::UpdateKeyboardInput(float keyElapsedTime) {
 		// Clear the keyboard buffer, we need it to check for changes
-		memset(m_KeyboardBuffer, 0, sizeof(uint8_t) * GUIInput::InputConstants::KeyboardBufferSize);
-		memset(m_ScanCodeState, 0, sizeof(uint8_t) * GUIInput::InputConstants::KeyboardBufferSize);
-		while (keypressed()) {
-			uint32_t rawkey = readkey();
-			uint8_t ascii = rawkey & 0xff;
-			uint8_t scancode = (rawkey >> 8);
+		m_KeyboardBuffer.fill(0);
+		m_ScanCodeState.fill(0);
 
-			m_ScanCodeState[scancode] = GUIInput::InputEvents::Pushed;
-			m_KeyboardBuffer[ascii] = GUIInput::InputEvents::Pushed;
+		while (keypressed()) {
+			int rawkey = readkey();
+			uint8_t ascii = (rawkey & 0xFF);
+			uint8_t scancode = static_cast<uint8_t>(rawkey >> 8);
+
+			m_ScanCodeState.at(scancode) = GUIInput::InputEvents::Pushed;
+			m_KeyboardBuffer.at(ascii) = GUIInput::InputEvents::Pushed;
 		}
 
-		ConvertKeyEvent(KEY_SPACE, ' ', keyElapsedTime);
+		ConvertKeyEvent(KEY_SPACE, GUIInput::KeyboardKeys::KeySpace, keyElapsedTime);
 		ConvertKeyEvent(KEY_BACKSPACE, GUIInput::KeyboardKeys::KeyBackspace, keyElapsedTime);
 		ConvertKeyEvent(KEY_TAB, GUIInput::KeyboardKeys::KeyTab, keyElapsedTime);
 		ConvertKeyEvent(KEY_ENTER, GUIInput::KeyboardKeys::KeyEnter, keyElapsedTime);
@@ -123,15 +121,43 @@ namespace RTE {
 		m_KeyModifier = GUIInput::KeyModifiers::ModNone;
 
 #ifndef GUI_STANDALONE
-		if (key_shifts & KB_SHIFT_FLAG) { m_KeyModifier |= GUIInput::KeyModifiers::ModShift; }
-		if (key_shifts & KB_ALT_FLAG) { m_KeyModifier |= GUIInput::KeyModifiers::ModAlt; }
-		if (key_shifts & KB_CTRL_FLAG) { m_KeyModifier |= GUIInput::KeyModifiers::ModCtrl; }
-		if (key_shifts & KB_COMMAND_FLAG) { m_KeyModifier |= GUIInput::KeyModifiers::ModCommand; }
+		if (key_shifts & KB_CTRL_FLAG) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModCtrl;
+		} else if (key_shifts & KB_SHIFT_FLAG) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModShift;
+		} else if (key_shifts & KB_ALT_FLAG) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModAlt;
+		}
+		if (m_KeyModifier != GUIInput::KeyModifiers::ModNone) {
+			if ((key_shifts & KB_CTRL_FLAG) && (key_shifts & KB_SHIFT_FLAG) && (key_shifts & KB_ALT_FLAG)) {
+				m_KeyModifier = GUIInput::KeyModifiers::ModCtrlShiftAlt;
+			} else {
+				if ((key_shifts & KB_CTRL_FLAG) && (key_shifts & KB_SHIFT_FLAG)) {
+					m_KeyModifier = GUIInput::KeyModifiers::ModCtrlShift;
+				} else if ((key_shifts & KB_CTRL_FLAG) && (key_shifts & KB_ALT_FLAG)) {
+					m_KeyModifier = GUIInput::KeyModifiers::ModCtrlAlt;
+				}
+			}
+		}
 #else
-		if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) { m_KeyModifier |= GUIInput::KeyModifiers::ModShift; }
-		if (key[KEY_ALT]) { m_KeyModifier |= GUIInput::KeyModifiers::ModAlt; }
-		if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) { m_KeyModifier |= GUIInput::KeyModifiers::ModCtrl; }
-		if (key[KEY_COMMAND]) { m_KeyModifier |= GUIInput::KeyModifiers::ModCommand; }
+		if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModCtrl;
+		} else if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModShift;
+		} else if (key[KEY_ALT]) {
+			m_KeyModifier = GUIInput::KeyModifiers::ModAlt;
+		}
+		if (m_KeyModifier != GUIInput::KeyModifiers::ModNone) {
+			if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && (key[KEY_LSHIFT] || key[KEY_RSHIFT]) && key[KEY_ALT]) {
+				m_KeyModifier = GUIInput::KeyModifiers::ModCtrlShiftAlt;
+			} else {
+				if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && (key[KEY_LSHIFT] || key[KEY_RSHIFT])) {
+					m_KeyModifier = GUIInput::KeyModifiers::ModCtrlShift;
+				} else if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_ALT]) {
+					m_KeyModifier = GUIInput::KeyModifiers::ModCtrlAlt;
+				}
+			}
+		}
 #endif
 	}
 
@@ -142,30 +168,33 @@ namespace RTE {
 
 #ifndef GUI_STANDALONE
 		m_MouseWheelChange = g_UInputMan.MouseWheelMoved();
+#else
+		m_MouseWheelChange = mouse_z;
+		position_mouse_z(0);
 #endif
 
 		if (!m_KeyJoyMouseCursor) {
 			if (mouse_b & AllegroMouseButtons::ButtonLeft) {
-				m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
-				m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
+				m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
+				m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
 			} else {
-				m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
-				m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
+				m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
+				m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
 			}
 		}
 		if (mouse_b & AllegroMouseButtons::ButtonMiddle) {
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonMiddle] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonMiddle] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonMiddle] = GUIInput::InputStates::Down;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonMiddle] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonMiddle] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonMiddle] = GUIInput::InputStates::Down;
 		} else {
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonMiddle] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonMiddle] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonMiddle] = GUIInput::InputStates::Up;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonMiddle] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonMiddle] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonMiddle] = GUIInput::InputStates::Up;
 		}
 		if (mouse_b & AllegroMouseButtons::ButtonRight) {
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonRight] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonRight] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonRight] = GUIInput::InputStates::Down;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonRight] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonRight] == GUIInput::InputStates::Up) ? GUIInput::InputEvents::Pushed : GUIInput::InputEvents::Repeat;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonRight] = GUIInput::InputStates::Down;
 		} else {
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonRight] = (m_MouseButtonsStates[GUIInput::MouseButtons::ButtonRight] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonRight] = GUIInput::InputStates::Up;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonRight] = (m_MouseButtonStates[GUIInput::MouseButtons::ButtonRight] == GUIInput::InputStates::Down) ? GUIInput::InputEvents::Released : GUIInput::InputEvents::None;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonRight] = GUIInput::InputStates::Up;
 		}
 	}
 
@@ -193,18 +222,18 @@ namespace RTE {
 
 		// Button states/presses, Primary - ACTUALLY make either button work, we don't have use for secondary in menus
 		if (g_UInputMan.MenuButtonHeld(UInputMan::MenuCursorButtons::MENU_EITHER)) {
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Repeat;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Repeat;
 		}
 		if (g_UInputMan.MenuButtonPressed(UInputMan::MenuCursorButtons::MENU_EITHER)) {
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Pushed;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Down;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Pushed;
 		} else if (g_UInputMan.MenuButtonReleased(UInputMan::MenuCursorButtons::MENU_EITHER)) {
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Released;
-		} else if (m_MouseButtonsEvents[0] == Released) {
-			m_MouseButtonsStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
-			m_MouseButtonsEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::None;
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::Released;
+		} else if (m_MouseButtonEvents[0] == Released) {
+			m_MouseButtonStates[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputStates::Up;
+			m_MouseButtonEvents[GUIInput::MouseButtons::ButtonLeft] = GUIInput::InputEvents::None;
 		}
 #endif
 	}

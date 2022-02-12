@@ -352,8 +352,8 @@ namespace RTE {
 
 	void GUIListPanel::SelectItem(int X, int Y, int Modifier) {
 		std::vector<Item *>::iterator it;
-		bool Shift = Modifier & GUIInput::KeyModifiers::ModShift;
-		bool Ctrl = Modifier & GUIInput::KeyModifiers::ModCtrl;
+		bool Shift = Modifier == GUIInput::KeyModifiers::ModShift;
+		bool Ctrl = Modifier == GUIInput::KeyModifiers::ModCtrl;
 
 		// If multiselect is disabled, then clear all the items
 		// If multiselect is enabled, but no useful modifier keys are down,

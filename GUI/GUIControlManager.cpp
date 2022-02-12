@@ -124,18 +124,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlManager::MouseInRect(const GUIRect *Rect, int X, int Y) const {
-		if (!Rect) {
-			return false;
-		}
-		if (X >= Rect->left && X <= Rect->right && Y >= Rect->top && Y <= Rect->bottom) {
-			return true;
-		}
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	GUIControl * GUIControlManager::FindTopControl(int pointX, int pointY) {
 		for (std::vector<GUIControl *>::reverse_iterator controlItr = m_ControlList.rbegin(); controlItr != m_ControlList.rend(); controlItr++) {
 			if (GUIControl *control = *controlItr) {
@@ -438,7 +426,7 @@ namespace RTE {
 			// Check for a double click
 			for (int i = 0; i < 3; i++) {
 				if (buttonPushed & (1 << i)) {
-					if (currentTime - m_LastMouseDown[i] < (float)(m_DoubleClickTime) && MouseInRect(&m_DoubleClickRect, mousePosX, mousePosY)) {
+					if (currentTime - m_LastMouseDown[i] < static_cast<float>(m_DoubleClickTime) && m_Input->MouseIsInsideRect(&m_DoubleClickRect)) {
 						m_DoubleClickButtons |= (1 << i);
 					} else {
 						// Setup the first click
@@ -496,8 +484,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::ProcessKeyboardInput(int keyModifier) {
-		std::array<uint8_t, 256> keyBuffer;
-		m_Input->GetKeyboardBuffer(keyBuffer.data());
+		std::array<uint8_t, c_KeyboardBufferSize> keyBuffer = m_Input->GetKeyboardBuffer();
 
 		for (int key = 1; key < keyBuffer.size(); ++key) {
 			switch (keyBuffer[key]) {

@@ -94,8 +94,8 @@ namespace RTE {
 	void GUITextPanel::OnKeyPress(int KeyCode, int Modifier) {
 		// TODO: Figure out what the "performance bitching" is.
 		// Condition here to stop the compiler bitching about performance
-		bool Shift = ((Modifier & GUIInput::KeyModifiers::ModShift) != 0);
-		bool ModKey = ((Modifier & GUIInput::KeyModifiers::ModCtrl) != 0);
+		bool Shift = Modifier == GUIInput::KeyModifiers::ModShift;
+		bool ModKey = Modifier == GUIInput::KeyModifiers::ModCtrl;
 
 		// To convert to allegro's crazy scheme with their keyboard function returning the order of the letter when ctrl is pressed
 		int asciiChar = ModKey ? KeyCode + 96 : KeyCode;
@@ -277,7 +277,7 @@ namespace RTE {
 		std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
 		m_CursorIndex = m_Text.size();
 
-		if (!(Modifier & GUIInput::KeyModifiers::ModShift)) { m_GotSelection = false; }
+		if (Modifier != GUIInput::KeyModifiers::ModShift) { m_GotSelection = false; }
 
 		// Go through each character until we to the mouse point
 		int TX = m_X;
@@ -290,7 +290,7 @@ namespace RTE {
 		}
 
 		// Do a selection if holding the shift button
-		if (Modifier & GUIInput::KeyModifiers::ModShift)
+		if (Modifier == GUIInput::KeyModifiers::ModShift)
 			DoSelection(OldIndex, m_CursorIndex);
 
 		// Update the text

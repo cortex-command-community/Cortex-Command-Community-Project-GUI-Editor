@@ -1,6 +1,8 @@
 #ifndef _GUIINPUT_
 #define _GUIINPUT_
 
+#include "GUIConstants.h"
+
 namespace RTE {
 
 	/// <summary>
@@ -23,46 +25,47 @@ namespace RTE {
 		/// <summary>
 		/// 
 		/// </summary>
-		enum MouseButtons { ButtonLeft, ButtonMiddle, ButtonRight };
+		enum MouseButtons {
+			ButtonNone = -1,
+			ButtonLeft,
+			ButtonMiddle,
+			ButtonRight,
+			MouseButtonCount
+		};
 
 		/// <summary>
 		/// Extra keys
 		/// </summary>
 		enum KeyboardKeys {
 			KeyNone = 0,
-			KeyBackspace = 0x00000008,
-			KeyTab = 0x00000009,
-			KeyEnter = 0x0000000D,
-			KeyEscape = 0x0000001B,
-			KeyLeftArrow = 0x00000086,
-			KeyRightArrow = 0x00000087,
-			KeyUpArrow = 0x00000088,
-			KeyDownArrow = 0x00000089,
-			KeyInsert = 0x00000095,
-			KeyDelete = 0x00000096,
-			KeyHome = 0x00000097,
-			KeyEnd = 0x00000098,
-			KeyPageUp = 0x00000099,
-			KeyPageDown = 0x0000009A
+			KeyBackspace = 0x08,
+			KeyTab = 0x09,
+			KeyEnter = 0x0D,
+			KeyEscape = 0x1B,
+			KeySpace = 0x20,
+			KeyLeftArrow = 0x86,
+			KeyRightArrow = 0x87,
+			KeyUpArrow = 0x88,
+			KeyDownArrow = 0x89,
+			KeyInsert = 0x95,
+			KeyDelete = 0x96,
+			KeyHome = 0x97,
+			KeyEnd = 0x98,
+			KeyPageUp = 0x99,
+			KeyPageDown = 0x9A
 		};
 
 		/// <summary>
 		/// Modifiers
 		/// </summary>
-		enum KeyModifiers {
-			ModNone = 0x00,
-			ModShift = 0x01,
-			ModCtrl = 0x02,
-			ModAlt = 0x04,
-			ModCommand = 0x08
-		};
+		enum KeyModifiers { ModNone, ModCtrl, ModShift, ModAlt, ModCtrlShift, ModCtrlAlt, ModAltShift, ModCtrlShiftAlt };
 
 #pragma region Creation
 		/// <summary>
 		/// Constructor method used to instantiate a GUIInput object in system memory.
 		/// </summary>
 		/// <param name="keyJoyMouseCursor">Whether the keyboard and joysticks also can control the mouse cursor.</param>
-		explicit GUIInput(bool keyJoyMouseCursor = false) : m_KeyJoyMouseCursor(keyJoyMouseCursor) { Clear(); }
+		explicit GUIInput(bool keyJoyMouseCursor = false) : m_KeyJoyMouseCursor(keyJoyMouseCursor) {}
 #pragma endregion
 
 #pragma region Destruction
@@ -84,8 +87,7 @@ namespace RTE {
 		/// <summary>
 		/// Copies the keyboard buffer into an array. The keyboard buffer is ordered by ASCII code and each entry contains a GUInput::Event enum state.
 		/// </summary>
-		/// <param name="bufferArray">Buffer array.</param>
-		void GetKeyboardBuffer(unsigned char *bufferArray) const;
+		const std::array<uint8_t, c_KeyboardBufferSize> & GetKeyboardBuffer() const { return m_KeyboardBuffer; }
 
 		/// <summary>
 		/// Gets the key modifiers.
@@ -98,14 +100,14 @@ namespace RTE {
 		/// </summary>
 		/// <param name="ascii"></param>
 		/// <returns></returns>
-		unsigned char GetAsciiState(unsigned char ascii) const { return m_KeyboardBuffer[ascii]; }
+		uint8_t GetAsciiState(uint8_t ascii) const { return m_KeyboardBuffer.at(ascii); }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="scanCode"></param>
 		/// <returns></returns>
-		unsigned char GetScanCodeState(unsigned char scanCode) const { return m_ScanCodeState[scanCode]; }
+		uint8_t GetScanCodeState(uint8_t scanCode) const { return m_ScanCodeState.at(scanCode); }
 #pragma endregion
 
 #pragma region Mouse Handling
@@ -183,6 +185,15 @@ namespace RTE {
 		/// <param name="mouseOffsetX">The new offset from the GUI upper left corner to the screen upper left corner.</param>
 		/// <param name="mouseOffsetY"></param>
 		void SetMouseOffset(int mouseOffsetX, int mouseOffsetY) { m_MouseOffsetX = mouseOffsetX; m_MouseOffsetY = mouseOffsetY; }
+
+		/// <summary>
+		/// Checks if the mouse point is inside a rectangle.
+		/// </summary>
+		/// <param name="rect">Rectangle</param>
+		/// <param name="mousePosX">Mouse position.</param>
+		/// <param name="mousePosY"></param>
+		/// <returns></returns>
+		bool MouseIsInsideRect(const GUIRect *rect) const;
 #pragma endregion
 
 #pragma region Virtual Methods
@@ -194,18 +205,13 @@ namespace RTE {
 
 	protected:
 
-		enum InputConstants {
-			KeyboardBufferSize = 256,
-			MouseButtonCount = 3
-		};
-
 		// Keyboard buffer holding the key states
-		unsigned char m_KeyboardBuffer[InputConstants::KeyboardBufferSize];
-		unsigned char m_ScanCodeState[InputConstants::KeyboardBufferSize];
+		std::array<uint8_t, c_KeyboardBufferSize> m_KeyboardBuffer = {};
+		std::array<uint8_t, c_KeyboardBufferSize> m_ScanCodeState = {};
 
 		// Mouse button states. Order: Left, Middle, Right
-		int m_MouseButtonsEvents[InputConstants::MouseButtonCount];
-		int m_MouseButtonsStates[InputConstants::MouseButtonCount];
+		std::array<int, MouseButtons::MouseButtonCount> m_MouseButtonEvents = {};
+		std::array<int, MouseButtons::MouseButtonCount> m_MouseButtonStates = {};
 
 		int m_MouseX = 0;
 		int m_MouseY = 0;
@@ -222,11 +228,6 @@ namespace RTE {
 		bool m_KeyJoyMouseCursor = false; //!< Whether the keyboard and joysticks also control the mouse.
 
 	private:
-
-		/// <summary>
-		/// Clears all the member variables of this GUIInput, effectively resetting the members of this abstraction level only.
-		/// </summary>
-		void Clear();
 
 		// Disallow the use of some implicit methods.
 		GUIInput(const GUIInput &reference) = delete;

@@ -19,7 +19,7 @@ namespace RTE {
 		/// Constructor method used to instantiate a AllegroInput object in system memory.
 		/// </summary>
 		/// <param name="keyJoyMouseCursor">Whether the keyboard and joysticks also can control the mouse cursor.</param>
-		AllegroInput(bool keyJoyMouseCursor = false);
+		explicit AllegroInput(bool keyJoyMouseCursor = false);
 #pragma endregion
 
 #pragma region Concrete Methods
