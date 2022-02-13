@@ -181,7 +181,7 @@ namespace RTE {
 				AddEvent(GUIEventType::Notification, GUIEventCode::Closed);
 
 				// Set the text to the item in the list panel
-				GUIListPanel::Item* Item = m_ListPanel->GetSelected();
+				GUIListBox::Item* Item = m_ListPanel->GetSelected();
 				if (Item) {
 					m_TextPanel->SetText(Item->m_Name);
 				} else {
@@ -192,7 +192,7 @@ namespace RTE {
 
 			if (m_DropDownStyle == DropDownList) {
 				// Set the text to the item in the list panel
-				if (const GUIListPanel::Item* Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
+				if (const GUIListBox::Item* Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
 			}
 		}
 	}
@@ -258,7 +258,7 @@ namespace RTE {
 		m_ListPanel->DeleteItem(Index);
 
 		// Update the selection
-		const GUIListPanel::Item *Item = m_ListPanel->GetSelected();
+		const GUIListBox::Item *Item = m_ListPanel->GetSelected();
 		if (!Item) {
 			m_ListPanel->SetSelectedIndex(0);
 			Item = m_ListPanel->GetSelected();
@@ -278,7 +278,7 @@ namespace RTE {
 		m_OldSelection = Index;
 
 		// Set the text to the item in the list panel
-		if (const GUIListPanel::Item *Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
+		if (const GUIListBox::Item *Item = m_ListPanel->GetSelected()) { m_TextPanel->SetText(Item->m_Name); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,7 +288,7 @@ namespace RTE {
 		if (m_OldSelection >= 0 && m_OldSelection < m_ListPanel->GetItemList()->size() && m_OldSelection != m_ListPanel->GetSelectedIndex()) {
 			m_ListPanel->SetSelectedIndex(m_OldSelection);
 			// Set the text to the item in the list panel
-			if (const GUIListPanel::Item *Item = m_ListPanel->GetSelected()) {
+			if (const GUIListBox::Item *Item = m_ListPanel->GetSelected()) {
 				m_TextPanel->SetText(Item->m_Name);
 				return true;
 			}
@@ -299,7 +299,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIListPanel::Item * GUIComboBox::GetItem(int Index) {
+	GUIListBox::Item * GUIComboBox::GetItem(int Index) {
 		return m_ListPanel->GetItem(Index);
 	}
 

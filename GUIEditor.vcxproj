@@ -150,7 +150,6 @@
     <ClCompile Include="GUI\GUISkin.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\GUIWriter.cpp" />
-    <ClCompile Include="GUI\Panels\GUIListPanel.cpp" />
     <ClCompile Include="GUI\Panels\GUIScrollPanel.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
@@ -195,7 +194,6 @@
     <ClInclude Include="GUI\GUISkin.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\GUIWriter.h" />
-    <ClInclude Include="GUI\Panels\GUIListPanel.h" />
     <ClInclude Include="GUI\Panels\GUIScrollPanel.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="System\Wrappers\AllegroInput.h" />

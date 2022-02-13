@@ -270,7 +270,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::SelectActiveControlFromParentList() const {
-		if (const GUIListPanel::Item *selectedItem = m_CollectionBoxList->GetSelected()) {
+		if (const GUIListBox::Item *selectedItem = m_CollectionBoxList->GetSelected()) {
 			// Try to find the box of that name, and select it
 			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name.substr(selectedItem->m_Name.find_first_not_of('\t'), std::string::npos));
 			if (control) {
@@ -297,7 +297,7 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorManager::SelectActiveControlFromChildrenList() const {
-		if (const GUIListPanel::Item *selectedItem = m_ControlsInCollectionBoxList->GetSelected()) {
+		if (const GUIListBox::Item *selectedItem = m_ControlsInCollectionBoxList->GetSelected()) {
 			// Try to find the control of that name, and select it
 			GUIControl *control = m_WorkspaceManager->GetControl(selectedItem->m_Name);
 			if (control) {

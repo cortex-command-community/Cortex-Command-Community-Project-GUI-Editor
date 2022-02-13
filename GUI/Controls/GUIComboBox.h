@@ -1,13 +1,12 @@
 #ifndef _GUICOMBOBOX_
 #define _GUICOMBOBOX_
 
-#include "GUIListPanel.h"
+#include "GUIListBox.h"
 
 namespace RTE {
 
 	class Entity;
 	class GUILabel;
-	class GUIListBox;
 
 	/// <summary>
 	/// A ComboBoxButton control class.
@@ -298,7 +297,7 @@ namespace RTE {
 		// Arguments:       Index.
 		// Returns:         Pointer to the item structure. 0 if the index was invalid.
 
-		GUIListPanel::Item * GetItem(int Index);
+		GUIListBox::Item * GetItem(int Index);
 
 
 		//////////////////////////////////////////////////////////////////////////////////////////
@@ -308,7 +307,7 @@ namespace RTE {
 		// Arguments:       Index.
 		// Returns:         Pointer to the item structure. 0 if nothing valid is selected.
 
-		GUIListPanel::Item * GetSelectedItem() { return GetItem(GetSelectedIndex()); }
+		GUIListBox::Item * GetSelectedItem() { return GetItem(GetSelectedIndex()); }
 
 
 		//////////////////////////////////////////////////////////////////////////////////////////
