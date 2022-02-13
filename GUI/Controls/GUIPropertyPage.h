@@ -1,7 +1,7 @@
 #ifndef _GUIPROPERTYPAGE_
 #define _GUIPROPERTYPAGE_
 
-#include "GUIScrollPanel.h"
+#include "GUIScrollbar.h"
 
 namespace RTE {
 
@@ -208,7 +208,7 @@ private:
 
     GUIProperties m_PageValues;
     std::vector<GUITextBox *> m_TextPanelList;
-	GUIScrollPanel m_VertScroll;
+	GUIScrollbar m_VertScroll;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// Method:          BuildBitmap

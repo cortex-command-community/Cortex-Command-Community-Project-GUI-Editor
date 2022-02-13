@@ -14,13 +14,13 @@ namespace RTE {
 
 		// Initial size & positions
 		m_HorzScroll.Create("", 0 + m_ScrollBarPadding, m_Height - m_ScrollBarThickness - m_ScrollBarPadding, m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
-		m_HorzScroll.SetOrientation(GUIScrollPanel::Horizontal);
+		m_HorzScroll.SetOrientation(GUIScrollbar::Horizontal);
 		m_HorzScroll.SetVisible(false);
 		m_HorzScroll.SetValue(0);
 		m_HorzScroll.SetSignalTarget(this);
 
 		m_VertScroll.Create("", m_Width - m_ScrollBarThickness - m_ScrollBarPadding, 0 + m_ScrollBarPadding, m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
-		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.SetOrientation(GUIScrollbar::Vertical);
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
@@ -41,13 +41,13 @@ namespace RTE {
 
 		// Initial size & positions
 		m_HorzScroll.Create("", 0 + m_ScrollBarPadding, m_Height - m_ScrollBarThickness - m_ScrollBarPadding, m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
-		m_HorzScroll.SetOrientation(GUIScrollPanel::Horizontal);
+		m_HorzScroll.SetOrientation(GUIScrollbar::Horizontal);
 		m_HorzScroll.SetVisible(false);
 		m_HorzScroll.SetValue(0);
 		m_HorzScroll.SetSignalTarget(this);
 
 		m_VertScroll.Create("", m_Width - m_ScrollBarThickness - m_ScrollBarPadding, 0 + m_ScrollBarPadding, m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
-		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.SetOrientation(GUIScrollbar::Vertical);
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);

@@ -14,8 +14,8 @@ namespace RTE {
 		m_PageValues.ClearProperties();
 		m_TextPanelList.clear();
 
-		m_VertScroll.Create(m_Width - 12, 0, 12, m_Height);
-		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.Create("", m_Width - 12, 0, 12, m_Height);
+		m_VertScroll.SetOrientation(GUIScrollbar::Vertical);
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
@@ -44,8 +44,8 @@ namespace RTE {
 		m_Height = std::max(m_Height, m_MinHeight);
 
 		// Create the vertical scrollbar
-		m_VertScroll.Create(m_Width - 12, 0, 12, m_Height);
-		m_VertScroll.SetOrientation(GUIScrollPanel::Vertical);
+		m_VertScroll.Create("", m_Width - 12, 0, 12, m_Height);
+		m_VertScroll.SetOrientation(GUIScrollbar::Vertical);
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
