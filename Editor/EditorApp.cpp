@@ -197,6 +197,9 @@ namespace RTEGUI {
 						OnSaveButton();
 					} else if (controlName == "SaveAsButton") {
 						OnSaveButton(true);
+					} else if (controlName == "TestPanelButton") {
+						m_EditorManager->GetTestPanel()->SetEnabled(!m_EditorManager->GetTestPanel()->GetEnabled());
+						m_EditorManager->GetTestPanel()->SetVisible(!m_EditorManager->GetTestPanel()->GetVisible());
 					} else if (controlName == "QuitButton") {
 						OnQuitButton();
 					} else if (controlName.substr(0, 2).compare("C_") == 0) {
@@ -251,6 +254,7 @@ namespace RTEGUI {
 		m_EditorManager->GetCurrentSelection().DrawSelectionBox(m_Screen.get(), m_Input.get());
 		m_EditorManager->GetLeftColumn()->Draw(m_Screen.get());
 		m_EditorManager->GetRightColumn()->Draw(m_Screen.get());
+		if (m_EditorManager->GetTestPanel()->GetVisible()) { m_EditorManager->GetTestPanel()->Draw(m_Screen.get()); }
 		m_EditorManager->GetToolBar()->Draw(m_Screen.get());
 
 		if (m_ZoomWorkspace) {

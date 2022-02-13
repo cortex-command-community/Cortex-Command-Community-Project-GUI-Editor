@@ -3,6 +3,11 @@
 #include "GUICheckbox.h"
 #include "GUILabel.h"
 #include "GUITextBox.h"
+#include "GUIComboBox.h"
+#include "GUIProgressBar.h"
+#include "GUIRadioButton.h"
+#include "GUISlider.h"
+#include "GUITab.h"
 
 #include "allegro.h"
 
@@ -116,7 +121,7 @@ namespace RTEGUI {
 		toolBarStrip->SetDrawColor(makecol(16, 16, 16));
 		toolBarStrip->SetDrawType(GUICollectionBox::DrawType::Color);
 
-		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", toolBarStrip, 370, 0, 100, 20));
+		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", toolBarStrip, 430, 0, 100, 20));
 		frameTimeLabel->SetText("Frame Time: 0");
 
 		GUIButton *toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("NewButton", "BUTTON", m_ToolBar.get(), 0, 0, 60, 20));
@@ -129,10 +134,13 @@ namespace RTEGUI {
 		toolBarButton->SetText("Save");
 		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("SaveAsButton", "BUTTON", m_ToolBar.get(), 240, 0, 60, 20));
 		toolBarButton->SetText("Save As");
-		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", m_ToolBar.get(), 300, 0, 60, 20));
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("TestPanelButton", "BUTTON", m_ToolBar.get(), 300, 0, 60, 20));
+		toolBarButton->SetText("Test");
+		toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("QuitButton", "BUTTON", m_ToolBar.get(), 360, 0, 60, 20));
 		toolBarButton->SetText("Quit");
 
 		CreateRootControl();
+		CreateTestPanel();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,6 +151,72 @@ namespace RTEGUI {
 		m_RootControl = rootCollectionBox;
 		m_CollectionBoxList->AddItem(m_RootControl->GetName());
 		m_CollectionBoxList->SetSelectedIndex(0);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void EditorManager::CreateTestPanel() {
+		m_TestPanel.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlTestPanel", "COLLECTIONBOX", m_EditorBase.get(), 0, m_ToolBar->GetPosY() + m_ToolBar->GetHeight(), 190, 510)));
+		m_TestPanel->SetDrawType(GUICollectionBox::DrawType::Panel);
+		m_TestPanel->SetEnabled(false);
+		m_TestPanel->SetVisible(false);
+
+		GUIButton *testButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("TestButton", "BUTTON", m_TestPanel.get(), 10, 10, 100, 20));
+		testButton->SetText("Button");
+
+		GUICheckbox *testCheckbox = dynamic_cast<GUICheckbox *>(m_EditorControlManager->AddControl("TestCheckbox", "CHECKBOX", m_TestPanel.get(), 10, 35, 100, 20));
+		testCheckbox->SetText("Checkbox");
+
+		GUIComboBox *testComboBox = dynamic_cast<GUIComboBox *>(m_EditorControlManager->AddControl("TestComboBox", "COMBOBOX", m_TestPanel.get(), 10, 60, 100, 20));
+		testComboBox->SetDropHeight(50);
+		testComboBox->AddItem("ComboBox");
+		testComboBox->AddItem("ComboBox");
+		testComboBox->AddItem("ComboBox");
+		testComboBox->AddItem("ComboBox");
+		testComboBox->SetSelectedIndex(0);
+
+		GUILabel *testLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("TestLabel", "LABEL", m_TestPanel.get(), 10, 85, 100, 20));
+		testLabel->SetText("Label");
+
+		GUIListBox *testListBox = dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("TestListBox", "LISTBOX", m_TestPanel.get(), 10, 110, 100, 60));
+		testListBox->AddItem("ListBox");
+		testListBox->AddItem("ListBox");
+		testListBox->AddItem("ListBox");
+		testListBox->AddItem("ListBox");
+		testListBox->AddItem("ListBox");
+
+		GUIProgressBar *testProgressBar = dynamic_cast<GUIProgressBar *>(m_EditorControlManager->AddControl("TestProgressBar", "PROGRESSBAR", m_TestPanel.get(), 10, 178, 100, 20));
+		testProgressBar->SetValue(50);
+
+		GUIRadioButton *testRadioButton1 = dynamic_cast<GUIRadioButton *>(m_EditorControlManager->AddControl("TestRadioButton1", "RADIOBUTTON", m_TestPanel.get(), 10, 200, 100, 20));
+		testRadioButton1->SetText("RadioButton1");
+		testRadioButton1->SetCheck(true);
+
+		GUIRadioButton *testRadioButton2 = dynamic_cast<GUIRadioButton *>(m_EditorControlManager->AddControl("TestRadioButton2", "RADIOBUTTON", m_TestPanel.get(), 10, 225, 100, 20));
+		testRadioButton2->SetText("RadioButton2");
+
+		GUIScrollbar *testScrollBar1 = dynamic_cast<GUIScrollbar *>(m_EditorControlManager->AddControl("TestScrollBar1", "SCROLLBAR", m_TestPanel.get(), 10, 250, 100, 20));
+
+		GUIScrollbar *testScrollBar2 = dynamic_cast<GUIScrollbar *>(m_EditorControlManager->AddControl("TestScrollBar2", "SCROLLBAR", m_TestPanel.get(), 125, 250, 20, 100));
+		testScrollBar2->SetOrientation(GUIScrollbar::Orientation::Vertical);
+
+		GUISlider *testSlider1 = dynamic_cast<GUISlider *>(m_EditorControlManager->AddControl("TestSlider1", "SLIDER", m_TestPanel.get(), 10, 270, 100, 20));
+
+		GUISlider *testSlider2 = dynamic_cast<GUISlider *>(m_EditorControlManager->AddControl("TestSlider2", "SLIDER", m_TestPanel.get(), 150, 250, 20, 100));
+		testSlider2->SetOrientation(GUISlider::Orientation::Vertical);
+
+		GUITab *testTab1 = dynamic_cast<GUITab *>(m_EditorControlManager->AddControl("TestTab1", "TAB", m_TestPanel.get(), 10, 295, 100, 20));
+		testTab1->SetText("Tab");
+		testTab1->SetCheck(true);
+
+		GUITab *testTab2 = dynamic_cast<GUITab *>(m_EditorControlManager->AddControl("TestTab2", "TAB", m_TestPanel.get(), 10, 320, 100, 20));
+		testTab2->SetText("Tab");
+
+		GUITextBox *testTextBox1 = dynamic_cast<GUITextBox *>(m_EditorControlManager->AddControl("TestTextBox1", "TEXTBOX", m_TestPanel.get(), 10, 345, 100, 20));
+
+		GUITextBox *testTextBox2 = dynamic_cast<GUITextBox *>(m_EditorControlManager->AddControl("TestTextBox2", "TEXTBOX", m_TestPanel.get(), 10, 370, 100, 20));
+		testTextBox2->SetReadOnly(true);
+		testTextBox2->SetText("TextBox");
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

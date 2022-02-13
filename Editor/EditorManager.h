@@ -41,6 +41,11 @@ namespace RTEGUI {
 		/// Creates the root CollectionBox for the edited document and adds it to the CollectionBox list.
 		/// </summary>
 		void CreateRootControl();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void CreateTestPanel();
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -91,6 +96,12 @@ namespace RTEGUI {
 		/// </summary>
 		/// <returns>Pointer to the PropertyPage GUIPropertyPage.</returns>
 		GUIPropertyPage * GetPropertyPage() const { return m_PropertyPage.get(); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		GUICollectionBox * GetTestPanel() const { return m_TestPanel.get(); }
 
 		/// <summary>
 		/// Gets the top level (root) Control of the workspace.
@@ -294,6 +305,8 @@ namespace RTEGUI {
 		std::unique_ptr<GUIPropertyPage> m_PropertyPage = nullptr; //!< Panel that displays and allows editing the properties of the currently selected element in the workspace.
 		std::unique_ptr<GUIListBox> m_CollectionBoxList = nullptr; //!< List box containing all the active top and sub level CollectionBoxes in the workspace.
 		std::unique_ptr<GUIListBox> m_ControlsInCollectionBoxList = nullptr; //!< List box containing all the controls that are children of the currently selected CollectionBox.
+
+		std::unique_ptr<GUICollectionBox> m_TestPanel = nullptr;
 
 		std::unique_ptr<GUIControlManager> m_WorkspaceManager = nullptr; //!< The GUIControlManager that handles the workspace.
 
