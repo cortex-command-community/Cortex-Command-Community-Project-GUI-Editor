@@ -1,14 +1,12 @@
 #ifndef _GUISLIDER_
 #define _GUISLIDER_
 
-#include "GUIScrollPanel.h"
-
 namespace RTE {
 
 /// <summary>
 /// A slider control class.
 /// </summary>
-class GUISlider : public GUIScrollPanel {
+class GUISlider : public GUIControl {
 
 public:
 
@@ -268,6 +266,15 @@ private:
 	int m_EndThickness = 0;
 	int m_OldValue = 0;
 
+	int m_Minimum = 0;
+	int m_Maximum = 100;
+	int m_Value = 0;
+	int m_ValueResolution = 1; //!< How much the value increases/decreases on each mouse wheel change when scrolling.
+
+	int m_KnobPosition = 0;
+	int m_KnobLength = 0;
+	bool m_GrabbedKnob = false;
+	int m_GrabbedPos = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Method:          BuildBitmap
