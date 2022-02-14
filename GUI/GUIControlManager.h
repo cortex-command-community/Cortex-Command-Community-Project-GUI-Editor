@@ -58,13 +58,6 @@ namespace RTE {
 		/// <param name="fileName">Filename.</param>
 		/// <returns>True if successful.</returns>
 		bool SaveLayout(const std::string &fileName) const;
-
-		/// <summary>
-		/// Saves the layout to a Writer class.
-		/// </summary>
-		/// <param name="writer">Writer class.</param>
-		/// <returns>True if successful.</returns>
-		bool SaveLayout(GUIWriter *writer) const;
 #pragma endregion
 
 #pragma region Getters and Setters

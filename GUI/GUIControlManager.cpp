@@ -84,20 +84,11 @@ namespace RTE {
 		if (!writer.Create(fileName)) {
 			return false;
 		}
-		bool saveResult = SaveLayout(&writer);
-		writer.EndWrite();
-		return saveResult;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	bool GUIControlManager::SaveLayout(GUIWriter *writer) const {
-		GUIAssert(writer, "");
-
 		for (GUIControl *control : m_ControlList) {
 			control->Save(writer);
-			writer->NewLine();
+			writer.NewLine(false, 2);
 		}
+		writer.EndWrite();
 		return true;
 	}
 

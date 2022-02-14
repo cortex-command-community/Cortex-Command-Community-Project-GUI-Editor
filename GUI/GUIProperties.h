@@ -3,6 +3,8 @@
 
 namespace RTE {
 
+	class GUIWriter;
+
 	/// <summary>
 	/// A class containing properties for controls and skins.
 	/// </summary>
@@ -141,10 +143,10 @@ namespace RTE {
 		void OverwriteProperties(const GUIProperties *reference, bool appendUndefinedProps = false);
 
 		/// <summary>
-		/// Converts the properties to a string.
+		/// 
 		/// </summary>
-		/// <returns></returns>
-		std::string ToString() const;
+		/// <param name="writer"></param>
+		void Save(GUIWriter &writer);
 #pragma endregion
 
 #pragma region PropertyPage Control Handling

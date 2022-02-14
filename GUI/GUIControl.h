@@ -42,7 +42,7 @@ namespace RTE {
 
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
-			const std::string_view GetControlType() const override { return c_ControlType; } \
+			std::string_view GetControlType() const override { return c_ControlType; } \
 			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIControl::GetRect(posX, posY, width, height); }
 #pragma endregion
 
@@ -105,13 +105,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="writer">Writer.</param>
 		/// <returns>True if successful.</returns>
-		bool Save(GUIWriter *writer);
-
-		/// <summary>
-		/// Convert the properties in the panel to a string.
-		/// </summary>
-		/// <returns></returns>
-		std::string ToString() const;
+		void Save(GUIWriter &writer);
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -565,7 +559,7 @@ namespace RTE {
 		///
 		/// </summary>
 		/// <returns></returns>
-		virtual const std::string_view GetControlType() const { return ""; }
+		virtual std::string_view GetControlType() const { return ""; }
 #pragma endregion
 
 	protected:

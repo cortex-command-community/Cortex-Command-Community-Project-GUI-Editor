@@ -99,69 +99,22 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::Save(GUIWriter *writer) {
-		std::string OutString = "";
-		std::string Name;
-
-		// Get the control to store its properties
+	void GUIControl::Save(GUIWriter &writer) {
 		StoreProperties();
 
-		// Section Header
-		m_Properties.GetPropertyValue("Name", &Name);
+		writer << ("[" + GetName() + "]");
 
-		OutString.append("[");
-		OutString.append(Name);
-		OutString.append("]\n");
+		writer.NewPropertyWithValue("ControlType", GetControlType());
+		writer.NewPropertyWithValue("Parent", m_ParentControl ? m_ParentControl->GetName() : "None");
 
-		// General control values
-		OutString.append("ControlType = ");
-		OutString += GetControlType();
-		OutString.append("\n");
+		writer.NewPropertyWithValue("X", m_ParentControl ? GetRelPosX() : m_X);
+		writer.NewPropertyWithValue("Y", m_ParentControl ? GetRelPosY() : m_Y);
+		writer.NewPropertyWithValue("Width", m_Width);
+		writer.NewPropertyWithValue("Height", m_Height);
+		writer.NewPropertyWithValue("Visible", m_Visible ? "True" : "False");
+		writer.NewPropertyWithValue("Enabled", m_Enabled ? "True" : "False");
 
-		// Parent
-		OutString += "Parent = ";
-		if (m_ParentControl) {
-			OutString += m_ParentControl->GetName();
-		} else {
-			OutString += "None";
-		}
-		OutString += "\n";
-
-		// Get the main panel and write its location
-		//GUIControl *Pan = GetPanel();
-		//if (Pan) { OutString.append(Pan->ToString()); }
-
-		// Write out the properties
-		OutString.append(m_Properties.ToString());
-
-		// Write to the writer class
-		*writer << OutString;
-
-		return true;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	std::string GUIControl::ToString() const {
-		std::string OutString = "";
-
-		// Subtract the position from the parent
-		int X = m_X;
-		int Y = m_Y;
-
-		if (m_ParentControl) {
-			X -= m_ParentControl->m_X;
-			Y -= m_ParentControl->m_Y;
-		}
-
-		OutString += WriteValue("X", X);
-		OutString += WriteValue("Y", Y);
-		OutString += WriteValue("Width", m_Width);
-		OutString += WriteValue("Height", m_Height);
-		OutString += WriteValue("Visible", m_Visible);
-		OutString += WriteValue("Enabled", m_Enabled);
-
-		return OutString;
+		m_Properties.Save(writer);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

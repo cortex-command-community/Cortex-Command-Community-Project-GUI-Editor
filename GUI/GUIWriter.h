@@ -83,6 +83,13 @@ namespace RTE {
 		/// </summary>
 		/// <param name="propName">The name of the property to be written.</param>
 		void NewProperty(const std::string &propName) const { NewLine(); *m_Stream << propName + " = "; }
+
+		/// <summary>
+		/// Creates a new line and writes the name of the specified property, followed by its set value.
+		/// </summary>
+		/// <param name="propName">The name of the property to be written.</param>
+		/// <param name="propValue">The value of the property.</param>
+		template <typename Type> void NewPropertyWithValue(const std::string &propName, const Type &propValue) { NewProperty(propName); *this << propValue; }
 #pragma endregion
 
 #pragma region Writer Status
@@ -119,6 +126,7 @@ namespace RTE {
 		GUIWriter & operator<<(const double &var) { *m_Stream << var; return *this; }
 		GUIWriter & operator<<(const char *var) { *m_Stream << var; return *this; }
 		GUIWriter & operator<<(const std::string &var) { *m_Stream << var; return *this; }
+		GUIWriter & operator<<(const std::string_view &var) { *m_Stream << var; return *this; }
 #pragma endregion
 
 	protected:

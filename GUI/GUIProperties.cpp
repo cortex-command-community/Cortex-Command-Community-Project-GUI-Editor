@@ -1,4 +1,5 @@
 #include "GUI.h"
+#include "GUIWriter.h"
 
 namespace RTE {
 
@@ -143,12 +144,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	std::string GUIProperties::ToString() const {
-		std::stringstream outStringStream;
+	void GUIProperties::Save(GUIWriter &writer) {
 		for (const PropEntry *property : m_PropertyEntries) {
-			outStringStream << property->Name << " = " << property->Value << "\n";
+			if (!property->Value.empty()) { writer.NewPropertyWithValue(property->Name, property->Value); }
 		}
-		return outStringStream.str();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
