@@ -122,13 +122,22 @@ namespace RTEGUI {
 
 			bool modCtrl = m_KeyStates.at(KEY_LCONTROL) == pressed || m_KeyStates.at(KEY_RCONTROL) == pressed;
 			bool modShift = m_KeyStates.at(KEY_LSHIFT) == pressed || m_KeyStates.at(KEY_RSHIFT) == pressed;
-
-			if (m_KeyStates.at(KEY_ALT) && m_KeyStates.at(KEY_F4)) { OnQuitButton(); }
+			bool modAlt = m_KeyStates.at(KEY_ALT) == pressed;
 
 			// Escape key - Undo any grab
 			if (m_KeyStates.at(KEY_ESC) == pressed) { m_EditorManager->ClearCurrentSelection(); }
 
 			const EditorSelection &currentSelection = m_EditorManager->GetCurrentSelection();
+
+			if (modAlt) {
+				if (m_KeyStates.at(KEY_F4)) {
+					OnQuitButton();
+				} else if (m_KeyStates.at(KEY_UP) && currentSelection.GetControl()) {
+					currentSelection.GetControl()->ChangeZPosition(ZPosChangeType::MoveUp);
+				} else if (m_KeyStates.at(KEY_DOWN) && currentSelection.GetControl()) {
+					currentSelection.GetControl()->ChangeZPosition(ZPosChangeType::MoveDown);
+				}
+			}
 
 			if (modCtrl) {
 				if (m_KeyStates.at(KEY_C) == pressed && m_PrevKeyStates.at(KEY_C) != pressed) {
@@ -159,7 +168,7 @@ namespace RTEGUI {
 			if (currentSelection.GetControl() && !m_EditorManager->GetPropertyPage()->HasTextFocus()) {
 				if (m_KeyStates.at(KEY_DEL) == pressed) {
 					m_EditorManager->RemoveControl(currentSelection.GetControl());
-				} else {
+				} else if (!modAlt) {
 					bool selectionNudged = false;
 					if (m_KeyStates.at(KEY_UP) == pressed && m_PrevKeyStates.at(KEY_UP) != pressed) {
 						selectionNudged = currentSelection.NudgeSelection(EditorSelection::NudgeDirection::NudgeUp, modShift);

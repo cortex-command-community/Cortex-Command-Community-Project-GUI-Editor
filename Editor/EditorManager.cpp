@@ -102,10 +102,18 @@ namespace RTEGUI {
 		m_CollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("CollectionBoxList", "LISTBOX", listsPanel, 5, collectionBoxListLabel->GetHeight() + 5, 260, 230)));
 		m_CollectionBoxList->SetMouseScrolling(true);
 
+		// TODO: Add buttons for Z pos changing.
+		//GUIButton *collectionBoxChangeZUpButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("CollectionBoxListZChangeUpButton", "BUTTON", listsPanel, 120, 5, 50, 20));
+		//GUIButton *collectionBoxChangeZDownButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("CollectionBoxListZChangeDownButton", "BUTTON", listsPanel, 170, 5, 50, 20));
+
 		GUILabel *controlsInCollectionBoxListLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxListLabel", "LABEL", listsPanel, 10, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 110, 20));
 		controlsInCollectionBoxListLabel->SetText("Container Elements :");
 		m_ControlsInCollectionBoxList.reset(dynamic_cast<GUIListBox *>(m_EditorControlManager->AddControl("ControlsInCollectionBoxList", "LISTBOX", listsPanel, 5, controlsInCollectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetRelPosY() + 235, 260, 220)));
 		m_ControlsInCollectionBoxList->SetMouseScrolling(true);
+
+		// TODO: Add buttons for Z pos changing.
+		//GUIButton *collectionBoxChildChangeZUpButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("CollectionBoxChildrenListZChangeUpButton", "BUTTON", listsPanel, 120, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 50, 20));
+		//GUIButton *collectionBoxChildChangeZDownButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("CollectionBoxChildrenListZChangeDownButton", "BUTTON", listsPanel, 170, collectionBoxListLabel->GetHeight() + m_CollectionBoxList->GetHeight() + 10, 50, 20));
 
 		// Create the workspace area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
