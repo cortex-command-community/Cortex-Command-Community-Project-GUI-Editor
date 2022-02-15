@@ -4,6 +4,13 @@
 namespace RTE {
 
 #pragma region
+	enum class ZPosChangeType {
+		MoveToTop,
+		MoveToBottom,
+		MoveUp,
+		MoveDown
+	};
+
 	enum MouseCursorType {
 		Pointer,
 		Text,

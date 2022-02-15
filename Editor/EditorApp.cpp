@@ -301,7 +301,7 @@ namespace RTEGUI {
 			m_EditorManager->GetWorkspaceManager()->LoadLayout(newFilename, addControls);
 			m_ActiveFileName = newFilename;
 
-			GUIControl *newRootControl = m_EditorManager->GetWorkspaceManager()->GetControlList()->front();
+			GUIControl *newRootControl = m_EditorManager->GetWorkspaceManager()->GetContainerList()->front();
 			newRootControl->Move(m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY());
 			newRootControl->StoreProperties();
 

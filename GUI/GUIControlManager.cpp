@@ -204,11 +204,15 @@ namespace RTE {
 				newControl->Create(name, posX, posY, width, height);
 				newControl->ChangeSkin(m_Skin.get());
 
-				newControl->Setup(this, !m_ControlList.empty() ? m_ControlList.back()->GetPosZ() + 1 : 0);
+				newControl->Setup(this);
 
 				if (parent) { parent->AddChild(newControl); }
 
-				m_ControlList.emplace_back(newControl);
+				if (newControl->IsContainer()) {
+					m_ContainerList.emplace_back(newControl);
+				} else {
+					m_ControlList.emplace_back(newControl);
+				}
 				return newControl;
 			}
 		}
@@ -230,7 +234,7 @@ namespace RTE {
 				newControl->Create(properties);
 				newControl->ChangeSkin(m_Skin.get());
 
-				newControl->Setup(this, !m_ControlList.empty() ? m_ControlList.back()->GetPosZ() + 1 : 0);
+				newControl->Setup(this);
 
 				std::string parent;
 				properties->GetPropertyValue("Parent", &parent);
@@ -238,7 +242,11 @@ namespace RTE {
 				if (parent != "None") {
 					if (GUIControl *parentControl = GetControl(parent)) { parentControl->AddChild(newControl); }
 				}
-				m_ControlList.emplace_back(newControl);
+				if (newControl->IsContainer()) {
+					m_ContainerList.emplace_back(newControl);
+				} else {
+					m_ControlList.emplace_back(newControl);
+				}
 				return newControl;
 			}
 		}
@@ -322,6 +330,66 @@ namespace RTE {
 		for (GUIControl *control : m_ControlList) {
 			control->ChangeSkin(m_Skin.get());
 		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIControlManager::ChangeZPosition(int controlID, ZPosChangeType changeType) {
+		int controlIndex = -1;
+		std::vector<GUIControl *> *controlContainer = nullptr;
+
+		for (int i = 0; i < m_ContainerList.size(); ++i) {
+			if (m_ContainerList[i]->GetUniqueID() == controlID) {
+				controlContainer = &m_ContainerList;
+				controlIndex = i;
+				break;
+			}
+		}
+		if (controlIndex < 0) {
+			for (GUIControl *container : m_ContainerList) {
+				std::vector<GUIControl *> *containerChildren = container->GetChildren();
+				for (int i = 0; i < containerChildren->size(); ++i) {
+					if (containerChildren->at(i)->GetUniqueID() == controlID) {
+						controlContainer = containerChildren;
+						controlIndex = i;
+						break;
+					}
+				}
+			}
+		}
+		if (controlIndex >= 0) {
+			GUIControl *control = controlContainer->at(controlIndex);
+
+			switch (changeType) {
+				case ZPosChangeType::MoveToTop:
+				case ZPosChangeType::MoveUp:
+					if (controlIndex < controlContainer->size() - 1) {
+						if (changeType == ZPosChangeType::MoveToTop) {
+							controlContainer->erase(controlContainer->begin() + controlIndex);
+							controlContainer->emplace_back(control);
+						} else {
+							std::swap(controlContainer->at(controlIndex), controlContainer->at(controlIndex + 1));
+						}
+						return true;
+					}
+					break;
+				case ZPosChangeType::MoveToBottom:
+				case ZPosChangeType::MoveDown:
+					if (controlIndex > 0) {
+						if (changeType == ZPosChangeType::MoveToBottom) {
+							controlContainer->erase(controlContainer->begin() + controlIndex);
+							controlContainer->emplace(controlContainer->begin(), control);
+						} else {
+							std::swap(controlContainer->at(controlIndex), controlContainer->at(controlIndex - 1));
+						}
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,8 +537,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::Draw(GUIScreen *Screen) const {
-		for (GUIControl *control : m_ControlList) {
-			if (control->GetVisible()) { control->Draw(Screen); }
+		for (GUIControl *container : m_ContainerList) {
+			if (container->GetVisible()) { container->Draw(Screen); }
 		}
 	}
 }

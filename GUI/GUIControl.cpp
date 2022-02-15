@@ -243,46 +243,8 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::ChangeZPosition(int changeType) {
-		if (!m_ParentControl) {
-			return;
-		}
-		int Index = -1;
-
-		// Find the child in our children list
-		std::vector<GUIControl *>::iterator it;
-		int Count = 0;
-		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++, Count++) {
-			if (GetUniqueID() == this->GetUniqueID()) {
-				Index = Count;
-				break;
-			}
-		}
-		// Didn't find the child
-		if (Index == -1) {
-			return;
-		}
-		switch (changeType) {
-			// Put the child at the end of the list
-			case GUIControl::ZChange::TopMost:
-				m_ChildControls.erase(m_ChildControls.begin() + Index);
-				m_ChildControls.push_back(this);
-				break;
-
-				// Put the child at the start of the list
-			case GUIControl::ZChange::BottomMost:
-				m_ChildControls.erase(m_ChildControls.begin() + Index);
-				m_ChildControls.insert(m_ChildControls.begin(), this);
-				break;
-			default:
-				break;
-		}
-		// Go through and re-order the Z positions
-		Count = 0;
-		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++, Count++) {
-			GUIControl *P = *it;
-			if (P) { P->SetPosZ(Count); }
-		}
+	bool GUIControl::ChangeZPosition(ZPosChangeType changeType) {
+		return m_ParentControl ? m_OwningManager->ChangeZPosition(m_UniqueID, changeType) : false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,18 +333,12 @@ namespace RTE {
 			child->m_Width = std::max(child->m_Width, 0);
 			child->m_Height = std::max(child->m_Height, 0);
 
-			int zPos = 0;
-			if (!m_ChildControls.empty()) {
-				const GUIControl *lastChild = m_ChildControls.back();
-				zPos = lastChild->GetPosZ() + 1;
-			}
-
 			// Remove the child from any previous parent
 			if (child->m_ParentControl) { child->m_ParentControl->RemoveChild(child->GetName()); }
 
 			// Setup the inherited values
 			child->m_ParentControl = this;
-			child->Setup(m_OwningManager, zPos);
+			child->Setup(m_OwningManager);
 
 			// Add the child to the list
 			m_ChildControls.push_back(child);
@@ -391,15 +347,14 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::Setup(GUIControlManager *manager, int ZPos) {
+	void GUIControl::Setup(GUIControlManager *manager) {
 		m_OwningManager = manager;
-		m_Z = ZPos;
 
 		// Request a new ID
 		m_UniqueID = m_OwningManager->GetUniqueID();
 
-		for (int i = 0; i < m_ChildControls.size(); ++i) {
-			m_ChildControls[i]->Setup(m_OwningManager, i);
+		for (GUIControl *childControl : m_ChildControls) {
+			childControl->Setup(m_OwningManager);
 		}
 	}
 

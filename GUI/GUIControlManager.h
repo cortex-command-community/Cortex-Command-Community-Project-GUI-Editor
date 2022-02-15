@@ -144,6 +144,12 @@ namespace RTE {
 		std::vector<GUIControl *> * GetControlList() { return &m_ControlList; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		std::vector<GUIControl *> * GetContainerList() { return &m_ContainerList; }
+
+		/// <summary>
 		/// Manually creates a control.
 		/// </summary>
 		/// <param name="name">Name.</param>
@@ -206,6 +212,14 @@ namespace RTE {
 		void ChangeSkin(const std::string &skinDir, const std::string &skinFile = "skin.ini");
 
 		/// <summary>
+		/// Changes the Z Position of a control.
+		/// </summary>
+		/// <param name="controlID"></param>
+		/// <param name="type">Change type.</param>
+		/// <returns></returns>
+		bool ChangeZPosition(int controlID, ZPosChangeType changeType);
+
+		/// <summary>
 		/// Updates the GUI every frame
 		/// </summary>
 		/// <param name="ignoreKeyboardEvents">Whether keyboard events should be ignored or not. Used to avoid conflicts when custom keyboard handling for GUI elements is preset.</param>
@@ -235,6 +249,7 @@ namespace RTE {
 		std::unique_ptr<GUISkin> m_Skin = nullptr;
 
 		std::vector<GUIControl *> m_ControlList;
+		std::vector<GUIControl *> m_ContainerList;
 		std::deque<GUIEvent *> m_EventQueue;
 
 		MouseCursorType m_CursorType = MouseCursorType::Pointer;

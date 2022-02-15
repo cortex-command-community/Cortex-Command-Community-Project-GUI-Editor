@@ -119,7 +119,7 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(GUIControl::ZChange::TopMost);
+				m_ListPanel->ChangeZPosition(ZPosChangeType::MoveToTop);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }
@@ -139,7 +139,7 @@ namespace RTE {
 				m_ListPanel->EndUpdate();
 
 				// Make this panel go above the rest
-				m_ListPanel->ChangeZPosition(GUIControl::ZChange::TopMost);
+				m_ListPanel->ChangeZPosition(ZPosChangeType::MoveToTop);
 
 				// Save the current selection
 				if (m_ListPanel->GetSelectedIndex() >= 0 && m_ListPanel->GetSelectedIndex() < m_ListPanel->GetItemList()->size()) { m_OldSelection = m_ListPanel->GetSelectedIndex(); }

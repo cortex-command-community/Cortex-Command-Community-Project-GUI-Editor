@@ -35,11 +35,6 @@ namespace RTE {
 			MOUSE_RIGHT = 0x04,
 		};
 
-		/// <summary>
-		/// Z Change
-		/// </summary>
-		enum ZChange { TopMost, BottomMost };
-
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
 			std::string_view GetControlType() const override { return c_ControlType; } \
@@ -323,22 +318,11 @@ namespace RTE {
 		virtual void GetControlRect(int *posX, int *posY, int *width, int *height) const;
 
 		/// <summary>
-		/// Gets the Z index of the panel.
-		/// </summary>
-		/// <returns></returns>
-		int GetPosZ() const { return m_Z; }
-
-		/// <summary>
-		/// Sets the Z index of the panel.
-		/// </summary>
-		/// <param name="newZ">ZPos.</param>
-		void SetPosZ(int newZ) { m_Z = newZ; }
-
-		/// <summary>
 		/// Changes the Z Position of the panel.
 		/// </summary>
 		/// <param name="type">Change type.</param>
-		void ChangeZPosition(int type);
+		/// <returns></returns>
+		bool ChangeZPosition(ZPosChangeType changeType);
 
 		/// <summary>
 		/// Checks if a point is inside the panel.
@@ -377,8 +361,7 @@ namespace RTE {
 		/// Sets up the panel for use with the manager.
 		/// </summary>
 		/// <param name="manager">Pointer to the manager to use.</param>
-		/// <param name="zPos">ZPosition.</param>
-		void Setup(GUIControlManager *manager, int zPos);
+		void Setup(GUIControlManager *manager);
 
 		/// <summary>
 		/// Removes a child based on name.
@@ -578,8 +561,6 @@ namespace RTE {
 		int m_Y = 0;
 		int m_Width = 0;
 		int m_Height = 0;
-
-		int m_Z = 0;
 
 		bool m_GotFocus = false;
 		bool m_Captured = false;
