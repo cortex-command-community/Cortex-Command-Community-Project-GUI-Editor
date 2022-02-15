@@ -52,18 +52,17 @@ namespace RTE {
 		if (!reader.Create(fileName)) {
 			return false;
 		}
-		std::vector<GUIProperties *> loadedControlProperties;
+		std::vector<std::shared_ptr<GUIProperties>> loadedControlProperties;
 		loadedControlProperties.reserve(50);
 
-		GUIProperties *currentSection = nullptr;
+		std::shared_ptr<GUIProperties> currentSection = nullptr;
 
-		while (!reader.GetStream()->eof()) {
+		while (!reader.EndOfFile()) {
 			std::string line = reader.ReadLine();
 			if (!line.empty()) {
 				if (line.front() == '[' && line.back() == ']') {
-					GUIProperties *section = new GUIProperties(std::string_view(line).substr(1, line.size() - 2));
-					currentSection = section;
-					loadedControlProperties.emplace_back(section);
+					currentSection = std::make_shared<GUIProperties>(std::string_view(line).substr(1, line.size() - 2));
+					loadedControlProperties.emplace_back(currentSection);
 				} else {
 					size_t equalPos = line.find_first_of('=');
 					if (currentSection && equalPos != std::string::npos) { currentSection->AddProperty(reader.TrimString(line.substr(0, equalPos)), reader.TrimString(line.substr(equalPos + 1, std::string::npos))); }
@@ -71,8 +70,8 @@ namespace RTE {
 			}
 		}
 		if (!keepOld) { ClearAllControls(); }
-		for (GUIProperties *controlProperties : loadedControlProperties) {
-			AddControl(controlProperties);
+		for (const std::shared_ptr<GUIProperties> &controlProperties : loadedControlProperties) {
+			AddControl(controlProperties.get());
 		}
 		return true;
 	}
@@ -199,85 +198,51 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::AddControl(const std::string &Name, const std::string &Type, GUIControl *Parent, int X, int Y, int Width, int Height) {
-		// Skip if we already have a control of this name
-		if (GetControl(Name)) {
-			return nullptr;
-		}
-		// Create the control
-		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type);
-		if (!newControl) {
-			return nullptr;
-		}
-		newControl->Create(Name, X, Y, Width, Height);
-		newControl->ChangeSkin(m_Skin.get());
+	GUIControl * GUIControlManager::AddControl(const std::string &name, const std::string &type, GUIControl *parent, int posX, int posY, int width, int height) {
+		if (!GetControl(name)) {
+			if (GUIControl *newControl = GUIControlFactory::CreateControl(this, type)) {
+				newControl->Create(name, posX, posY, width, height);
+				newControl->ChangeSkin(m_Skin.get());
 
-		if (Parent) {
-			int Z = 0;
+				newControl->Setup(this, !m_ControlList.empty() ? m_ControlList.back()->GetPosZ() + 1 : 0);
 
-			// Get the last panel in the list
-			if (!m_ControlList.empty()) {
-				const GUIControl *p = m_ControlList.at(m_ControlList.size() - 1);
-				Z = p->GetZPos() + 1;
+				if (parent) { parent->AddChild(newControl); }
+
+				m_ControlList.emplace_back(newControl);
+				return newControl;
 			}
-			// Setup the panel
-			newControl->Setup(this, Z);
-
-			Parent->AddChild(newControl);
 		}
-		// Add the control to the list
-		m_ControlList.push_back(newControl);
-
-		return newControl;
+		return nullptr;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::AddControl(GUIProperties *Property) {
-		GUIAssert(Property, "");
+	GUIControl * GUIControlManager::AddControl(GUIProperties *properties) {
+		GUIAssert(properties, "");
 
-		// Get the control type and name
-		std::string Type;
-		Property->GetPropertyValue("ControlType", &Type);
-		std::string Name;
-		Property->GetPropertyValue("Name", &Name);
+		std::string type;
+		properties->GetPropertyValue("ControlType", &type);
+		std::string name;
+		properties->GetPropertyValue("Name", &name);
 
-		// Skip if we already have a control of this name
-		if (GetControl(Name)) {
-			return nullptr;
-		}
-		// Create the control
-		GUIControl *newControl = GUIControlFactory::CreateControl(this, Type);
-		if (!newControl) {
-			return nullptr;
-		}
-		newControl->Create(Property);
-		newControl->ChangeSkin(m_Skin.get());
+		if (!GetControl(name)) {
+			if (GUIControl *newControl = GUIControlFactory::CreateControl(this, type)) {
+				newControl->Create(properties);
+				newControl->ChangeSkin(m_Skin.get());
 
-		// Get the parent control
-		std::string Parent;
-		Property->GetPropertyValue("Parent", &Parent);
+				newControl->Setup(this, !m_ControlList.empty() ? m_ControlList.back()->GetPosZ() + 1 : 0);
 
-		GUIControl *Par = GetControl(Parent);
-		if (Par && Parent.compare("None") != 0) {
+				std::string parent;
+				properties->GetPropertyValue("Parent", &parent);
 
-			int Z = 0;
-
-			// Get the last panel in the list
-			if (!m_ControlList.empty()) {
-				const GUIControl *p = m_ControlList.at(m_ControlList.size() - 1);
-				Z = p->GetZPos() + 1;
+				if (parent != "None") {
+					if (GUIControl *parentControl = GetControl(parent)) { parentControl->AddChild(newControl); }
+				}
+				m_ControlList.emplace_back(newControl);
+				return newControl;
 			}
-			// Setup the panel
-			newControl->Setup(this, Z);
-
-			Par->AddChild(newControl);
 		}
-
-		// Add the control to the list
-		m_ControlList.push_back(newControl);
-
-		return newControl;
+		return nullptr;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

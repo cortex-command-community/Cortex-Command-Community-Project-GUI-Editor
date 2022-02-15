@@ -326,13 +326,13 @@ namespace RTE {
 		/// Gets the Z index of the panel.
 		/// </summary>
 		/// <returns></returns>
-		int GetZPos() const { return m_ZPos; }
+		int GetPosZ() const { return m_Z; }
 
 		/// <summary>
 		/// Sets the Z index of the panel.
 		/// </summary>
 		/// <param name="newZ">ZPos.</param>
-		void SetZPos(int newZ) { m_ZPos = newZ; }
+		void SetPosZ(int newZ) { m_Z = newZ; }
 
 		/// <summary>
 		/// Changes the Z Position of the panel.
@@ -579,6 +579,8 @@ namespace RTE {
 		int m_Width = 0;
 		int m_Height = 0;
 
+		int m_Z = 0;
+
 		bool m_GotFocus = false;
 		bool m_Captured = false;
 
@@ -623,8 +625,6 @@ namespace RTE {
 	private:
 
 		GUIRect m_Rect;
-
-		int m_ZPos = 0;
 
 		GUIControl *m_SignalTarget = nullptr;
 	};

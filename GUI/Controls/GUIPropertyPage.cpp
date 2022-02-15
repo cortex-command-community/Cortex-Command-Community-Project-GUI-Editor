@@ -153,7 +153,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !m_Captured) {
 			return;
 		}
 	}

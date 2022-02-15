@@ -1028,7 +1028,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIListBox::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		m_ExternalCapture = IsCaptured();
+		m_ExternalCapture = m_Captured;
 
 		// Over a scrollbar
 		if (m_VertScroll.GetVisible() && m_VertScroll.PointInside(X, Y)) {

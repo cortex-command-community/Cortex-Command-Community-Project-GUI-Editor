@@ -9,6 +9,7 @@ namespace RTE {
 	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
 		m_ChildControls.clear();
 		m_Properties.ClearProperties();
+		m_Properties.SetName(name);
 
 		m_Properties.AddProperty("Name", std::string(name));
 		m_Properties.AddProperty("Anchor", "Left, Top");
@@ -280,7 +281,7 @@ namespace RTE {
 		Count = 0;
 		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++, Count++) {
 			GUIControl *P = *it;
-			if (P) { P->SetZPos(Count); }
+			if (P) { P->SetPosZ(Count); }
 		}
 	}
 
@@ -373,7 +374,7 @@ namespace RTE {
 			int zPos = 0;
 			if (!m_ChildControls.empty()) {
 				const GUIControl *lastChild = m_ChildControls.back();
-				zPos = lastChild->GetZPos() + 1;
+				zPos = lastChild->GetPosZ() + 1;
 			}
 
 			// Remove the child from any previous parent
@@ -392,20 +393,13 @@ namespace RTE {
 
 	void GUIControl::Setup(GUIControlManager *manager, int ZPos) {
 		m_OwningManager = manager;
-		m_ZPos = ZPos;
+		m_Z = ZPos;
 
 		// Request a new ID
 		m_UniqueID = m_OwningManager->GetUniqueID();
 
-		// Set the manager for all the children
-		int Z = 0;
-		std::vector<GUIControl *>::iterator it;
-		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControl *P = *it;
-			if (P) {
-				Z++;
-				P->Setup(manager, Z);
-			}
+		for (int i = 0; i < m_ChildControls.size(); ++i) {
+			m_ChildControls[i]->Setup(m_OwningManager, i);
 		}
 	}
 

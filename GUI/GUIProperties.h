@@ -44,6 +44,12 @@ namespace RTE {
 		/// </summary>
 		/// <returns></returns>
 		std::string GetName() const { return m_Name; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newName"></param>
+		void SetName(const std::string_view &newName) { m_Name = newName; }
 #pragma endregion
 
 #pragma region Property Entry Handling

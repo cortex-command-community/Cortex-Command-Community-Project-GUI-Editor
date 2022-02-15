@@ -156,7 +156,7 @@ namespace RTE {
 
 	void GUILabel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		// If the mouse is over the button, add the clicked notification to the event queue
-		if (PointInside(X, Y) && (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) && IsCaptured()) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
+		if (PointInside(X, Y) && (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) && m_Captured) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
 
 		ReleaseMouse();
 	}

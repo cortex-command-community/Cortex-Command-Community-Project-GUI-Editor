@@ -105,6 +105,12 @@ namespace RTE {
 		bool ReaderOK() const { return m_Stream.get() && !m_Stream->fail() && m_Stream->is_open(); }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool EndOfFile() const { return m_Stream->eof(); }
+
+		/// <summary>
 		/// Makes an error message box pop up for the user that tells them something went wrong with the reading, and where.
 		/// </summary>
 		/// <param name="errorDesc">The message describing what's wrong.</param>

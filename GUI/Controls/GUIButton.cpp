@@ -193,7 +193,7 @@ namespace RTE {
 	void GUIButton::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
 		if (PointInside(X, Y)) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
 
-		if (!IsCaptured()) {
+		if (!m_Captured) {
 			return;
 		}
 
@@ -245,7 +245,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIButton::OnMouseMove(int X, int Y, int Buttons, int Modifier) {
-		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !IsCaptured()) {
+		if (!(Buttons & GUIControl::MouseButtons::MOUSE_LEFT) || !m_Captured) {
 			return;
 		}
 
