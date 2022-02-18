@@ -204,8 +204,6 @@ namespace RTE {
 				newControl->Create(name, posX, posY, width, height);
 				newControl->ChangeSkin(m_Skin.get());
 
-				newControl->Setup(this);
-
 				if (parent) { parent->AddChild(newControl); }
 
 				if (newControl->IsContainer()) {
@@ -233,8 +231,6 @@ namespace RTE {
 			if (GUIControl *newControl = GUIControlFactory::CreateControl(this, type)) {
 				newControl->Create(properties);
 				newControl->ChangeSkin(m_Skin.get());
-
-				newControl->Setup(this);
 
 				std::string parent;
 				properties->GetPropertyValue("Parent", &parent);

@@ -79,12 +79,6 @@ namespace RTE {
 		GUIProperties * GetProperties() { return &m_Properties; }
 
 		/// <summary>
-		/// Adds this panels properties to a properties class.
-		/// </summary>
-		/// <param name="properties">GUIProperties.</param>
-		void BuildProperties(GUIProperties *properties) const;
-
-		/// <summary>
 		/// Gets the control to store the values into properties.
 		/// </summary>
 		virtual void StoreProperties() {}
@@ -356,12 +350,6 @@ namespace RTE {
 		/// <param name="child">Pointer to the panel to add.</param>
 		/// <param name="convertToAbsolutePos"></param>
 		void AddChild(GUIControl *child, bool convertToAbsolutePos = true);
-
-		/// <summary>
-		/// Sets up the panel for use with the manager.
-		/// </summary>
-		/// <param name="manager">Pointer to the manager to use.</param>
-		void Setup(GUIControlManager *manager);
 
 		/// <summary>
 		/// Removes a child based on name.

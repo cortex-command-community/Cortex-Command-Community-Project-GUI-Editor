@@ -295,7 +295,6 @@ namespace RTEGUI {
 		createdControl->StoreProperties();
 		properties.OverwriteProperties(s_SelectionCopyInfo.Properties, true);
 		properties.SetPropertyValue("Name", newControlName);
-		createdControl->BuildProperties(&properties);
 		createdControl->ApplyProperties(&properties);
 		m_PropertyPage->SetPropertyValues(&properties);
 
@@ -587,7 +586,6 @@ namespace RTEGUI {
 			control->StoreProperties();
 			GUIProperties properties;
 			properties.OverwriteProperties(control->GetProperties(), true);
-			control->BuildProperties(&properties);
 			m_PropertyPage->SetPropertyValues(&properties);
 			result = true;
 		}

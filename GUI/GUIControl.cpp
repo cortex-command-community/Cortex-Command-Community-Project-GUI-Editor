@@ -7,29 +7,37 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		m_UniqueID = m_OwningManager->GetUniqueID();
+
 		m_ChildControls.clear();
+
+		m_X = posX;
+		m_Y = posY;
+		m_Width = width;
+		m_Height = height;
+
 		m_Properties.ClearProperties();
 		m_Properties.SetName(name);
 
 		m_Properties.AddProperty("Name", std::string(name));
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
-
-		m_X = posX;
-		m_Y = posY;
-		m_Width = width;
-		m_Height = height;
+		m_Properties.AddProperty("X", m_ParentControl ? m_X - m_ParentControl->m_X : m_X);
+		m_Properties.AddProperty("Y", m_ParentControl ? m_Y - m_ParentControl->m_Y : m_Y);
+		m_Properties.AddProperty("Width", m_Width);
+		m_Properties.AddProperty("Height", m_Height);
+		m_Properties.AddProperty("Visible", m_Visible);
+		m_Properties.AddProperty("Enabled", m_Enabled);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::Create(GUIProperties *reference) {
+		m_UniqueID = m_OwningManager->GetUniqueID();
+
 		m_Properties.AddProperty("Name", "");
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
-
-		reference->GetPropertyValue("Visible", &m_Visible);
-		reference->GetPropertyValue("Enabled", &m_Enabled);
 
 		reference->GetPropertyValue("X", &m_X);
 		reference->GetPropertyValue("Y", &m_Y);
@@ -40,28 +48,6 @@ namespace RTE {
 		reference->GetPropertyValue("Enabled", &m_Enabled);
 
 		m_Properties.OverwriteProperties(reference);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::BuildProperties(GUIProperties *properties) const {
-		GUIAssert(properties, "");
-
-		// Subtract the position from the parent
-		int X = m_X;
-		int Y = m_Y;
-
-		if (m_ParentControl) {
-			X -= m_ParentControl->m_X;
-			Y -= m_ParentControl->m_Y;
-		}
-
-		properties->AddProperty("X", X);
-		properties->AddProperty("Y", Y);
-		properties->AddProperty("Width", m_Width);
-		properties->AddProperty("Height", m_Height);
-		properties->AddProperty("Visible", m_Visible);
-		properties->AddProperty("Enabled", m_Enabled);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,23 +324,9 @@ namespace RTE {
 
 			// Setup the inherited values
 			child->m_ParentControl = this;
-			child->Setup(m_OwningManager);
 
 			// Add the child to the list
 			m_ChildControls.push_back(child);
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::Setup(GUIControlManager *manager) {
-		m_OwningManager = manager;
-
-		// Request a new ID
-		m_UniqueID = m_OwningManager->GetUniqueID();
-
-		for (GUIControl *childControl : m_ChildControls) {
-			childControl->Setup(m_OwningManager);
 		}
 	}
 

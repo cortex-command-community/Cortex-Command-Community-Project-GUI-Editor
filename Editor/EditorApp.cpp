@@ -316,7 +316,6 @@ namespace RTEGUI {
 
 			GUIProperties newRootControlProps;
 			newRootControlProps.OverwriteProperties(newRootControl->GetProperties(), true);
-			newRootControl->BuildProperties(&newRootControlProps);
 
 			m_EditorManager->ClearCurrentSelection();
 			m_EditorManager->SetRootControl(newRootControl);
