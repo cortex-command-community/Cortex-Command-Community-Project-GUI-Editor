@@ -7,43 +7,76 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+	void GUICollectionBox::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 
-		// Make sure the box isn't too small
+		m_Properties.AddProperty("DrawBackground", true);
+		m_Properties.AddProperty("DrawType", DrawType::Color);
+		m_Properties.AddProperty("DrawColor", 0);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUICollectionBox::Create(GUIProperties *reference) {
+		GUIControl::Create(reference);
+
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 
-		// Get the values
-		Props->GetPropertyValue("DrawBackground", &m_DrawBackground);
-		std::string value;
-		Props->GetPropertyValue("DrawType", &value);
-		if (value == "Color") {
-			m_DrawType = DrawType::Color;
-		} else if (value == "Image") {
-			m_DrawType = DrawType::Image;
-		} else if (value == "Panel") {
-			m_DrawType = DrawType::Panel;
-		}
-		Props->GetPropertyValue("DrawColor", &m_DrawColor);
+		m_Properties.AddProperty("DrawBackground", reference->GetPropertyValue<std::string>("DrawBackground"));
+		m_Properties.AddProperty("DrawType", (reference->GetPropertyValue<std::string>("DrawType") == "Color") ? DrawType::Color : DrawType::Image);
+		m_Properties.AddProperty("DrawColor", reference->GetPropertyValue<int>("DrawColor"));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUICollectionBox::~GUICollectionBox() {
-		if (m_Background) {
-			m_Background->Destroy();
-			delete m_Background;
-			m_Background = nullptr;
+	void GUICollectionBox::Move(int newPosX, int newPosY) {
+		int relPosX = newPosX - m_X;
+		int relPosY = newPosY - m_Y;
+		m_X = newPosX;
+		m_Y = newPosY;
+
+		for (GUIControl *childControl : m_Children) {
+			int childPosX;
+			int childPosY;
+			childControl->GetControlRect(&childPosX, &childPosY, nullptr, nullptr);
+			childControl->Move(childPosX + relPosX, childPosY + relPosY);
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+	void GUICollectionBox::Resize(int Width, int Height) {
+		int oldWidth = m_Width;
+		int oldHeight = m_Height;
+		m_Width = Width;
+		m_Height = Height;
 
-		// Build the panel bitmap
+		for (GUIControl *childControl : m_Children) {
+			int childAnchor = childControl->GetAnchor();
+
+			int childPosX;
+			int childPosY;
+			int childWidth;
+			int childHeight;
+			childControl->GetControlRect(&childPosX, &childPosY, &childWidth, &childHeight);
+
+			int destPosX = childPosX;
+			int destPosY = childPosY;
+			int destWidth = childWidth;
+			int destHeight = childHeight;
+
+			if ((childAnchor & GUIControl::Anchor::AnchorRight) && !(childAnchor & GUIControl::Anchor::AnchorLeft)) { destPosX = m_Width - (oldWidth - (destPosX - m_X)) + m_X; }
+			if ((childAnchor & GUIControl::Anchor::AnchorBottom) && !(childAnchor & GUIControl::Anchor::AnchorTop)) { destPosY = m_Height - (oldHeight - (destPosY - m_Y)) + m_Y; }
+			if (destPosX != childPosX || destPosY != childPosX) { childControl->Move(destPosX, destPosY); }
+
+			childPosX -= m_X;
+			childPosY -= m_Y;
+
+			if (childAnchor & GUIControl::Anchor::AnchorLeft && childAnchor & GUIControl::Anchor::AnchorRight) { destWidth = (m_Width - (oldWidth - (childPosX + childWidth))) - destPosX; }
+			if (childAnchor & GUIControl::Anchor::AnchorTop && childAnchor & GUIControl::Anchor::AnchorBottom) { destHeight = (m_Height - (oldHeight - (childPosY + childHeight))) - destPosY; }
+			if (destWidth != childWidth || destHeight != childHeight) { childControl->Resize(destWidth, destHeight); }
+		}
 		BuildBitmap();
 	}
 
@@ -51,139 +84,28 @@ namespace RTE {
 
 	void GUICollectionBox::BuildBitmap() {
 		m_DrawBitmap.reset(m_Skin->CreateBitmap(m_Width, m_Height));
-
-		// Create the button image
 		m_Skin->BuildStandardRect(m_DrawBitmap.get(), "CollectionBox_Panel", 0, 0, m_Width, m_Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::Draw(GUIScreen *Screen) {
-		if (m_DrawBackground) {
-			if (m_DrawType == DrawType::Color) {
-				Screen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(m_DrawColor, Screen->GetBitmap()->GetColorDepth()), true);
-			} else if (m_DrawType == DrawType::Image) {
-				if (m_DrawBitmap && m_DrawBackground) {
-					// Setup the clipping
-					Screen->GetBitmap()->SetClipRect(GetRect());
-
-					// Draw the image
-					m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, nullptr);
-
-					// Get rid of clipping
-					Screen->GetBitmap()->SetClipRect(nullptr);
-				}
-			} else if (m_DrawType == DrawType::Panel && m_DrawBackground) {
-				if (m_DrawBitmap) {
-					GUIRect Rect;
-					SetRect(&Rect, 0, 0, m_Width, m_Height);
-					Screen->DrawBitmapTrans(m_DrawBitmap.get(), m_X, m_Y, &Rect);
-				}
-			}
-		}
-		GUIControl::Draw(Screen);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUICollectionBox::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
-		ReleaseMouse();
-
-		AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUICollectionBox::Move(int X, int Y) {
-		int DX = X - m_X;
-		int DY = Y - m_Y;
-
-		m_X = X;
-		m_Y = Y;
-
-		// Go through all my children moving them
-		std::vector<GUIControl *>::iterator it;
-		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControl *C = *it;
-			int CX;
-			int CY;
-			int CW;
-			int CH;
-			C->GetControlRect(&CX, &CY, &CW, &CH);
-
-			C->Move(CX + DX, CY + DY);
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUICollectionBox::Resize(int Width, int Height) {
-		int OldWidth = m_Width;
-		int OldHeight = m_Height;
-
-		m_Width = Width;
-		m_Height = Height;
-
-		// Go through all my children moving them
-		std::vector<GUIControl *>::iterator it;
-		for (it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControl *C = *it;
-			int CX, CY, CW, CH;
-			int Anchor = C->GetAnchor();
-
-			C->GetControlRect(&CX, &CY, &CW, &CH);
-
-			int DX = CX;
-			int DY = CY;
-			int W = CW;
-			int H = CH;
-
-			// Attached to Right and/or Bottom edges
-			if ((Anchor & GUIControl::Anchor::AnchorRight) && !(Anchor & GUIControl::Anchor::AnchorLeft)) { DX = m_Width - (OldWidth - (CX - m_X)) + m_X; }
-			if ((Anchor & GUIControl::Anchor::AnchorBottom) && !(Anchor & GUIControl::Anchor::AnchorTop)) { DY = m_Height - (OldHeight - (CY - m_Y)) + m_Y; }
-
-			if (DX != CX || DY != CY) { C->Move(DX, DY); }
-
-			CX -= m_X;
-			CY -= m_Y;
-
-			// Attached to opposing edges
-			if (Anchor & GUIControl::Anchor::AnchorLeft && Anchor & GUIControl::Anchor::AnchorRight) { W = (m_Width - (OldWidth - (CX + CW))) - CX; }
-			if (Anchor & GUIControl::Anchor::AnchorTop && Anchor & GUIControl::Anchor::AnchorBottom) { H = (m_Height - (OldHeight - (CY + CH))) - CY; }
-
-			if (W != CW || H != CH) { C->Resize(W, H); }
-		}
+	void GUICollectionBox::ChangeSkin(GUISkin *newSkin) {
+		GUIControl::ChangeSkin(newSkin);
 		BuildBitmap();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::SetDrawImage(GUIBitmap *Bitmap) {
-		m_DrawBitmap.reset(Bitmap);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUICollectionBox::StoreProperties() {
-		m_Properties.AddProperty("DrawBackground", m_DrawBackground);
-		m_Properties.AddProperty("DrawType", m_DrawType == DrawType::Color ? "Color" : "Image");
-		m_Properties.AddProperty("DrawColor", (int)m_DrawColor);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUICollectionBox::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
-
-		// Get the values
-		m_Properties.GetPropertyValue("DrawBackground", &m_DrawBackground);
-		std::string value;
-		m_Properties.GetPropertyValue("DrawType", &value);
-		if (value == "Color") {
-			m_DrawType = DrawType::Color;
-		} else if (value == "Image") {
-			m_DrawType = DrawType::Image;
+	void GUICollectionBox::Draw(GUIScreen *targetScreen) {
+		if (GetDrawBackground()) {
+			targetScreen->GetBitmap()->SetClipRect(GetRect());
+			if (GetDrawType() == DrawType::Color) {
+				targetScreen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(GetDrawColor(), targetScreen->GetBitmap()->GetColorDepth()), true);
+			} else {
+				if (m_DrawBitmap) { m_DrawBitmap->DrawTrans(targetScreen->GetBitmap(), m_X, m_Y, nullptr); }
+			}
+			targetScreen->GetBitmap()->SetClipRect(nullptr);
 		}
-		m_Properties.GetPropertyValue("DrawColor", &m_DrawColor);
+		GUIControl::Draw(targetScreen);
 	}
 }
