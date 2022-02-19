@@ -362,20 +362,4 @@ namespace RTE {
 	void GUIControl::TrackMouseHover(bool Enabled, float Delay) {
 		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
 	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::Draw(GUIScreen *targetScreen) {
-		GUIRect *clippingRect = GetRect();
-		targetScreen->GetBitmap()->AddClipRect(clippingRect);
-
-		for (GUIControl *childControl : m_ChildControls) {
-			if (childControl->GetVisible()) {
-				// Re-set the clipping rect since the last child has messed with it.
-				targetScreen->GetBitmap()->SetClipRect(clippingRect);
-				childControl->Draw(targetScreen);
-			}
-		}
-		targetScreen->GetBitmap()->SetClipRect(nullptr);
-	}
 }

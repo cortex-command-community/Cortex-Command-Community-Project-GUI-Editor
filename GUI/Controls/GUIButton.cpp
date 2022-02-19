@@ -172,8 +172,6 @@ namespace RTE {
 		if (m_Text->OverflowScrollIsActivated() && m_Font->CalculateWidth(m_Text->GetText()) > m_Width - m_BorderSizes->left - m_BorderSizes->right) { BuildBitmap(); }
 
 		m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, &Rect);
-
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

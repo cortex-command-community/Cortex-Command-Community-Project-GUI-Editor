@@ -202,7 +202,6 @@ namespace RTE {
 		} else {
 			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + X + Half - m_KnobImage->GetWidth() / 2, m_Y + m_KnobPosition, nullptr);
 		}
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

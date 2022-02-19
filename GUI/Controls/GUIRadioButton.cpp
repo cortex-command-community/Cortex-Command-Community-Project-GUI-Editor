@@ -81,8 +81,6 @@ namespace RTE {
 		if (!m_Image) {
 			return;
 		}
-		// Setup the clipping
-		Screen->GetBitmap()->SetClipRect(GetRect());
 
 		// Calculate the y position of the base
 		// Make it centered vertically
@@ -118,9 +116,6 @@ namespace RTE {
 			m_Font->SetKerning(m_FontKerning);
 			m_Font->Draw(Screen->GetBitmap(), m_X + (m_ImageRects[0].right - m_ImageRects[0].left), m_Y + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
 		}
-		Screen->GetBitmap()->SetClipRect(nullptr);
-
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

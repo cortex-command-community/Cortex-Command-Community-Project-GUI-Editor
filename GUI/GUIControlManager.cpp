@@ -523,7 +523,7 @@ namespace RTE {
 
 	void GUIControlManager::Draw(GUIScreen *Screen) const {
 		for (GUIControl *container : m_Containers) {
-			if (container->GetVisible()) { container->Draw(Screen); }
+			container->Draw(Screen);
 		}
 	}
 }

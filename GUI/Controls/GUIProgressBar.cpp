@@ -97,22 +97,12 @@ namespace RTE {
 		}
 		if (m_IndicatorImage->GetWidth() + m_Spacing > 0) { Count = Count / (float)(m_IndicatorImage->GetWidth() + m_Spacing); }
 
-		// Setup the clipping
-		GUIRect Rect = *GetRect();
-		Rect.left++;
-		Rect.right -= 2;
-		Screen->GetBitmap()->SetClipRect(&Rect);
-
 		int x = m_X + 2;
 		int Limit = (int)ceil(Count);
 		for (int i = 0; i < Limit; i++) {
 			m_IndicatorImage->Draw(Screen->GetBitmap(), x, m_Y + 2, nullptr);
 			x += m_IndicatorImage->GetWidth() + m_Spacing;
 		}
-
-		Screen->GetBitmap()->SetClipRect(nullptr);
-
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

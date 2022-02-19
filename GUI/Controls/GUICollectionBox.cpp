@@ -97,15 +97,20 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::Draw(GUIScreen *targetScreen) {
-		if (GetDrawBackground()) {
-			targetScreen->GetBitmap()->SetClipRect(GetRect());
-			if (GetDrawType() == DrawType::Color) {
-				targetScreen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(GetDrawColor(), targetScreen->GetBitmap()->GetColorDepth()), true);
-			} else {
-				if (m_DrawBitmap) { m_DrawBitmap->DrawTrans(targetScreen->GetBitmap(), m_X, m_Y, nullptr); }
+		if (m_Visible) {
+			GUIRect *clippingRect = m_ParentControl ? m_ParentControl->GetRect() : GetRect();
+			targetScreen->GetBitmap()->SetClipRect(clippingRect);
+			if (GetDrawBackground()) {
+				if (GetDrawType() == DrawType::Color) {
+					targetScreen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(GetDrawColor(), targetScreen->GetBitmap()->GetColorDepth()), true);
+				} else {
+					if (m_DrawBitmap) { m_DrawBitmap->DrawTrans(targetScreen->GetBitmap(), m_X, m_Y, nullptr); }
+				}
+			}
+			for (GUIControl *childControl : m_Children) {
+				if (childControl->GetVisible()) { childControl->Draw(targetScreen); }
 			}
 			targetScreen->GetBitmap()->SetClipRect(nullptr);
 		}
-		GUIControl::Draw(targetScreen);
 	}
 }

@@ -522,7 +522,7 @@ namespace RTE {
 		/// Draws the panel.
 		/// </summary>
 		/// <param name="targetScreen">Screen class.</param>
-		virtual void Draw(GUIScreen *targetScreen);
+		virtual void Draw(GUIScreen *targetScreen) {}
 #pragma endregion
 
 #pragma region Class Info

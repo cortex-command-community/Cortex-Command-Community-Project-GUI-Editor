@@ -133,8 +133,6 @@ namespace RTE {
 			Y += Size;
 		}
 		Screen->GetBitmap()->DrawRectangle(m_X + m_Width / 2, m_Y + 1, 0, Y - m_Y - Spacer * 2, m_LineColor, false);
-
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -547,9 +547,6 @@ namespace RTE {
 		// Clamp the cursor
 		m_CursorX = std::max(m_CursorX, 0);
 
-		// Setup the clipping
-		Screen->GetBitmap()->SetClipRect(GetRect());
-
 		std::string Text = m_Text.substr(m_StartIndex);
 
 		// Draw the text
@@ -577,8 +574,5 @@ namespace RTE {
 
 		// If we have focus, draw the cursor with hacky blink
 		if (m_GotFocus && (m_CursorBlinkCount++ % 30 > 15)) { Screen->GetBitmap()->DrawRectangle(m_X + m_CursorX + 2, m_Y + m_HeightMargin + m_CursorY + 2, 1, FontHeight - 3, m_CursorColor, true); }
-
-		// Restore normal clipping
-		Screen->GetBitmap()->SetClipRect(nullptr);
 	}
 }

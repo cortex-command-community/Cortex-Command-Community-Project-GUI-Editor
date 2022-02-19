@@ -1122,8 +1122,5 @@ namespace RTE {
 
 		if (m_HorzScroll.GetVisible()) { m_HorzScroll.Draw(Screen); }
 		if (m_VertScroll.GetVisible()) { m_VertScroll.Draw(Screen); }
-
-		// Draw any children
-		GUIControl::Draw(Screen);
 	}
 }

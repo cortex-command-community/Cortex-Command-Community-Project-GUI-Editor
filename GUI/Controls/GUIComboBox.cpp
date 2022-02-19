@@ -99,8 +99,6 @@ namespace RTE {
 
 		// If selected item has a bitmap AND no text to show, just show the bitmap as the selected thing
 		if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, nullptr); }
-
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

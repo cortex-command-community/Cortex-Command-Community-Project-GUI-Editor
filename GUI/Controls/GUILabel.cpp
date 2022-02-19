@@ -53,15 +53,11 @@ namespace RTE {
 
 	void GUILabel::Draw(GUIScreen *Screen) {
 		Draw(Screen->GetBitmap());
-		GUIControl::Draw(Screen);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUILabel::Draw(GUIBitmap *Bitmap, bool overwiteFontColorAndKerning) {
-		// Setup the clipping
-		Bitmap->AddClipRect(GetRect());
-
 		if (m_Font) {
 			if (overwiteFontColorAndKerning) {
 				m_Font->SetColor(m_FontColor);
@@ -139,8 +135,6 @@ namespace RTE {
 			}
 			m_Font->DrawAligned(Bitmap, xPos, yPos, m_Text, m_HorizontalOverflowScroll && textFullWidth > m_Width ? GUIFont::HAlignment::Left : m_HAlignment, m_VerticalOverflowScroll && textFullHeight > m_Height ? GUIFont::VAlignment::Top : m_VAlignment, m_HorizontalOverflowScroll ? textFullWidth : m_Width, m_FontShadow);
 		}
-
-		Bitmap->SetClipRect(nullptr);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

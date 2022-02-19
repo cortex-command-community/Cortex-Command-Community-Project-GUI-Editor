@@ -100,7 +100,7 @@ namespace RTE {
 		if (!clippingRect) {
 			set_clip_rect(m_Bitmap, 0, 0, m_Bitmap->w - 1, m_Bitmap->h - 1);
 		} else {
-			set_clip_rect(m_Bitmap, clippingRect->left, clippingRect->top, clippingRect->right, clippingRect->bottom);
+			set_clip_rect(m_Bitmap, clippingRect->left, clippingRect->top, clippingRect->right - 1, clippingRect->bottom - 1);
 		}
 	}
 
@@ -115,7 +115,7 @@ namespace RTE {
 		if (!clippingRect) {
 			set_clip_rect(m_Bitmap, 0, 0, m_Bitmap->w - 1, m_Bitmap->h - 1);
 		} else {
-			add_clip_rect(m_Bitmap, clippingRect->left, clippingRect->top, clippingRect->right, clippingRect->bottom);
+			add_clip_rect(m_Bitmap, clippingRect->left, clippingRect->top, clippingRect->right - 1, clippingRect->bottom - 1);
 		}
 	}
 
