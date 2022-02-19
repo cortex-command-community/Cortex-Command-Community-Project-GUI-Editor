@@ -124,6 +124,13 @@ namespace RTE {
 		int GetPropertyValue(const std::string &propName, int *propValueArray, int arraySize);
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="propName"></param>
+		/// <returns></returns>
+		template <typename Type> Type GetPropertyValue(const std::string &propName) const { Type propValue; GetPropertyValue(propName, &propValue); return propValue; }
+
+		/// <summary>
 		/// Changes the value of a property.
 		/// </summary>
 		/// <param name="propName">Property name.</param>
