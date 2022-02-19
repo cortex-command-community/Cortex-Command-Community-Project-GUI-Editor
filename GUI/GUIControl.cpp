@@ -98,8 +98,8 @@ namespace RTE {
 		writer.NewPropertyWithValue("Y", m_ParentControl ? GetRelPosY() : m_Y);
 		writer.NewPropertyWithValue("Width", m_Width);
 		writer.NewPropertyWithValue("Height", m_Height);
-		writer.NewPropertyWithValue("Visible", m_Visible ? "True" : "False");
-		writer.NewPropertyWithValue("Enabled", m_Enabled ? "True" : "False");
+		writer.NewPropertyWithValue("Visible", m_Visible);
+		writer.NewPropertyWithValue("Enabled", m_Enabled);
 
 		m_Properties.Save(writer);
 	}

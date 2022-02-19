@@ -54,11 +54,11 @@ namespace RTE {
 	bool GUIProperties::GetPropertyValue(const std::string &propName, bool *propValue) const {
 		GUIAssert(propValue, "");
 
-		std::string returnValue;
+		int returnValue;
 		if (!GetPropertyValue(propName, &returnValue)) {
 			return false;
 		}
-		*propValue = (returnValue == "True") ? true : false;
+		*propValue = returnValue > 0;
 
 		return true;
 	}

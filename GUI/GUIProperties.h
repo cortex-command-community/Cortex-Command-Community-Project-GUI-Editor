@@ -79,7 +79,7 @@ namespace RTE {
 		/// </summary>
 		/// <param name="propName">Property name.</param>
 		/// <param name="propValue">Property value.</param>
-		void AddProperty(const std::string &propName, bool propValue) { AddProperty(propName, std::string(propValue ? "True" : "False")); }
+		void AddProperty(const std::string &propName, bool propValue) { AddProperty(propName, std::to_string(propValue)); }
 
 		/// <summary>
 		/// Gets a string value.
