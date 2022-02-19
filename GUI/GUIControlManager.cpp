@@ -83,7 +83,7 @@ namespace RTE {
 		if (!writer.Create(fileName)) {
 			return false;
 		}
-		for (GUIControl *control : m_ControlList) {
+		for (GUIControl *control : m_AllControls) {
 			control->Save(writer);
 			writer.NewLine(false, 2);
 		}
@@ -102,8 +102,19 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	GUIControl * GUIControlManager::GetControl(const std::string_view &name) const {
+		for (GUIControl *control : m_AllControls) {
+			if (control->GetName() == name) {
+				return control;
+			}
+		}
+		return nullptr;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	GUIControl * GUIControlManager::FindTopControl(int pointX, int pointY) {
-		for (std::vector<GUIControl *>::reverse_iterator controlItr = m_ControlList.rbegin(); controlItr != m_ControlList.rend(); controlItr++) {
+		for (std::deque<GUIControl *>::reverse_iterator controlItr = m_AllControls.rbegin(); controlItr != m_AllControls.rend(); controlItr++) {
 			if (GUIControl *control = *controlItr) {
 				if (GUIControl *topControl = control->TopPanelUnderPoint(pointX, pointY)) {
 					return topControl;
@@ -116,21 +127,9 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUIControl * GUIControlManager::FindBottomControl(int pointX, int pointY) {
-		for (GUIControl *control : m_ControlList) {
-			if (GUIControl *bottomPanel = control->BottomPanelUnderPoint(pointX, pointY)) {
-				return bottomPanel;
-			}
-		}
-		return nullptr;
-	}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	GUIControl * GUIControlManager::GetControl(const std::string_view &Name) const {
-		for (GUIControl *control : m_ControlList) {
-			if (control->GetName() == Name) {
-				return control;
+		for (GUIControl *control : m_AllControls) {
+			if (GUIControl *bottomControl = control->BottomPanelUnderPoint(pointX, pointY)) {
+				return bottomControl;
 			}
 		}
 		return nullptr;
@@ -140,7 +139,7 @@ namespace RTE {
 
 	GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *parent, int depth) {
 		// Default to the root object if no parent specified
-		if (!parent) { parent = m_ControlList.front(); }
+		if (!parent) { parent = m_Containers.front(); }
 		if (!parent) {
 			return nullptr;
 		}
@@ -158,25 +157,27 @@ namespace RTE {
 			return nullptr;
 		}
 
-		// Check children
-		std::vector<GUIControl *> *List = parent->GetChildren();
+		if (parent->IsContainer()) {
+			// Check children
+			std::deque<GUIControl *> *List = parent->GetChildren();
 
-		GUIAssert(List, "");
+			GUIAssert(List, "");
 
-		// Control the depth. If negative, it'll go forever
-		if (depth != 0) {
-			for (std::vector<GUIControl *>::reverse_iterator it = List->rbegin(); it != List->rend(); it++) {
-				// Only check visible controls
-				if ((*it)->GetVisible()) {
-					GUIControl *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
-					if (C) {
-						return C;
+			// Control the depth. If negative, it'll go forever
+			if (depth != 0) {
+				for (std::deque<GUIControl *>::reverse_iterator it = List->rbegin(); it != List->rend(); it++) {
+					// Only check visible controls
+					if ((*it)->GetVisible()) {
+						GUIControl *C = GetControlUnderPoint(pointX, pointY, *it, depth - 1);
+						if (C) {
+							return C;
+						}
 					}
 				}
 			}
 		}
 		// If not asked to search for the root object, return the parent if point is on it
-		return parent == m_ControlList.front() ? nullptr : parent;
+		return parent == m_Containers.front() ? nullptr : parent;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,11 +190,10 @@ namespace RTE {
 
 				if (parent) { parent->AddChild(newControl); }
 
-				if (newControl->IsContainer()) {
-					m_ContainerList.emplace_back(newControl);
-				} else {
-					m_ControlList.emplace_back(newControl);
-				}
+				if (newControl->IsContainer()) { m_Containers.emplace_back(newControl); }
+
+				m_AllControls.emplace_back(newControl);
+
 				return newControl;
 			}
 		}
@@ -221,11 +221,10 @@ namespace RTE {
 				if (parent != "None") {
 					if (GUIControl *parentControl = GetControl(parent)) { parentControl->AddChild(newControl); }
 				}
-				if (newControl->IsContainer()) {
-					m_ContainerList.emplace_back(newControl);
-				} else {
-					m_ControlList.emplace_back(newControl);
-				}
+				if (newControl->IsContainer()) { m_Containers.emplace_back(newControl); }
+
+				m_AllControls.emplace_back(newControl);
+
 				return newControl;
 			}
 		}
@@ -237,13 +236,13 @@ namespace RTE {
 	void GUIControlManager::RemoveControl(const std::string &Name, bool RemoveFromParent) {
 		// NOTE: We can't simply remove it because some controls need to remove extra panels and it's silly to add 'remove' to every control to remove their extra panels (ie. Combobox).
 		// Signals and stuff are also linked in so we just remove the controls from the list and not from memory.
-		for (std::vector<GUIControl *>::iterator controlItr = m_ControlList.begin(); controlItr != m_ControlList.end(); controlItr++) {
+		for (std::deque<GUIControl *>::iterator controlItr = m_Containers.begin(); controlItr != m_Containers.end(); controlItr++) {
 			GUIControl *control = *controlItr;
 			if (control->GetName() == Name) {
 
 				// Just remove controlItr from the list
 				control->SetVisible(false);
-				m_ControlList.erase(controlItr);
+				m_Containers.erase(controlItr);
 
 				// Remove all my children
 				control->RemoveAllChildren();
@@ -259,14 +258,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::ClearAllControls() {
-		for (GUIControl *control : m_ControlList) {
+		for (GUIControl *control : m_Containers) {
 			delete control;
 		}
-		m_ControlList.clear();
-
-		for (GUIEvent *event : m_EventQueue) {
-			delete event;
-		}
+		m_Containers.clear();
+		m_AllControls.clear();
 		m_EventQueue.clear();
 	}
 
@@ -312,11 +308,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControlManager::ChangeSkin(const std::string &SkinDir, const std::string &SkinFilename) {
+	void GUIControlManager::ChangeSkin(const std::string &SkinDir, const std::string &SkinFilename) const {
 		m_Skin->Destroy();
 		m_Skin->Create(SkinDir, SkinFilename);
 
-		for (GUIControl *control : m_ControlList) {
+		for (GUIControl *control : m_AllControls) {
 			control->ChangeSkin(m_Skin.get());
 		}
 	}
@@ -325,18 +321,18 @@ namespace RTE {
 
 	bool GUIControlManager::ChangeZPosition(int controlID, ZPosChangeType changeType) {
 		int controlIndex = -1;
-		std::vector<GUIControl *> *controlContainer = nullptr;
+		std::deque<GUIControl *> *controlContainer = nullptr;
 
-		for (int i = 0; i < m_ContainerList.size(); ++i) {
-			if (m_ContainerList[i]->GetUniqueID() == controlID) {
-				controlContainer = &m_ContainerList;
+		for (int i = 0; i < m_Containers.size(); ++i) {
+			if (m_Containers[i]->GetUniqueID() == controlID) {
+				controlContainer = &m_Containers;
 				controlIndex = i;
 				break;
 			}
 		}
 		if (controlIndex < 0) {
-			for (GUIControl *container : m_ContainerList) {
-				std::vector<GUIControl *> *containerChildren = container->GetChildren();
+			for (GUIControl *container : m_Containers) {
+				std::deque<GUIControl *> *containerChildren = container->GetChildren();
 				for (int i = 0; i < containerChildren->size(); ++i) {
 					if (containerChildren->at(i)->GetUniqueID() == controlID) {
 						controlContainer = containerChildren;
@@ -526,7 +522,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::Draw(GUIScreen *Screen) const {
-		for (GUIControl *container : m_ContainerList) {
+		for (GUIControl *container : m_Containers) {
 			if (container->GetVisible()) { container->Draw(Screen); }
 		}
 	}

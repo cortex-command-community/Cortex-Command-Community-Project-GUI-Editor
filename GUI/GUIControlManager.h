@@ -134,13 +134,13 @@ namespace RTE {
 		/// Gets the control list.
 		/// </summary>
 		/// <returns>Pointer.</returns>
-		std::vector<GUIControl *> * GetControlList() { return &m_ControlList; }
+		std::deque<GUIControl *> * GetControlList() { return &m_AllControls; }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		std::vector<GUIControl *> * GetContainerList() { return &m_ContainerList; }
+		std::deque<GUIControl *> * GetContainerList() { return &m_Containers; }
 
 		/// <summary>
 		/// Manually creates a control.
@@ -248,9 +248,10 @@ namespace RTE {
 		GUIInput *m_Input = nullptr; // Not owned.
 		std::unique_ptr<GUISkin> m_Skin = nullptr;
 
-		std::vector<GUIControl *> m_ControlList;
-		std::vector<GUIControl *> m_ContainerList;
-		std::deque<GUIEvent *> m_EventQueue;
+		std::deque<GUIControl *> m_AllControls = {};
+
+		std::deque<GUIControl *> m_Containers = {};
+		std::deque<GUIEvent> m_EventQueue = {};
 
 		MouseCursorType m_CursorType = MouseCursorType::Pointer;
 

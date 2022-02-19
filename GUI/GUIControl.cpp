@@ -9,7 +9,7 @@ namespace RTE {
 	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
 		m_UniqueID = m_OwningManager->RequestUniqueID();
 
-		m_ChildControls.clear();
+		m_Children.clear();
 
 		m_X = posX;
 		m_Y = posY;
@@ -168,8 +168,8 @@ namespace RTE {
 		m_X = X;
 		m_Y = Y;
 
-		if (moveChildren) {
-			for (GUIControl *childControl : m_ChildControls) {
+		if (m_IsContainer && moveChildren) {
+			for (GUIControl *childControl : m_Children) {
 				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
 			}
 		}
@@ -185,8 +185,10 @@ namespace RTE {
 		m_X = X;
 		m_Y = Y;
 
-		for (GUIControl *childControl : m_ChildControls) {
-			childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
+		if (m_IsContainer) {
+			for (GUIControl *childControl : m_Children) {
+				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
+			}
 		}
 	}
 
@@ -196,8 +198,10 @@ namespace RTE {
 		m_X += dX;
 		m_Y += dY;
 
-		for (GUIControl *childControl : m_ChildControls) {
-			childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
+		if (m_IsContainer) {
+			for (GUIControl *childControl : m_Children) {
+				childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
+			}
 		}
 	}
 
@@ -253,51 +257,31 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUIControl * GUIControl::TopPanelUnderPoint(int x, int y) {
-		if (!PointInside(x, y)) {
+		if ((!m_Visible || !m_Enabled) || !PointInside(x, y)) {
 			return nullptr;
 		}
-		// If this panel is invisible or disabled, this panel is ignored
-		if (!m_Visible || !m_Enabled) {
-			return nullptr;
-		}
-
-		// Go through the children
-		GUIControl *CurPanel = nullptr;
-		std::vector<GUIControl *>::reverse_iterator it;
-		for (it = m_ChildControls.rbegin(); it != m_ChildControls.rend(); it++) {
-			GUIControl *P = *it;
-			if (P) {
-				CurPanel = P->TopPanelUnderPoint(x, y);
-				if (CurPanel != nullptr) {
-					return CurPanel;
+		if (m_IsContainer) {
+			for (std::deque<GUIControl *>::reverse_iterator controlItr = m_Children.rbegin(); controlItr != m_Children.rend(); controlItr++) {
+				if (GUIControl *control = *controlItr) {
+					if (control->TopPanelUnderPoint(x, y)) {
+						return control;
+					}
 				}
 			}
 		}
-
-		// Return this panel
 		return this;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUIControl * GUIControl::BottomPanelUnderPoint(int x, int y) {
-		if (!PointInside(x, y)) {
+		if ((!m_Visible || !m_Enabled) || !PointInside(x, y)) {
 			return nullptr;
 		}
-		// If this panel is invisible or disabled, this panel is ignored
-		if (!m_Visible || !m_Enabled) {
-			return nullptr;
-		}
-
-		// Go through the children
-		GUIControl *CurPanel = nullptr;
-		;
-		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
-			GUIControl *P = *it;
-			if (P) {
-				CurPanel = P->BottomPanelUnderPoint(x, y);
-				if (CurPanel != nullptr) {
-					return CurPanel;
+		if (m_IsContainer) {
+			for (GUIControl *control : m_Children) {
+				if (control->BottomPanelUnderPoint(x, y)) {
+					return control;
 				}
 			}
 		}
@@ -326,7 +310,7 @@ namespace RTE {
 			child->m_ParentControl = this;
 
 			// Add the child to the list
-			m_ChildControls.push_back(child);
+			m_Children.push_back(child);
 		}
 	}
 
@@ -335,10 +319,10 @@ namespace RTE {
 	void GUIControl::RemoveChild(const std::string_view &name) {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (std::vector<GUIControl *>::iterator it = m_ChildControls.begin(); it != m_ChildControls.end(); it++) {
+		for (std::deque<GUIControl *>::iterator it = m_Children.begin(); it != m_Children.end(); it++) {
 			const GUIControl *C = *it;
 			if (C && C->GetName().compare(name) == 0) {
-				m_ChildControls.erase(it);
+				m_Children.erase(it);
 				break;
 			}
 		}
@@ -349,10 +333,10 @@ namespace RTE {
 	void GUIControl::RemoveAllChildren() {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
-		for (const GUIControl *control : m_ChildControls) {
+		for (const GUIControl *control : m_Children) {
 			if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
 		}
-		m_ChildControls.clear();
+		m_Children.clear();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

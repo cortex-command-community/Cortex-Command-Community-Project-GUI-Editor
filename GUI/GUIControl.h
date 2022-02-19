@@ -108,7 +108,7 @@ namespace RTE {
 		/// Gets the children list.
 		/// </summary>
 		/// <returns></returns>
-		std::vector<GUIControl *> * GetChildren() { return &m_ChildControls; }
+		std::deque<GUIControl *> * GetChildren() { return &m_Children; }
 
 		/// <summary>
 		/// Gets the panel's ID.
@@ -562,7 +562,7 @@ namespace RTE {
 		int m_FontKerning = 1;
 
 		GUIProperties m_Properties;
-		std::vector<GUIControl *> m_ChildControls;
+		std::deque<GUIControl *> m_Children = {};
 
 		bool m_IsContainer = false;
 

@@ -196,8 +196,8 @@ namespace RTE {
 
 		// Go through all my RadioButton siblings and un-check them
 		if (m_ParentControl) {
-			std::vector<GUIControl *>::iterator it;
-			std::vector<GUIControl *> *Children = m_ParentControl->GetChildren();
+			std::deque<GUIControl *>::iterator it;
+			std::deque<GUIControl *> *Children = m_ParentControl->GetChildren();
 
 			for (it = Children->begin(); it != Children->end(); it++) {
 				GUIControl *C = *it;

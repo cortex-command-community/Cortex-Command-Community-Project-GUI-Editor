@@ -485,12 +485,13 @@ namespace RTEGUI {
 		if (!MouseInsideBox(mousePosX, mousePosY, controlPosX, controlPosY, controlWidth, controlHeight)) {
 			return nullptr;
 		}
-
-		// Check children. Check in reverse because top most visible control is last in the list.
-		for (std::vector<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
-			GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
-			if (childControl) {
-				return childControl;
+		if (control->IsContainer()) {
+			// Check children. Check in reverse because top most visible control is last in the list.
+			for (std::deque<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
+				GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
+				if (childControl) {
+					return childControl;
+				}
 			}
 		}
 		return control;
