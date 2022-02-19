@@ -50,6 +50,12 @@ namespace RTE {
 
 #pragma region Getters and Setters
 		/// <summary>
+		/// Sets the enabled state of the panel.
+		/// </summary>
+		/// <param name="enabled">Enabled.</param>
+		void SetEnabled(bool enabled) override;
+
+		/// <summary>
 		/// Gets the current drawing type.
 		/// </summary>
 		/// <returns>Type.</returns>

@@ -308,6 +308,7 @@ namespace RTE {
 
 			// Setup the inherited values
 			child->m_ParentControl = this;
+			child->m_Enabled = m_Enabled;
 
 			// Add the child to the list
 			m_Children.push_back(child);
