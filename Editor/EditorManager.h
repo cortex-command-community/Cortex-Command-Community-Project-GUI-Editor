@@ -155,7 +155,7 @@ namespace RTEGUI {
 		/// <summary>
 		/// Removes focus from whatever element currently focused in the editor controls.
 		/// </summary>
-		void RemoveFocus() const { m_EditorControlManager->SetFocus(nullptr); }
+		void RemoveFocus() const { m_EditorControlManager->SetFocusedControl(nullptr); }
 #pragma endregion
 
 #pragma region GUI Element Creation

@@ -566,24 +566,6 @@ namespace RTE {
 
 		bool m_IsContainer = false;
 
-#pragma region Property Handling
-		/// <summary>
-		/// Writes a single value to string.
-		/// </summary>
-		/// <param name="name">Value name.</param>
-		/// <param name="value">Value.</param>
-		/// <returns></returns>
-		std::string WriteValue(const std::string &name, int value) const { return (name + " = " + std::to_string(value) + "\n"); }
-
-		/// <summary>
-		/// Writes a single value to string.
-		/// </summary>
-		/// <param name="name">Value name.</param>
-		/// <param name="value">Value.</param>
-		/// <returns></returns>
-		std::string WriteValue(const std::string &name, bool value) const { return (name + " = " + (value ? "True" : "False") + "\n"); }
-#pragma endregion
-
 		/// <summary>
 		/// Sets up the manager to enable/disable hover tracking of this panel.
 		/// </summary>

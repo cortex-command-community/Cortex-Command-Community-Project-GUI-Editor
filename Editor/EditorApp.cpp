@@ -133,9 +133,9 @@ namespace RTEGUI {
 				if (m_KeyStates.at(KEY_F4)) {
 					OnQuitButton();
 				} else if (m_KeyStates.at(KEY_UP) && currentSelection.GetControl()) {
-					currentSelection.GetControl()->ChangeZPosition(ZPosChangeType::MoveUp);
+					currentSelection.GetControl()->ChangeZPosition(modShift ? ZPosChangeType::MoveToTop : ZPosChangeType::MoveUp);
 				} else if (m_KeyStates.at(KEY_DOWN) && currentSelection.GetControl()) {
-					currentSelection.GetControl()->ChangeZPosition(ZPosChangeType::MoveDown);
+					currentSelection.GetControl()->ChangeZPosition(modShift ? ZPosChangeType::MoveToBottom : ZPosChangeType::MoveDown);
 				}
 			}
 

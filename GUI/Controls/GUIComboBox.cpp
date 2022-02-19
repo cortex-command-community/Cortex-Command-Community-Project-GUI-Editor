@@ -94,6 +94,9 @@ namespace RTE {
 		// Draw the background
 		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
 
+		m_TextPanel->Draw(Screen->GetBitmap());
+		m_ListPanel->Draw(Screen);
+
 		// If selected item has a bitmap AND no text to show, just show the bitmap as the selected thing
 		if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, nullptr); }
 
@@ -163,7 +166,7 @@ namespace RTE {
 				// Hide the list panel
 				m_ListPanel->SetVisible(false);
 				m_ListPanel->ReleaseMouse();
-				m_OwningManager->SetFocus(nullptr);
+				m_OwningManager->SetFocusedControl(nullptr);
 				m_Button.SetPushed(false);
 
 				// Restore the old selection
@@ -175,7 +178,7 @@ namespace RTE {
 				// Hide the list panel
 				m_ListPanel->SetVisible(false);
 				m_ListPanel->ReleaseMouse();
-				m_OwningManager->SetFocus(nullptr);
+				m_OwningManager->SetFocusedControl(nullptr);
 				m_Button.SetPushed(false);
 
 				AddEvent(GUIEventType::Notification, GUIEventCode::Closed);

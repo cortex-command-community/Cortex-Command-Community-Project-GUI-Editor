@@ -93,8 +93,7 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	void GUIControlManager::SetFocus(GUIControl *newFocusedControl) {
+	void GUIControlManager::SetFocusedControl(GUIControl *newFocusedControl) {
 		// Send the LoseFocus event to the old control (if there is one), then send the GainFocus event to the new control.
 		if (m_FocusedControl) { m_FocusedControl->OnLoseFocus(); }
 		m_FocusedControl = newFocusedControl;
@@ -125,11 +124,6 @@ namespace RTE {
 		return nullptr;
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControlManager::AddEvent(GUIEvent *newEvent) {
-		if (newEvent) { m_EventQueue.emplace_back(newEvent); }
-	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

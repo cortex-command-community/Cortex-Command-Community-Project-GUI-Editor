@@ -62,12 +62,6 @@ namespace RTE {
 
 #pragma region Getters and Setters
 		/// <summary>
-		/// Gets the input controller object.
-		/// </summary>
-		/// <returns></returns>
-		GUIInput * GetInputController() { return m_Input; }
-
-		/// <summary>
 		/// Gets the GUIScreen that this GUIControlManager is drawing itself to.
 		/// </summary>
 		/// <returns>Pointer to the GUIScreen that this GUIControlManager is drawing itself to.</returns>
@@ -77,32 +71,13 @@ namespace RTE {
 		/// Gets the Skin object currently in use.
 		/// </summary>
 		/// <returns>A pointer to the currently used skin. Please don't mess it up.</returns>
-		GUISkin * GetSkin() { return m_Skin.get(); }
+		GUISkin * GetSkin() const { return m_Skin.get(); }
 
 		/// <summary>
-		/// Gets an event from the queue.
+		/// Gets the input controller object.
 		/// </summary>
-		/// <param name="eventPtr">Pointer to variable receiving the Event.</param>
-		/// <returns>Returns true when an event was grabbed. Returns false when there was no more events in the queue OR the Event pointer is 0.</returns>
-		bool GetEvent(GUIEvent *eventPtr);
-
-		/// <summary>
-		/// Sets the cursor type.
-		/// </summary>
-		/// <param name="cursorType">Cursor type.</param>
-		void SetCursor(MouseCursorType cursorType) { m_CursorType = cursorType; }
-
-		/// <summary>
-		/// Enables and disables the mouse completely for this.
-		/// </summary>
-		/// <param name="enable">Enable.</param>
-		void EnableMouse(bool enable = true) { m_MouseEnabled = enable; }
-
-		/// <summary>
-		/// Give focus to a panel.
-		/// </summary>
-		/// <param name="newFocusedControl">Control.</param>
-		void SetFocus(GUIControl *newFocusedControl);
+		/// <returns></returns>
+		GUIInput * GetInputController() { return m_Input; }
 
 		/// <summary>
 		/// Sets the absolute position of this entire GUI on the screen. This is useful if the UI's are being drawn in a different area of the screen than the top left corner.
@@ -113,10 +88,28 @@ namespace RTE {
 		void SetPosOnScreen(int posX, int posY) const { m_Input->SetMouseOffset(-posX, -posY); }
 
 		/// <summary>
+		/// Enables and disables the mouse completely for this.
+		/// </summary>
+		/// <param name="enable">Enable.</param>
+		void EnableMouse(bool enable = true) { m_MouseEnabled = enable; }
+
+		/// <summary>
+		/// Sets the cursor type.
+		/// </summary>
+		/// <param name="cursorType">Cursor type.</param>
+		void SetMouseCursorType(MouseCursorType cursorType) { m_CursorType = cursorType; }
+
+		/// <summary>
 		/// Gets a unique ID for a panel.
 		/// </summary>
 		/// <returns></returns>
-		int GetUniqueID() { return m_UniqueIDCounter++; }
+		int RequestUniqueID() { return m_UniqueIDCounter++; }
+
+		/// <summary>
+		/// Give focus to a panel.
+		/// </summary>
+		/// <param name="newFocusedControl">Control.</param>
+		void SetFocusedControl(GUIControl *newFocusedControl);
 #pragma endregion
 
 #pragma region 
@@ -205,11 +198,18 @@ namespace RTE {
 
 #pragma region Concrete Methods
 		/// <summary>
+		/// Gets an event from the queue.
+		/// </summary>
+		/// <param name="eventPtr">Pointer to variable receiving the Event.</param>
+		/// <returns>Returns true when an event was grabbed. Returns false when there was no more events in the queue OR the Event pointer is 0.</returns>
+		bool GetEvent(GUIEvent *eventPtr);
+
+		/// <summary>
 		/// Changes the skin of the controls.
 		/// </summary>
 		/// <param name="skinDir">Skin directory.</param>
 		/// <param name="skinFile"></param>
-		void ChangeSkin(const std::string &skinDir, const std::string &skinFile = "skin.ini");
+		void ChangeSkin(const std::string &skinDir, const std::string &skinFile = "skin.ini") const;
 
 		/// <summary>
 		/// Changes the Z Position of a control.
