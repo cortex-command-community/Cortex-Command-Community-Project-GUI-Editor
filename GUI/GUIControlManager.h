@@ -292,7 +292,7 @@ namespace RTE {
 		/// Add a new event to the queue.
 		/// </summary>
 		/// <param name="event">Event point.</param>
-		void AddEvent(GUIEvent *newEvent);
+		void AddEvent(const GUIEvent &newEvent) { m_EventQueue.emplace_back(newEvent); }
 
 #pragma region Update Breakdown
 		/// <summary>

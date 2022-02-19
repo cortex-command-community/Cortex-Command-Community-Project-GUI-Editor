@@ -93,17 +93,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControlManager::GetEvent(GUIEvent *eventPtr) {
-		if (eventPtr && !m_EventQueue.empty()) {
-			*eventPtr = *m_EventQueue.front();
-			delete m_EventQueue.front();
-			m_EventQueue.pop_front();
-			return true;
-		}
-		return false;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::SetFocus(GUIControl *newFocusedControl) {
 		// Send the LoseFocus event to the old control (if there is one), then send the GainFocus event to the new control.
@@ -316,6 +305,16 @@ namespace RTE {
 		if (m_HoverTrack) { m_HoverTime = static_cast<float>(m_Timer->GetElapsedRealTimeMS()) + (Delay / 1000.0F); }
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIControlManager::GetEvent(GUIEvent *eventPtr) {
+		if (eventPtr && !m_EventQueue.empty()) {
+			*eventPtr = m_EventQueue.front();
+			m_EventQueue.pop_front();
+			return true;
+		}
+		return false;
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
