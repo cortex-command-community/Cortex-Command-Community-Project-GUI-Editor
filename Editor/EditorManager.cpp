@@ -272,15 +272,7 @@ namespace RTEGUI {
 		std::string newControlName;
 		for (int i = 1; i < 1000; ++i) {
 			newControlName = s_SelectionCopyInfo.Name + " - copy " + std::to_string(i);
-			// Check if this name exists
-			bool found = false;
-			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
-				if (control->GetName() == newControlName) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
+			if (!m_WorkspaceManager->GetControl(newControlName)) {
 				break;
 			}
 		}
@@ -332,16 +324,7 @@ namespace RTEGUI {
 			std::string controlName = controlType;
 			std::transform(controlName.begin(), controlName.end(), controlName.begin(), tolower);
 			controlName.append(std::to_string(i));
-
-			// Check if this name exists
-			bool found = false;
-			for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
-				if (control->GetName() == controlName) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
+			if (!m_WorkspaceManager->GetControl(controlName)) {
 				return controlName;
 			}
 		}
