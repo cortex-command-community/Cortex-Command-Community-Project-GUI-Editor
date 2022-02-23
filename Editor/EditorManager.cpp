@@ -27,14 +27,10 @@ namespace RTEGUI {
 		m_WorkspaceManager->Create(screen, input, skinDir, skinFilename);
 
 		m_EditorBase.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorBase", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), screen->GetBitmap()->GetHeight())));
-		m_EditorBase->SetDrawBackground(true);
 		m_EditorBase->SetDrawColor(makecol(32, 32, 32));
-		m_EditorBase->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		m_LeftColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("LeftColumn", "COLLECTIONBOX", nullptr, 0, 0, 285, screen->GetBitmap()->GetHeight())));
-		m_LeftColumn->SetDrawBackground(true);
 		m_LeftColumn->SetDrawColor(makecol(23, 23, 23));
-		m_LeftColumn->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		GUICollectionBox *editorControls = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("EditorControlsPanel", "COLLECTIONBOX", m_LeftColumn.get(), 0, 30, 270, 155));
 		editorControls->SetDrawType(GUICollectionBox::DrawType::Image);
@@ -90,9 +86,7 @@ namespace RTEGUI {
 		m_PropertyPage.reset(dynamic_cast<GUIPropertyPage *>(m_EditorControlManager->AddControl("PropertyPage", "PROPERTYPAGE", m_LeftColumn.get(), 5, 220, 260, 310)));
 
 		m_RightColumn.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("RightColumn", "COLLECTIONBOX", nullptr, 955, 0, 285, screen->GetBitmap()->GetHeight())));
-		m_RightColumn->SetDrawBackground(true);
 		m_RightColumn->SetDrawColor(makecol(23, 23, 23));
-		m_RightColumn->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		GUICollectionBox *listsPanel = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ControlListsPanel", "COLLECTIONBOX", m_RightColumn.get(), 15, 30, m_RightColumn->GetWidth() - 15, 505));
 		listsPanel->SetDrawType(GUICollectionBox::DrawType::Image);
@@ -117,19 +111,12 @@ namespace RTEGUI {
 
 		// Create the workspace area showing the editing box
 		GUICollectionBox *workspace = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("Workspace", "COLLECTIONBOX", m_EditorBase.get(), m_WorkspacePosX, m_WorkspacePosY, m_WorkspaceWidth, m_WorkspaceHeight));
-		workspace->SetDrawBackground(true);
 		workspace->SetDrawColor(makecol(64, 64, 64));
-		workspace->SetDrawType(GUICollectionBox::DrawType::Color);
 
 		m_ToolBar.reset(dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBar", "COLLECTIONBOX", nullptr, 0, 0, screen->GetBitmap()->GetWidth(), 30)));
-		m_ToolBar->SetDrawBackground(false);
+		m_ToolBar->SetDrawColor(makecol(16, 16, 16));
 
-		GUICollectionBox *toolBarStrip = dynamic_cast<GUICollectionBox *>(m_EditorControlManager->AddControl("ToolBarStrip", "COLLECTIONBOX", m_ToolBar.get(), 0, 0, m_ToolBar->GetWidth(), 30));
-		toolBarStrip->SetDrawBackground(true);
-		toolBarStrip->SetDrawColor(makecol(16, 16, 16));
-		toolBarStrip->SetDrawType(GUICollectionBox::DrawType::Color);
-
-		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", toolBarStrip, 430, 0, 100, 20));
+		GUILabel *frameTimeLabel = dynamic_cast<GUILabel *>(m_EditorControlManager->AddControl("FrameTimer", "LABEL", m_ToolBar.get(), 430, 0, 100, 20));
 		frameTimeLabel->SetText("Frame Time: 0");
 
 		GUIButton *toolBarButton = dynamic_cast<GUIButton *>(m_EditorControlManager->AddControl("NewButton", "BUTTON", m_ToolBar.get(), 0, 0, 60, 20));
@@ -471,8 +458,7 @@ namespace RTEGUI {
 		if (control->IsContainer()) {
 			// Check children. Check in reverse because top most visible control is last in the list.
 			for (std::deque<GUIControl *>::reverse_iterator childListEntry = control->GetChildren()->rbegin(); childListEntry != control->GetChildren()->rend(); childListEntry++) {
-				GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY);
-				if (childControl) {
+				if (GUIControl *childControl = ControlUnderMouse(*childListEntry, mousePosX, mousePosY)) {
 					return childControl;
 				}
 			}

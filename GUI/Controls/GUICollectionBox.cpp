@@ -11,7 +11,7 @@ namespace RTE {
 		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 
 		m_Properties.AddProperty("DrawBackground", true);
-		m_Properties.AddProperty("DrawType", DrawType::Color);
+		m_Properties.AddProperty("DrawType", "Color");
 		m_Properties.AddProperty("DrawColor", 0);
 	}
 
