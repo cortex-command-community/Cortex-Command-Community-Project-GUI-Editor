@@ -24,9 +24,6 @@ namespace RTE {
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
-
-		AddChild(&m_HorzScroll);
-		AddChild(&m_VertScroll);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,9 +48,6 @@ namespace RTE {
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
-
-		AddChild(&m_HorzScroll);
-		AddChild(&m_VertScroll);
 
 		// Get the properties
 		bool Multi = false;

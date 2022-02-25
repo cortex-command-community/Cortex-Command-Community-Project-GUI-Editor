@@ -19,7 +19,6 @@ namespace RTE {
 		m_VertScroll.SetVisible(false);
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
-		AddChild(&m_VertScroll);
 
 		int spacer = 2;
 		int panelHeight = 16;
@@ -29,7 +28,6 @@ namespace RTE {
 			textPanel->Create("", m_Width / 2, i * panelHeight + spacer, m_Width / 2, panelHeight);
 			textPanel->SetVisible(false);
 			textPanel->SetSignalTarget(this);
-			AddChild(textPanel);
 			m_TextPanelList.emplace_back(textPanel);
 		}
 	}
@@ -50,8 +48,6 @@ namespace RTE {
 		m_VertScroll.SetValue(0);
 		m_VertScroll.SetSignalTarget(this);
 
-		AddChild(&m_VertScroll);
-
 		// Create the text panels
 		int H = 16;
 		int Spacer = 0;
@@ -61,8 +57,6 @@ namespace RTE {
 			T->Create("", m_Width / 2, i*H + Spacer, m_Width / 2, H);
 			T->SetVisible(false);
 			T->SetSignalTarget(this);
-			AddChild(T);
-
 			m_TextPanelList.push_back(T);
 		}
 	}

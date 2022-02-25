@@ -49,7 +49,6 @@ namespace RTE {
 		m_TextPanel->SetVisible(true);
 		//m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 		m_TextPanel->SetSignalTarget(this);
-		AddChild(m_TextPanel.get());
 
 		m_ListPanel = std::make_unique<GUIListBox>(m_OwningManager);
 		m_ListPanel->Create("", m_X, m_Y + m_Height, m_Width, m_DropHeight);
@@ -59,14 +58,11 @@ namespace RTE {
 		m_ListPanel->SetMultiSelect(false);
 		m_ListPanel->SetHotTracking(true);
 		m_ListPanel->EnableScrollbars(false, true);
-		//if (m_ParentControl) { m_ParentControl->AddChild(m_ListPanel.get()); }
-		AddChild(m_ListPanel.get());
 
 		m_CreatedList = true;
 
 		m_Button.Create(m_X + m_Width - 17, m_Y, 17, m_Height);
 		m_Button.SetSignalTarget(this);
-		AddChild(&m_Button);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

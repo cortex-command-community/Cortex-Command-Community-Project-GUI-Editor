@@ -19,7 +19,6 @@ namespace RTE {
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
-			AddChild(m_Text.get());
 		}
 		if (!m_Icon) { m_Icon = std::make_unique<AllegroBitmap>(); }
 		if (!m_BorderSizes) { m_BorderSizes = std::make_unique<GUIRect>(); }
@@ -41,7 +40,6 @@ namespace RTE {
 			m_Text->SetFont(m_Font);
 			m_Text->SetVisible(false);
 			m_Text->SetEnabled(false);
-			AddChild(m_Text.get());
 		}
 		if (!m_Icon) { m_Icon = std::make_unique<AllegroBitmap>(); }
 		if (!m_BorderSizes) { m_BorderSizes = std::make_unique<GUIRect>(); }
