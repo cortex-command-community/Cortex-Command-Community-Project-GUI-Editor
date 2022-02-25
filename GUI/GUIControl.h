@@ -126,7 +126,7 @@ namespace RTE {
 		/// Sets the enabled state of the panel.
 		/// </summary>
 		/// <param name="enabled">Enabled.</param>
-		virtual void SetEnabled(bool enabled) { m_Enabled = enabled; }
+		void SetEnabled(bool enabled) { m_Enabled = enabled; }
 
 		/// <summary>
 		/// Gets the visibility of the panel.
