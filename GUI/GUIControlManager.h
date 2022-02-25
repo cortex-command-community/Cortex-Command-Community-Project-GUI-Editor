@@ -282,14 +282,6 @@ namespace RTE {
 		GUIControl * FindTopControl(int pointX, int pointY);
 
 		/// <summary>
-		/// Goes through the panel list and selects the bottommost ('first', render wise) panel on a specific point.
-		/// </summary>
-		/// <param name="pointX">Mouse Position.</param>
-		/// <param name="pointY"></param>
-		/// <returns></returns>
-		GUIControl * FindBottomControl(int pointX, int pointY);
-
-		/// <summary>
 		/// Add a new event to the queue.
 		/// </summary>
 		/// <param name="event">Event point.</param>

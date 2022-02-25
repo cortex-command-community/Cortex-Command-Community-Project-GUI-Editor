@@ -126,17 +126,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControlManager::FindBottomControl(int pointX, int pointY) {
-		for (GUIControl *control : m_AllControls) {
-			if (GUIControl *bottomControl = control->BottomPanelUnderPoint(pointX, pointY)) {
-				return bottomControl;
-			}
-		}
-		return nullptr;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *parent, int depth) {
 		// Default to the root object if no parent specified
 		if (!parent) { parent = m_Containers.front(); }
