@@ -85,26 +85,26 @@ namespace RTE {
 
 		// Calculate the y position of the base
 		// Make it centered vertically
-		int YPos = m_Height / 2 - (m_ImageRects[0].bottom - m_ImageRects[0].top) / 2 + m_Y;
+		int YPos = m_Height / 2 - (m_ImageRects[0].bottom - m_ImageRects[0].top) / 2 + m_PosY;
 
 		// Draw the base
-		m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[0]);
+		m_Image->DrawTrans(Screen->GetBitmap(), m_PosX, YPos, &m_ImageRects[0]);
 
 		// Draw the selected one
 		if (m_Selected) {
 			if (m_Enabled) {
-				m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[2]);
+				m_Image->DrawTrans(Screen->GetBitmap(), m_PosX, YPos, &m_ImageRects[2]);
 			} // else
-				//m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[3]);
+				//m_Image->DrawTrans(Screen->GetBitmap(), m_PosX, YPos, &m_ImageRects[3]);
 			//}
 		}
 
 		// If highlighted, draw that
 		if (m_Mouseover || m_GotFocus) {
-			m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[1]);
+			m_Image->DrawTrans(Screen->GetBitmap(), m_PosX, YPos, &m_ImageRects[1]);
 		} else if (!m_Enabled) {
 			// Should show as grayed out and disabled when it is, regardless of checked or not
-			m_Image->DrawTrans(Screen->GetBitmap(), m_X, YPos, &m_ImageRects[3]);
+			m_Image->DrawTrans(Screen->GetBitmap(), m_PosX, YPos, &m_ImageRects[3]);
 		}
 
 		// Draw the text
@@ -118,7 +118,7 @@ namespace RTE {
 			m_Font->SetColor(m_FontColor);
 			m_Font->SetKerning(m_FontKerning);
 			// TODO: DONT HARDCODE TEXT OFFSET
-			m_Font->Draw(Screen->GetBitmap(), m_X + 4, m_Y + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
+			m_Font->Draw(Screen->GetBitmap(), m_PosX + 4, m_PosY + (m_Height / 2) - (m_Font->GetFontHeight() / 2) - 1, Text, m_FontShadow);
 		}
 	}
 
@@ -154,15 +154,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITab::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
-
-		// Rebuild the bitmap
-		BuildBitmap();
+	void GUITab::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

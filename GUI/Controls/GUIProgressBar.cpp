@@ -83,7 +83,7 @@ namespace RTE {
 
 	void GUIProgressBar::Draw(GUIScreen *Screen) {
 		// Draw the base
-		Screen->DrawBitmap(m_DrawBitmap.get(), m_X, m_Y, nullptr);
+		Screen->DrawBitmap(m_DrawBitmap.get(), m_PosX, m_PosY, nullptr);
 
 		// Draw the indicators
 		if (!m_IndicatorImage) {
@@ -97,10 +97,10 @@ namespace RTE {
 		}
 		if (m_IndicatorImage->GetWidth() + m_Spacing > 0) { Count = Count / (float)(m_IndicatorImage->GetWidth() + m_Spacing); }
 
-		int x = m_X + 2;
+		int x = m_PosX + 2;
 		int Limit = (int)ceil(Count);
 		for (int i = 0; i < Limit; i++) {
-			m_IndicatorImage->Draw(Screen->GetBitmap(), x, m_Y + 2, nullptr);
+			m_IndicatorImage->Draw(Screen->GetBitmap(), x, m_PosY + 2, nullptr);
 			x += m_IndicatorImage->GetWidth() + m_Spacing;
 		}
 	}
@@ -114,15 +114,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIProgressBar::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
-
-		// Rebuild the bitmap
-		BuildBitmap();
+	void GUIProgressBar::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

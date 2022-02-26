@@ -38,7 +38,7 @@ namespace RTE {
 #pragma region Global Macro Definitions
 		#define GUIControlOverrideMethods \
 			std::string_view GetControlType() const override { return c_ControlType; } \
-			void GetControlRect(int *posX, int *posY, int *width, int *height) const override { GUIControl::GetRect(posX, posY, width, height); }
+			void Resize(int newWidth, int newHeight) override;
 #pragma endregion
 
 #pragma region Creation
@@ -205,25 +205,63 @@ namespace RTE {
 		/// Gets the x position of the panel.
 		/// </summary>
 		/// <returns></returns>
-		int GetPosX() const { return m_X; }
+		int GetPosX() const { return m_PosX; }
 
 		/// <summary>
-		/// Gets the x position of the panel, relative to its parent
+		/// 
 		/// </summary>
-		/// <returns></returns>
-		int GetRelPosX() const { return m_X - m_ParentControl->GetPosX(); }
+		/// <param name="newPosX"></param>
+		void SetPosX(int newPosX) { m_PosX = newPosX; }
 
 		/// <summary>
 		/// Gets the y position of the panel
 		/// </summary>
 		/// <returns></returns>
-		int GetPosY() const { return m_Y; }
+		int GetPosY() const { return m_PosY; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newPosY"></param>
+		void SetPosY(int newPosY) { m_PosY = newPosY; }
+
+		/// <summary>
+		/// Called when the control needs to be moved.
+		/// </summary>
+		/// <param name="newPosX">New position.</param>
+		/// <param name="newPosY"></param>
+		virtual void Move(int newPosX, int newPosY) { SetPosX(newPosX); SetPosY(newPosY); }
+
+		/// <summary>
+		/// Gets the x position of the panel, relative to its parent
+		/// </summary>
+		/// <returns></returns>
+		int GetRelPosX() const { return m_PosX - (m_ParentControl ? m_ParentControl->GetPosX() : 0); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="relX"></param>
+		void SetRelPosX(int relX) { m_PosX = (m_ParentControl ? m_ParentControl->GetPosX() : m_PosX) + relX; }
 
 		/// <summary>
 		/// Gets the y position of the panel, relative to its parent.
 		/// </summary>
 		/// <returns></returns>
-		int GetRelPosY() const { return m_Y - m_ParentControl->GetPosY(); }
+		int GetRelPosY() const { return m_PosY - (m_ParentControl ? m_ParentControl->GetPosY() : 0); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="relY"></param>
+		void SetRelPosY(int relY) { m_PosY = (m_ParentControl ? m_ParentControl->GetPosY() : m_PosY) + relY; }
+
+		/// <summary>
+		/// Moves the position of the panel by a relative amount.
+		/// </summary>
+		/// <param name="relX">X.</param>
+		/// <param name="relY">Y.</param>
+		virtual void MoveRelative(int relX, int relY) { SetRelPosX(relX); SetRelPosY(relY); }
 
 		/// <summary>
 		/// Gets the width of the panel.
@@ -232,60 +270,36 @@ namespace RTE {
 		int GetWidth() const { return m_Width; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newWidth"></param>
+		void SetWidth(int newWidth) { m_Width = newWidth; }
+
+		/// <summary>
 		/// Gets the height of the panel.
 		/// </summary>
 		/// <returns></returns>
 		int GetHeight() const { return m_Height; }
 
 		/// <summary>
-		/// Adjusts the size of the panel.
+		/// 
 		/// </summary>
-		/// <param name="newWidth">Width.</param>
-		/// <param name="newHeight">Height.</param>
-		virtual void SetSize(int newWidth, int newHeight) { m_Width = newWidth; m_Height = newHeight; }
+		/// <param name="newHeight"></param>
+		void SetHeight(int newHeight) { m_Height = newHeight; }
 
 		/// <summary>
 		/// Called when the control needs to be resized.
 		/// </summary>
 		/// <param name="newWidth">New size.</param>
 		/// <param name="newHeight"></param>
-		virtual void Resize(int newWidth, int newHeight) {}
+		virtual void Resize(int newWidth, int newHeight) { SetWidth(newWidth); SetHeight(newHeight); }
 
 		/// <summary>
 		/// Centers this in its parent, taking this' dimensions into consideration.
 		/// </summary>
 		/// <param name="centerX">Which axis to center.</param>
 		/// <param name="centerY"></param>
-		virtual void CenterInParent(bool centerX, bool centerY);
-
-		/// <summary>
-		/// Adjusts the absolute position of the panel.
-		/// </summary>
-		/// <param name="newPosX">X.</param>
-		/// <param name="newPosY">Y.</param>
-		/// <param name="moveChildren">Whether to move the children too.</param>
-		virtual void SetPositionAbs(int newPosX, int newPosY, bool moveChildren = true);
-
-		/// <summary>
-		/// Sets the position of the panel, relative to its parent.
-		/// </summary>
-		/// <param name="newPosX">X.</param>
-		/// <param name="newPosY">Y.</param>
-		virtual void SetPositionRel(int newPosX, int newPosY);
-
-		/// <summary>
-		/// Called when the control needs to be moved.
-		/// </summary>
-		/// <param name="newPosX">New position.</param>
-		/// <param name="newPosY"></param>
-		virtual void Move(int newPosX, int newPosY) {}
-
-		/// <summary>
-		/// Moves the position of the panel by a relative amount.
-		/// </summary>
-		/// <param name="newPosX">X.</param>
-		/// <param name="newPosY">Y.</param>
-		virtual void MoveRelative(int newPosX, int newPosY);
+		virtual void CenterInParent(bool centerX, bool centerY) { if (m_ParentControl) { MoveRelative(centerX ? (m_ParentControl->GetWidth() / 2) - (m_Width / 2) : 0, centerY ? (m_ParentControl->GetHeight() / 2) - (m_Height / 2) : 0); } }
 
 		/// <summary>
 		/// Gets the rectangle of the panel.
@@ -294,22 +308,13 @@ namespace RTE {
 		GUIRect * GetRect();
 
 		/// <summary>
-		/// Gets the rectangle of the panel.
+		/// Gets the rectangle of the control.
 		/// </summary>
 		/// <param name="posX">X.</param>
 		/// <param name="posY">Y.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		void GetRect(int *posX, int *posY, int *width, int *height) const;
-
-		/// <summary>
-		/// Gets the rectangle of the control.
-		/// </summary>
-		/// <param name="posX">Position.</param>
-		/// <param name="posY"></param>
-		/// <param name="width">Size.</param>
-		/// <param name="height"></param>
-		virtual void GetControlRect(int *posX, int *posY, int *width, int *height) const;
 
 		/// <summary>
 		/// Changes the Z Position of the panel.
@@ -537,8 +542,8 @@ namespace RTE {
 		bool m_Enabled = true;
 		bool m_Visible = true;
 
-		int m_X = 0; // absolute coordinates
-		int m_Y = 0;
+		int m_PosX = 0; // absolute coordinates
+		int m_PosY = 0;
 		int m_Width = 0;
 		int m_Height = 0;
 

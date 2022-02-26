@@ -58,9 +58,9 @@ namespace RTE {
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
-			int KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
+			int KnobTop = m_PosY + m_ButtonSize + m_KnobPosition;
 
-			if (Y < m_Y + m_ButtonSize) {
+			if (Y < m_PosY + m_ButtonSize) {
 				// Grabbed the top button
 				m_ButtonPushed[0] = true;
 				AdjustValue(-m_SmallChange);
@@ -68,7 +68,7 @@ namespace RTE {
 				// Track the hover
 				TrackMouseHover(true, 500);
 
-			} else if (Y > m_Y + m_Height - m_ButtonSize) {
+			} else if (Y > m_PosY + m_Height - m_ButtonSize) {
 				// Pushed the bottom button
 				m_ButtonPushed[1] = true;
 				AdjustValue(m_SmallChange);
@@ -84,7 +84,7 @@ namespace RTE {
 			} else {
 				// Grabbed the background region
 				m_GrabbedBackg = true;
-				m_GrabbedPos = Y - (m_Y + m_ButtonSize);
+				m_GrabbedPos = Y - (m_PosY + m_ButtonSize);
 				if (m_GrabbedPos < m_KnobPosition) {
 					AdjustValue(-m_PageSize);
 					m_GrabbedSide = 0;
@@ -94,7 +94,7 @@ namespace RTE {
 				}
 
 				// Now if the knob is over the cursor, grab it instead
-				KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
+				KnobTop = m_PosY + m_ButtonSize + m_KnobPosition;
 				if (Y >= KnobTop && Y <= KnobTop + m_KnobLength) {
 					m_GrabbedBackg = false;
 					m_GrabbedKnob = true;
@@ -108,9 +108,9 @@ namespace RTE {
 
 		// Horizontal
 		if (m_Orientation == Orientation::Horizontal) {
-			int KnobTop = m_X + m_ButtonSize + m_KnobPosition;
+			int KnobTop = m_PosX + m_ButtonSize + m_KnobPosition;
 
-			if (X < m_X + m_ButtonSize) {
+			if (X < m_PosX + m_ButtonSize) {
 				// Grabbed the left button
 				m_ButtonPushed[0] = true;
 				AdjustValue(-m_SmallChange);
@@ -118,7 +118,7 @@ namespace RTE {
 				// Track the hover
 				TrackMouseHover(true, 500);
 
-			} else if (X > m_X + m_Width - m_ButtonSize) {
+			} else if (X > m_PosX + m_Width - m_ButtonSize) {
 				// Pushed the right button
 				m_ButtonPushed[1] = true;
 				AdjustValue(m_SmallChange);
@@ -133,7 +133,7 @@ namespace RTE {
 			} else {
 				// Grabbed the background region
 				m_GrabbedBackg = true;
-				m_GrabbedPos = X - (m_X + m_ButtonSize);
+				m_GrabbedPos = X - (m_PosX + m_ButtonSize);
 				if (m_GrabbedPos < m_KnobPosition) {
 					AdjustValue(-m_PageSize);
 					m_GrabbedSide = 0;
@@ -143,7 +143,7 @@ namespace RTE {
 				}
 
 				// Now if the knob is over the cursor, grab it instead
-				KnobTop = m_X + m_ButtonSize + m_KnobPosition;
+				KnobTop = m_PosX + m_ButtonSize + m_KnobPosition;
 				if (X >= KnobTop && X <= KnobTop + m_KnobLength) {
 					m_GrabbedBackg = false;
 					m_GrabbedKnob = true;
@@ -183,20 +183,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIScrollbar::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		// If there is no change in size, ignore the call
-		if (m_Width == Width && m_Height == Height) {
-			return;
+	void GUIScrollbar::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			m_RebuildSize = true;
 		}
-
-		GUIControl::SetSize(Width, Height);
-
-		// Rebuild the bitmaps
-		m_RebuildSize = true;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -448,24 +439,24 @@ namespace RTE {
 		GUIBitmap *Dest = Screen->GetBitmap();
 
 		// Draw the background
-		m_DrawBitmaps[Back]->Draw(Dest, m_X, m_Y, nullptr);
+		m_DrawBitmaps[Back]->Draw(Dest, m_PosX, m_PosY, nullptr);
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
 			// Top Button
 			int X = m_ButtonPushed[0] ? m_Width : 0;
 			SetRect(&Rect, X, 0, X + m_Width, m_ButtonSize);
-			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_PosX, m_PosY, &Rect);
 
 			// Bottom Button
 			X = m_ButtonPushed[1] ? m_Width : 0;
 			SetRect(&Rect, X, m_ButtonSize, X + m_Width, m_ButtonSize * 2);
-			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, (m_Y + m_Height) - m_ButtonSize, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_PosX, (m_PosY + m_Height) - m_ButtonSize, &Rect);
 
 			// Knob
 			if (m_KnobLength > 0) {
 				SetRect(&Rect, 0, 0, m_Width, m_KnobLength);
-				m_DrawBitmaps[KnobStates]->Draw(Dest, m_X, m_Y + m_ButtonSize + m_KnobPosition, &Rect);
+				m_DrawBitmaps[KnobStates]->Draw(Dest, m_PosX, m_PosY + m_ButtonSize + m_KnobPosition, &Rect);
 			}
 		}
 
@@ -474,17 +465,17 @@ namespace RTE {
 			// Left Button
 			int X = m_ButtonPushed[0] ? m_ButtonSize : 0;
 			SetRect(&Rect, X, 0, X + m_ButtonSize, m_Height);
-			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_X, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, m_PosX, m_PosY, &Rect);
 
 			// Right Button
 			X = m_ButtonPushed[1] ? m_ButtonSize : 0;
 			SetRect(&Rect, X, m_Height, X + m_ButtonSize, m_Height * 2);
-			m_DrawBitmaps[ButtonStates]->Draw(Dest, (m_X + m_Width) - m_ButtonSize, m_Y, &Rect);
+			m_DrawBitmaps[ButtonStates]->Draw(Dest, (m_PosX + m_Width) - m_ButtonSize, m_PosY, &Rect);
 
 			// Knob
 			if (m_KnobLength > 0) {
 				SetRect(&Rect, 0, 0, m_KnobLength, m_Height);
-				m_DrawBitmaps[KnobStates]->Draw(Dest, m_X + m_ButtonSize + m_KnobPosition, m_Y, &Rect);
+				m_DrawBitmaps[KnobStates]->Draw(Dest, m_PosX + m_ButtonSize + m_KnobPosition, m_PosY, &Rect);
 			}
 		}
 	}
@@ -499,13 +490,13 @@ namespace RTE {
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
 			MoveLength = m_Height - m_ButtonSize * 2;
-			KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
+			KnobTop = m_PosY + m_ButtonSize + m_KnobPosition;
 			MousePos = Y;
 		}
 		// Horizontal
 		if (m_Orientation == Orientation::Horizontal) {
 			MoveLength = m_Width - m_ButtonSize * 2;
-			KnobTop = m_X + m_ButtonSize + m_KnobPosition;
+			KnobTop = m_PosX + m_ButtonSize + m_KnobPosition;
 			MousePos = X;
 		}
 
@@ -552,13 +543,13 @@ namespace RTE {
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
-			int KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
+			int KnobTop = m_PosY + m_ButtonSize + m_KnobPosition;
 
-			if (Y < m_Y + m_ButtonSize && m_ButtonPushed[0]) {
+			if (Y < m_PosY + m_ButtonSize && m_ButtonPushed[0]) {
 				// Grabbed the top button
 				AdjustValue(-m_SmallChange);
 
-			} else if (Y > m_Y + m_Height - m_ButtonSize && m_ButtonPushed[1]) {
+			} else if (Y > m_PosY + m_Height - m_ButtonSize && m_ButtonPushed[1]) {
 				// Pushed the bottom button
 				AdjustValue(m_SmallChange);
 
@@ -567,14 +558,14 @@ namespace RTE {
 
 			} else if (m_GrabbedBackg) {
 				// Grabbed the background region
-				int p = Y - (m_Y + m_ButtonSize);
+				int p = Y - (m_PosY + m_ButtonSize);
 				if (m_GrabbedSide == 0 && p < m_KnobPosition) {
 					AdjustValue(-m_PageSize);
 				} else if (m_GrabbedSide == 1 && p >= m_KnobPosition) {
 					AdjustValue(m_PageSize);
 				}
 				// Now if the knob is over the cursor, grab it instead
-				KnobTop = m_Y + m_ButtonSize + m_KnobPosition;
+				KnobTop = m_PosY + m_ButtonSize + m_KnobPosition;
 				if (Y >= KnobTop && Y <= KnobTop + m_KnobLength) {
 					m_GrabbedBackg = false;
 					m_GrabbedKnob = true;
@@ -585,13 +576,13 @@ namespace RTE {
 
 		// Horizontal
 		if (m_Orientation == Horizontal) {
-			int KnobTop = m_X + m_ButtonSize + m_KnobPosition;
+			int KnobTop = m_PosX + m_ButtonSize + m_KnobPosition;
 
-			if (X < m_X + m_ButtonSize && m_ButtonPushed[0]) {
+			if (X < m_PosX + m_ButtonSize && m_ButtonPushed[0]) {
 				// Grabbed the left button
 				AdjustValue(-m_SmallChange);
 
-			} else if (X > m_X + m_Width - m_ButtonSize && m_ButtonPushed[1]) {
+			} else if (X > m_PosX + m_Width - m_ButtonSize && m_ButtonPushed[1]) {
 				// Pushed the right button
 				AdjustValue(m_SmallChange);
 
@@ -600,14 +591,14 @@ namespace RTE {
 
 			} else if (m_GrabbedBackg) {
 				// Grabbed the background region
-				int p = X - (m_X + m_ButtonSize);
+				int p = X - (m_PosX + m_ButtonSize);
 				if (m_GrabbedSide == 0 && p < m_KnobPosition) {
 					AdjustValue(-m_PageSize);
 				} else if (m_GrabbedSide == 1 && p >= m_KnobPosition) {
 					AdjustValue(m_PageSize);
 				}
 				// Now if the knob is over the cursor, grab it instead
-				KnobTop = m_X + m_ButtonSize + m_KnobPosition;
+				KnobTop = m_PosX + m_ButtonSize + m_KnobPosition;
 				if (X >= KnobTop && X <= KnobTop + m_KnobLength) {
 					m_GrabbedBackg = false;
 					m_GrabbedKnob = true;
@@ -684,19 +675,5 @@ namespace RTE {
 		Props->AddProperty("PageSize", m_PageSize);
 		Props->AddProperty("SmallChange", m_SmallChange);
 		Props->AddProperty("ValueResolution", m_ValueResolution);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIScrollbar::SetSize(int Width, int Height) {
-		// If there is no change in size, ignore the call
-		if (m_Width == Width && m_Height == Height) {
-			return;
-		}
-
-		GUIControl::SetSize(Width, Height);
-
-		// Rebuild the bitmaps
-		m_RebuildSize = true;
 	}
 }

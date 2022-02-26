@@ -94,24 +94,21 @@ public:
 	void SetScrollBarPadding(int newPadding) { m_ScrollBarPadding = newPadding; AdjustScrollbars(); }
 #pragma endregion
 
+#pragma region Positioning and Sizing
+	/// <summary>
+	/// Called when the control needs to be moved.
+	/// </summary>
+	/// <param name="newPosX">New position.</param>
+	/// <param name="newPosY"></param>
+	void Move(int newPosX, int newPosY) override;
 
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          Move
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Called when the control needs to be moved.
-	// Arguments:       New position.
-
-	void Move(int X, int Y) override { SetPositionAbs(X, Y); }
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          Resize
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Called when the control needs to be resized.
-	// Arguments:       New size.
-
-    void Resize(int Width, int Height) override;
+	/// <summary>
+	/// Moves the position of the panel by a relative amount.
+	/// </summary>
+	/// <param name="relX">X.</param>
+	/// <param name="relY">Y.</param>
+	void MoveRelative(int relX, int relY) override;
+#pragma endregion
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -343,24 +340,6 @@ public:
 	// Arguments:       Index.
 
 	void DeleteItem(int Index);
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          SetSize
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Adjusts the size of the panel.
-	// Arguments:       Width, Height.
-
-	void SetSize(int Width, int Height) override;
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Method:          SetPositionAbs
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// Description:     Adjusts the position of the panel.
-	// Arguments:       X, Y.
-
-	void SetPositionAbs(int X, int Y);
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////

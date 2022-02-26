@@ -65,7 +65,7 @@ namespace RTE {
 			}
 
 			// Adjust for horizontal alignment
-			int xPos = m_X;
+			int xPos = m_PosX;
 			if (m_HAlignment == GUIFont::HAlignment::Centre) {
 				xPos += m_Width / 2;
 			} else if (m_HAlignment == GUIFont::HAlignment::Right) {
@@ -73,7 +73,7 @@ namespace RTE {
 			}
 
 			// Adjust for vertical alignment
-			int yPos = m_Y;
+			int yPos = m_PosY;
 			if (m_VAlignment == GUIFont::VAlignment::Middle) {
 				yPos += (m_Height / 2) - 1;
 			} else if (m_VAlignment == GUIFont::VAlignment::Bottom) {
@@ -84,8 +84,8 @@ namespace RTE {
 			int textFullHeight = m_VerticalOverflowScroll ? m_Font->CalculateHeight(m_Text) : 0;
 			bool modifyXPos = textFullWidth > m_Width;
 			bool modifyYPos = textFullHeight > m_Height;
-			xPos = modifyXPos ? m_X : xPos;
-			yPos = modifyYPos ? m_Y : yPos;
+			xPos = modifyXPos ? m_PosX : xPos;
+			yPos = modifyYPos ? m_PosY : yPos;
 			if (OverflowScrollIsActivated()) {
 				switch (m_OverflowScrollState) {
 					case OverflowScrollState::WaitAtStart:
@@ -157,19 +157,15 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUILabel::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
+	void GUILabel::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) { GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight)); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	int GUILabel::ResizeHeightToFit() {
 		int newHeight = m_Font->CalculateHeight(m_Text, m_Width);
-		GUIControl::SetSize(m_Width, newHeight);
+		GUIControl::Resize(m_Width, newHeight);
 
 		return newHeight;
 	}

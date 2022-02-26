@@ -11,8 +11,8 @@ namespace RTE {
 
 		m_Children.clear();
 
-		m_X = posX;
-		m_Y = posY;
+		m_PosX = posX;
+		m_PosY = posY;
 		m_Width = width;
 		m_Height = height;
 
@@ -22,8 +22,8 @@ namespace RTE {
 		m_Properties.AddProperty("Name", std::string(name));
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
-		m_Properties.AddProperty("X", m_ParentControl ? m_X - m_ParentControl->m_X : m_X);
-		m_Properties.AddProperty("Y", m_ParentControl ? m_Y - m_ParentControl->m_Y : m_Y);
+		m_Properties.AddProperty("X", m_ParentControl ? GetRelPosX() : m_PosX);
+		m_Properties.AddProperty("Y", m_ParentControl ? GetRelPosY() : m_PosY);
 		m_Properties.AddProperty("Width", m_Width);
 		m_Properties.AddProperty("Height", m_Height);
 		m_Properties.AddProperty("Visible", m_Visible);
@@ -39,8 +39,8 @@ namespace RTE {
 		m_Properties.AddProperty("Anchor", "Left, Top");
 		m_Properties.AddProperty("ToolTip", "");
 
-		reference->GetPropertyValue("X", &m_X);
-		reference->GetPropertyValue("Y", &m_Y);
+		reference->GetPropertyValue("X", &m_PosX);
+		reference->GetPropertyValue("Y", &m_PosY);
 		reference->GetPropertyValue("Width", &m_Width);
 		reference->GetPropertyValue("Height", &m_Height);
 
@@ -94,8 +94,8 @@ namespace RTE {
 		writer.NewPropertyWithValue("ControlType", GetControlType());
 		writer.NewPropertyWithValue("Parent", m_ParentControl ? m_ParentControl->GetName() : "None");
 
-		writer.NewPropertyWithValue("X", m_ParentControl ? GetRelPosX() : m_X);
-		writer.NewPropertyWithValue("Y", m_ParentControl ? GetRelPosY() : m_Y);
+		writer.NewPropertyWithValue("X", m_ParentControl ? GetRelPosX() : m_PosX);
+		writer.NewPropertyWithValue("Y", m_ParentControl ? GetRelPosY() : m_PosY);
 		writer.NewPropertyWithValue("Width", m_Width);
 		writer.NewPropertyWithValue("Height", m_Height);
 		writer.NewPropertyWithValue("Visible", m_Visible);
@@ -150,85 +150,18 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIControl::CenterInParent(bool centerX, bool centerY) {
-		int newRelX = m_X - m_ParentControl->GetPosX();
-		int newRelY = m_Y - m_ParentControl->GetPosY();
-
-		if (centerX) { newRelX = (m_ParentControl->GetWidth() / 2) - (GetWidth() / 2); }
-		if (centerY) { newRelY = (m_ParentControl->GetHeight() / 2) - (GetHeight() / 2); }
-
-		SetPositionRel(newRelX, newRelY);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::SetPositionAbs(int X, int Y, bool moveChildren) {
-		int DX = X - m_X;
-		int DY = Y - m_Y;
-		m_X = X;
-		m_Y = Y;
-
-		if (m_IsContainer && moveChildren) {
-			for (GUIControl *childControl : m_Children) {
-				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
-			}
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::SetPositionRel(int X, int Y) {
-		X += m_ParentControl->GetPosX();
-		Y += m_ParentControl->GetPosY();
-		int DX = X - m_X;
-		int DY = Y - m_Y;
-		m_X = X;
-		m_Y = Y;
-
-		if (m_IsContainer) {
-			for (GUIControl *childControl : m_Children) {
-				childControl->SetPositionAbs(childControl->m_X + DX, childControl->m_Y + DY);
-			}
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::MoveRelative(int dX, int dY) {
-		m_X += dX;
-		m_Y += dY;
-
-		if (m_IsContainer) {
-			for (GUIControl *childControl : m_Children) {
-				childControl->SetPositionAbs(childControl->m_X + dX, childControl->m_Y + dY);
-			}
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	GUIRect * GUIControl::GetRect() {
-		SetRect(&m_Rect, m_X, m_Y, m_X + m_Width, m_Y + m_Height);
+		SetRect(&m_Rect, m_PosX, m_PosY, m_PosX + m_Width, m_PosY + m_Height);
 		return &m_Rect;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::GetRect(int *posX, int *posY, int *width, int *height) const {
-		if (posX) { *posX = m_X; }
-		if (posY) { *posY = m_Y; }
+		if (posX) { *posX = m_PosX; }
+		if (posY) { *posY = m_PosY; }
 		if (width) { *width = m_Width; }
 		if (height) { *height = m_Height; }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUIControl::GetControlRect(int *posX, int *posY, int *width, int *height) const {
-		// Zero the values for controls that don't override this
-		if (posX) { *posX = 0; }
-		if (posY) { *posY = 0; }
-		if (width) { *width = 0; }
-		if (height) { *height = 0; }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,8 +211,8 @@ namespace RTE {
 		if (child) {
 			// Convert the child's coordinates into absolute coordinates
 			if (convertToAbsolutePos) {
-				child->m_X += m_X;
-				child->m_Y += m_Y;
+				child->m_PosX += m_PosX;
+				child->m_PosY += m_PosY;
 			}
 
 			// Make sure the rectangle is valid

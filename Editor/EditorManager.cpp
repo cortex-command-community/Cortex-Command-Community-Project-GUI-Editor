@@ -451,7 +451,7 @@ namespace RTEGUI {
 		int controlPosY;
 		int controlWidth;
 		int controlHeight;
-		control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+		control->GetRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
 		if (!MouseInsideBox(mousePosX, mousePosY, controlPosX, controlPosY, controlWidth, controlHeight)) {
 			return nullptr;
 		}
@@ -473,7 +473,7 @@ namespace RTEGUI {
 		int controlPosY;
 		int controlWidth;
 		int controlHeight;
-		control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+		control->GetRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
 
 		int regionSize = 6;
 		int handle = 0;

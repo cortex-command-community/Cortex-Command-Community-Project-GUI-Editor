@@ -64,13 +64,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUITextBox::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		m_Width = std::max(Width, m_MinWidth);
-		m_Height = std::max(Height, m_MinHeight);
-
-		// Force a rebuild
-		ChangeSkin(m_Skin);
+	void GUITextBox::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			ChangeSkin(m_Skin);
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,7 +296,7 @@ namespace RTE {
 		if (Modifier != GUIInput::KeyModifiers::ModShift) { m_GotSelection = false; }
 
 		// Go through each character until we to the mouse point
-		int TX = m_X;
+		int TX = m_PosX;
 		for (int i = 0; i < Text.size(); i++) {
 			TX += m_Font->CalculateWidth(Text.at(i));
 			if (TX > X) {
@@ -331,7 +329,7 @@ namespace RTE {
 
 		// Select from the mouse down point to where the mouse is currently
 		std::string Text = m_Text.substr(m_StartIndex, m_Text.size() - m_StartIndex);
-		int TX = m_X;
+		int TX = m_PosX;
 		for (int i = 0; i < Text.size(); i++) {
 			TX += m_Font->CalculateWidth(Text.at(i));
 			if (TX >= X) {
@@ -535,7 +533,7 @@ namespace RTE {
 
 	void GUITextBox::Draw(GUIScreen *Screen) {
 		// Draw the background
-		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
+		m_DrawBitmap->Draw(Screen->GetBitmap(), m_PosX, m_PosY, nullptr);
 
 		if (!m_Font) {
 			return;
@@ -552,15 +550,15 @@ namespace RTE {
 		// Draw the text
 		m_Font->SetColor(m_FontColor);
 		m_Font->SetKerning(m_FontKerning);
-		m_Font->Draw(Screen->GetBitmap(), m_X + m_WidthMargin, m_Y + m_HeightMargin, Text, m_FontShadow);
+		m_Font->Draw(Screen->GetBitmap(), m_PosX + m_WidthMargin, m_PosY + m_HeightMargin, Text, m_FontShadow);
 
 		// Draw the right-justified extra text in the background
-		m_Font->DrawAligned(Screen->GetBitmap(), m_X + m_Width - m_WidthMargin, m_Y + m_HeightMargin, m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
+		m_Font->DrawAligned(Screen->GetBitmap(), m_PosX + m_Width - m_WidthMargin, m_PosY + m_HeightMargin, m_RightText, GUIFont::HAlignment::Right, GUIFont::VAlignment::Top, m_Width, m_FontShadow);
 
 		// Draw the selected text
 		if (m_GotSelection && m_GotFocus && !m_Text.empty()) {
 			// Draw selection mark
-			Screen->GetBitmap()->DrawRectangle(m_X + m_WidthMargin + m_SelectionX, m_Y + m_HeightMargin + 2, m_SelectionWidth, FontHeight - 3, m_SelectedColorIndex, true);
+			Screen->GetBitmap()->DrawRectangle(m_PosX + m_WidthMargin + m_SelectionX, m_PosY + m_HeightMargin + 2, m_SelectionWidth, FontHeight - 3, m_SelectedColorIndex, true);
 			// Draw text with selection regions in different color
 			m_Font->SetColor(m_FontSelectColor);
 			int Start = std::min(m_StartSelection, m_EndSelection);
@@ -568,11 +566,11 @@ namespace RTE {
 
 			// Selection
 			if (m_StartIndex > Start) { Start = m_StartIndex; }
-			m_Font->Draw(Screen->GetBitmap(), m_X + m_WidthMargin + m_SelectionX, m_Y + m_HeightMargin, Text.substr(Start - m_StartIndex, End - Start));
+			m_Font->Draw(Screen->GetBitmap(), m_PosX + m_WidthMargin + m_SelectionX, m_PosY + m_HeightMargin, Text.substr(Start - m_StartIndex, End - Start));
 		}
 
 
 		// If we have focus, draw the cursor with hacky blink
-		if (m_GotFocus && (m_CursorBlinkCount++ % 30 > 15)) { Screen->GetBitmap()->DrawRectangle(m_X + m_CursorX + 2, m_Y + m_HeightMargin + m_CursorY + 2, 1, FontHeight - 3, m_CursorColor, true); }
+		if (m_GotFocus && (m_CursorBlinkCount++ % 30 > 15)) { Screen->GetBitmap()->DrawRectangle(m_PosX + m_CursorX + 2, m_PosY + m_HeightMargin + m_CursorY + 2, 1, FontHeight - 3, m_CursorColor, true); }
 	}
 }

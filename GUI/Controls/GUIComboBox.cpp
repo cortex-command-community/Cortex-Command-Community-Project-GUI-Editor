@@ -45,13 +45,13 @@ namespace RTE {
 	void GUIComboBox::CreateChildren() {
 		m_TextPanel = std::make_unique<GUILabel>(m_OwningManager);
 
-		m_TextPanel->Create("", m_X, m_Y, m_Width - 12, m_Height);
+		m_TextPanel->Create("", m_PosX, m_PosY, m_Width - 12, m_Height);
 		m_TextPanel->SetVisible(true);
 		//m_TextPanel->SetLocked(m_DropDownStyle == DropDownStyles::DropDownList);
 		m_TextPanel->SetSignalTarget(this);
 
 		m_ListPanel = std::make_unique<GUIListBox>(m_OwningManager);
-		m_ListPanel->Create("", m_X, m_Y + m_Height, m_Width, m_DropHeight);
+		m_ListPanel->Create("", m_PosX, m_PosY + m_Height, m_Width, m_DropHeight);
 		//m_ListPanel->ChangeSkin(m_Skin);
 		m_ListPanel->SetVisible(false);
 		m_ListPanel->SetSignalTarget(this);
@@ -61,7 +61,7 @@ namespace RTE {
 
 		m_CreatedList = true;
 
-		m_Button.Create(m_X + m_Width - 17, m_Y, 17, m_Height);
+		m_Button.Create(m_PosX + m_Width - 17, m_PosY, 17, m_Height);
 		m_Button.SetSignalTarget(this);
 	}
 
@@ -88,13 +88,13 @@ namespace RTE {
 
 	void GUIComboBox::Draw(GUIScreen *Screen) {
 		// Draw the background
-		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
+		m_DrawBitmap->Draw(Screen->GetBitmap(), m_PosX, m_PosY, nullptr);
 
 		m_TextPanel->Draw(Screen->GetBitmap());
 		m_ListPanel->Draw(Screen);
 
 		// If selected item has a bitmap AND no text to show, just show the bitmap as the selected thing
-		if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_X + 4, m_Y + 4, nullptr); }
+		if (m_ListPanel->GetSelected() && m_ListPanel->GetSelected()->m_Name.empty() && m_ListPanel->GetSelected()->m_pBitmap) { m_ListPanel->GetSelected()->m_pBitmap->DrawTrans(Screen->GetBitmap(), m_PosX + 4, m_PosY + 4, nullptr); }
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,32 +215,35 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::Move(int X, int Y) {
-		GUIControl::SetPositionAbs(X, Y);
-
-		m_ListPanel->SetPositionAbs(m_X, m_Y + m_Height);
+	void GUIComboBox::Move(int newPosX, int newPosY) {
+		GUIControl::Move(newPosX, newPosY);
+		m_ListPanel->Move(m_PosX, m_PosY + m_Height);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIComboBox::Resize(int Width, int Height) {
-		// Make sure the textbox isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-		Height = std::min(Height, 20);
+	void GUIComboBox::MoveRelative(int relX, int relY) {
+		GUIControl::MoveRelative(relX, relY);
+		m_ListPanel->Move(m_PosX, m_PosY + m_Height);
+	}
 
-		GUIControl::SetSize(Width, Height);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		m_TextPanel->SetSize(m_Width - 12, m_Height);
-		m_TextPanel->SetPositionAbs(m_X, m_Y);
+	void GUIComboBox::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
 
-		m_Button.SetPositionAbs(m_X + m_Width - 13, m_Y + 1);
-		m_Button.SetSize(12, m_Height - 2);
-		m_ListPanel->SetSize(m_Width, m_DropHeight);
-		m_ListPanel->SetPositionAbs(m_X, m_Y + m_Height);
+			m_TextPanel->Resize(m_Width - 12, m_Height);
+			m_TextPanel->Move(m_PosX, m_PosY);
 
-		// Force a bitmap rebuild
-		ChangeSkin(m_Skin);
+			m_Button.Move(m_PosX + m_Width - 13, m_PosY + 1);
+			m_Button.Resize(12, m_Height - 2);
+
+			m_ListPanel->Resize(m_Width, m_DropHeight);
+			m_ListPanel->Move(m_PosX, m_PosY + m_Height);
+
+			ChangeSkin(m_Skin);
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +310,7 @@ namespace RTE {
 		m_DropHeight = std::max(m_DropHeight, 20);
 
 		// Change the list panel
-		m_ListPanel->SetSize(m_Width, m_DropHeight);
+		m_ListPanel->Resize(m_Width, m_DropHeight);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,14 +413,14 @@ namespace RTE {
 		GUIRect Rect;
 		SetRect(&Rect, 0, m_Pushed ? m_Height : 0, m_Width, m_Pushed ? m_Height * 2 : m_Height);
 
-		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, &Rect);
+		m_DrawBitmap->Draw(Screen->GetBitmap(), m_PosX, m_PosY, &Rect);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIComboBoxButton::Create(int X, int Y, int Width, int Height) {
-		m_X = X;
-		m_Y = Y;
+		m_PosX = X;
+		m_PosY = Y;
 		m_Width = Width;
 		m_Height = Height;
 	}

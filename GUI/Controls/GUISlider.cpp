@@ -184,7 +184,7 @@ namespace RTE {
 		}
 
 		// Draw the base
-		Screen->DrawBitmap(m_DrawBitmap.get(), m_X + X, m_Y + Y, nullptr);
+		Screen->DrawBitmap(m_DrawBitmap.get(), m_PosX + X, m_PosY + Y, nullptr);
 
 		// Draw the indicator
 		if (!m_KnobImage) {
@@ -198,9 +198,9 @@ namespace RTE {
 			Half = m_DrawBitmap->GetWidth() / 2;
 		}
 		if (m_Orientation == Orientation::Horizontal) {
-			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + m_KnobPosition, m_Y + Y + Half - m_KnobImage->GetHeight() / 2, nullptr);
+			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_PosX + m_KnobPosition, m_PosY + Y + Half - m_KnobImage->GetHeight() / 2, nullptr);
 		} else {
-			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_X + X + Half - m_KnobImage->GetWidth() / 2, m_Y + m_KnobPosition, nullptr);
+			m_KnobImage->DrawTrans(Screen->GetBitmap(), m_PosX + X + Half - m_KnobImage->GetWidth() / 2, m_PosY + m_KnobPosition, nullptr);
 		}
 	}
 
@@ -219,17 +219,17 @@ namespace RTE {
 		}
 
 		if (m_Orientation == Orientation::Horizontal) {
-			if (X > m_X + m_EndThickness && X < m_X + m_Width - m_EndThickness) {
+			if (X > m_PosX + m_EndThickness && X < m_PosX + m_Width - m_EndThickness) {
 				m_GrabbedKnob = true;
-				m_KnobPosition = X - m_X - (m_KnobLength / 2);
-				m_GrabbedPos = X - (m_X + m_KnobPosition);
+				m_KnobPosition = X - m_PosX - (m_KnobLength / 2);
+				m_GrabbedPos = X - (m_PosX + m_KnobPosition);
 			}
 			Size = m_Width;
 		} else {
-			if (Y > m_Y + m_EndThickness && Y < m_Y + m_Height - m_EndThickness) {
+			if (Y > m_PosY + m_EndThickness && Y < m_PosY + m_Height - m_EndThickness) {
 				m_GrabbedKnob = true;
-				m_KnobPosition = Y - m_Y - (m_KnobLength / 2);
-				m_GrabbedPos = Y - (m_Y + m_KnobPosition);
+				m_KnobPosition = Y - m_PosY - (m_KnobLength / 2);
+				m_GrabbedPos = Y - (m_PosY + m_KnobPosition);
 			}
 			Size = m_Height;
 		}
@@ -272,14 +272,14 @@ namespace RTE {
 		// Horizontal
 		if (m_Orientation == Orientation::Horizontal) {
 			MousePos = X;
-			KnobTop = m_X + m_KnobPosition;
+			KnobTop = m_PosX + m_KnobPosition;
 			Size = m_Width;
 		}
 
 		// Vertical
 		if (m_Orientation == Orientation::Vertical) {
 			MousePos = Y;
-			KnobTop = m_Y + m_KnobPosition;
+			KnobTop = m_PosY + m_KnobPosition;
 			Size = m_Height;
 		}
 
@@ -350,15 +350,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUISlider::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
-
-		// Rebuild the bitmap
-		BuildBitmap();
+	void GUISlider::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

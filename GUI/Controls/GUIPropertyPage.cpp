@@ -102,7 +102,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIPropertyPage::Draw(GUIScreen *Screen) {
-		if (m_DrawBitmap) { m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr); }
+		if (m_DrawBitmap) { m_DrawBitmap->Draw(Screen->GetBitmap(), m_PosX, m_PosY, nullptr); }
 
 		// Check the font first
 		if (!m_Font) {
@@ -112,7 +112,7 @@ namespace RTE {
 		// Draw the properties
 		int Count = m_PageValues.GetPropertyCount();
 		int Spacer = 2;
-		int Y = m_Y + Spacer;
+		int Y = m_PosY + Spacer;
 		int Size = 16;
 		std::string Name;
 		std::string Value;
@@ -121,12 +121,12 @@ namespace RTE {
 			m_PageValues.GetProperty(i, &Name, &Value);
 			m_Font->SetColor(m_FontColor);
 			m_Font->SetKerning(m_FontKerning);
-			m_Font->Draw(Screen->GetBitmap(), m_X + Spacer, Y, Name, m_FontShadow);
+			m_Font->Draw(Screen->GetBitmap(), m_PosX + Spacer, Y, Name, m_FontShadow);
 
-			Screen->GetBitmap()->DrawRectangle(m_X + 1, Y + Size + (m_Font->GetFontHeight() / 2 - Size / 2), m_Width - 2, 0, m_LineColor, false);
+			Screen->GetBitmap()->DrawRectangle(m_PosX + 1, Y + Size + (m_Font->GetFontHeight() / 2 - Size / 2), m_Width - 2, 0, m_LineColor, false);
 			Y += Size;
 		}
-		Screen->GetBitmap()->DrawRectangle(m_X + m_Width / 2, m_Y + 1, 0, Y - m_Y - Spacer * 2, m_LineColor, false);
+		Screen->GetBitmap()->DrawRectangle(m_PosX + m_Width / 2, m_PosY + 1, 0, Y - m_PosY - Spacer * 2, m_LineColor, false);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,16 +152,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIPropertyPage::Resize(int Width, int Height) {
-		// Make sure the control isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
-
-		// TODO: Alter text panels
-
-		BuildBitmap();
+	void GUIPropertyPage::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

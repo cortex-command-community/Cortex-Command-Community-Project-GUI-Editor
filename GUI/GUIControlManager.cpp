@@ -137,7 +137,7 @@ namespace RTE {
 		int Y;
 		int Width;
 		int Height;
-		parent->GetControlRect(&X, &Y, &Width, &Height);
+		parent->GetRect(&X, &Y, &Width, &Height);
 
 		if (pointX < X || pointX > X + Width) {
 			return nullptr;

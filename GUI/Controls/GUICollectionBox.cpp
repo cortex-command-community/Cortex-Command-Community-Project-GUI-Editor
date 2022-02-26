@@ -31,53 +31,62 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUICollectionBox::Move(int newPosX, int newPosY) {
-		int relPosX = newPosX - m_X;
-		int relPosY = newPosY - m_Y;
-		m_X = newPosX;
-		m_Y = newPosY;
+		if (m_PosX != newPosX || m_PosY != newPosY) {
+			int childRelX = newPosX - m_PosX;
+			int childRelY = newPosY - m_PosY;
+			GUIControl::Move(newPosX, newPosY);
 
-		for (GUIControl *childControl : m_Children) {
-			int childPosX;
-			int childPosY;
-			childControl->GetControlRect(&childPosX, &childPosY, nullptr, nullptr);
-			childControl->Move(childPosX + relPosX, childPosY + relPosY);
+			for (GUIControl *childControl : m_Children) {
+				childControl->Move(childControl->GetPosX() + childRelX, childControl->GetPosY() + childRelY);
+			}
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUICollectionBox::Resize(int Width, int Height) {
-		int oldWidth = m_Width;
-		int oldHeight = m_Height;
-		m_Width = Width;
-		m_Height = Height;
+	void GUICollectionBox::MoveRelative(int relX, int relY) {
+		GUIControl::MoveRelative(relX, relY);
 
 		for (GUIControl *childControl : m_Children) {
-			int childAnchor = childControl->GetAnchor();
-
-			int childPosX;
-			int childPosY;
-			int childWidth;
-			int childHeight;
-			childControl->GetControlRect(&childPosX, &childPosY, &childWidth, &childHeight);
-
-			int destPosX = childPosX;
-			int destPosY = childPosY;
-			int destWidth = childWidth;
-			int destHeight = childHeight;
-
-			if ((childAnchor & GUIControl::Anchor::AnchorRight) && !(childAnchor & GUIControl::Anchor::AnchorLeft)) { destPosX = m_Width - (oldWidth - (destPosX - m_X)) + m_X; }
-			if ((childAnchor & GUIControl::Anchor::AnchorBottom) && !(childAnchor & GUIControl::Anchor::AnchorTop)) { destPosY = m_Height - (oldHeight - (destPosY - m_Y)) + m_Y; }
-			if (destPosX != childPosX || destPosY != childPosX) { childControl->Move(destPosX, destPosY); }
-
-			childPosX -= m_X;
-			childPosY -= m_Y;
-
-			if (childAnchor & GUIControl::Anchor::AnchorLeft && childAnchor & GUIControl::Anchor::AnchorRight) { destWidth = (m_Width - (oldWidth - (childPosX + childWidth))) - destPosX; }
-			if (childAnchor & GUIControl::Anchor::AnchorTop && childAnchor & GUIControl::Anchor::AnchorBottom) { destHeight = (m_Height - (oldHeight - (childPosY + childHeight))) - destPosY; }
-			if (destWidth != childWidth || destHeight != childHeight) { childControl->Resize(destWidth, destHeight); }
+			childControl->MoveRelative(relX, relY);
 		}
-		BuildBitmap();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUICollectionBox::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			int oldWidth = m_Width;
+			int oldHeight = m_Height;
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+
+			for (GUIControl *childControl : m_Children) {
+				int childAnchor = childControl->GetAnchor();
+
+				int childPosX;
+				int childPosY;
+				int childWidth;
+				int childHeight;
+				childControl->GetRect(&childPosX, &childPosY, &childWidth, &childHeight);
+
+				int destPosX = childPosX;
+				int destPosY = childPosY;
+				int destWidth = childWidth;
+				int destHeight = childHeight;
+
+				if ((childAnchor & GUIControl::Anchor::AnchorRight) && !(childAnchor & GUIControl::Anchor::AnchorLeft)) { destPosX = m_Width - (oldWidth - (destPosX - m_PosX)) + m_PosX; }
+				if ((childAnchor & GUIControl::Anchor::AnchorBottom) && !(childAnchor & GUIControl::Anchor::AnchorTop)) { destPosY = m_Height - (oldHeight - (destPosY - m_PosY)) + m_PosY; }
+				if (destPosX != childPosX || destPosY != childPosX) { childControl->Move(destPosX, destPosY); }
+
+				childPosX -= m_PosX;
+				childPosY -= m_PosY;
+
+				if (childAnchor & GUIControl::Anchor::AnchorLeft && childAnchor & GUIControl::Anchor::AnchorRight) { destWidth = (m_Width - (oldWidth - (childPosX + childWidth))) - destPosX; }
+				if (childAnchor & GUIControl::Anchor::AnchorTop && childAnchor & GUIControl::Anchor::AnchorBottom) { destHeight = (m_Height - (oldHeight - (childPosY + childHeight))) - destPosY; }
+				if (destWidth != childWidth || destHeight != childHeight) { childControl->Resize(destWidth, destHeight); }
+			}
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,9 +111,9 @@ namespace RTE {
 			targetScreen->GetBitmap()->SetClipRect(clippingRect);
 			if (GetDrawBackground()) {
 				if (GetDrawType() == DrawType::Color) {
-					targetScreen->GetBitmap()->DrawRectangle(m_X, m_Y, m_Width, m_Height, m_Skin->ConvertColor(GetDrawColor(), targetScreen->GetBitmap()->GetColorDepth()), true);
+					targetScreen->GetBitmap()->DrawRectangle(m_PosX, m_PosY, m_Width, m_Height, m_Skin->ConvertColor(GetDrawColor(), targetScreen->GetBitmap()->GetColorDepth()), true);
 				} else {
-					if (m_DrawBitmap) { m_DrawBitmap->DrawTrans(targetScreen->GetBitmap(), m_X, m_Y, nullptr); }
+					if (m_DrawBitmap) { m_DrawBitmap->DrawTrans(targetScreen->GetBitmap(), m_PosX, m_PosY, nullptr); }
 				}
 			}
 			for (GUIControl *childControl : m_Children) {

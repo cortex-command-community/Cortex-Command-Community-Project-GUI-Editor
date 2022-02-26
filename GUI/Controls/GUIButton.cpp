@@ -143,14 +143,14 @@ namespace RTE {
 			m_Font->SetColor(m_FontColor);
 			m_Font->SetKerning(m_FontKerning);
 			m_Text->SetFont(m_Font);
-			m_Text->SetSize(contentMaxWidth, contentMaxHeight);
+			m_Text->Resize(contentMaxWidth, contentMaxHeight);
 
 			int textXPos = m_BorderSizes->left + buttonContentPadding + 1;
-			m_Text->SetPositionAbs(textXPos, textYPos);
+			m_Text->Move(textXPos, textYPos);
 			m_Text->Draw(m_DrawBitmap.get(), false);
-			m_Text->SetPositionAbs(textXPos, m_Height + textYPos);
+			m_Text->Move(textXPos, m_Height + textYPos);
 			m_Text->Draw(m_DrawBitmap.get(), false);
-			m_Text->SetPositionAbs(textXPos + 1, (m_Height * 2) + textYPos + 1);
+			m_Text->Move(textXPos + 1, (m_Height * 2) + textYPos + 1);
 			m_Text->Draw(m_DrawBitmap.get(), false);
 		}
 	}
@@ -169,7 +169,7 @@ namespace RTE {
 
 		if (m_Text->OverflowScrollIsActivated() && m_Font->CalculateWidth(m_Text->GetText()) > m_Width - m_BorderSizes->left - m_BorderSizes->right) { BuildBitmap(); }
 
-		m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_X, m_Y, &Rect);
+		m_DrawBitmap->DrawTrans(Screen->GetBitmap(), m_PosX, m_PosY, &Rect);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,14 +269,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIButton::Resize(int Width, int Height) {
-		// Make sure the button isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
-
-		GUIControl::SetSize(Width, Height);
-
-		BuildBitmap();
+	void GUIButton::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
+			BuildBitmap();
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -15,7 +15,7 @@ namespace RTEGUI {
 		m_GrabbingControl = true;
 		m_GrabbingHandle = false;
 
-		m_Control->GetControlRect(&m_GrabX, &m_GrabY, nullptr, nullptr);
+		m_Control->GetRect(&m_GrabX, &m_GrabY, nullptr, nullptr);
 		m_ClickX = mousePosX;
 		m_ClickY = mousePosY;
 		m_GrabX -= m_ClickX;
@@ -61,9 +61,9 @@ namespace RTEGUI {
 		int parentPosY = 0;
 		int parentWidth = 0;
 		int parentHeight = 0;
-		m_Control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+		m_Control->GetRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
 		GUIControl *parent = m_Control->GetParent();
-		parent->GetControlRect(&parentPosX, &parentPosY, &parentWidth, &parentHeight);
+		parent->GetRect(&parentPosX, &parentPosY, &parentWidth, &parentHeight);
 
 		int minSize = 10;
 
@@ -120,7 +120,7 @@ namespace RTEGUI {
 		int yPosToMoveTo = ProcessSnapCoord(newPosY + m_GrabY);
 		int currentPosX = 0;
 		int currentPosY = 0;
-		m_Control->GetControlRect(&currentPosX, &currentPosY, nullptr, nullptr);
+		m_Control->GetRect(&currentPosX, &currentPosY, nullptr, nullptr);
 
 		if (xPosToMoveTo == currentPosX && yPosToMoveTo == currentPosY) {
 			return false;
@@ -135,7 +135,7 @@ namespace RTEGUI {
 		int nudgeSize = preciseNudge ? 1 : s_SnapGridSize;
 		int currentPosX = 0;
 		int currentPosY = 0;
-		m_Control->GetControlRect(&currentPosX, &currentPosY, nullptr, nullptr);
+		m_Control->GetRect(&currentPosX, &currentPosY, nullptr, nullptr);
 
 		switch (nudgeDirection) {
 			case NudgeDirection::NudgeUp:
@@ -196,7 +196,7 @@ namespace RTEGUI {
 		int controlPosY;
 		int controlWidth;
 		int controlHeight;
-		m_Control->GetControlRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
+		m_Control->GetRect(&controlPosX, &controlPosY, &controlWidth, &controlHeight);
 
 		// If we've grabbed and moved the control, draw the selection box where the mouse was moved to
 		if (m_GrabbingControl && m_GrabTriggered) {

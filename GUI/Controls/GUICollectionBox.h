@@ -106,11 +106,11 @@ namespace RTE {
 		void Move(int newPosX, int newPosY) override;
 
 		/// <summary>
-		/// Called when the control needs to be resized.
+		/// Moves the position of the panel by a relative amount.
 		/// </summary>
-		/// <param name="newWidth">New size.</param>
-		/// <param name="newHeight"></param>
-		void Resize(int newWidth, int newHeight) override;
+		/// <param name="relX">X.</param>
+		/// <param name="relY">Y.</param>
+		void MoveRelative(int relX, int relY) override;
 #pragma endregion
 
 #pragma region Mouse Event Handling

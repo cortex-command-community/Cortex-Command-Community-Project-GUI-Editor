@@ -84,12 +84,19 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::Resize(int Width, int Height) {
-		// Make sure the listbox isn't too small
-		Width = std::max(Width, m_MinWidth);
-		Height = std::max(Height, m_MinHeight);
+	void GUIListBox::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) {
+			GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight));
 
-		SetSize(Width, Height);
+			m_HorzScroll.Move(m_PosX, m_PosY + m_Height - 17);
+			m_HorzScroll.Resize(m_Width, 17);
+			m_VertScroll.Move(m_PosX + m_Width - 17, m_PosY);
+			m_VertScroll.Resize(17, m_Height);
+
+			AdjustScrollbars();
+
+			BuildBitmap(true, true);
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -402,7 +409,7 @@ namespace RTE {
 		int Height = m_Height;
 		if (m_HorzScroll.GetVisible()) { Height -= m_HorzScroll.GetHeight(); }
 
-		int y = m_Y + 1;
+		int y = m_PosY + 1;
 		if (m_VertScroll.GetVisible())
 			y -= m_VertScroll.GetValue();
 		int Count = 0;
@@ -483,7 +490,7 @@ namespace RTE {
 			y += GetItemHeight(I);
 
 			// End of viewable region
-			if (y > m_Y + Height) {
+			if (y > m_PosY + Height) {
 				break;
 			}
 		}
@@ -636,10 +643,10 @@ namespace RTE {
 		if (!m_VertScrollEnabled) { m_VertScroll.SetVisible(false); }
 
 		// Re-adjust the scrollbar positions & sizes, just to be safe
-		m_HorzScroll.SetPositionAbs(m_X + m_ScrollBarPadding, m_Y + m_Height - m_ScrollBarThickness - m_ScrollBarPadding);
-		m_HorzScroll.SetSize(m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
-		m_VertScroll.SetPositionAbs(m_X + m_Width - m_ScrollBarThickness - m_ScrollBarPadding, m_Y + m_ScrollBarPadding);
-		m_VertScroll.SetSize(m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
+		m_HorzScroll.Move(m_PosX + m_ScrollBarPadding, m_PosY + m_Height - m_ScrollBarThickness - m_ScrollBarPadding);
+		m_HorzScroll.Resize(m_Width - (m_ScrollBarPadding * 2), m_ScrollBarThickness);
+		m_VertScroll.Move(m_PosX + m_Width - m_ScrollBarThickness - m_ScrollBarPadding, m_PosY + m_ScrollBarPadding);
+		m_VertScroll.Resize(m_ScrollBarThickness, m_Height - (m_ScrollBarPadding * 2));
 
 		// If there are items wider than the listpanel, make the horizontal scrollpanel visible
 		int Width = m_Width - 4;
@@ -695,12 +702,12 @@ namespace RTE {
 
 		// If both scrollbars are visible, adjust the size so they don't intersect
 		if (m_VertScroll.GetVisible() && m_HorzScroll.GetVisible()) {
-			m_VertScroll.SetSize(m_VertScroll.GetWidth(), m_Height - m_HorzScroll.GetHeight() - (m_ScrollBarPadding * 2));
-			m_HorzScroll.SetSize(m_Width - m_VertScroll.GetWidth() - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight());
+			m_VertScroll.Resize(m_VertScroll.GetWidth(), m_Height - m_HorzScroll.GetHeight() - (m_ScrollBarPadding * 2));
+			m_HorzScroll.Resize(m_Width - m_VertScroll.GetWidth() - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight());
 		} else {
 			// Normal size
-			if (m_VertScroll.GetVisible()) { m_VertScroll.SetSize(m_VertScroll.GetWidth(), m_Height - (m_ScrollBarPadding * 2)); }
-			if (m_HorzScroll.GetVisible()) { m_HorzScroll.SetSize(m_Width - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight()); }
+			if (m_VertScroll.GetVisible()) { m_VertScroll.Resize(m_VertScroll.GetWidth(), m_Height - (m_ScrollBarPadding * 2)); }
+			if (m_HorzScroll.GetVisible()) { m_HorzScroll.Resize(m_Width - (m_ScrollBarPadding * 2), m_HorzScroll.GetHeight()); }
 		}
 	}
 
@@ -830,7 +837,7 @@ namespace RTE {
 		int Height = m_Height;
 		if (m_HorzScroll.GetVisible()) { Height -= m_HorzScroll.GetHeight(); }
 
-		int y = m_Y + 1;
+		int y = m_PosY + 1;
 		if (m_VertScroll.GetVisible()) { y -= m_VertScroll.GetValue(); }
 		int Count = 0;
 		for (std::vector<Item *>::iterator it = m_Items.begin(); it != m_Items.end(); it++, Count++) {
@@ -843,7 +850,7 @@ namespace RTE {
 			y += GetItemHeight(pItem);
 
 			// End of viewable region
-			if (y > m_Y + Height) {
+			if (y > m_PosY + Height) {
 				break;
 			}
 		}
@@ -981,32 +988,23 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::SetSize(int Width, int Height) {
-		GUIControl::SetSize(Width, Height);
+	void GUIListBox::Move(int newPosX, int newPosY) {
+		GUIControl::Move(newPosX, newPosY);
 
-		// Adjust the scrollbar positions & sizes
-		m_HorzScroll.SetPositionAbs(m_X, m_Y + m_Height - 17);
-		m_HorzScroll.SetSize(m_Width, 17);
-		m_VertScroll.SetPositionAbs(m_X + m_Width - 17, m_Y);
-		m_VertScroll.SetSize(17, m_Height);
+		m_HorzScroll.Move(newPosX, newPosY + m_Height - 17);
+		m_VertScroll.Move(newPosX + m_Width - 17, newPosY);
 
-		// Adjust the scrollbar values
 		AdjustScrollbars();
-
-		// Build the bitmap
-		BuildBitmap(true, true);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIListBox::SetPositionAbs(int X, int Y) {
-		GUIControl::SetPositionAbs(X, Y);
+	void GUIListBox::MoveRelative(int relX, int relY) {
+		GUIControl::MoveRelative(relX, relY);
 
-		// Adjust the scrollbar positions
-		m_HorzScroll.SetPositionAbs(X, Y + m_Height - 17);
-		m_VertScroll.SetPositionAbs(X + m_Width - 17, Y);
+		m_HorzScroll.MoveRelative(relX, relY);
+		m_VertScroll.MoveRelative(relX, relY);
 
-		// Adjust the scrollbar values
 		AdjustScrollbars();
 	}
 
@@ -1112,7 +1110,7 @@ namespace RTE {
 
 	void GUIListBox::Draw(GUIScreen *Screen) {
 		// Draw the base
-		m_DrawBitmap->Draw(Screen->GetBitmap(), m_X, m_Y, nullptr);
+		m_DrawBitmap->Draw(Screen->GetBitmap(), m_PosX, m_PosY, nullptr);
 
 		if (m_HorzScroll.GetVisible()) { m_HorzScroll.Draw(Screen); }
 		if (m_VertScroll.GetVisible()) { m_VertScroll.Draw(Screen); }
