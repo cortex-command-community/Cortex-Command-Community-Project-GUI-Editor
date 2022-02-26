@@ -333,14 +333,6 @@ namespace RTE {
 		/// <param name="posY"></param>
 		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
 		GUIControl * TopPanelUnderPoint(int posX, int posY);
-
-		/// <summary>
-		/// Recursively goes down the tree to check the last panel under a point
-		/// </summary>
-		/// <param name="posX">X, Y Coordinates of point.</param>
-		/// <param name="posY"></param>
-		/// <returns>A pointer to the panel. 0 if no panel is under the point.</returns>
-		GUIControl * BottomPanelUnderPoint(int posX, int posY);
 #pragma endregion
 
 #pragma region 

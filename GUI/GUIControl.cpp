@@ -274,23 +274,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	GUIControl * GUIControl::BottomPanelUnderPoint(int x, int y) {
-		if ((!m_Visible || !m_Enabled) || !PointInside(x, y)) {
-			return nullptr;
-		}
-		if (m_IsContainer) {
-			for (GUIControl *control : m_Children) {
-				if (control->BottomPanelUnderPoint(x, y)) {
-					return control;
-				}
-			}
-		}
-		// Return this panel
-		return this;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIControl::AddChild(GUIControl *child, bool convertToAbsolutePos) {
 		if (child) {
 			// Convert the child's coordinates into absolute coordinates
