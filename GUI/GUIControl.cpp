@@ -9,8 +9,6 @@ namespace RTE {
 	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
 		m_UniqueID = m_OwningManager->RequestUniqueID();
 
-		m_Children.clear();
-
 		m_PosX = posX;
 		m_PosY = posY;
 		m_Width = width;

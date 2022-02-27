@@ -20,6 +20,8 @@ namespace RTE {
 	void GUICollectionBox::Create(GUIProperties *reference) {
 		GUIControl::Create(reference);
 
+		m_Children.clear();
+
 		m_Width = std::max(m_Width, m_MinWidth);
 		m_Height = std::max(m_Height, m_MinHeight);
 

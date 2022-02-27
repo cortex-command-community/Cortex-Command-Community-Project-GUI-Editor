@@ -50,6 +50,12 @@ namespace RTE {
 
 #pragma region Getters and Setters
 		/// <summary>
+		/// Gets the children list.
+		/// </summary>
+		/// <returns></returns>
+		std::deque<GUIControl *> * GetChildren() override { return &m_Children; }
+
+		/// <summary>
 		/// Gets the current drawing type.
 		/// </summary>
 		/// <returns>Type.</returns>

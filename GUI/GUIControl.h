@@ -108,7 +108,7 @@ namespace RTE {
 		/// Gets the children list.
 		/// </summary>
 		/// <returns></returns>
-		std::deque<GUIControl *> * GetChildren() { return &m_Children; }
+		virtual std::deque<GUIControl *> * GetChildren() { return nullptr; }
 
 		/// <summary>
 		/// Gets the panel's ID.
