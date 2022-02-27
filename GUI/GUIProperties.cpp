@@ -5,20 +5,11 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUIProperties::ClearProperties() {
-		for (const PropEntry *property : m_PropertyEntries) {
-			delete property;
-		}
-		m_PropertyEntries.clear();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void GUIProperties::AddProperty(const std::string &propName, const std::string &propValue) {
 		if (GetPropertyValue(propName, &std::string())) {
 			SetPropertyValue(propName, propValue);
 		} else {
-			m_PropertyEntries.emplace_back(new PropEntry(propName, propValue));
+			m_PropertyEntries.emplace_back(propName, propValue);
 		}
 	}
 
@@ -27,9 +18,9 @@ namespace RTE {
 	bool GUIProperties::GetPropertyValue(const std::string_view &propName, std::string *propValue) const {
 		GUIAssert(propValue, "");
 
-		for (const PropEntry *property : m_PropertyEntries) {
-			if (property->Name == propName) {
-				*propValue = property->Value;
+		for (const GUIPropEntry &property : m_PropertyEntries) {
+			if (property.Name == propName) {
+				*propValue = property.Value;
 				return true;
 			}
 		}
@@ -122,10 +113,10 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIProperties::SetPropertyValue(const std::string_view &propName, const std::string_view &propValue) const {
-		for (PropEntry *property : m_PropertyEntries) {
-			if (property->Name == propName) {
-				property->Value = propValue;
+	bool GUIProperties::SetPropertyValue(const std::string_view &propName, const std::string_view &propValue) {
+		for (GUIPropEntry &property : m_PropertyEntries) {
+			if (property.Name == propName) {
+				property.Value = propValue;
 				return true;
 			}
 		}
@@ -137,16 +128,16 @@ namespace RTE {
 	void GUIProperties::OverwriteProperties(const GUIProperties *reference, bool appendUndefinedProps) {
 		GUIAssert(reference, "");
 
-		for (const PropEntry *property : reference->m_PropertyEntries) {
-			if (!SetPropertyValue(property->Name, property->Value) && appendUndefinedProps) { AddProperty(property->Name, property->Value); }
+		for (const GUIPropEntry &property : reference->m_PropertyEntries) {
+			if (!SetPropertyValue(property.Name, property.Value) && appendUndefinedProps) { AddProperty(property.Name, property.Value); }
 		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProperties::Save(GUIWriter &writer) {
-		for (const PropEntry *property : m_PropertyEntries) {
-			if (!property->Value.empty()) { writer.NewPropertyWithValue(property->Name, property->Value); }
+		for (const GUIPropEntry &property : m_PropertyEntries) {
+			if (!property.Value.empty()) { writer.NewPropertyWithValue(property.Name, property.Value); }
 		}
 	}
 
@@ -156,9 +147,9 @@ namespace RTE {
 		if (index < 0 || index >= m_PropertyEntries.size()) {
 			return false;
 		}
-		const PropEntry *property = m_PropertyEntries.at(index);
-		if (propName) { *propName = property->Name; }
-		if (propValue) { *propValue = property->Value; }
+		const GUIPropEntry &property = m_PropertyEntries.at(index);
+		if (propName) { *propName = property.Name; }
+		if (propValue) { *propValue = property.Value; }
 
 		return true;
 	}
@@ -169,9 +160,9 @@ namespace RTE {
 		if (index < 0 || index >= m_PropertyEntries.size()) {
 			return false;
 		}
-		PropEntry *property = m_PropertyEntries.at(index);
-		property->Name = propName;
-		property->Value = propValue;
+		GUIPropEntry &property = m_PropertyEntries.at(index);
+		property.Name = propName;
+		property.Value = propValue;
 
 		return true;
 	}

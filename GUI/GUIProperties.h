@@ -28,14 +28,9 @@ namespace RTE {
 
 #pragma region Destruction
 		/// <summary>
-		/// Destructor method used to free a GUIProperties object in system memory.
-		/// </summary>
-		~GUIProperties() { ClearProperties(); }
-
-		/// <summary>
 		/// Clears the properties.
 		/// </summary>
-		void ClearProperties();
+		void ClearProperties() { m_PropertyEntries.clear(); }
 #pragma endregion
 
 #pragma region Getters and Setters
@@ -136,7 +131,7 @@ namespace RTE {
 		/// <param name="propName">Property name.</param>
 		/// <param name="newPropValue">New property value.</param>
 		/// <returns>True if the property was set. Otherwise false.</returns>
-		bool SetPropertyValue(const std::string_view &propName, const std::string_view &newPropValue) const;
+		bool SetPropertyValue(const std::string_view &propName, const std::string_view &newPropValue);
 
 		/// <summary>
 		/// Changes the value of a property.
@@ -144,7 +139,7 @@ namespace RTE {
 		/// <param name="propName">Property name.</param>
 		/// <param name="newPropValue">New property value.</param>
 		/// <returns>True if the property was set. Otherwise false.</returns>
-		bool SetPropertyValue(const std::string_view &propName, int newPropValue) const { return SetPropertyValue(propName, std::to_string(newPropValue)); }
+		bool SetPropertyValue(const std::string_view &propName, int newPropValue) { return SetPropertyValue(propName, std::to_string(newPropValue)); }
 #pragma endregion
 
 #pragma region Concrete Methods
@@ -193,15 +188,15 @@ namespace RTE {
 		/// <summary>
 		/// Property structure.
 		/// </summary>
-		struct PropEntry {
+		struct GUIPropEntry {
 			std::string Name = "";
 			std::string Value = "";
 
-			PropEntry(const std::string &name, const std::string &value) : Name(name), Value(value) {}
+			GUIPropEntry(const std::string &name, const std::string &value) : Name(name), Value(value) {}
 		};
 
 		std::string m_Name = "";
-		std::vector<PropEntry *> m_PropertyEntries;
+		std::vector<GUIPropEntry> m_PropertyEntries = {};
 
 		// Disallow the use of some implicit methods.
 		GUIProperties(const GUIProperties &reference) = delete;

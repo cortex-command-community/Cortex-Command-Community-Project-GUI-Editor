@@ -191,7 +191,7 @@ namespace RTE {
 		/// Sets the control's tooltip string.
 		/// </summary>
 		/// <param name="toolTip">The new ToolTip for this.</param>
-		void SetToolTip(const std::string_view &toolTip) const { m_Properties.SetPropertyValue("ToolTip", toolTip); }
+		void SetToolTip(const std::string_view &toolTip) { m_Properties.SetPropertyValue("ToolTip", toolTip); }
 
 		/// <summary>
 		/// Sets the font this panel will be using

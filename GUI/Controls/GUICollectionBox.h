@@ -59,7 +59,7 @@ namespace RTE {
 		/// Sets the drawing type.
 		/// </summary>
 		/// <param name="newDrawType">Type.</param>
-		void SetDrawType(DrawType newDrawType) const { m_Properties.SetPropertyValue("DrawType", (newDrawType == DrawType::Color) ? "Color" : "Image"); }
+		void SetDrawType(DrawType newDrawType) { m_Properties.SetPropertyValue("DrawType", (newDrawType == DrawType::Color) ? "Color" : "Image"); }
 
 		/// <summary>
 		/// Sets whether to draw the background.
@@ -70,7 +70,7 @@ namespace RTE {
 		/// Sets whether to draw the background.
 		/// </summary>
 		/// <param name="drawBackground">Draw.</param>
-		void SetDrawBackground(bool drawBackground) const { m_Properties.SetPropertyValue("DrawBackground", drawBackground); }
+		void SetDrawBackground(bool drawBackground) { m_Properties.SetPropertyValue("DrawBackground", drawBackground); }
 
 		/// <summary>
 		/// Gets the drawing color.
@@ -82,7 +82,7 @@ namespace RTE {
 		/// Sets the drawing color.
 		/// </summary>
 		/// <param name="newColor">Color.</param>
-		void SetDrawColor(int newColor) const { m_Properties.SetPropertyValue("DrawColor", newColor); }
+		void SetDrawColor(int newColor) { m_Properties.SetPropertyValue("DrawColor", newColor); }
 
 		/// <summary>
 		/// Gets the drawing image bitmap that is being drawn
