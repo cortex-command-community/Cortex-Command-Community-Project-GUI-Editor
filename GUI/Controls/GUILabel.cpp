@@ -7,41 +7,167 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUILabel::Create(GUIProperties *Props) {
-		GUIControl::Create(Props);
+	void GUILabel::Create(const std::string_view &name, int posX, int posY, int width, int height) {
+		GUIControl::Create(name, posX, posY, (width > 0) ? std::max(width, m_MinWidth) : m_DefaultWidth, (height > 0) ? std::max(height, m_MinHeight) : m_DefaultHeight);
 
-		// Make sure the label isn't too small
-		m_Width = std::max(m_Width, m_MinWidth);
-		m_Height = std::max(m_Height, m_MinHeight);
-
-		// Get the values
-		Props->GetPropertyValue("Text", &m_Text);
-
-		std::string alignString;
-		Props->GetPropertyValue("HAlignment", &alignString);
-		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
-		if (alignString == "centre" || alignString == "center") { m_HAlignment = GUIFont::HAlignment::Centre; }
-		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
-
-		Props->GetPropertyValue("VAlignment", &alignString);
-		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
-		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
-		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
-
-		Props->GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
-		Props->GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
+		m_Properties.AddProperty("Text", "");
+		m_Properties.AddProperty("HAlignment", "Left");
+		m_Properties.AddProperty("VAlignment", "Middle");
+		m_Properties.AddProperty("HorizontalOverflowScroll", false);
+		m_Properties.AddProperty("VerticalOverflowScroll", false);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUILabel::ChangeSkin(GUISkin *Skin) {
-		GUIControl::ChangeSkin(Skin);
+	void GUILabel::Create(GUIProperties *reference) {
+		GUIControl::Create(reference);
 
-		// Load the font
-		std::string Filename;
+		m_Width = std::max(m_Width, m_MinWidth);
+		m_Height = std::max(m_Height, m_MinHeight);
 
-		m_Skin->GetValue("Label", "Font", &Filename);
-		m_Font = m_Skin->GetFont(Filename);
+		m_Properties.OverwriteProperties(reference, true);
+
+		m_Properties.AddProperty("Text", reference->GetPropertyValue<std::string>("Text"));
+		m_Properties.AddProperty("HAlignment", GUIFont::HAlignment::Left);
+		m_Properties.AddProperty("VAlignment", GUIFont::VAlignment::Middle);
+		m_Properties.AddProperty("HorizontalOverflowScroll", reference->GetPropertyValue<bool>("HorizontalOverflowScroll"));
+		m_Properties.AddProperty("VerticalOverflowScroll", reference->GetPropertyValue<bool>("VerticalOverflowScroll"));
+
+		std::string alignString;
+		reference->GetPropertyValue("HAlignment", &alignString);
+		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (alignString == "centre" || alignString == "center") { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
+
+		reference->GetPropertyValue("VAlignment", &alignString);
+		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
+
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	int GUILabel::GetTextHeight() {
+		return m_Font->CalculateHeight(GetText(), m_Width);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::Resize(int newWidth, int newHeight) {
+		if (m_Width != newWidth || m_Height != newHeight) { GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight)); }
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::SetHorizontalOverflowScroll(bool newOverflowScroll) {
+		m_HorizontalOverflowScroll = newOverflowScroll;
+		if (m_HorizontalOverflowScroll) {
+			m_VerticalOverflowScroll = false;
+		} else if (!m_VerticalOverflowScroll) {
+			m_OverflowScrollState = OverflowScrollState::Deactivated;
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::SetVerticalOverflowScroll(bool newOverflowScroll) {
+		m_VerticalOverflowScroll = newOverflowScroll;
+		if (m_VerticalOverflowScroll) {
+			m_HorizontalOverflowScroll = false;
+		} else if (!m_HorizontalOverflowScroll) {
+			m_OverflowScrollState = OverflowScrollState::Deactivated;
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::ActivateDeactivateOverflowScroll(bool activateScroll) {
+		if (OverflowScrollIsEnabled() && activateScroll != OverflowScrollIsActivated()) {
+			m_OverflowScrollState = activateScroll ? OverflowScrollState::WaitAtStart : OverflowScrollState::Deactivated;
+			m_OverflowScrollTimer.SetRealTimeLimitMS(-1);
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::StoreProperties() {
+		//m_Properties.AddProperty("Text", m_Text);
+
+		if (m_HAlignment == GUIFont::HAlignment::Left) {
+			m_Properties.AddProperty("HAlignment", "left");
+		} else if (m_HAlignment == GUIFont::HAlignment::Centre) {
+			m_Properties.AddProperty("HAlignment", "centre");
+		} else if (m_HAlignment == GUIFont::HAlignment::Right) {
+			m_Properties.AddProperty("HAlignment", "right");
+		}
+		if (m_VAlignment == GUIFont::VAlignment::Top) {
+			m_Properties.AddProperty("VAlignment", "top");
+		} else if (m_VAlignment == GUIFont::VAlignment::Middle) {
+			m_Properties.AddProperty("VAlignment", "middle");
+		} else if (m_VAlignment == GUIFont::VAlignment::Bottom) {
+			m_Properties.AddProperty("VAlignment", "bottom");
+		}
+		m_Properties.AddProperty("HorizontalOverflowScroll", m_HorizontalOverflowScroll);
+		m_Properties.AddProperty("VerticalOverflowScroll", m_VerticalOverflowScroll);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::ApplyProperties(GUIProperties *Props) {
+		GUIControl::ApplyProperties(Props);
+
+		//m_Properties.GetPropertyValue("Text", &m_Text);
+
+		std::string alignString;
+		m_Properties.GetPropertyValue("HAlignment", &alignString);
+		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
+		if (alignString == "centre") { m_HAlignment = GUIFont::HAlignment::Centre; }
+		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
+
+		m_Properties.GetPropertyValue("VAlignment", &alignString);
+		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
+		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
+		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
+
+		m_Properties.GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
+		m_Properties.GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	int GUILabel::ResizeHeightToFit() {
+		int newHeight = m_Font->CalculateHeight(GetText(), m_Width);
+		GUIControl::Resize(m_Width, newHeight);
+
+		return newHeight;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::OnMouseDown(int mousePosX, int mousePosY, int buttons, int modifier) {
+		if (buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
+			CaptureMouse();
+			SetFocus();
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::OnMouseUp(int mousePosX, int mousePosY, int buttons, int modifier) {
+		if (m_Captured && (buttons & GUIControl::MouseButtons::MOUSE_LEFT) && PointInside(mousePosX, mousePosY)) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked); }
+		ReleaseMouse();
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void GUILabel::ChangeSkin(GUISkin *newSkin) {
+		GUIControl::ChangeSkin(newSkin);
+
+		std::string fontFileName;
+		m_Skin->GetValue("Label", "Font", &fontFileName);
+		m_Font = m_Skin->GetFont(fontFileName);
+
 		m_Skin->GetValue("Label", "FontColor", &m_FontColor);
 		m_Skin->GetValue("Label", "FontShadow", &m_FontShadow);
 		m_Skin->GetValue("Label", "FontKerning", &m_FontKerning);
@@ -51,13 +177,13 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUILabel::Draw(GUIScreen *Screen) {
-		Draw(Screen->GetBitmap());
+	void GUILabel::Draw(GUIScreen *targetScreen) {
+		Draw(targetScreen->GetBitmap());
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void GUILabel::Draw(GUIBitmap *Bitmap, bool overwiteFontColorAndKerning) {
+	void GUILabel::Draw(GUIBitmap *targetBitmap, bool overwiteFontColorAndKerning) {
 		if (m_Font) {
 			if (overwiteFontColorAndKerning) {
 				m_Font->SetColor(m_FontColor);
@@ -80,8 +206,8 @@ namespace RTE {
 				yPos += (m_Height)-1;
 			}
 
-			int textFullWidth = m_HorizontalOverflowScroll ? m_Font->CalculateWidth(m_Text) : 0;
-			int textFullHeight = m_VerticalOverflowScroll ? m_Font->CalculateHeight(m_Text) : 0;
+			int textFullWidth = m_HorizontalOverflowScroll ? m_Font->CalculateWidth(GetText()) : 0;
+			int textFullHeight = m_VerticalOverflowScroll ? m_Font->CalculateHeight(GetText()) : 0;
 			bool modifyXPos = textFullWidth > m_Width;
 			bool modifyYPos = textFullHeight > m_Height;
 			xPos = modifyXPos ? m_PosX : xPos;
@@ -133,119 +259,7 @@ namespace RTE {
 						break;
 				}
 			}
-			m_Font->DrawAligned(Bitmap, xPos, yPos, m_Text, m_HorizontalOverflowScroll && textFullWidth > m_Width ? GUIFont::HAlignment::Left : m_HAlignment, m_VerticalOverflowScroll && textFullHeight > m_Height ? GUIFont::VAlignment::Top : m_VAlignment, m_HorizontalOverflowScroll ? textFullWidth : m_Width, m_FontShadow);
+			m_Font->DrawAligned(targetBitmap, xPos, yPos, GetText(), m_HorizontalOverflowScroll && textFullWidth > m_Width ? GUIFont::HAlignment::Left : m_HAlignment, m_VerticalOverflowScroll && textFullHeight > m_Height ? GUIFont::VAlignment::Top : m_VAlignment, m_HorizontalOverflowScroll ? textFullWidth : m_Width, m_FontShadow);
 		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::OnMouseDown(int X, int Y, int Buttons, int Modifier) {
-		if (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) {
-			CaptureMouse();
-			SetFocus();
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::OnMouseUp(int X, int Y, int Buttons, int Modifier) {
-		// If the mouse is over the button, add the clicked notification to the event queue
-		if (PointInside(X, Y) && (Buttons & GUIControl::MouseButtons::MOUSE_LEFT) && m_Captured) { AddEvent(GUIEventType::Notification, GUIEventCode::Clicked, Buttons); }
-
-		ReleaseMouse();
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::Resize(int newWidth, int newHeight) {
-		if (m_Width != newWidth || m_Height != newHeight) { GUIControl::Resize(std::max(newWidth, m_MinWidth), std::max(newHeight, m_MinHeight)); }
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int GUILabel::ResizeHeightToFit() {
-		int newHeight = m_Font->CalculateHeight(m_Text, m_Width);
-		GUIControl::Resize(m_Width, newHeight);
-
-		return newHeight;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int GUILabel::GetTextHeight() {
-		return m_Font->CalculateHeight(m_Text, m_Width);
-	}
-	void GUILabel::SetHorizontalOverflowScroll(bool newOverflowScroll) {
-		m_HorizontalOverflowScroll = newOverflowScroll;
-		if (m_HorizontalOverflowScroll) {
-			m_VerticalOverflowScroll = false;
-		} else if (!m_VerticalOverflowScroll) {
-			m_OverflowScrollState = OverflowScrollState::Deactivated;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::SetVerticalOverflowScroll(bool newOverflowScroll) {
-		m_VerticalOverflowScroll = newOverflowScroll;
-		if (m_VerticalOverflowScroll) {
-			m_HorizontalOverflowScroll = false;
-		} else if (!m_HorizontalOverflowScroll) {
-			m_OverflowScrollState = OverflowScrollState::Deactivated;
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::ActivateDeactivateOverflowScroll(bool activateScroll) {
-		if (OverflowScrollIsEnabled() && activateScroll != OverflowScrollIsActivated()) {
-			m_OverflowScrollState = activateScroll ? OverflowScrollState::WaitAtStart : OverflowScrollState::Deactivated;
-			m_OverflowScrollTimer.SetRealTimeLimitMS(-1);
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::StoreProperties() {
-		m_Properties.AddProperty("Text", m_Text);
-
-		if (m_HAlignment == GUIFont::HAlignment::Left) {
-			m_Properties.AddProperty("HAlignment", "left");
-		} else if (m_HAlignment == GUIFont::HAlignment::Centre) {
-			m_Properties.AddProperty("HAlignment", "centre");
-		} else if (m_HAlignment == GUIFont::HAlignment::Right) {
-			m_Properties.AddProperty("HAlignment", "right");
-		}
-		if (m_VAlignment == GUIFont::VAlignment::Top) {
-			m_Properties.AddProperty("VAlignment", "top");
-		} else if (m_VAlignment == GUIFont::VAlignment::Middle) {
-			m_Properties.AddProperty("VAlignment", "middle");
-		} else if (m_VAlignment == GUIFont::VAlignment::Bottom) {
-			m_Properties.AddProperty("VAlignment", "bottom");
-		}
-		m_Properties.AddProperty("HorizontalOverflowScroll", m_HorizontalOverflowScroll);
-		m_Properties.AddProperty("VerticalOverflowScroll", m_VerticalOverflowScroll);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	void GUILabel::ApplyProperties(GUIProperties *Props) {
-		GUIControl::ApplyProperties(Props);
-
-		m_Properties.GetPropertyValue("Text", &m_Text);
-
-		std::string alignString;
-		m_Properties.GetPropertyValue("HAlignment", &alignString);
-		if (alignString == "left") { m_HAlignment = GUIFont::HAlignment::Left; }
-		if (alignString == "centre") { m_HAlignment = GUIFont::HAlignment::Centre; }
-		if (alignString == "right") { m_HAlignment = GUIFont::HAlignment::Right; }
-
-		m_Properties.GetPropertyValue("VAlignment", &alignString);
-		if (alignString == "top") { m_VAlignment = GUIFont::VAlignment::Top; }
-		if (alignString == "middle") { m_VAlignment = GUIFont::VAlignment::Middle; }
-		if (alignString == "bottom") { m_VAlignment = GUIFont::VAlignment::Bottom; }
-
-		m_Properties.GetPropertyValue("HorizontalOverflowScroll", &m_HorizontalOverflowScroll);
-		m_Properties.GetPropertyValue("VerticalOverflowScroll", &m_VerticalOverflowScroll);
 	}
 }

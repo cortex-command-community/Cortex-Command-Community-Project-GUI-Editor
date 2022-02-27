@@ -168,7 +168,7 @@ public:
     /// Gets the text of this GUIButton's GUILabel.
     /// </summary>
     /// <returns>The text of this GUIButton's GUILabel.</returns>
-    const std::string & GetText() const;
+    std::string GetText() const;
 
     /// <summary>
     /// Sets the text of this GUIButton's GUILabel.
