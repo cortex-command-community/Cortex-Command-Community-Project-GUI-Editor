@@ -137,12 +137,6 @@ namespace RTE {
 		std::deque<GUIControl *> * GetControlList() { return &m_AllControls; }
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		std::deque<GUIControl *> * GetContainerList() { return &m_Containers; }
-
-		/// <summary>
 		/// Manually creates a control.
 		/// </summary>
 		/// <param name="name">Name.</param>
@@ -248,9 +242,9 @@ namespace RTE {
 		GUIInput *m_Input = nullptr; // Not owned.
 		std::unique_ptr<GUISkin> m_Skin = nullptr;
 
+		std::deque<GUIControl *> m_OrphanControls = {};
 		std::deque<GUIControl *> m_AllControls = {};
 
-		std::deque<GUIControl *> m_Containers = {};
 		std::deque<GUIEvent> m_EventQueue = {};
 
 		MouseCursorType m_CursorType = MouseCursorType::Pointer;

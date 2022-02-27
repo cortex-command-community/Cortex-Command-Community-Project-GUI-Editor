@@ -409,7 +409,7 @@ namespace RTEGUI {
 		};
 
 		GUICollectionBox *collectionBox = nullptr;
-		for (GUIControl *control : *m_WorkspaceManager->GetContainerList()) {
+		for (GUIControl *control : *m_WorkspaceManager->GetControlList()) {
 			if ((collectionBox = dynamic_cast<GUICollectionBox *>(control)) && collectionBox->GetParent() == m_RootControl) { recursiveAddItem(collectionBox, "\t"); }
 		}
 

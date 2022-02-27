@@ -128,7 +128,7 @@ namespace RTE {
 
 	GUIControl * GUIControlManager::GetControlUnderPoint(int pointX, int pointY, GUIControl *parent, int depth) {
 		// Default to the root object if no parent specified
-		if (!parent) { parent = m_Containers.front(); }
+		if (!parent) { parent = m_OrphanControls.front(); }
 		if (!parent) {
 			return nullptr;
 		}
@@ -166,7 +166,7 @@ namespace RTE {
 			}
 		}
 		// If not asked to search for the root object, return the parent if point is on it
-		return parent == m_Containers.front() ? nullptr : parent;
+		return parent == m_OrphanControls.front() ? nullptr : parent;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,10 +177,11 @@ namespace RTE {
 				newControl->Create(name, posX, posY, width, height);
 				newControl->ChangeSkin(m_Skin.get());
 
-				if (parent) { parent->AddChild(newControl); }
-
-				if (newControl->IsContainer()) { m_Containers.emplace_back(newControl); }
-
+				if (parent) {
+					parent->AddChild(newControl);
+				} else {
+					m_OrphanControls.emplace_back(newControl);
+				}
 				m_AllControls.emplace_back(newControl);
 
 				return newControl;
@@ -194,24 +195,16 @@ namespace RTE {
 	GUIControl * GUIControlManager::AddControl(GUIProperties *properties) {
 		GUIAssert(properties, "");
 
-		std::string type;
-		properties->GetPropertyValue("ControlType", &type);
-		std::string name;
-		properties->GetPropertyValue("Name", &name);
-
-		if (!GetControl(name)) {
-			if (GUIControl *newControl = GUIControlFactory::CreateControl(this, type)) {
+		if (!GetControl(properties->GetPropertyValue<std::string>("Name"))) {
+			if (GUIControl *newControl = GUIControlFactory::CreateControl(this, properties->GetPropertyValue<std::string>("ControlType"))) {
 				newControl->Create(properties);
 				newControl->ChangeSkin(m_Skin.get());
 
-				std::string parent;
-				properties->GetPropertyValue("Parent", &parent);
-
-				if (parent != "None") {
+				if (std::string parent = properties->GetPropertyValue<std::string>("Parent"); parent != "None") {
 					if (GUIControl *parentControl = GetControl(parent)) { parentControl->AddChild(newControl); }
+				} else {
+					m_OrphanControls.emplace_back(newControl);
 				}
-				if (newControl->IsContainer()) { m_Containers.emplace_back(newControl); }
-
 				m_AllControls.emplace_back(newControl);
 
 				return newControl;
@@ -225,13 +218,13 @@ namespace RTE {
 	void GUIControlManager::RemoveControl(const std::string &Name, bool RemoveFromParent) {
 		// NOTE: We can't simply remove it because some controls need to remove extra panels and it's silly to add 'remove' to every control to remove their extra panels (ie. Combobox).
 		// Signals and stuff are also linked in so we just remove the controls from the list and not from memory.
-		for (std::deque<GUIControl *>::iterator controlItr = m_Containers.begin(); controlItr != m_Containers.end(); controlItr++) {
+		for (std::deque<GUIControl *>::iterator controlItr = m_AllControls.begin(); controlItr != m_AllControls.end(); controlItr++) {
 			GUIControl *control = *controlItr;
 			if (control->GetName() == Name) {
 
 				// Just remove controlItr from the list
 				control->SetVisible(false);
-				m_Containers.erase(controlItr);
+				m_AllControls.erase(controlItr);
 
 				// Remove all my children
 				control->RemoveAllChildren();
@@ -247,10 +240,11 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::ClearAllControls() {
-		for (GUIControl *control : m_Containers) {
+		for (GUIControl *control : m_AllControls) {
 			delete control;
 		}
-		m_Containers.clear();
+
+		m_OrphanControls.clear();
 		m_AllControls.clear();
 		m_EventQueue.clear();
 	}
@@ -312,15 +306,15 @@ namespace RTE {
 		int controlIndex = -1;
 		std::deque<GUIControl *> *controlContainer = nullptr;
 
-		for (int i = 0; i < m_Containers.size(); ++i) {
-			if (m_Containers[i]->GetUniqueID() == controlID) {
-				controlContainer = &m_Containers;
+		for (int i = 0; i < m_AllControls.size(); ++i) {
+			if (m_AllControls[i]->GetUniqueID() == controlID) {
+				controlContainer = &m_AllControls;
 				controlIndex = i;
 				break;
 			}
 		}
 		if (controlIndex < 0) {
-			for (GUIControl *container : m_Containers) {
+			for (GUIControl *container : m_AllControls) {
 				std::deque<GUIControl *> *containerChildren = container->GetChildren();
 				for (int i = 0; i < containerChildren->size(); ++i) {
 					if (containerChildren->at(i)->GetUniqueID() == controlID) {
@@ -511,8 +505,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControlManager::Draw(GUIScreen *Screen) const {
-		for (GUIControl *container : m_Containers) {
-			container->Draw(Screen);
+		for (GUIControl *control : m_OrphanControls) {
+			control->Draw(Screen);
 		}
 	}
 }
