@@ -326,10 +326,10 @@ namespace RTE {
 		/// <summary>
 		/// Checks if a point is inside the panel.
 		/// </summary>
-		/// <param name="posX">Coordinates of point.</param>
-		/// <param name="posY"></param>
+		/// <param name="pointX">Coordinates of point.</param>
+		/// <param name="pointY"></param>
 		/// <returns>A boolean of the check result.</returns>
-		virtual bool PointInside(int posX, int posY);
+		virtual bool PointInside(int pointX, int pointY) { return m_Visible && (pointX > m_PosX && pointX < m_PosX + m_Width) && (pointY > m_PosY && pointY < m_PosY + m_Height); }
 
 		/// <summary>
 		/// Recursively goes up the tree from to check the first panel under a point.

@@ -170,23 +170,6 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool GUIControl::PointInside(int X, int Y) {
-		// Can't be inside an invisible panel
-		if (!m_Visible) {
-			return false;
-		}
-		if (X < m_X || Y < m_Y) {
-			return false;
-		}
-		if (X > m_X + m_Width || Y > m_Y + m_Height) {
-			return false;
-		}
-		// Mouse is inside
-		return true;
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	GUIControl * GUIControl::TopPanelUnderPoint(int x, int y) {
 		if ((!m_Visible || !m_Enabled) || !PointInside(x, y)) {
 			return nullptr;
