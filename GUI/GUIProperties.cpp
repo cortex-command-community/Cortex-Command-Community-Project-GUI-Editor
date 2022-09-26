@@ -6,7 +6,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIProperties::AddProperty(const std::string &propName, const std::string &propValue) {
-		if (GetPropertyValue(propName, &std::string())) {
+		if (std::string unused;  GetPropertyValue(propName, &unused)) {
 			SetPropertyValue(propName, propValue);
 		} else {
 			m_PropertyEntries.emplace_back(propName, propValue);
