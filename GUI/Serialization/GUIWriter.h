@@ -58,6 +58,11 @@ namespace RTE {
 		void ObjectEnd() { --m_IndentCount; if (m_IndentCount == 0) { NewLine(false, 2); } }
 
 		/// <summary>
+		/// Marks that there is a null reference to an object here.
+		/// </summary>
+		void NoObject() const { *m_Stream << "None"; }
+
+		/// <summary>
 		/// Creates a new line that can be properly indented.
 		/// </summary>
 		/// <param name="toIndent">Whether to indent the new line or not.</param>

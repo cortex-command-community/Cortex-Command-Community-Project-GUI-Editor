@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Serialization;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;DEBUG_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -85,7 +85,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Panels;$(ProjectDir)GUI\Serialization;$(ProjectDir)GUI\Controls;$(SolutionDir)GUI;$(ProjectDir)System\Wrappers;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -127,9 +127,10 @@
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
-    <ClCompile Include="GUI\GUIReader.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
-    <ClCompile Include="GUI\GUIWriter.cpp" />
+    <ClCompile Include="GUI\Serialization\GUIReader.cpp" />
+    <ClCompile Include="GUI\Serialization\GUISerializable.cpp" />
+    <ClCompile Include="GUI\Serialization\GUIWriter.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="System\Wrappers\AllegroInput.cpp" />
     <ClCompile Include="System\Wrappers\AllegroScreen.cpp" />
@@ -150,9 +151,10 @@
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
-    <ClInclude Include="GUI\GUIReader.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
-    <ClInclude Include="GUI\GUIWriter.h" />
+    <ClInclude Include="GUI\Serialization\GUIReader.h" />
+    <ClInclude Include="GUI\Serialization\GUISerializable.h" />
+    <ClInclude Include="GUI\Serialization\GUIWriter.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
     <ClInclude Include="System\Wrappers\AllegroInput.h" />
     <ClInclude Include="System\Wrappers\AllegroScreen.h" />
