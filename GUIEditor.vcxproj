@@ -123,31 +123,11 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Editor\EditorApp.cpp" />
-    <ClCompile Include="Editor\EditorManager.cpp" />
-    <ClCompile Include="Editor\EditorSelection.cpp" />
-    <ClCompile Include="Editor\EditorUtil.cpp" />
-    <ClCompile Include="GUI\Controls\GUIButton.cpp" />
-    <ClCompile Include="GUI\Controls\GUICheckbox.cpp" />
-    <ClCompile Include="GUI\Controls\GUICollectionBox.cpp" />
-    <ClCompile Include="GUI\Controls\GUIComboBox.cpp" />
-    <ClCompile Include="GUI\Controls\GUILabel.cpp" />
-    <ClCompile Include="GUI\Controls\GUIListBox.cpp" />
-    <ClCompile Include="GUI\Controls\GUIProgressBar.cpp" />
-    <ClCompile Include="GUI\Controls\GUIPropertyPage.cpp" />
-    <ClCompile Include="GUI\Controls\GUIRadioButton.cpp" />
-    <ClCompile Include="GUI\Controls\GUIScrollbar.cpp" />
-    <ClCompile Include="GUI\Controls\GUISlider.cpp" />
-    <ClCompile Include="GUI\Controls\GUITab.cpp" />
-    <ClCompile Include="GUI\Controls\GUITextBox.cpp" />
     <ClCompile Include="GUI\GUIControl.cpp" />
-    <ClCompile Include="GUI\GUIControlFactory.cpp" />
-    <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
     <ClCompile Include="GUI\GUIReader.cpp" />
-    <ClCompile Include="GUI\GUISkin.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\GUIWriter.cpp" />
     <ClCompile Include="System\Wrappers\AllegroBitmap.cpp" />
@@ -162,35 +142,15 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Editor\EditorApp.h" />
-    <ClInclude Include="Editor\EditorManager.h" />
-    <ClInclude Include="Editor\EditorSelection.h" />
-    <ClInclude Include="Editor\EditorUtil.h" />
-    <ClInclude Include="GUI\Controls\GUIButton.h" />
-    <ClInclude Include="GUI\Controls\GUICheckbox.h" />
-    <ClInclude Include="GUI\Controls\GUICollectionBox.h" />
-    <ClInclude Include="GUI\Controls\GUIComboBox.h" />
-    <ClInclude Include="GUI\Controls\GUILabel.h" />
-    <ClInclude Include="GUI\Controls\GUIListBox.h" />
-    <ClInclude Include="GUI\Controls\GUIProgressBar.h" />
-    <ClInclude Include="GUI\Controls\GUIPropertyPage.h" />
-    <ClInclude Include="GUI\Controls\GUIRadioButton.h" />
-    <ClInclude Include="GUI\Controls\GUIScrollbar.h" />
-    <ClInclude Include="GUI\Controls\GUISlider.h" />
-    <ClInclude Include="GUI\Controls\GUITab.h" />
-    <ClInclude Include="GUI\Controls\GUITextBox.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\GUIConstants.h" />
     <ClInclude Include="GUI\GUIControl.h" />
-    <ClInclude Include="GUI\GUIControlFactory.h" />
-    <ClInclude Include="GUI\GUIControlManager.h" />
     <ClInclude Include="GUI\GUIEvent.h" />
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
     <ClInclude Include="GUI\GUIReader.h" />
-    <ClInclude Include="GUI\GUISkin.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\GUIWriter.h" />
     <ClInclude Include="System\Wrappers\AllegroBitmap.h" />
