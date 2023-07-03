@@ -2,6 +2,7 @@
 #define _GUISKIN_
 
 #include "GUIConstants.h"
+#include "GUISerializable.h"
 
 namespace RTE {
 
@@ -49,7 +50,7 @@ namespace RTE {
 		GUIFont * GetFont(const std::string &fontName);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="cursorType"></param>
 		/// <returns></returns>

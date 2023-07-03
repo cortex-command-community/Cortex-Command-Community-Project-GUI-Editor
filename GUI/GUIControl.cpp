@@ -6,46 +6,40 @@ namespace RTE {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	bool GUIControl::ReadProperty(GUIReader &reader, const std::string_view &propName) {
+		if (propName == "X") {
+			reader >> m_PosX;
+		} else if (propName == "Y") {
+			reader >> m_PosY;
+		} else {
+			return GUISerializable::ReadProperty(reader, propName);
+		}
+		return false;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	bool GUIControl::Save(GUIWriter &writer) const {
+		GUISerializable::Save(writer);
+
+		return true;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void GUIControl::Create(const std::string_view &name, int posX, int posY, int width, int height) {
 		m_UniqueID = m_OwningManager->RequestUniqueID();
-
+		m_Name = name;
 		m_PosX = posX;
 		m_PosY = posY;
 		m_Width = width;
 		m_Height = height;
-
-		m_Properties.ClearProperties();
-		m_Properties.SetName(name);
-
-		m_Properties.AddProperty("Name", std::string(name));
-		m_Properties.AddProperty("Anchor", "Left, Top");
-		m_Properties.AddProperty("ToolTip", "");
-		m_Properties.AddProperty("X", m_ParentControl ? GetRelPosX() : m_PosX);
-		m_Properties.AddProperty("Y", m_ParentControl ? GetRelPosY() : m_PosY);
-		m_Properties.AddProperty("Width", m_Width);
-		m_Properties.AddProperty("Height", m_Height);
-		m_Properties.AddProperty("Visible", m_Visible);
-		m_Properties.AddProperty("Enabled", m_Enabled);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::Create(GUIProperties *reference) {
 		m_UniqueID = m_OwningManager->RequestUniqueID();
-
-		m_Properties.AddProperty("Name", "");
-		m_Properties.AddProperty("Anchor", "Left, Top");
-		m_Properties.AddProperty("ToolTip", "");
-
-		reference->GetPropertyValue("X", &m_PosX);
-		reference->GetPropertyValue("Y", &m_PosY);
-		reference->GetPropertyValue("Width", &m_Width);
-		reference->GetPropertyValue("Height", &m_Height);
-
-		reference->GetPropertyValue("Visible", &m_Visible);
-		reference->GetPropertyValue("Enabled", &m_Enabled);
-
-		m_Properties.OverwriteProperties(reference);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +99,7 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::SetFocus() {
-		m_OwningManager->SetFocusedControl(this);
+		//m_OwningManager->SetFocusedControl(this);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +159,8 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	bool GUIControl::ChangeZPosition(ZPosChangeType changeType) {
-		return m_ParentControl ? m_OwningManager->ChangeZPosition(m_UniqueID, changeType) : false;
+		//return m_ParentControl ? m_OwningManager->ChangeZPosition(m_UniqueID, changeType) : false;
+		return false;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +226,7 @@ namespace RTE {
 		// Note: We do NOT free the children because they are still linked in through their panels. This merely removes the control from the list.
 		// This will cause a small memory leak, but this is only designed for the GUI Editor and is a bit of a hack.
 		for (const GUIControl *control : m_Children) {
-			if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
+			//if (control) { m_OwningManager->RemoveControl(control->GetName(), false); }
 		}
 		m_Children.clear();
 	}
@@ -239,24 +234,24 @@ namespace RTE {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::AddEvent(GUIEventType eventType, GUIEventCode eventCode, int eventData) {
-		m_OwningManager->AddEvent(GUIEvent(this, eventType, eventCode, eventData));
+		//m_OwningManager->AddEvent(GUIEvent(this, eventType, eventCode, eventData));
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::CaptureMouse() {
-		m_OwningManager->CaptureMouse(this);
+		//m_OwningManager->CaptureMouse(this);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::ReleaseMouse() {
-		m_OwningManager->ReleaseMouse();
+		//m_OwningManager->ReleaseMouse();
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void GUIControl::TrackMouseHover(bool Enabled, float Delay) {
-		m_OwningManager->TrackMouseHover(this, Enabled, Delay);
+		//m_OwningManager->TrackMouseHover(this, Enabled, Delay);
 	}
 }

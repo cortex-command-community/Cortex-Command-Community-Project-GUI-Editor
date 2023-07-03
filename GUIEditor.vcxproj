@@ -124,9 +124,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GUI\GUIControl.cpp" />
+    <ClCompile Include="GUI\GUIControlFactory.cpp" />
+    <ClCompile Include="GUI\GUIControlManager.cpp" />
     <ClCompile Include="GUI\GUIFont.cpp" />
     <ClCompile Include="GUI\GUIInput.cpp" />
     <ClCompile Include="GUI\GUIProperties.cpp" />
+    <ClCompile Include="GUI\GUISkin.cpp" />
     <ClCompile Include="GUI\GUIUtil.cpp" />
     <ClCompile Include="GUI\Serialization\GUIReader.cpp" />
     <ClCompile Include="GUI\Serialization\GUISerializable.cpp" />
@@ -146,11 +149,14 @@
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\GUIConstants.h" />
     <ClInclude Include="GUI\GUIControl.h" />
+    <ClInclude Include="GUI\GUIControlFactory.h" />
+    <ClInclude Include="GUI\GUIControlManager.h" />
     <ClInclude Include="GUI\GUIEvent.h" />
     <ClInclude Include="GUI\GUIFont.h" />
     <ClInclude Include="GUI\GUIInput.h" />
     <ClInclude Include="GUI\GUIInterface.h" />
     <ClInclude Include="GUI\GUIProperties.h" />
+    <ClInclude Include="GUI\GUISkin.h" />
     <ClInclude Include="GUI\GUIUtil.h" />
     <ClInclude Include="GUI\Serialization\GUIReader.h" />
     <ClInclude Include="GUI\Serialization\GUISerializable.h" />

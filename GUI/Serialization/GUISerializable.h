@@ -19,14 +19,14 @@ namespace RTE {
 		/// Convenience macro to cut down on duplicate ReadProperty and Save methods in classes that extend GUISerializable.
 		/// </summary>
 		#define GUISerializableOverrideMethods \
-			bool ReadProperty(const std::string_view &propName, GUIReader &reader) override; \
+			bool ReadProperty(GUIReader &reader, const std::string_view &propName) override; \
 			bool Save(GUIWriter &writer) const override;
 
 		/// <summary>
 		/// Convenience macro to cut down on duplicate GetClassName methods in classes that extend GUISerializable.
 		/// </summary>
 		#define GUISerializableClassNameGetter \
-			const std::string & GetClassName() const override { return c_ClassName; }
+			const std::string_view & GetClassName() const override { return c_ClassName; }
 #pragma endregion
 
 #pragma region Creation
@@ -135,7 +135,7 @@ namespace RTE {
 		/// Gets the class name of this GUISerializable.
 		/// </summary>
 		/// <returns>A string with the friendly-formatted type name of this GUISerializable.</returns>
-		virtual const std::string & GetClassName() const = 0;
+		virtual const std::string_view & GetClassName() const = 0;
 #pragma endregion
 
 	private:

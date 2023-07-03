@@ -2,18 +2,21 @@
 #define _RTEGUICONTROLBASE_
 
 #include "GUIConstants.h"
+#include "GUISerializable.h"
 
 namespace RTE {
 
 	class GUIControlManager;
-	class GUIWriter;
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	class GUIControl {
+	class GUIControl : public GUISerializable {
 
 	public:
+
+		GUISerializableClassNameGetter;
+		GUISerializableOverrideMethods;
 
 		/// <summary>
 		/// Anchor points.
@@ -43,7 +46,7 @@ namespace RTE {
 
 #pragma region Creation
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		GUIControl() = default;
 
@@ -66,7 +69,7 @@ namespace RTE {
 
 #pragma region Destruction
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		virtual ~GUIControl() = default;
 #pragma endregion
@@ -208,7 +211,7 @@ namespace RTE {
 		int GetPosX() const { return m_PosX; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newPosX"></param>
 		void SetPosX(int newPosX) { m_PosX = newPosX; }
@@ -220,7 +223,7 @@ namespace RTE {
 		int GetPosY() const { return m_PosY; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newPosY"></param>
 		void SetPosY(int newPosY) { m_PosY = newPosY; }
@@ -239,7 +242,7 @@ namespace RTE {
 		int GetRelPosX() const { return m_PosX - (m_ParentControl ? m_ParentControl->GetPosX() : 0); }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="relX"></param>
 		void SetRelPosX(int relX) { m_PosX = (m_ParentControl ? m_ParentControl->GetPosX() : m_PosX) + relX; }
@@ -251,7 +254,7 @@ namespace RTE {
 		int GetRelPosY() const { return m_PosY - (m_ParentControl ? m_ParentControl->GetPosY() : 0); }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="relY"></param>
 		void SetRelPosY(int relY) { m_PosY = (m_ParentControl ? m_ParentControl->GetPosY() : m_PosY) + relY; }
@@ -270,7 +273,7 @@ namespace RTE {
 		int GetWidth() const { return m_Width; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newWidth"></param>
 		void SetWidth(int newWidth) { m_Width = newWidth; }
@@ -282,7 +285,7 @@ namespace RTE {
 		int GetHeight() const { return m_Height; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newHeight"></param>
 		void SetHeight(int newHeight) { m_Height = newHeight; }
@@ -340,7 +343,7 @@ namespace RTE {
 		GUIControl * TopPanelUnderPoint(int posX, int posY);
 #pragma endregion
 
-#pragma region 
+#pragma region
 		/// <summary>
 		/// Adds a child to this panel.
 		/// </summary>
@@ -532,12 +535,15 @@ namespace RTE {
 
 	protected:
 
+		static constexpr std::string_view c_ClassName = "";
+
 		GUIControlManager *m_OwningManager = nullptr; //!< Not owned, owns this!
 		GUISkin *m_Skin = nullptr;
 
 		std::unique_ptr<GUIBitmap> m_DrawBitmap = nullptr;
 
 		int m_UniqueID = -1;
+		std::string m_Name = "";
 
 		bool m_Enabled = true;
 		bool m_Visible = true;

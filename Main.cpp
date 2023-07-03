@@ -1,10 +1,11 @@
-#include "EditorApp.h"
-#include "EditorUtil.h"
+//#include "EditorApp.h"
+//#include "EditorUtil.h"
 #include "ContentFile.h"
+#include "allegro.h"
 #include "winalleg.h"
 #include "loadpng.h"
 
-using namespace RTEGUI;
+//using namespace RTEGUI;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -12,8 +13,8 @@ using namespace RTEGUI;
 /// Entry point for the GUI editor app.
 /// </summary>
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	//allegro_init();
-	//loadpng_init();
+	allegro_init();
+	loadpng_init();
 	//g_GUIEditor.Initialize();
 
 	//std::chrono::steady_clock::time_point frameTimeStart;

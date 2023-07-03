@@ -50,7 +50,7 @@ namespace RTE {
 		/// Used to specify the start of an object to be written.
 		/// </summary>
 		/// <param name="className">The class name of the object about to be written.</param>
-		void ObjectStart(const std::string &className) { *m_Stream << className; ++m_IndentCount; }
+		void ObjectStart(const std::string_view &className) { *m_Stream << className; ++m_IndentCount; }
 
 		/// <summary>
 		/// Used to specify the end of an object that has just been written.
