@@ -183,9 +183,6 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.cpp">
       <Filter>RTE\System</Filter>
     </ClCompile>
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.cpp">
-      <Filter>RTE\System</Filter>
-    </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.cpp">
       <Filter>RTE\System</Filter>
     </ClCompile>
@@ -211,9 +208,6 @@
       <Filter>RTE\System</Filter>
     </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\RTETools.cpp">
-      <Filter>RTE\System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.cpp">
       <Filter>RTE\System</Filter>
     </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Serializable.cpp">
@@ -265,9 +259,6 @@
       <Filter>RTE\Menus</Filter>
     </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.cpp">
-      <Filter>RTE\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.cpp">
       <Filter>RTE\Menus</Filter>
     </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.cpp">
@@ -588,6 +579,9 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\SceneEditor.cpp">
       <Filter>RTE\Activities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\LuaMan.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -746,9 +740,6 @@
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.h">
       <Filter>RTE\System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.h">
-      <Filter>RTE\System</Filter>
-    </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.h">
       <Filter>RTE\System</Filter>
     </ClInclude>
@@ -777,9 +768,6 @@
       <Filter>RTE\System</Filter>
     </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\RTETools.h">
-      <Filter>RTE\System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.h">
       <Filter>RTE\System</Filter>
     </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Serializable.h">
@@ -834,9 +822,6 @@
       <Filter>RTE\Menus</Filter>
     </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.h">
-      <Filter>RTE\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.h">
       <Filter>RTE\Menus</Filter>
     </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.h">
@@ -1144,5 +1129,10 @@
     <ResourceCompile Include="Resources\Resource.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Icon32.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

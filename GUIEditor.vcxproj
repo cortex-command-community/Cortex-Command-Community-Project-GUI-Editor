@@ -12,22 +12,19 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DB486FC0-C6F8-4AD3-8D32-8AA0314C6B33}</ProjectGuid>
-    <RootNamespace>editor</RootNamespace>
-    <ProjectName>GUIEditor</ProjectName>
+    <RootNamespace>RTEGUI</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='16.0'">v142</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v143</PlatformToolset>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <OutDir>$(SolutionDir)_Bin\</OutDir>
     <IntDir>_Bin\$(Configuration)\</IntDir>
-    <EmbedManifest>false</EmbedManifest>
+    <OutDir>..\Cortex-Command-Community-Project-Data\</OutDir>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -37,83 +34,130 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>RTE GUI Editor.debug</TargetName>
+    <TargetName>Cortex Command GUI Editor.debug</TargetName>
+    <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>RTE GUI Editor</TargetName>
+    <TargetName>Cortex Command GUI Editor</TargetName>
+    <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)'=='16.0'">/bigobj /Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)'=='17.0'">/bigobj %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;_DEBUG;DEBUG_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\Editor;$(ProjectDir)..\Cortex-Command-Community-Project-Source;$(ProjectDir)..\Cortex-Command-Community-Project-Source\System;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Lua;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Entities;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Activities;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Menus;$(ProjectDir)..\Cortex-Command-Community-Project-Source\GUI;$(ProjectDir)..\Cortex-Command-Community-Project-Source\GUI\Wrappers;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\win;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\boost_1_75;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\win\LZ4;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\fmod;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\include;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\addons\loadpng;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\SDL2-2.26.3\include;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\LuaJIT-2.1\src;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\luabind;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\RakNet\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32_LEAN_AND_MEAN;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_WINDOWS;WIN32;MIN_DEBUG_BUILD;DEBUGMODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level1</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <WarningLevel>Level2</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles);StandardIncludes.h;</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <OmitFramePointers>false</OmitFramePointers>
-      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <ConformanceMode>true</ConformanceMode>
+      <IncludeInUnityFile>false</IncludeInUnityFile>
+      <AddCodeAfterSourceInclude>#undef GetClassName</AddCodeAfterSourceInclude>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;zlibstat.lib;libpng16_static.lib;loadpng.lib;allegro_static_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;setupapi.lib;version.lib;imm32.lib;zlibstat.lib;libpng16_static.lib;fmod_vc.lib;allegro-debug.lib;loadpng-debug.lib;liblz4_debug_static.lib;luajit-debug-release.lib;luabind-debug.lib;raknet-debug.lib;sdl2main-debug.lib;sdl2-debug.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\SDL2-2.26.3\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\LuaJIT-2.1\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\RakNet\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\lib\win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)\RTEA.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalOptions>/ignore:4098 /ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>LinkVerbose</ShowProgress>
+      <AdditionalOptions>/ignore:4099 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <Manifest>
-      <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
+      <OutputManifestFile>$(IntDir)$(TargetName).manifest</OutputManifestFile>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
+    <Xdcmake>
+      <OutputFile>$(IntDir)$(TargetName).xml</OutputFile>
+    </Xdcmake>
+    <Bscmake>
+      <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)external\include;$(ProjectDir)System\RTECompatibility;$(ProjectDir)GUI\Wrappers;$(SolutionDir)GUI;$(ProjectDir)System;$(ProjectDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN32_LEAN_AND_MEAN;_HAS_ITERATOR_DEBUGGING=0;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;GUI_STANDALONE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)'=='16.0'">/bigobj /Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)'=='17.0'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\Editor;$(ProjectDir)..\Cortex-Command-Community-Project-Source;$(ProjectDir)..\Cortex-Command-Community-Project-Source\System;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Lua;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Entities;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Activities;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Managers;$(ProjectDir)..\Cortex-Command-Community-Project-Source\Menus;$(ProjectDir)..\Cortex-Command-Community-Project-Source\GUI;$(ProjectDir)..\Cortex-Command-Community-Project-Source\GUI\Wrappers;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\win;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\boost_1_75;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\win\LZ4;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\include\common\fmod;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\include;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\addons\loadpng;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\SDL2-2.26.3\include;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\LuaJIT-2.1\src;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\luabind;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\RakNet\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32_LEAN_AND_MEAN;ALLEGRO_STATICLINK;ALLEGRO_NO_STD_HEADERS;ALLEGRO_NO_MAGIC_MAIN;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_WINDOWS;WIN32;DEBUG_RELEASE_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>
+      </EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
-      <ForcedIncludeFiles>StandardIncludes.h;</ForcedIncludeFiles>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles);StandardIncludes.h;</ForcedIncludeFiles>
+      <OmitFramePointers>false</OmitFramePointers>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <OmitFramePointers>true</OmitFramePointers>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>false</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <ConformanceMode>true</ConformanceMode>
+      <IncludeInUnityFile>false</IncludeInUnityFile>
+      <AddCodeAfterSourceInclude>#undef GetClassName</AddCodeAfterSourceInclude>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;ddraw.lib;dxguid.lib;zlibstat.lib;libpng16_static.lib;loadpng.lib;allegro_static_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;dinput8.lib;ddraw.lib;dxguid.lib;dsound.lib;zlibstat.lib;libpng16_static.lib;fmod_vc.lib;allegro-debug-release.lib;loadpng-debug-release.lib;liblz4_release_static.lib;luajit-debug-release.lib;luabind-debug-release.lib;raknet-release.lib;opengl32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\allegro 4.4.3.1-custom\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\SDL2-2.26.3\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\luabind-0.7.1\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\LuaJIT-2.1\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\sources\RakNet\_Bin;$(ProjectDir)..\Cortex-Command-Community-Project-Source\external\lib\win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalOptions>/ignore:4098 /ignore:4099 /ignore:4217 /ignore:4049 /NOIMPLIB %(AdditionalOptions)</AdditionalOptions>
-      <LargeAddressAware>true</LargeAddressAware>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <FixedBaseAddress>false</FixedBaseAddress>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalOptions>/ignore:4099 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
+      <ProgramDatabaseFile>$(IntDir)\RTEA.pdb</ProgramDatabaseFile>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <Manifest>
-      <OutputManifestFile>$(IntDir)$(Configuration).manifest</OutputManifestFile>
+      <OutputManifestFile>$(IntDir)$(TargetName).manifest</OutputManifestFile>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
+    <Xdcmake>
+      <OutputFile>$(IntDir)$(TargetName).xml</OutputFile>
+    </Xdcmake>
+    <Bscmake>
+      <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\ActorEditor.cpp" />
@@ -213,22 +257,66 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroBitmap.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroScreen.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\GUIInputWrapper.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaAdapters.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsActivities.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsEntities.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsGUI.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsInput.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsManagers.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsMisc.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsPrimitives.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsSystem.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuabindObjectWrapper.cpp" />
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaAdapters.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuabindObjectWrapper.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsActivities.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsEntities.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsGUI.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsManagers.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsMisc.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsInput.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsPrimitives.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsSystem.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\LuaMan.cpp">
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard Condition="'$(VisualStudioVersion)'=='16.0'">stdcpp17</LanguageStandard>
+    </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\ActivityMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\AudioMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\CameraMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\ConsoleMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\FrameMan.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\LuaMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MenuMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MetaMan.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MovableMan.cpp" />
@@ -253,7 +341,6 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MainMenuGUI.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MetagameGUI.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioActivityConfigGUI.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioGUI.cpp" />
@@ -275,7 +362,6 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\DataModule.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Entity.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\InputMapping.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\InputScheme.cpp" />
@@ -286,10 +372,12 @@
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Reader.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\RTEError.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\RTETools.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Serializable.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\SpatialPartitionGrid.cpp" />
-    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\StandardIncludes.cpp" />
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\StandardIncludes.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>StandardIncludes.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\System.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Timer.cpp" />
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Vector.cpp" />
@@ -434,7 +522,6 @@
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MainMenuGUI.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MetagameGUI.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.h" />
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioActivityConfigGUI.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioGUI.h" />
@@ -458,7 +545,6 @@
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Entity.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Gamepad.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.h" />
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\InputMapping.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\InputScheme.h" />
@@ -470,7 +556,6 @@
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Reader.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\RTEError.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\RTETools.h" />
-    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Serializable.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Singleton.h" />
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\SpatialPartitionGrid.h" />
@@ -484,6 +569,9 @@
     <ClInclude Include="Editor\EditorSelection.h" />
     <ClInclude Include="Editor\EditorUtil.h" />
     <ClInclude Include="Resources\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Icon32.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
