@@ -9,126 +9,15 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>c;cpp;h;hpp</Extensions>
     </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{0aba3e8c-3d0a-4bec-9935-650eff0d4572}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{2a3cd1a4-9fe2-4b33-b6dc-c4e4eb71600e}</UniqueIdentifier>
     </Filter>
     <Filter Include="GUI\Wrappers">
       <UniqueIdentifier>{1b25b727-3fa0-45de-83e8-a280cc37a265}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\RTECompatibility">
-      <UniqueIdentifier>{3c58d7d0-cdfc-429c-8180-7560dc38947f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="GUI\GUIButton.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUICheckbox.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUICollectionBox.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIComboBox.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIControl.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIControlFactory.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIControlManager.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIEvent.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIFont.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIInput.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUILabel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIListBox.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIListPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIManager.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIProgressBar.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIProperties.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIPropertyPage.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIRadioButton.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIScrollbar.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIScrollPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUISkin.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUISlider.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUITab.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUITextBox.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUITextPanel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIUtil.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroBitmap.cpp">
-      <Filter>GUI\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroInput.cpp">
-      <Filter>GUI\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Wrappers\AllegroScreen.cpp">
-      <Filter>GUI\Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="System\StandardIncludes.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\ContentFile.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Reader.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\RTEError.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Writer.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
     <ClCompile Include="Editor\EditorApp.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
@@ -141,139 +30,10 @@
     <ClCompile Include="Editor\EditorSelection.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\GUIReader.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GUIWriter.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RTECompatibility\Serializable.cpp">
-      <Filter>System\RTECompatibility</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUI.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIButton.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUICheckbox.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUICollectionBox.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIComboBox.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIControl.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIControlFactory.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIControlManager.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIEvent.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIFont.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIInput.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUILabel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIListBox.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIListPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIManager.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIProgressBar.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIProperties.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIPropertyPage.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIRadioButton.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIScrollbar.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIScrollPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUISkin.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUISlider.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUITab.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUITextBox.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUITextPanel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIUtil.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroBitmap.h">
-      <Filter>GUI\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroInput.h">
-      <Filter>GUI\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Wrappers\AllegroScreen.h">
-      <Filter>GUI\Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\StandardIncludes.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Singleton.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIInterface.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\ContentFile.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Reader.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\RTEError.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Serializable.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Timer.h">
-      <Filter>System\RTECompatibility</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RTECompatibility\Writer.h">
-      <Filter>System\RTECompatibility</Filter>
     </ClInclude>
     <ClInclude Include="Editor\EditorApp.h">
       <Filter>Editor</Filter>
@@ -286,12 +46,6 @@
     </ClInclude>
     <ClInclude Include="Editor\EditorSelection.h">
       <Filter>Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIReader.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GUIWriter.h">
-      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
