@@ -2,6 +2,12 @@
 #include "EditorUtil.h"
 #include "GUICheckbox.h"
 #include "GUITextBox.h"
+
+#include "WindowMan.h"
+#include "FrameMan.h"
+#include "PresetMan.h"
+#include "UInputMan.h"
+
 #include "winalleg.h"
 
 namespace RTEGUI {
@@ -11,11 +17,11 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::Initialize() {
-		set_color_depth(32);
-		set_color_conversion(COLORCONV_MOST);
-		set_window_title("Cortex Command GUI Editor");
-		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
-		set_close_button_callback(QuitHandler);
+		//set_color_depth(32);
+		//set_color_conversion(COLORCONV_MOST);
+		//set_window_title("Cortex Command GUI Editor");
+		//set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
+		//set_close_button_callback(QuitHandler);
 		//set_resize_callback(ResizeHandler);
 		//set_display_switch_callback(SWITCH_OUT, SwitchOutHandler);
 		//set_display_switch_callback(SWITCH_IN, SwitchInHandler);
@@ -23,18 +29,18 @@ namespace RTEGUI {
 		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
 		int desktopResX;
 		int desktopResY;
-		get_desktop_resolution(&desktopResX, &desktopResY);
-		m_BackBuffer = create_bitmap(desktopResX, desktopResY);
-		clear_to_color(m_BackBuffer, 0);
+		//get_desktop_resolution(&desktopResX, &desktopResY);
 
-		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
-		m_Input = std::make_unique<GUIInputWrapper>(-1);
+		BITMAP *backbuffer = g_FrameMan.GetBackBuffer32();
+
+		m_Screen = std::make_unique<AllegroScreen>(backbuffer);
+		m_Input = std::make_unique<GUIInputWrapper>(-1, g_UInputMan.GetJoystickCount() > 0);
 
 		// Initialize the UI
-		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");
+		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Base.rte/GUIs/Skins/Menus", "MainMenuSubMenuSkin.ini");
 
 		// Only allow workspace zoom if the screen resolution is FHD or above, smaller resolutions can't fully display it
-		if (m_BackBuffer->w < 1920 && m_BackBuffer->h < 1080) {
+		if (backbuffer->w < 1920 && backbuffer->h < 1080) {
 			m_EditorManager->DisableZoomCheckbox();
 		} else {
 			m_ZoomBuffer = create_bitmap(m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
@@ -49,7 +55,6 @@ namespace RTEGUI {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditorApp::DestroyBackBuffers() {
-		destroy_bitmap(m_BackBuffer);
 		if (m_ZoomBuffer) { destroy_bitmap(m_ZoomBuffer); }
 	}
 
@@ -249,10 +254,10 @@ namespace RTEGUI {
 	void EditorApp::DrawEditor() {
 		if (m_WindowResized) {
 			//acknowledge_resize();
-			show_mouse(m_ZoomWorkspace ? nullptr : screen);
+			//show_mouse(m_ZoomWorkspace ? nullptr : screen);
 			m_WindowResized = false;
 		}
-		clear_to_color(m_BackBuffer, 0);
+		BITMAP *backbuffer = g_FrameMan.GetBackBuffer32();
 
 		m_EditorManager->GetEditorBase()->Draw(m_Screen.get());
 		m_EditorManager->GetWorkspaceManager()->Draw();
@@ -262,12 +267,15 @@ namespace RTEGUI {
 		m_EditorManager->GetToolBar()->Draw(m_Screen.get());
 
 		if (m_ZoomWorkspace) {
-			m_EditorManager->GetControlManager()->DrawMouse();
+			//m_EditorManager->GetControlManager()->DrawMouse();
 
-			stretch_blit(m_BackBuffer, m_ZoomBuffer, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth(), m_EditorManager->GetWorkspaceHeight(), 0, 0, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
-			blit(m_ZoomBuffer, m_BackBuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
+			stretch_blit(backbuffer, m_ZoomBuffer, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth(), m_EditorManager->GetWorkspaceHeight(), 0, 0, m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
+			blit(m_ZoomBuffer, backbuffer, 0, 0, m_EditorManager->GetWorkspacePosX(), m_EditorManager->GetWorkspacePosY(), m_EditorManager->GetWorkspaceWidth() * 2, m_EditorManager->GetWorkspaceHeight() * 2);
 		}
-		blit(m_BackBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
+
+		m_EditorManager->GetControlManager()->DrawMouse();
+
+		//blit(backbuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
