@@ -30,6 +30,108 @@
     <ClCompile Include="Editor\EditorSelection.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIBanner.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIButton.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUICheckbox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUICollectionBox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIComboBox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControl.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControlFactory.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControlManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIEvent.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIFont.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIInput.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUILabel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIListBox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIListPanel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIPanel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIProgressBar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIProperties.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIPropertyPage.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIRadioButton.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIReader.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIScrollbar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIScrollPanel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUISkin.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUISlider.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUISound.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUITab.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUITextBox.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUITextPanel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIUtil.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\GUIWriter.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroBitmap.cpp">
+      <Filter>GUI\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroScreen.cpp">
+      <Filter>GUI\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\GUIInputWrapper.cpp">
+      <Filter>GUI\Wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h">
@@ -46,6 +148,114 @@
     </ClInclude>
     <ClInclude Include="Editor\EditorSelection.h">
       <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIBanner.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIButton.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUICheckbox.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUICollectionBox.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIComboBox.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControl.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControlFactory.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIControlManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIEvent.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIFont.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIInput.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIInterface.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUILabel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIListBox.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIListPanel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIPanel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIProgressBar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIProperties.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIPropertyPage.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIRadioButton.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIReader.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIScrollbar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIScrollPanel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUISkin.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUISlider.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUISound.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUITab.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUITextBox.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUITextPanel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIUtil.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\GUIWriter.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroBitmap.h">
+      <Filter>GUI\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\AllegroScreen.h">
+      <Filter>GUI\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\GUIInputWrapper.h">
+      <Filter>GUI\Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
