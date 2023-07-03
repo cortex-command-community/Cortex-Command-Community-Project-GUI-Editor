@@ -10,8 +10,10 @@ A tool for creating and editing Cortex Command GUI layouts.
 
 2. Follow the [CCCP Source Repository Windows Build Instructions](https://github.com/cortex-command-community/Cortex-Command-Community-Project-Source#windows-build-instructions) on copying libraries into the **Data Repository**.
 
-3. Open `RTEGUI.sln`, choose the desired configuration and run the project.  
+3. Open `RTEGUI.sln`, choose the desired configuration and run the project.
 Build supports Visual Studio 2022 and 2019 (>=16.10) versions. Earlier versions are not supported due to lack of C++20 standard library features and conformance.
+
+4. The compiled executable will be located in the **Data Repository**.
 
 ***
 
