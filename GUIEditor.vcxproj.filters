@@ -15,6 +15,30 @@
     <Filter Include="GUI\Wrappers">
       <UniqueIdentifier>{1b25b727-3fa0-45de-83e8-a280cc37a265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RTE">
+      <UniqueIdentifier>{c1cc61e1-1dae-492c-8690-2e4cae821494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\Activities">
+      <UniqueIdentifier>{98bed9b0-9a6e-4108-b7e0-50d2736bb99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\Entities">
+      <UniqueIdentifier>{663c7cfc-80a5-493d-b86e-f561e5bd6d31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\Lua">
+      <UniqueIdentifier>{021a5ce0-3adb-421f-acae-89eaaa08e17c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\Managers">
+      <UniqueIdentifier>{5bc82cb8-946c-4e7c-8312-699be7c52686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\Menus">
+      <UniqueIdentifier>{78f20ba3-ee58-4a27-bb1b-81b06e64b418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\System">
+      <UniqueIdentifier>{9f7fec89-ade4-44cc-816a-ed2f4436afa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE\System\MicroPather">
+      <UniqueIdentifier>{edcaa7ff-0973-425d-ab90-94c7c2cbcc09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -131,6 +155,438 @@
     </ClCompile>
     <ClCompile Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\GUIInputWrapper.cpp">
       <Filter>GUI\Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\MicroPather\micropather.cpp">
+      <Filter>RTE\System\MicroPather</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Atom.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Box.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Color.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\ContentFile.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Controller.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\DataModule.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Entity.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\InputMapping.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\InputScheme.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Matrix.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\PathFinder.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\PieQuadrant.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Reader.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\RTEError.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\RTETools.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Serializable.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\SpatialPartitionGrid.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\StandardIncludes.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\System.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Timer.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Vector.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\System\Writer.cpp">
+      <Filter>RTE\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\AreaEditorGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\AreaPickerGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\AssemblyEditorGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\BuyMenuGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\GibEditorGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\InventoryMenuGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\LoadingScreen.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MainMenuGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MetagameGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioActivityConfigGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SceneEditorGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsAudioGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsGameplayGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputMappingGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputMappingWizardGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsMiscGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsVideoGUI.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Menus\TitleScreen.cpp">
+      <Filter>RTE\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\ActivityMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\AudioMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\CameraMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\ConsoleMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\FrameMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\LuaMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MenuMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MetaMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\MovableMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\NetworkClient.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\NetworkServer.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\PerformanceMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\PostProcessMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\PresetMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\PrimitiveMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\SceneMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\SettingsMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\TimerMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\UInputMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Managers\WindowMan.cpp">
+      <Filter>RTE\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaAdapters.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsActivities.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsEntities.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsGUI.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsInput.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsManagers.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsMisc.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsPrimitives.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingsSystem.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Lua\LuabindObjectWrapper.cpp">
+      <Filter>RTE\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ACDropShip.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ACrab.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ACraft.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ACRocket.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Activity.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Actor.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ADoor.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ADSensor.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\AEmitter.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\AHuman.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Arm.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\AtomGroup.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Attachable.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\BunkerAssembly.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\BunkerAssemblyScheme.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Deployment.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Emission.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Gib.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\GlobalScript.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\HDFirearm.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\HeldDevice.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Icon.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Leg.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\LimbPath.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Loadout.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Magazine.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Material.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MetaPlayer.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MetaSave.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MOPixel.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MOSParticle.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MOSprite.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MOSRotating.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\MovableObject.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\PEmitter.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\PieMenu.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\PieSlice.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Round.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Scene.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SceneLayer.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SceneObject.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SLBackground.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SLTerrain.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SoundContainer.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\SoundSet.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\TDExplosive.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainDebris.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainFrosting.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainObject.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\ThrownDevice.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Entities\Turret.cpp">
+      <Filter>RTE\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\ActorEditor.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\AreaEditor.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\AssemblyEditor.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\BaseEditor.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\EditorActivity.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\GameActivity.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\GAScripted.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\GATutorial.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\GibEditor.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\MultiplayerGame.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\MultiplayerServerLobby.cpp">
+      <Filter>RTE\Activities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Cortex-Command-Community-Project-Source\Activities\SceneEditor.cpp">
+      <Filter>RTE\Activities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +712,432 @@
     </ClInclude>
     <ClInclude Include="..\Cortex-Command-Community-Project-Source\GUI\Wrappers\GUIInputWrapper.h">
       <Filter>GUI\Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\MicroPather\micropather.h">
+      <Filter>RTE\System\MicroPather</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Atom.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Box.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Color.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Constants.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\ContentFile.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Controller.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\DataModule.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Entity.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Gamepad.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GenericSavedData.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GLCheck.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\GraphicalPrimitive.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\InputMapping.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\InputScheme.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Matrix.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\NetworkMessages.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\PathFinder.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\PieQuadrant.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Reader.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\RTEError.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\RTETools.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\ScreenShader.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Serializable.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Singleton.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\SpatialPartitionGrid.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\StandardIncludes.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\System.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Timer.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Vector.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\System\Writer.h">
+      <Filter>RTE\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\AreaEditorGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\AreaPickerGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\AssemblyEditorGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\BuyMenuGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\GibEditorGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\InventoryMenuGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\LoadingScreen.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MainMenuGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MetagameGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ModManagerGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\MultiplayerGameGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ObjectPickerGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioActivityConfigGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\ScenarioGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SceneEditorGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsAudioGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsGameplayGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputMappingGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsInputMappingWizardGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsMiscGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\SettingsVideoGUI.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Menus\TitleScreen.h">
+      <Filter>RTE\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\ActivityMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\AudioMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\CameraMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\ConsoleMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\FrameMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\LuaMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\MenuMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\MetaMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\MovableMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\NetworkClient.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\NetworkServer.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\PerformanceMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\PostProcessMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\PresetMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\PrimitiveMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\SceneMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\SettingsMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\TimerMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\UInputMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Managers\WindowMan.h">
+      <Filter>RTE\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Lua\LuaAdapterDefinitions.h">
+      <Filter>RTE\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Lua\LuabindDefinitions.h">
+      <Filter>RTE\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Lua\LuaBindingRegisterDefinitions.h">
+      <Filter>RTE\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Lua\LuabindObjectWrapper.h">
+      <Filter>RTE\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ACDropShip.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ACrab.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ACraft.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ACRocket.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Activity.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Actor.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ADoor.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ADSensor.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\AEmitter.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\AHuman.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Arm.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\AtomGroup.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Attachable.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\BunkerAssembly.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\BunkerAssemblyScheme.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Deployment.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Emission.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Gib.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\GlobalScript.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\HDFirearm.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\HeldDevice.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Icon.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Leg.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\LimbPath.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Loadout.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Magazine.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Material.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MetaPlayer.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MetaSave.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MOPixel.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MOSParticle.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MOSprite.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MOSRotating.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\MovableObject.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\PEmitter.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\PieMenu.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\PieSlice.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Round.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Scene.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SceneLayer.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SceneObject.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SLBackground.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SLTerrain.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SoundContainer.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\SoundSet.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\TDExplosive.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainDebris.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainFrosting.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\TerrainObject.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\ThrownDevice.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Entities\Turret.h">
+      <Filter>RTE\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\ActorEditor.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\AreaEditor.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\AssemblyEditor.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\BaseEditor.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\EditorActivity.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\GameActivity.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\GAScripted.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\GATutorial.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\GibEditor.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\MultiplayerGame.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\MultiplayerServerLobby.h">
+      <Filter>RTE\Activities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cortex-Command-Community-Project-Source\Activities\SceneEditor.h">
+      <Filter>RTE\Activities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
