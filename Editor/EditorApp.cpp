@@ -16,9 +16,9 @@ namespace RTEGUI {
 		set_window_title("Cortex Command GUI Editor");
 		set_gfx_mode(GFX_AUTODETECT_WINDOWED, m_ResX, m_ResY, 0, 0);
 		set_close_button_callback(QuitHandler);
-		set_resize_callback(ResizeHandler);
-		set_display_switch_callback(SWITCH_OUT, SwitchOutHandler);
-		set_display_switch_callback(SWITCH_IN, SwitchInHandler);
+		//set_resize_callback(ResizeHandler);
+		//set_display_switch_callback(SWITCH_OUT, SwitchOutHandler);
+		//set_display_switch_callback(SWITCH_IN, SwitchInHandler);
 
 		// Don't want to deal with recreating the backbuffer on window resize so just create one as large as the screen.
 		int desktopResX;
@@ -28,7 +28,7 @@ namespace RTEGUI {
 		clear_to_color(m_BackBuffer, 0);
 
 		m_Screen = std::make_unique<AllegroScreen>(m_BackBuffer);
-		m_Input = std::make_unique<AllegroInput>(-1);
+		m_Input = std::make_unique<GUIInputWrapper>(-1);
 
 		// Initialize the UI
 		m_EditorManager = std::make_unique<EditorManager>(m_Screen.get(), m_Input.get(), "Assets", "EditorSkin.ini");
@@ -248,7 +248,7 @@ namespace RTEGUI {
 
 	void EditorApp::DrawEditor() {
 		if (m_WindowResized) {
-			acknowledge_resize();
+			//acknowledge_resize();
 			show_mouse(m_ZoomWorkspace ? nullptr : screen);
 			m_WindowResized = false;
 		}
@@ -352,8 +352,8 @@ namespace RTEGUI {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void EditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
-		m_EditorManager->GetRightColumn()->Move(resizeInfo->new_w - m_EditorManager->GetRightColumn()->GetWidth(), 0);
-		m_WindowResized = true;
-	}
+	//void EditorApp::OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo) {
+	//	m_EditorManager->GetRightColumn()->Move(resizeInfo->new_w - m_EditorManager->GetRightColumn()->GetWidth(), 0);
+	//	m_WindowResized = true;
+	//}
 }

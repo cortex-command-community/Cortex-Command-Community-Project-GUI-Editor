@@ -1,5 +1,8 @@
 #include "EditorUtil.h"
 
+#undef NOGDI
+#undef NOCTLMGR
+
 #include <Windows.h>
 #include <mmsystem.h>
 #include <commdlg.h>

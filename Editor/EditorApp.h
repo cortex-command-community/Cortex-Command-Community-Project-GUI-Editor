@@ -3,7 +3,7 @@
 
 #include "EditorManager.h"
 #include "AllegroScreen.h"
-#include "AllegroInput.h"
+#include "GUIInputWrapper.h"
 
 #include "allegro.h"
 
@@ -96,13 +96,13 @@ namespace RTEGUI {
 		/// <summary>
 		/// Called when the window has been resized.
 		/// </summary>
-		void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
+		//void OnWindowResize(RESIZE_DISPLAY_EVENT *resizeInfo);
 #pragma endregion
 
 	private:
 
 		std::unique_ptr<AllegroScreen> m_Screen = nullptr; //!< GUI backbuffer.
-		std::unique_ptr<AllegroInput> m_Input = nullptr; //!< Input wrapper for Allegro.
+		std::unique_ptr<GUIInputWrapper> m_Input = nullptr; //!< Input wrapper for Allegro.
 		std::unique_ptr<EditorManager> m_EditorManager = nullptr; //!< The editor manager that handles all the editor GUI and workspace.
 
 		std::array<int, KEY_MAX> m_KeyStates; //!< The states of the keyboard keys in this update.
@@ -137,7 +137,7 @@ namespace RTEGUI {
 	/// Window resize handling.
 	/// </summary>
 	/// <param name="resizeInfo"></param>
-	static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
+	//static void ResizeHandler(RESIZE_DISPLAY_EVENT *resizeInfo) { g_GUIEditor.OnWindowResize(resizeInfo); }
 
 	/// <summary>
 	/// Window lose focus handling. Used to fix key buffer not clearing when the main window loses focus, making keys pressed before the focus loss "stuck" between updates.

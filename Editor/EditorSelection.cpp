@@ -1,7 +1,7 @@
 #include "EditorSelection.h"
 
 #include "AllegroScreen.h"
-#include "AllegroInput.h"
+#include "GUIInputWrapper.h"
 
 namespace RTEGUI {
 

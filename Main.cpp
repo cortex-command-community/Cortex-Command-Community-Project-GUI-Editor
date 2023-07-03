@@ -1,8 +1,12 @@
 #include "EditorApp.h"
 #include "EditorUtil.h"
 #include "ContentFile.h"
-#include "winalleg.h"
+//#include "winalleg.h"
+
+#include "allegro.h"
 #include "loadpng.h"
+#include "SDL.h"
+#include "SDL_main.h"
 
 using namespace RTEGUI;
 
@@ -11,7 +15,7 @@ using namespace RTEGUI;
 /// <summary>
 /// Entry point for the GUI editor app.
 /// </summary>
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main(int argc, char **argv) {
 	allegro_init();
 	loadpng_init();
 	g_GUIEditor.Initialize();
