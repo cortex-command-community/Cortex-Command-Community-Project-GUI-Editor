@@ -39,23 +39,23 @@ namespace RTE {
 
 		g_WindowMan.SetIgnoreMultiDisplays(true);
 
-		g_LuaMan.Initialize();
-		g_NetworkServer.Initialize();
-		g_NetworkClient.Initialize();
+		//g_LuaMan.Initialize();
+		//g_NetworkServer.Initialize();
+		//g_NetworkClient.Initialize();
 		g_TimerMan.Initialize();
 		g_WindowMan.Initialize();
 		g_FrameMan.Initialize();
-		g_PostProcessMan.Initialize();
-		g_PerformanceMan.Initialize();
+		//g_PostProcessMan.Initialize();
+		//g_PerformanceMan.Initialize();
 
 		if (g_AudioMan.Initialize()) { g_GUISound.Initialize(); }
 
 		g_UInputMan.Initialize();
 		g_ConsoleMan.Initialize();
-		g_SceneMan.Initialize();
-		g_MovableMan.Initialize();
-		g_MetaMan.Initialize();
-		g_MenuMan.Initialize();
+		//g_SceneMan.Initialize();
+		//g_MovableMan.Initialize();
+		//g_MetaMan.Initialize();
+		//g_MenuMan.Initialize();
 
 		g_WindowMan.SetVSyncEnabled(true);
 
@@ -70,21 +70,21 @@ namespace RTE {
 	/// Destroys all the managers and frees all loaded data before termination.
 	/// </summary>
 	void DestroyManagers() {
-		g_NetworkClient.Destroy();
-		g_NetworkServer.Destroy();
-		g_MetaMan.Destroy();
-		g_PerformanceMan.Destroy();
-		g_MovableMan.Destroy();
-		g_SceneMan.Destroy();
-		g_ActivityMan.Destroy();
+		//g_NetworkClient.Destroy();
+		//g_NetworkServer.Destroy();
+		//g_MetaMan.Destroy();
+		//g_PerformanceMan.Destroy();
+		//g_MovableMan.Destroy();
+		//g_SceneMan.Destroy();
+		//g_ActivityMan.Destroy();
 		g_GUISound.Destroy();
 		g_AudioMan.Destroy();
 		g_PresetMan.Destroy();
 		g_UInputMan.Destroy();
-		g_PostProcessMan.Destroy();
+		//g_PostProcessMan.Destroy();
 		g_FrameMan.Destroy();
 		g_TimerMan.Destroy();
-		g_LuaMan.Destroy();
+		//g_LuaMan.Destroy();
 		ContentFile::FreeAllLoaded();
 		g_ConsoleMan.Destroy();
 	}
